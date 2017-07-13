@@ -41,6 +41,21 @@
         .table-responsive{
             overflow: visible !important;
         }
+
+        .error-class {
+  color: #a94442;
+  border-color: 2px solid #ebccd1;
+  padding:1px 20px 1px 20px;
+}
+.main-sidebar,.main-header{
+  position: fixed;
+}
+.content-header{
+  margin-top: 40px;
+}
+.content{
+  margin-top: 20px;
+}
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -55,7 +70,7 @@
       <span class="logo-lg"><b>My Seoul</b>Admin</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
+    <nav class="navbar navbar-fixed-top">
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
@@ -84,33 +99,15 @@
       <ul class="sidebar-menu">
 
         <li class="header" style="font-size: 15px;">Transaction</li>
-        <li class="treeview" id = "tenant">
-          <a href="#">
-            <i class="fa fa-users"></i>
-            <span>Vendor Management</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
+       
+         
             <li class = "{{Route::getFacadeRoot()->current()->uri() == 'Registration' ? 'active' : ''}}"><a href="/Registration"><i class="fa fa-pencil-square"></i> Registration</a></li>
-            <li><a href="/List"><i class="fa fa-list-alt"></i>Members</a></li>
-          </ul>
+            <li class = "{{Route::getFacadeRoot()->current()->uri() == 'List' ? 'active' : ''}}"><a href="/List"><i class="fa fa-list-alt"></i>Stall Holders</a></li>
+    
         </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-file-text"></i>
-            <span>Contract Management</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/Contract"><i class="fa fa-list"></i>Contracts</a></li>
-            <li><a href="/CreateContract"><i class="fa fa-list"></i>Create Contracts</a></li>
-           
-          </ul>
-        </li>
+       
+            <li class = "{{Route::getFacadeRoot()->current()->uri() == 'Contract' ? 'active' : ''}}"><a href="/Contract"><i class="glyphicon glyphicon-modal-window "></i>Contracts</a></li>
+         
 
         <li class="treeview">
           <a href="#">
