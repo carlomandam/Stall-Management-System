@@ -1,7 +1,8 @@
 @extends('layout.app')
+
 @section('content-header')
 
-<h1>List of Vendors</h1>
+<h1>List of Stall Holders</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">List</li>
@@ -9,7 +10,7 @@
   @stop
 
   @section('content')
-  	  <div class="box box-primary">
+      <div class="box box-primary">
             <div class="box-header">
             </div>
             <!-- /.box-header -->
@@ -18,14 +19,16 @@
               <table id="tblmember" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>No</th>
+                  <th>Stall Holder No.</th>
                   <th>Name</th>
+                  <th>Contact</th>
+                  <th>Email</th>
                   <th>Action</th>
 
                 </tr>
                 </thead>
                 <tbody>
-           			
+                
                 </tbody>
               </table>
               </div>
@@ -60,7 +63,7 @@
  <div class="modal fade" tabindex="-1" id="update" role="dialog">
                     <div class="modal-dialog modal-lg" role="document">
                         <form action="" method="post" id="updateform">
-                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                            <input type="hidden" name="_token" value="<{{ csrf_token() }}">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -110,7 +113,7 @@
                       <label for="sex"><b>*Sex:</b></label>
                     
                     <div class="radio" style="margin-left: 30px;">
-                      <label><input type="radio" name="sex" value="1" checked="checked"><b>Male</b></label>
+                      <label><input type="radio" name="sex" value="1" ><b>Male</b></label>
                       <label><input type="radio" name="sex" value="0"><b>Female</b></label>
                     </div>
                                 </div>
@@ -203,9 +206,10 @@
                                 </div>
                                 <div class="modal-footer">
                                     
-                                    <button class="btn btn-info pull-right" style="background-color:#191966">Submit</button>
+                                    <button class="btn btn-info pull-right" style="background-color:#191966" id = "btn-submit">Submit</button>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -213,9 +217,41 @@
   @stop
 
   @section('script')
-  	<script>
+    <script>
+
     var obj;
+     $(document).ready(function () {
+        //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
+        var select = $('#DOBYear');
+        var leastYr = 1960;
+        var nowYr = 2017;
+        for (var v = nowYr; v >= leastYr; v--) {
+            $('#DOBYear').append('<option value ="' + v + '">' + v + '</option');
+        }
+      });
+      $('#DOBMonth').change(function () {
+        if ($(this).val() == 4 || $(this).val() == 6 || $(this).val() == 9 || $(this).val() == 11) {
+            $('#DOBDay option[value =31]').remove();
+            if ($("#DOBDay option[value='30']").length == 0) {
+                $('#DOBDay').append('<option value="' + 30 + '">' + 30 + '</option>');
+            }
+        }
+        else if ($(this).val() == 2) {
+            $('#DOBDay option[value =30]').remove();
+            $('#DOBDay option[value =31]').remove();
+        }
+        else {
+            if ($("#DOBDay option[value='30']").length == 0) {
+                $('#DOBDay').append('<option value="' + 30 + '">' + 30 + '</option>');
+                $('#DOBDay').append('<option value="' + 31 + '">' + 31 + '</option>');
+            }
+            else if ($("#DOBDay option[value = '31']").length == 0) {
+                $('#DOBDay').append('<option value="' + 31 + '">' + 31 + '</option>');
+            }
+        }
+    });
      function getInfo(id) {
+
             $.ajax({
                 type: "POST"
                 , url: '/getVendorInfo'
@@ -224,28 +260,140 @@
                     , "id": id
                 }
                 , success: function (data) {
-                    obj = JSON.parse(data);
-                    $('#update').modal('show');
-                }
+                    obj = JSON.parse(data)[0];
+                  
+                 $('modal').appendTo("body"); 
+                    $(".modal").on('shown.bs.modal', function () {
+                    $leftval = "SH-" + 2017;
+                    $stallholderno = $leftval + String("00000" + obj.venID).slice(-5);
+                    $('#vendor_no').val($stallholderno);
+                    $('#update').find('input[name=orgname]').val(obj.venOrgName);
+                    $('#update').find('input[name=fname]').val(obj.venFName);
+                    $('#update').find('input[name=mname]').val(obj.venMName);
+                    $('#update').find('input[name=lname]').val(obj.venLName);
+                    if(obj.venSex==1)
+                    {
+                    $('#update').find('input[name=sex][value = 1]').attr('checked', true);}
+                    else{
+                       $('#update').find('input[name=sex][value = 0]').attr('checked', true);
+                    }
+                    $('#update').find('input[name = email]').val(obj.venEmail);
+                    $('#update').find('input[name = mob]').val(obj.venContact);
+                    var bday = obj.venBDay;
+                   
+                    $splitDate = bday.split("-");
+                    $('#DOBYear').val($splitDate[0]).attr('selected',true).siblings('option').removeAttr('selected');
+                  //  $('#DOBYear').selectmenu('refresh',true);
+                    $('#DOBMonth').val($splitDate[1]).attr('selected',true).siblings('option').removeAttr('selected');
+                    $('#DOBDay').val($splitDate[2]).attr('selected',true).siblings('option').removeAttr('selected');
+
+                    $('#address').val(obj.venAddress);
+                
+                 
             });
+                }
+
+
+
+            });
+                       
         }
-          $(".modal").on('shown.bs.modal', function () {
-                getVendor();
-                if ($(this)[0] == $('#update')[0]) {
-                   // $(this).find('input[name=vendor_no]').val("SH-"+ date('Y') +obj.stallID);
-                    $(this).find('input[name=orgname]').val(obj.venOrgName);
-                    $(this).find('input[name=fname]').val(obj.venFName);
-                     $(this).find('input[name=mname]').val(obj.venMName);
-                      $(this).find('input[name=lname]').val(obj.venLName);
+     
+        // $('#updateform').modal('hide');
+
+         $('#btn-submit').on('click',function()
+         {
+             //VALIDATE UPDATE DETAILS//
+        $('#updateform').validate({
+            rules:{
+                     fname: {required:true}
+                    ,lname: {required:true}
+                    ,sex:   {required:true }
+                    ,address:{required:true}
+                    ,mob:    {required:true,
+                             number:true }
+                    ,email:  {required:true,
+                            email:true
+                       
+                        
+                    }
+            },
+
+            messages:{
+                    fname: {
+                        required: "First Name is required"
+                    },
+                    lname: {
+                        required: "Last Name is required"
+                    },
+                    address: {
+                        required: "Home Address is required"
+                    },
+                    mob: {
+                        required: "Mobile No. is required",
+                        number: "Numbers only"
+                    },
+                    email: {
+                        required: "Email Address is required"
+                        ,remote: "Email is already taken"
+                    }
+            },
+
+            errorClass: "error-class",
+            validClass :"valid-class"
+
+       });
+         });
+
+  
+        $("#updateform").unbind('submit').bind('submit', function (e) {
+            e.preventDefault();
+            if (!$("#updateform").valid()) return;
+            var hasChange = false;
+            if ($("#fname").val() != obj.venFName) hasChange = true;
+            if ($("#mname").val() != obj.venMName) hasChange = true;
+            if ($("#lname").val() != obj.venLName) hasChange = true;
+            if ($("#address").val() != obj.venAddress) hasChange = true;
+            if ($("#email").val() != obj.venEmail) hasChange = true;
+            if ($("#mob").val() != obj.venContact) hasChange = true;
+            if ($("#sex").val() != obj.venSex) hasChange = true;
+            if ($("#orgname").val() != obj.venOrgName) hasChange = true;
+            $bday = $("#DOBYear").val()+"-"+$("#DOBMonth").val() +"-"+$("#DOBDay").val() ;
+            if ($($bday).val() != obj.venBDay) hasChange = true;
+            if (!hasChange) return;
+            var formData = new FormData($(this)[0]);
+            $.ajax({
+                type: "POST"
+                , url: '/UpdateVendor'
+                , data: formData
+                , processData: false
+                , contentType: false
+                , context: this
+                , success: function (data) {
+                    toastr.success('Successfully Updated!');
+                    $('#tblmember').DataTable().ajax.reload();
+                    $('#update').modal('hide');
                 }
             });
-         
+        });
+        $(".modal").on('hidden.bs.modal', function () {
+            $(this).find('form').validate().resetForm();
+            $(this).find('form')[0].reset();
+        })
+ 
+
+        //POPULATE DATATABLE//
  $('#tblmember').DataTable({
             ajax: '/getVendor'
             , responsive: true
+
             , "columns": [
                  {
-                    "data": "venID"
+                    "data" : function(data, type, dataToSet){
+                      $leftval = "SH-" + 2017;
+                    $stallholderno = $leftval + String("00000" + data.venID).slice(-5);
+                            return ($stallholderno);
+                        }
                     }
                     , 
                     {
@@ -253,6 +401,13 @@
                             return (data.venFName +" "+data.venLName);
                         }
                     },
+                    {
+                      "data" : "venContact"
+                    },
+                    {
+                      "data": "venEmail"
+                    },
+
                     {
                     "data": "actions"
                     }
@@ -262,7 +417,7 @@
                     "width": "30%"
                     , "searchable": false
                     , "sortable": false
-                    , "targets": 2
+                    , "targets": 4
                     }
   ]
         });
