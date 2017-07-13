@@ -16,8 +16,7 @@ legend{
     margin-left: 10px;
     color: #3c8dbc;
 }
-.select2-results__option[aria-selected=true] { 
-color: red; }
+
 #last_fieldset
 {
     display: none;
@@ -28,6 +27,7 @@ color: red; }
 .disabled:hover {
     cursor: not-allowed;
 }
+
 
 </style>
 
@@ -41,20 +41,25 @@ color: red; }
   @section('content')
    <div class="row">
         <!-- left column -->
-        <form class ="form-horizontal" id="applyForm" method ="post" action = "{{url('/Registration')}} " role:'form'>
+        <form class ="form-horizontal" id="applyForm" method ="post" action = " " >
         <input type="hidden" id="_token" name="_token" value="{{csrf_token() }}">
         <div class="col-md-12">
-        	<div class ="box box-primary">
+            <div class ="box box-primary">
              <fieldset>
-        		<div class= "box-header">
+                <div class= "box-header">
                       
-        				<legend> <b>Stall Holder Details</b></legend>
+                        <legend> <b>Stall Holder Details</b></legend>
                 </div> 
                 <!--/.box-header-->
                         
-        				<div class ="box-body">
+                        <div class ="box-body">
+                        <div class = "col-md-12 form-group ">
+                          <select class="js-example-multiple-limit" style="width: 100%;  " id = "ven_name" name = "ven_name">
 
-                        <div class = "col-md-12 form-group row">
+                            </select>       
+                          
+                        </div>
+                        <div class = "col-md-12 form-group row" id = "stallhold">
                             <div class = "col-md-4">
                             <label><b>Stall Holder No:</b></label>
                         
@@ -73,14 +78,14 @@ color: red; }
                             <input type = "text" class = "form-control" id = "orgname" name = "orgname" />
                         </div>
                         </div>
-        					<div class="col-md-12 form-group row">
+                            <div class="col-md-12 form-group row">
 
-        						<div class="col-md-4">
+                                <div class="col-md-4">
 
-        							<label for="firstName"><b>*First Name:</b></label>
-        						
-        							<input type="text" class="form-control" id="fname" name ="fname" required>
-        						</div>
+                                    <label for="firstName"><b>*First Name:</b></label>
+                                
+                                    <input type="text" class="form-control" id="fname" name ="fname" >
+                                </div>
                                 <div class="col-md-4">
                                     <label for="middleName"><b>Middle Name:</b></label>
                                 
@@ -89,26 +94,26 @@ color: red; }
                                 <div class="col-md-4">
                                     <label for="lastname"><b>*Last Name:</b></label>
                                 
-                                    <input type="text" class="form-control" id="lname" name="lname" required>
+                                    <input type="text" class="form-control" id="lname" name="lname" >
                                 </div>
-        					</div>
-        					
-        					
-        					<div class=" col-md-12 form-group row">
-        						<div class="col-md-3">
-        							<label for="sex"><b>*Sex:</b></label>
-        						
-        						<div class="radio" style="margin-left: 30px;">
-        							<label><input type="radio" name="sex" value="1" checked="checked"><b>Male</b></label>
-        							<label><input type="radio" name="sex" value="0"><b>Female</b></label>
-        						</div>
+                            </div>
+                            
+                            
+                            <div class=" col-md-12 form-group row">
+                                <div class="col-md-3">
+                                    <label for="sex"><b>*Sex:</b></label>
+                                
+                                <div class="radio" style="margin-left: 30px;">
+                                    <label><input type="radio" name="sex" value="1" checked="checked"><b>Male</b></label>
+                                    <label><input type="radio" name="sex" value="0"><b>Female</b></label>
+                                </div>
                                 </div>
 
                                 <div class = "col-md-3">
                                 <label for="bday"><b>*Birthday:</b></label>
                                 <div class= "form-inline">
                                 <select name="DOBMonth" id = "DOBMonth">
-    <option> - Month - </option>
+    <option disabled="" selected=""> - Month - </option>
     <option value="01">January</option>
     <option value="02">Febuary</option>
     <option value="03">March</option>
@@ -124,7 +129,7 @@ color: red; }
 </select>
 
 <select name="DOBDay" id = "DOBDay">
-    <option> - Day - </option>
+    <option disabled="" selected=""> - Day - </option>
     <option value="01">01</option>
     <option value="02">02</option>
     <option value="03">03</option>
@@ -159,7 +164,7 @@ color: red; }
 </select>
 
 <select name="DOBYear" id = "DOBYear">
-    <option> - Year - </option>
+    <option disabled="" selected=""> - Year - </option>
     
     
 </select>
@@ -167,12 +172,12 @@ color: red; }
                                 </div>
                                 <div class = "col-md-3">
                                         <label for = "email">*Email Address:</label>
-                                        <input type = "email" class = "form-control" id = "email" name = "email"/>
+                                        <input type = "text" class = "form-control" id = "email" name = "email"/>
                                 </div>
 
                                 <div class="col-md-3">
                                     <label for="phone"><b>* Mobile:</b></label>
-                                    <input type="text" class="form-control" id="mob" name="mob"required>
+                                    <input type="text" class="form-control" id="mob" name="mob">
                                  </div>
 
 
@@ -201,7 +206,7 @@ color: red; }
                                     
                                     <div class="col-md-10">
                                         <label for="lastname"><b>*Stall No:</b></label>
-                                      <select class="js-example-placeholder-multiple" multiple="multiple" style="width: 100%; " id = "stallno" name = "stallno_name">
+                                      <select class="js-example-basic-single" style="width: 100%; " id = "stallno" name = "stallno_name">
 
                                         @for($i = 0; $i < $buildingCount; $i++)
                                         {<optgroup label = '{{$buildingNames[$i]}}'>
@@ -251,12 +256,12 @@ color: red; }
 <div class="col-md-12 form-group row">
     <div class="col-md-12">
         <label for="startdate">* Starting Date: </label>
-        <input type="text" class="form-control" id='datepicker' /> </div>
+        <input type="text" class="form-control" id='datepicker' name='datepicker' /> </div>
 </div>
 <div class="col-md-12 form-group row">
     <div class="col-md-12">
         <label for="bussiname">Business Name:</label>
-        <input type="text" class="form-control" id="businessName" /> </div>
+        <input type="text" class="form-control" id="businessName" name ="businessName" /> </div>
 </div>
 <div class="col-md-12 form-group row">
     <div class="col-md-6">
@@ -267,22 +272,28 @@ color: red; }
 <div class="col-md-12 form-group row" id="assoc_hold">
     <div class="col-md-6">
         <label for="assoc1"><b>Associate 1:</b></label>
-        <input type="text" class="form-control" placeholder="Full Name" id="assoc_one"> </div>
+        <input type="text" class="form-control" placeholder="Full Name" id="assoc_one" name ="assoc_one"> </div>
     <div class="col-md-6">
         <label for="assoc2"><b>Associate 2:</b></label>
-        <input type="text" class="form-control" / placeholder="Full Name" id="assoc_two"> </div>
+        <input type="text" class="form-control" / placeholder="Full Name" id="assoc_two" name ="assoc_two"> </div>
 </div>
 <div class="col-md-12 form-group row">
     <div class="col-md-12">
         <label for="address"><b>*List of Products:</b></label>
-        <textarea rows="4" class="form-control" id="address" name="address"></textarea>
+        <textarea rows="4" class="form-control" id="prods" name="prods"></textarea>
     </div>
 </div>
+
+                   
 <div class="pull-right" id="btn-last">
     <button type="button" class="btn btn-primary" style="font-size: 16px; margin-right: 50px; width: 100px; margin-right: 20px;" id="btn-prev">Previous</button>
-    <button type="submit" class="btn btn-primary" style="font-size: 16px; width: 100px; margin-right: 50px;">Submit</button>
+    <button type="submit" id = "btn-submit" class="btn btn-primary" style="font-size: 16px; width: 100px; margin-right: 50px;">Submit</button>
 </div>
+
 </fieldset>
+                     
+
+
 </div>
 <!--/.box-body-->
 </div>
@@ -292,38 +303,9 @@ color: red; }
 </form>
 </div>
 <!-- /.row -->
-<!-- Modal -->
-<div class="modal fade" id="table" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <button class="modal-title" id="myModalLabel">Stall Name</h4>
-            </div>
-            <div class="modal-body">
-                <p> Choose desired stall</p>
-                <table id="example1" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Stall Name</th>
-                            <th>Type</th>
-                            <th>Floor no.</th>
-                            <th>Stall Rate</th>
-                            <th>Rate per Day</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success">Done</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div> @stop @section('script')
+
+ @stop
+  @section('script')
 <script>
     function clearForm() {
         var store = $('#vendor_no').val();
@@ -371,8 +353,87 @@ color: red; }
             }
         });
         // MULTI-STEP FORM///
-        $('#applyForm fieldset :first-child').fadeIn('slow');
+        
         $('#applyForm #btn-next').on('click', function () {
+
+            $('#applyForm').validate({
+                rules:{
+                     fname: {required:true}
+                    ,lname: {required:true}
+                    ,sex:   {required:true }
+                    ,address:{required:true}
+                    ,mob:    {required:true,
+                             number:true }
+                    ,email:  {required:true,
+                            email:true,
+                        remote:{
+                            url: '/checkEmail',
+                            type: 'post',
+                            data:{
+                                email:function(){
+                                    return $('#applyForm').find("input[name=email]").val();
+                                },
+                                _token: function(){
+                                    return $('#_token').val();
+                                }
+                            }
+                        }
+                    }
+                    ,stallno_name: {required:true}
+                    ,prods: {required:true}
+                    ,datepicker:   {required:true }
+                   
+                    
+
+
+
+                }
+                , messages:{
+                    fname: {
+                        required: "First Name is required"
+                    },
+                    lname: {
+                        required: "Last Name is required"
+                    },
+                    address: {
+                        required: "Home Address is required"
+                    },
+                    mob: {
+                        required: "Mobile No. is required",
+                        number: "Numbers only"
+                    },
+                    email: {
+                        required: "Email Address is required"
+                        ,remote: "Email is already taken"
+                    },
+                    stallno_name: {
+                        required: "Select a Stall No."
+                    },
+                    prods: {
+                        required: "List of products is required"
+                    },
+                    datepicker: {
+                        required: "Start Date is required"
+                    }
+
+                  
+                }
+                ,errorClass: "error-class"
+            , validClass: "valid-class"
+
+            });  
+
+
+
+            
+
+
+            if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
+                           return false;
+                 }
+
+
+            $('#applyForm fieldset :first-child').fadeIn('slow');
             var parent_fieldset = $(this).parents('fieldset');
             var next_step = true;
             if (next_step) {
@@ -381,6 +442,8 @@ color: red; }
                 });
             }
         });
+   
+
         //CLICK PREVIOUS BUTTON///
         $('#applyForm #btn-prev').on('click', function () {
             $(this).parents('fieldset').fadeOut(400, function () {
@@ -390,7 +453,7 @@ color: red; }
     });
     // MULTIPLE SELECT2 ///
     $(function () {
-        $(".js-example-placeholder-multiple").select2({
+        $(".js-example-basic-single").select2({
             placeholder: 'Select Stall'
         });
     });
@@ -403,25 +466,23 @@ color: red; }
         , startDate: "dateToday"
         , todayHighlight: true
         , orientation: 'bottom'
+        ,format: 'yyyy-mm-dd'
     });
-    
+
+
+
+    //SELECTED STALL ID AND ITS RATES
     var stalls = JSON.parse(("{{$stall}}").replace(/&quot;/g,'"'));
     var val;
     var sel = 0;
     $('#stallno').on('change',function(){
         var newVal = $(this).val();
         if($('#stallno').val() != null){
-            if($('#stallno').val().length > sel){
-                index = 0;
-
-                for(var i=0; i<newVal.length; i++) {
-                    if($.inArray(newVal[i], val) == -1)
-                        index = i;
-                }
-
-                var stall = _.find(stalls,{'stallID': $('#stallno').val()[index]});
+            
+                var stall = _.find(stalls,{'stallID': $('#stallno').val()});
                 var util = '';
-                for(var i = 0 ; i < stall.stall_util.length; i++){
+               
+                   for(var i = 0 ; i < stall.stall_util.length; i++){
                     util += stall.stall_util[i].utility.utilName;
                     if(stall.stall_util[i].RateType == 1)
                         util += '(Monthly Reading)';
@@ -430,101 +491,115 @@ color: red; }
                     if(i < stall.stall_util.length - 1)
                         util += ', ';
                 }
-
+                
+                 $('#selectedtbl tbody td').remove();
+                sel = 0;
                 $('#selectedtbl tbody').append('<tr><td>'+stall.stallID+'</td><td>'+stall.stall_type.stypeName+'</td><td>'+util+'</td><td>Floor '+stall.floor.floorNo+', '+stall.floor.building.bldgName+'</td></tr>')
             }
-            else if($('#stallno').val().length < sel){
-                var id = val.filter(function(obj) { return newVal.indexOf(obj) == -1; });
-                $("td").filter(function() {
-                    return $(this).text() == id;
-                }).closest("tr").remove();
-            }
-            sel = $('#stallno').val().length; 
-        }else{
+          else{
             $('#selectedtbl tbody td').remove();
             sel = 0;
         }
         val = newVal;
     });
-    /* 
-     $('#stallno').on('change',function(){
-         $stallid = $('select[name = 'stallno_name']').val();
+ 
+    /// SUBMIT REGISTRATION//
+    $("#applyForm").submit(function (e) {
+            e.preventDefault();
+            if (!$("#applyForm").valid()) return;
+            var formData = new FormData($(this)[0]);
+            $.ajax({
+                type: "POST"
+                ,url:'/AddVendor'
+             , data: formData
+                , processData: false
+                , contentType: false
+                , context: this
+                , success: function (data) {
+                    toastr.success('Successfully Registered!');
+                    $("#applyForm")[0].reset();
+                        location.reload();
+                    
+                }
+            });
+        });
+   //SEARCH EXISTING STALL HOLDER//
 
-         $.ajax({
-             url:'/Registration/StallDetails',
-             data:{stallid:$stallid},
-             cache:false,
-             type:'POST',
-              beforeSend: function (xhr) {
-             var token = $('meta[name="csrf_token"]').attr('content');
+   $("#ven_name").select2({
 
-         if (token) {
-             return xhr.setRequestHeader('X-CSRF-TOKEN', token);
-         }
-     },
-           success:function(data){ 
-         console.log(data);
-         $('#result_container').html(data); 
-     }
-         });
-
-
-     });
-
-     */
-    /*
-///submit form////
-$('#applyForm').submit(function (e)
-{  
-    e.preventDefault();
-    
-    var formData = new FormData($(this)[0]);
-
-    $.ajax({
-
-        type:'post'
-        , url: '/Registration'
-        ,data: formData
-        ,processData: false
-        ,context: this
-        ,success: function (data)
-        {
-            toastr.success('Successfully Registered!');
-          
+  minimumInputLength:2,
+   allowClear: true,
+  placeholder: 'Select Existing Record',
+    ajax: {
+           url: '/searchVendor',
+          dataType: 'json',
+          delay: 250,
+          processResults: function (data) {
+            return {
+              results:  $.map(data, function (item) {
+                    return {
+                        text: item.full_name,
+                        id: item.venID
+                    }
+                })
+            };
+          },
+          cache: true
         }
+});
+$('#ven_name').on('change',function(){
+  
+    if( !$('#ven_name').val()) {
+         location.reload();
+           
+}
+     else{
+       var venid = $(this).val();
+       $.ajax({
+            method:'get',
+            url: '/displaySearch',
+            data: {
+                    "_token" : "{{ csrf_token()}}"
+                    ,"id":venid
+            },success: function(data)
+            {
+                var obj = JSON.parse(data)[0];
+               $leftval = "SH-" + 2017;
+               $stallholderno = $leftval + String("00000" + obj.venID).slice(-5);
+                 $('#applyForm').find('input[name=orgname]').val(obj.venOrgName);
+              $('#vendor_no').val($stallholderno);  
+              $('#fname').val(obj.venFName);
+              $('#mname').val(obj.venMName);
+              $('#lname').val(obj.venLName);
+              if(obj.venSex==1)
+                    {
+                    $('#applyForm').find('input[name=sex][value = 1]').attr('checked', true);}
+                    else{
+                       $('#applyForm').find('input[name=sex][value = 0]').attr('checked', true);
+                    }
 
-    });
+                    $('#applyForm').find('input[name = email]').val(obj.venEmail);
+                    $('#applyForm').find('input[name = mob]').val(obj.venContact);
+                    var bday = obj.venBDay;
+                   
+                    $splitDate = bday.split("-");
+                    $('#DOBYear').val($splitDate[0]).attr('selected',true).siblings('option').removeAttr('selected');
+                 
+                    $('#DOBMonth').val($splitDate[1]).attr('selected',true).siblings('option').removeAttr('selected');
+                    $('#DOBDay').val($splitDate[2]).attr('selected',true).siblings('option').removeAttr('selected');
+
+                    $('#address').val(obj.venAddress);
+              
+              }
+
+
+       });
+
+    }
+        
+     
 });
 
 
-  ////validate form/////
-    $('#applyForm').validate({
-        rules:{
-            venFName:{
-                required:true,
-                remote:{
-
-                ,type:'post'
-                data : {
-                    venFName:function(){
-                        return $('#applyForm').find("input[name=fname]").val();
-                    },
-                     _token: function()
-                    {
-                        return $("#_token").val();
-                    }
-                }
-            }
-            }
-        },
-
-        messages: {
-            venFName: {
-                required: "Enter First Name"
-            }
-        }
-        
-    });
-
-   */
-</script> @stop
+</script> 
+  @stop 
