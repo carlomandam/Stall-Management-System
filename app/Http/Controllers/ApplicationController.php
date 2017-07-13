@@ -7,25 +7,29 @@ use App\Vendor;
 use App\Stall;
 use App\StallRate;
 use App\StallType;
+use App\Rent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+
 class ApplicationController extends Controller
 {
    
 
     public function member()
     {
-    	return view ('transaction.Member');
+
+      return view ('transaction.Member');
     }
 
+   
      public function Memview()
      {
-     	return view ('transaction.View');
+      return view ('transaction.View');
      }
      public function Update()
      {
-     	return view ('transaction.Update');
+      return view ('transaction.Update');
      }
 
      public function create()
@@ -43,77 +47,87 @@ class ApplicationController extends Controller
 
         /// SELECT2 DROPDOWN POPULATE///
 
-        $stall = Stall::with('StallType','Floor.Building','StallUtil.Utility')->get();
+       
+        $stallinRent = DB::table('tblrent_info')
+                     ->pluck('stallID')->toArray();
 
+         $stall = Stall::with('StallType','Floor.Building','StallUtil.Utility')
+         ->whereNotIn('stallID',$stallinRent)->get();
         $buildingNames = DB::table('tblbuilding')->pluck('bldgName');
         $buildingNames = $buildingNames->toArray();
         $buildingCount = DB::table('tblbuilding')->count();
-
+      
         //END OF SELECT2 DROPDWON//
 
 
-        /// STALL FEES FETCH DATA ///
-
-        /*$fees = DB::table('tblstall')
-                ->join('tblstalltype','tblstall.stypeID','tblstalltype.stypeID')
-                ->join('tblutilities','tblutilities.utilID','tblstall_utilities.utilID')
-                ->join('tblstall_utilities','tblstall_utilities.stallID','tblutilities.stallID')
-                ->select('tblstall.*','tblstalltype.stypeID','tblstalltype.stypeLength','tblstalltype.stypeWidth','tblstall_utilities.RateType','tblutilities.utilName','tblutilities.utilDefaultMR')
-                ->get();*/
-
-
+       
          
-         /*-> join('tblstalltype','tblstall.stypeID','=','tblstalltype.stypeID')
-                    ->join('tblfloor','tblstall.floorID','=','tblfloor.floorID')
-                    ->join('tblbuilding','tblbuilding.bldgID','=','tblfloor.bldgID')
-                    
-                    ->select('tblstall.*','tblstalltype.stypeName','tblfloor.floorNo','tblbuilding.bldgName')
-                    ->where('stallStatus',1)
-                    ->get();*/
-         
-        //END OF STALL FEES FETCH DATA//
         
-        return view('transaction.Application',compact('nextId','stall','buildingNames','buildingCount'));
+        
+        return view('transaction.Application_temporary',compact('nextId','stall','buildingNames','buildingCount'));
     }
  
 
-    function addVendorInfo(Request $request) //new vendor
-     {
-
-     
-        $vendor = new Vendor;
-        $rules = ['fname' => 'required|max:191',
-            'lname' =>'required|max:191',
-            'sex' => 'required',
-            'address' => 'required',
-            'mob' =>'required|numeric',
-            'email' =>'required|unique:tblvendor,venEmail',
-            'orgname' =>'nullable'];
-
-      $validator = Validator::make(Input::all(),$rules);
-
-      if($validator->fails())
+    
+    function addVendor()
+    { 
+      if(isset($_POST['ven_name']))
       {
-        return Redirect::to('/Registration');
+        $vendor = Vendor::find($_POST['ven_name']);
+         try{
+                
+          
+                    $rent = new Rent;
+                    $rent->stallID = $_POST['stallno_name'];
+                    $rent->venID = $vendor->venID;
+                    $rent->rentStartDate = $_POST['datepicker'];
+                    $rent->rentRegDate = date('Y-m-d');
+                    $rent->rentBusinessName = $_POST['businessName'];
+                    $rent->rentProdDesc = $_POST['prods']; 
+                    $rent->assocHolder_1 =$_POST['assoc_one'];
+                    $rent->assocHolder_2 =$_POST['assoc_two'];
+                    $rent->save();
+                
+            }catch(Exception $e)
+            {
+              $vendor->forceDelete();
+            }
       }
       else{
+        $vendor = new Vendor;
 
-        $vendor->venFName = $request->get('fname');
-        $vendor->venMName = $request->get('mname');
-        $vendor->venLName = $request->get('lname');
-        $vendor->venSex = $request->get('sex');
-        $vendor->venAddress = $request->get('address');
-        $vendor->venBday = $request->get('DOBYear')+ "-" + $request->get('DOBMonth') + "-" + $request->get('DOBDay');
-        $vendor->venContact =$request->get('mob');
-        $vendor->venEmail = $request->get('email');
+        $vendor->venFName = $_POST['fname'];
+        $vendor->venMName = $_POST['mname'];
+        $vendor->venLName =  $_POST['lname'];
+        $vendor->venSex =  $_POST['sex'];
+        $vendor->venAddress =  $_POST['address'];
+        $vendor->venBday =  $_POST['DOBYear']."-". $_POST['DOBMonth']."-". $_POST['DOBDay'];
+        $vendor->venContact = $_POST['mob'];
+        $vendor->venEmail =  $_POST['email'];;
 
-        $vendor->save();}
-        
-      
-     }
-
-
-    function checkEmail()
+        if($vendor->save()){
+            try{
+                
+          
+                    $rent = new Rent;
+                    $rent->stallID = $_POST['stallno_name'];
+                    $rent->venID = $vendor->venID;
+                    $rent->rentStartDate = $_POST['datepicker'];
+                    $rent->rentRegDate = date('Y-m-d');
+                    $rent->rentBusinessName = $_POST['businessName'];
+                    $rent->rentProdDesc = $_POST['prods']; 
+                    $rent->assocHolder_1 =$_POST['assoc_one'];
+                    $rent->assocHolder_2 =$_POST['assoc_two'];
+                    $rent->save();
+                
+            }catch(Exception $e)
+            {
+              $vendor->forceDelete();
+            }
+        }
+      }
+    }
+function checkEmail()
 {
     $vendor =  Vendor::where('venEmail',$_POST['email'])->get();
     if(count($vendor) != 0)
@@ -125,6 +139,7 @@ class ApplicationController extends Controller
         return "true";
 }
  function getVendor(){
+
       $vendor = Vendor::all();
          //select venID, CONCAT name, actions//
       $data = array();
@@ -155,7 +170,7 @@ class ApplicationController extends Controller
     function getVendorInfo()
     {
         $vendor = Vendor::where('venID',$_POST['id'])->get();
-        return (json_encode($vendor[0]));
+        return (json_encode($vendor));
     }
 
     function contractTable()
@@ -163,5 +178,63 @@ class ApplicationController extends Controller
       $rent = Rent::with('Vendor')->get();
 
     }
-}
-    
+
+    function updateVendor()
+    {
+        $hasChange = false;
+        $vendor =  Vendor::find($_POST['id']);
+        $vendor->venFName = $_POST['fname'];
+        $vendor->venMName = $_POST['mname'];
+        $vendor->venLName =  $_POST['lname'];
+        $vendor->venSex =  $_POST['sex'];
+        $vendor->venAddress =  $_POST['address'];
+        $vendor->venBday =  $_POST['DOBYear']."-". $_POST['DOBMonth']."-". $_POST['DOBDay'];
+        $vendor->venContact = $_POST['mob'];
+        $vendor->venEmail =  $_POST['email'];;
+
+           if($vendor->isDirty()){
+            $vendor->save();
+            $hasChange = true;
+        }
+             echo $hasChange;
+    }
+
+    function searchVendor(Request $request){
+    $data = [];
+
+        if($request->has('q')){
+            $search = $request->q;
+            $data = DB::table("tblvendor")
+                ->select("venID",DB::raw("CONCAT(venFName,' ',venLName) as full_name"))
+                ->where('venFName','LIKE',"%$search%")
+                ->orWhere('venLName','LIKE',"%$search%")
+                ->get();
+        }
+
+        return response()->json($data);
+  }
+
+    function displaySearch()
+    {
+       $vendor = Vendor::where('venID',$_GET['id'])->get();
+        return (json_encode($vendor));
+    }
+
+
+     public function pdfview(Request $request)
+    {
+        $items = DB::table("tblvendor")->get();
+        view()->share('items',$items);
+
+        if($request->has('download')){
+            $pdf = PDF::loadView('pdfview');
+            return $pdf->download('pdfview.pdf');
+        }
+
+        return view('pdfview');
+    }
+
+  }
+
+   
+
