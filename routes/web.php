@@ -100,6 +100,7 @@ Route::post('/addUtility', 'Controller@addUtility');
 Route::post('/updateUtility', 'Controller@updateUtility');
 Route::post('/deleteUtility', 'Controller@deleteUtility');
 Route::post('/getUtilityInfo', 'Controller@getUtilityInfo');
+Route::post('/getFees', 'Controller@getFeesOpt');
 
 Route::get('/pdfview',array('as'=>'pdfview','uses'=>'PDFController@pdfview'));
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');

@@ -17,4 +17,8 @@ class Penalty extends Model
     public function Bill(){
         return $this->belongsToMany('App\Bill','penID');
     }
+    
+    public function Fee(){
+        return $this->belongsTo('App\Fee','feeID');
+    }
 }

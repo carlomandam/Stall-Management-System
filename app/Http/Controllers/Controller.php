@@ -520,7 +520,7 @@ class Controller extends BaseController
     }
     
     function getPenalties(){
-    	$penalties = Penalty::all();
+    	$penalties = Penalty::with('Fee')->get();
     	$data = array();
     	foreach ($penalties as $penalty) {
             $penalty['actions'] = "<button class='btn btn-success' onclick='getInfo(this.value)' value = '".$penalty['penID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
@@ -554,19 +554,26 @@ class Controller extends BaseController
     }
     
     function addPenalty(){
-        $penlaty = new Penalty;
-        $penlaty->penName = $_POST['penName'];
-        $penlaty->penAmount = $_POST['penAmount'];
-        $penlaty->penDesc = $_POST['penDesc'];
-        $penlaty->save();
+        $penalty = new Penalty;
+        $penalty->penName = $_POST['penName'];
+        $penalty->feeID = ($_POST['for'] == 0) ? null : $_POST['for']; 
+        $penalty->penAmount = $_POST['penAmount'];
+        $penalty->penType = $_POST['type'];
+        $penalty->penDays = $_POST['days'];
+        $penalty->penDesc = $_POST['desc'];
+        $penalty->save();
     }
     
     function updatePenalty(){
         $hasChange = false;
         $penalty = Penalty::where('penID',$_POST['id'])->first();
+        
         $penalty->penName = $_POST['penName'];
+        $penalty->feeID = ($_POST['for'] == 0) ? null : $_POST['for']; 
         $penalty->penAmount = $_POST['penAmount'];
-        $penalty->penDesc = $_POST['penDesc'];
+        $penalty->penType = $_POST['type'];
+        $penalty->penDays = $_POST['days'];
+        $penalty->penDesc = $_POST['desc'];
         
         if($penalty->isDirty()){
             $penalty->save();
@@ -647,5 +654,10 @@ class Controller extends BaseController
     function getUtilityInfo(){
         $util = Utility::where('utilID',$_POST['id'])->get();
         return (json_encode($util));
+    }
+    
+    function getFeesOpt(){
+        $fees = Fee::all();
+        return json_encode($fees);
     }
 }

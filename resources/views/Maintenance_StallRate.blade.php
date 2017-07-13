@@ -258,7 +258,7 @@
                 "_token": "{{ csrf_token() }}"
             }
             , success: function (data) {
-                building = JSON.parse(data);
+                var building = JSON.parse(data);
                 var opt = "<option value='0'>All</option>";
                 for (var i = 0; i < building.length; i++) {
                     opt += '<option value="' + building[i].bldgID + '">' + building[i].bldgName + '</option>';
