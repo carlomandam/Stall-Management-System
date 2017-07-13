@@ -16,7 +16,6 @@ Route::get('/', function () {
 });
 
 Route::get('/Registration', 'ApplicationController@create');
-Route::post('/Registration','ApplicationController@addVendorInfo');
 Route::get('/List', 'ApplicationController@member');
 Route::get('/View', 'ApplicationController@Memview');
 Route::get('/Update', 'ApplicationController@Update');
@@ -24,6 +23,16 @@ Route::get('/CreateContract','ContractController@create');
 Route::get('/Contract', 'ContractController@index');
 Route::get('/ViewContracts', 'ContractController@view');
 Route::get('/ShowDetails', 'ContractController@showdetails');
+Route::post('/checkEmail','ApplicationController@checkEmail');
+
+Route::post('/AddVendor','ApplicationController@addVendor');
+Route::get('/getVendor','ApplicationController@getVendor');
+Route::get('/contractTable','ApplicationController@contractTable');
+Route::post('/getVendorInfo','ApplicationController@getVendorInfo');
+Route::post('/UpdateVendor','ApplicationController@updateVendor');
+Route::get('/rentInfo','ContractController@getRentInfo');
+Route::get('/searchVendor','ApplicationController@searchVendor');
+Route::get('displaySearch','ApplicationController@displaySearch');
 //Route::post('/Registration/Create','Controller@addVendorInfo');
 //Route::resource('transaction','ApplicationController');
 
