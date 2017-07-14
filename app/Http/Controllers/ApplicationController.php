@@ -22,7 +22,11 @@ class ApplicationController extends Controller
       return view ('transaction.Member');
     }
 
-   
+      public function stall()
+    {
+
+      return view ('transaction.Stalls');
+    }
      public function Memview()
      {
       return view ('transaction.View');

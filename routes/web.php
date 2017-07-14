@@ -33,6 +33,7 @@ Route::post('/UpdateVendor','ApplicationController@updateVendor');
 Route::get('/rentInfo','ContractController@getRentInfo');
 Route::get('/searchVendor','ApplicationController@searchVendor');
 Route::get('displaySearch','ApplicationController@displaySearch');
+Route::get('/Stalls','ApplicationController@stall');
 //Route::post('/Registration/Create','Controller@addVendorInfo');
 //Route::resource('transaction','ApplicationController');
 

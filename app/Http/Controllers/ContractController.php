@@ -35,7 +35,7 @@ class ContractController extends Controller
           
             <button class='btn btn-primary' onclick='printpdf(this.value)' value = '".$rent['rentID']."' target = '_blank' ><span class='glyphicon glyphicon-print'></span> Print</button>
 
-            <button class='btn btn-success' onclick='getInfo(this.value)' value = '".$rent['rentID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
+          
              <button type='button' class='btn btn-danger dropdown-toggle' data-toggle='dropdown' disabled><span class=' glyphicon glyphicon-ban-circle'></span> Cancel</button>
            
             ";
