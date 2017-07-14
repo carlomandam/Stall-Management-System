@@ -548,16 +548,17 @@ legend{
 
                 var stall = _.find(stalls,{'stallID': $('#stallno').val()[index]});
                 var util = '';
-                for(var i = 0 ; i < stall.stall_util.length; i++){
-                    util += stall.stall_util[i].utility.utilName;
-                    if(stall.stall_util[i].RateType == 1)
-                        util += '(Monthly Reading)';
-                    else
-                        util += '(Php.'+stall.stall_util[i].Rate+'/Month)';
-                    if(i < stall.stall_util.length - 1)
-                        util += ', ';
+                if(stall.stall_util != undefined){
+                    for(var i = 0 ; i < stall.stall_util.length; i++){
+                        util += stall.stall_util[i].utility.utilName;
+                        if(stall.stall_util[i].RateType == 1)
+                            util += '(Monthly Reading)';
+                        else
+                            util += '(Php.'+stall.stall_util[i].Rate+'/Month)';
+                        if(i < stall.stall_util.length - 1)
+                            util += ', ';
+                    }
                 }
-
                 $('#selectedtbl tbody').append('<tr><td>'+stall.stallID+'</td><td>'+stall.stall_type.stypeName+'</td><td>'+util+'</td><td>Floor '+stall.floor.floorNo+', '+stall.floor.building.bldgName+'</td></tr>')
             }
             else if($('#stallno').val().length < sel){

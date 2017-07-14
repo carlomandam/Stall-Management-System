@@ -393,6 +393,9 @@ class Controller extends BaseController
     }
     
     function addStallRate(){
+        $rate = StallRate::where('stypeID', $_POST['stypeID'])->where('bldgID',($_POST['bldgID'] == 0) ? null : $_POST['bldgID'])->get();
+        if(count($rate) !== 0)
+            return "exist";
         $rate = new StallRate;
         $rate->bldgID = ($_POST['bldgID'] == 0) ? null : $_POST['bldgID'];
         $rate->stypeID = $_POST['stypeID'];

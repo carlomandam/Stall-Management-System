@@ -31,7 +31,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Stall Rates</h4> </div>
+                    <h4 class="modal-title">Add Stall Rate</h4> </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
@@ -42,13 +42,13 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stype">Building</label>
+                                <label for="stype">Building*</label>
                                 <select class="form-control bldgSelect" name="bldgID"> </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stype">Amount</label>
+                                <label for="stype">Amount*</label>
                                 <div class="input-group">
                                     <div class="input-group-addon"> <i>Php</i> </div>
                                     <input type="text" class="form-control" name="amt" placeholder="Php." /> </div>
@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Collection</label>
+                                <label>Collection*</label>
                                 <select class="form-control" name="collection">
                                     <option value='1'>Daily</option>
                                     <option value='2'>Weekly</option>
@@ -82,7 +82,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Stall Rates</h4> </div>
+                    <h4 class="modal-title">Update Stall Rate</h4> </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
@@ -93,13 +93,13 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stype">Building</label>
+                                <label for="stype">Building*</label>
                                 <select class="form-control bldgSelect" name="bldgID"> </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stype">Amount</label>
+                                <label for="stype">Amount*</label>
                                 <div class="input-group">
                                     <div class="input-group-addon"> <i>Php</i> </div>
                                     <input type="text" class="form-control" name="amt" placeholder="Php." /> </div>
@@ -107,7 +107,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Collection</label>
+                                <label>Collection*</label>
                                 <select class="form-control" name="collection">
                                     <option value='1'>Daily</option>
                                     <option value='2'>Weekly</option>
@@ -175,6 +175,10 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
+                    if(data == 'exist'){
+                        toastr.warning('Stall Rate is already set');
+                        return;
+                    }
                     toastr.success('Added New Stall Type');
                     $('#table').DataTable().ajax.reload();
                     $('#new').modal('hide');
@@ -194,7 +198,7 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
-                    toastr.success('Updated Stall Type Information');
+                    toastr.success('Updated Stall Rate');
                     $('#table').DataTable().ajax.reload();
                     $('#update').modal('hide');
                 }
