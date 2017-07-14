@@ -206,7 +206,7 @@ legend{
                                     
                                     <div class="col-md-10">
                                         <label for="lastname"><b>*Stall No:</b></label>
-                                      <select class="js-example-basic-single" style="width: 100%; " id = "stallno" name = "stallno_name">
+                                      <select class="js-example-basic-multiple" style="width: 100%; " id = "stallno" name = "stallno_name">
 
                                         @for($i = 0; $i < $buildingCount; $i++)
                                         {<optgroup label = '{{$buildingNames[$i]}}'>
@@ -467,19 +467,14 @@ legend{
                 });
             }
         });
-   
-
-        //CLICK PREVIOUS BUTTON///
-        $('#applyForm #btn-prev').on('click', function () {
-            $(this).parents('fieldset').fadeOut(400, function () {
-                $(this).prev().fadeIn();
-            });
-        });
-    });
     //SHOW CONTRACT DETAILS///
      $('#applyForm #btn-next2').on('click', function () {
            var parent_fieldset = $(this).parents('fieldset');
             var next_step = true;
+               if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
+                           return false;
+                 }
+
             if (next_step) {
                 parent_fieldset.fadeOut(400, function () {
 
@@ -488,6 +483,15 @@ legend{
                 });
             }
     });
+
+        //CLICK PREVIOUS BUTTON///
+        $('#applyForm #btn-prev').on('click', function () {
+            $(this).parents('fieldset').fadeOut(400, function () {
+                $(this).prev().fadeIn();
+            });
+        });
+    });
+   
 
 
      //LENGTH OF CONTRACT//
@@ -509,7 +513,7 @@ legend{
      //END OF LENGTH OF CONTRACT//
     // MULTIPLE SELECT2 ///
     $(function () {
-        $(".js-example-basic-single").select2({
+        $(".js-example-basic-multiple").select2({
             placeholder: 'Select Stall'
         });
     });
@@ -519,7 +523,7 @@ legend{
         , changeMonth: true
         , changeYear: true
         , autoclose: true
-        , startDate: "dateToday"
+        , startDate: "+1d"
         , todayHighlight: true
         , orientation: 'bottom'
         ,format: 'yyyy-mm-dd'
@@ -534,11 +538,17 @@ legend{
     $('#stallno').on('change',function(){
         var newVal = $(this).val();
         if($('#stallno').val() != null){
-            
-                var stall = _.find(stalls,{'stallID': $('#stallno').val()});
+            if($('#stallno').val().length > sel){
+                index = 0;
+
+                for(var i=0; i<newVal.length; i++) {
+                    if($.inArray(newVal[i], val) == -1)
+                        index = i;
+                }
+
+                var stall = _.find(stalls,{'stallID': $('#stallno').val()[index]});
                 var util = '';
-               
-                   for(var i = 0 ; i < stall.stall_util.length; i++){
+                for(var i = 0 ; i < stall.stall_util.length; i++){
                     util += stall.stall_util[i].utility.utilName;
                     if(stall.stall_util[i].RateType == 1)
                         util += '(Monthly Reading)';
@@ -547,12 +557,17 @@ legend{
                     if(i < stall.stall_util.length - 1)
                         util += ', ';
                 }
-                
-                 $('#selectedtbl tbody td').remove();
-                sel = 0;
+
                 $('#selectedtbl tbody').append('<tr><td>'+stall.stallID+'</td><td>'+stall.stall_type.stypeName+'</td><td>'+util+'</td><td>Floor '+stall.floor.floorNo+', '+stall.floor.building.bldgName+'</td></tr>')
             }
-          else{
+            else if($('#stallno').val().length < sel){
+                var id = val.filter(function(obj) { return newVal.indexOf(obj) == -1; });
+                $("td").filter(function() {
+                    return $(this).text() == id;
+                }).closest("tr").remove();
+            }
+            sel = $('#stallno').val().length; 
+        }else{
             $('#selectedtbl tbody td').remove();
             sel = 0;
         }

@@ -36,7 +36,10 @@ Route::get('displaySearch','ApplicationController@displaySearch');
 Route::get('/Stalls','ApplicationController@stall');
 //Route::post('/Registration/Create','Controller@addVendorInfo');
 //Route::resource('transaction','ApplicationController');
+//STALLS ROUTE//
 
+
+Route::get('/getStalls','StallController@getStalls');
 
 /////MAINTENANCE///////
 
