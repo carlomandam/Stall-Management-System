@@ -27,6 +27,9 @@ legend{
 .disabled:hover {
     cursor: not-allowed;
 }
+.required {
+    color: red;
+} 
 
 
 </style>
@@ -41,7 +44,7 @@ legend{
   @section('content')
    <div class="row">
         <!-- left column -->
-        <form class ="form-horizontal" id="applyForm" method ="post" action = " " >
+        <form class ="form-horizontal" id="applyForm" method ="post" action = "{{url('/AddVendor')}} " >
         <input type="hidden" id="_token" name="_token" value="{{csrf_token() }}">
         <div class="col-md-12">
         	<div class ="box box-primary">
@@ -49,14 +52,18 @@ legend{
         		<div class= "box-header">
                       
         				<legend> <b>Stall Holder Details</b></legend>
+
                 </div> 
                 <!--/.box-header-->
                         
         				<div class ="box-body">
-                        <div class = "col-md-12 form-group ">
-                          <select class="js-example-multiple-limit" style="width: 100%;  " id = "ven_name" name = "ven_name">
 
-                            </select>       
+                        <div class = "col-md-12 form-group ">
+                            <div class = "col-md-12">
+                              <select class="js-example-multiple-limit" style="width: 100%;  " id = "ven_name" name = "ven_name">
+
+                              </select>
+                            </div>       
                           
                         </div>
                         <div class = "col-md-12 form-group row" id = "stallhold">
@@ -82,26 +89,26 @@ legend{
 
         						<div class="col-md-4">
 
-        							<label for="firstName"><b>*First Name:</b></label>
+        							<label for="firstName"><b>First Name</b></label><span class="required">&nbsp*</span>
         						
-        							<input type="text" class="form-control" id="fname" name ="fname" >
+        							<input type="text" class="form-control" id="fname" name ="fname" placeholder="E.G. Jose Protacio">
         						</div>
                                 <div class="col-md-4">
-                                    <label for="middleName"><b>Middle Name:</b></label>
+                                    <label for="middleName"><b>Middle Name</b></label>
                                 
-                                    <input type="text" class="form-control" id="mname" name="mname" >
+                                    <input type="text" class="form-control" id="mname" name="mname" placeholder="E.G. Alonso Realonda">
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="lastname"><b>*Last Name:</b></label>
+                                    <label for="lastname"><b>Last Name</b></label><span class="required">&nbsp*</span>
                                 
-                                    <input type="text" class="form-control" id="lname" name="lname" >
+                                    <input type="text" class="form-control" id="lname" name="lname"  placeholder="E.G. Mercado Rizal">
                                 </div>
         					</div>
         					
         					
         					<div class=" col-md-12 form-group row">
         						<div class="col-md-3">
-        							<label for="sex"><b>*Sex:</b></label>
+        							<label for="sex"><b>Sex</b></label><span class="required">&nbsp*</span>
         						
         						<div class="radio" style="margin-left: 30px;">
         							<label><input type="radio" name="sex" value="1" checked="checked"><b>Male</b></label>
@@ -110,7 +117,7 @@ legend{
                                 </div>
 
                                 <div class = "col-md-3">
-                                <label for="bday"><b>*Birthday:</b></label>
+                                <label for="bday"><b>Birthday</b></label><span class="required">&nbsp*</span>
                                 <div class= "form-inline">
                                 <select name="DOBMonth" id = "DOBMonth">
     <option disabled="" selected=""> - Month - </option>
@@ -171,13 +178,13 @@ legend{
                                 </div>
                                 </div>
                                 <div class = "col-md-3">
-                                        <label for = "email">*Email Address:</label>
-                                        <input type = "text" class = "form-control" id = "email" name = "email"/>
+                                        <label for = "email">Email Address</label><span class="required">&nbsp*</span>
+                                        <input type = "text" class = "form-control" id = "email" name = "email"  placeholder="email@domain.com"/>
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="phone"><b>* Mobile:</b></label>
-                                    <input type="text" class="form-control" id="mob" name="mob">
+                                    <label for="phone"><b>Mobile Number</b></label><span class="required">&nbsp*</span>
+                                    <input type="text" class="form-control" id="mob" name="mob"  placeholder="09xxxxxxxxx">
                                  </div>
 
 
@@ -186,12 +193,13 @@ legend{
 
                             <div class="col-md-12 form-group row">
                                 <div class = "col-md-12">
-                                    <label for="address"><b>*Home Address:</b></label>
+                                    <label for="address"><b>Home Address</b></label><span class="required">&nbsp*</span>
                             
                                     <textarea rows="4" class="form-control" id="address" name="address"></textarea>
                                 </div>
+                                 <p class="small text-danger" style="margin-left: 20px;">Fields with asterisks(*) are required</p>
                             </div>
-                            
+                           
                                 <div class = "pull-right">
                             
                                 <button type="button" class="btn btn-primary" style="font-size: 16px; margin-right: 50px; width: 100px;" id = 'btn-next'>Next</button>
@@ -204,9 +212,9 @@ legend{
                       </div>
                       <div class="col-md-12 form-group row">
                                     
-                                    <div class="col-md-10">
-                                        <label for="lastname"><b>*Stall No:</b></label>
-                                      <select class="js-example-basic-multiple" style="width: 100%; " id = "stallno" name = "stallno_name">
+                                    <div class="col-md-12">
+                                        <label for="lastname"><b>Stall No</b></label><span class="required">&nbsp*</span>
+                    <select class="js-example-basic-multiple" style="width: 100%; " id = "stallno" name = "stallno_name[]" multiple = "multiple">
 
                                         @for($i = 0; $i < $buildingCount; $i++)
                                         {<optgroup label = '{{$buildingNames[$i]}}'>
@@ -234,7 +242,7 @@ legend{
                                 </div>
                             <div class ="col-md-12 form-group row">
 
-                                    <div class = "col-md-10">    
+                                    <div class = "col-md-12">    
                                   
 <!-- /.box-header -->
 <div class="box-body no-padding">
@@ -255,12 +263,12 @@ legend{
 </div>
 <div class="col-md-12 form-group row">
     <div class="col-md-12">
-        <label for="startdate">* Starting Date: </label>
-        <input type="text" class="form-control" id='datepicker' name='datepicker' /> </div>
+        <label for="startdate">Starting Date </label><span class="required">&nbsp*</span>
+        <input type="text" class="form-control" id='datepicker' name='datepicker'  readonly="readonly"  style=" cursor:pointer;background:white;"/> </div>
 </div>
 <div class="col-md-12 form-group row">
     <div class="col-md-12">
-        <label for="bussiname">Business Name:</label>
+        <label for="bussiname">Business Name</label>
         <input type="text" class="form-control" id="businessName" name ="businessName" /> </div>
 </div>
 <div class="col-md-12 form-group row">
@@ -271,17 +279,18 @@ legend{
 </div>
 <div class="col-md-12 form-group row" id="assoc_hold">
     <div class="col-md-6">
-        <label for="assoc1"><b>Associate 1:</b></label>
+        <label for="assoc1"><b>Associate 1</b></label>
         <input type="text" class="form-control" placeholder="Full Name" id="assoc_one" name ="assoc_one"> </div>
     <div class="col-md-6">
-        <label for="assoc2"><b>Associate 2:</b></label>
+        <label for="assoc2"><b>Associate 2</b></label>
         <input type="text" class="form-control" / placeholder="Full Name" id="assoc_two" name ="assoc_two"> </div>
 </div>
 <div class="col-md-12 form-group row">
     <div class="col-md-12">
-        <label for="address"><b>*List of Products:</b></label>
+        <label for="address"><b>List of Products</b></label><span class="required">&nbsp*</span>
         <textarea rows="4" class="form-control" id="prods" name="prods"></textarea>
     </div>
+     <p class="small text-danger" style="margin-left: 20px;">Fields with asterisks(*) are required</p>
 </div>
 
 <div class="pull-right" id="btn-last">
@@ -297,26 +306,31 @@ legend{
 
                       <div class="col-md-12 form-group row">
                         <div class = "col-md-2">
-                        <label for = "length">Length of Contract</label>
+                        <label for = "length">Length of Contract</label><span class="required">&nbsp*</span>
                         </div>
-                        <div class = "col-md-8">
-                        <input type = "text" id = "specific_no" name = "specific_no"/>
+                        <div class = "col-md-4">
+                        <input type = "text" id = "specific_no" name = "specific_no" placeholder="" />
                        
                         
-                        <select name = "length" id = "length">
-                             <option value = "1" selected>Week(s)</option>
-                             <option value = "2">Month-to-Month</option>
-                             <option value = "3">Month(s)</option>
-                             <option value = "4">Year-to-Year</option>
-                             <option value = "5">Year(s)</option>
-                            
+                        <select name = "length" id = "length" style="width: 50%">
+                           @foreach($contract_period as $period)
+                           {
+                            <option value = "{{$period['contract_periodID']}}">{{$period['contract_periodDesc']}}</option>
+                           }
+                        @endforeach
                         </select>
+
                         </div>
+
                       </div>
-                                  
+                      <div class = "col-md-12 form-group row">
+                        <div class = "col-md-12">
+                        <p class="small text-danger" >Fields with asterisks(*) are required</p>
+                        </div>
+                       </div>           
 <div class="pull-right" id="btn-last">
     <button type="button" class="btn btn-primary" style="font-size: 16px; margin-right: 50px; width: 100px; margin-right: 20px;" id="btn-prev">Previous</button>
-    <button type="button" id = "btn-final" class="btn btn-primary" style="font-size: 16px; width: 100px; margin-right: 50px;">Submit</button>
+    <button type="arf" id = "btn-submit" class="btn btn-primary" style="font-size: 16px; width: 100px; margin-right: 50px;">Submit</button>
 </div>
 </fieldset>
 </div>
@@ -360,6 +374,24 @@ legend{
         }
     });
     $(document).ready(function () {
+        //Set selected value in length of contract//
+        $("#length").val($("#length option:first").val());
+        var placeholderValue;
+   
+                if($("#length option:selected").text().indexOf('Week') > -1)
+                {
+                    placeholderValue = "No. of Week/s";
+                }
+                else if($("#length option:selected").text().indexOf('Month') > -1)
+                {
+                    placeholderValue = "No. of Month/s";
+                }
+                else
+                {
+                    placeholderValue = "No. of Year/s";
+                }
+            $('#specific_no').attr('placeholder',""+placeholderValue);
+
         //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
         var select = $('#DOBYear');
         var leastYr = 1960;
@@ -377,8 +409,25 @@ legend{
                 $('#assoc_hold').fadeOut();
             }
         });
+
+         //email validation//
+         $.validator.addMethod("custom_email", function(value, element) {
+          var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+        return pattern.test(value);
+        }, 'Input valid email address');
+
+         //mobile number validation//
+          
+         $.validator.addMethod("custom_mobno", function(value, element) {
+          var pattern = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+         return pattern.test(value);
+         }, 'Input valid mobile number');
+
+         //end of validation//
+
+
         // MULTI-STEP FORM///
-        
+  
         $('#applyForm #btn-next').on('click', function () {
 
             $('#applyForm').validate({
@@ -388,9 +437,10 @@ legend{
                     ,sex:   {required:true }
                     ,address:{required:true}
                     ,mob:    {required:true,
-                             number:true }
+                             custom_mobno:true,
+                             maxlength: 11 }
                     ,email:  {required:true,
-                            email:true,
+                           custom_email:true,
                         remote:{
                             url: '/checkEmail',
                             type: 'post',
@@ -407,7 +457,11 @@ legend{
                     ,stallno_name: {required:true}
                     ,prods: {required:true}
                     ,datepicker:   {required:true }
-                   
+                    ,DOBDay :{ required:true}
+                    ,DOBMonth: { required:true}
+                    ,DOBYear: {required:true}
+                    ,specific_no: {required:true,number:true}
+
                     
 
 
@@ -438,7 +492,14 @@ legend{
                         required: "List of products is required"
                     },
                     datepicker: {
-                        required: "Start Date is required"
+                        required: "Starting Date is required"
+                    },
+                    DOBDay, DOBMonth, DOBYear:{
+                        required: "Birthday is required"
+                    }, 
+                    specific_no:{
+                        required: "Input specific number",
+                        number: "Numbers only"
                     }
 
                   
@@ -497,14 +558,32 @@ legend{
      //LENGTH OF CONTRACT//
 
      $('#length').on('change',function(){
-   if($(this).val()==1|| $(this).val()==3 ||$(this).val()==5)
-        {
-            $('#specific_no').show();
-            $('#specific_no').val('');
+       var placeholderValue;
+     if($("#length option:selected").text().indexOf("(") > -1)
+        { 
+                if($("#length option:selected").text().indexOf('Week') > -1)
+                {
+                    placeholderValue = "No. of Week/s";
+                }
+                else if($("#length option:selected").text().indexOf('Month') > -1)
+                {
+                    placeholderValue = "No. of Month/s";
+                }
+                else
+                {
+                    placeholderValue = "No. of Year/s";
+                }
+            $('#specific_no').attr('placeholder',""+placeholderValue);
+            
+             $('#specific_no').removeAttr('disabled',false);
+            
+             $('#specific_no').val('');
         }
         else{
-            $('#specific_no').hide();
-             $('#specific_no').val('');
+            
+             $('#specific_no').val('N/A');
+             $('#specific_no').attr('disabled',true);
+             $('#specific_no').removeAttr('placeholder',false);
         }
      })
      
@@ -514,7 +593,8 @@ legend{
     // MULTIPLE SELECT2 ///
     $(function () {
         $(".js-example-basic-multiple").select2({
-            placeholder: 'Select Stall'
+            placeholder: 'Select Stall',
+            theme : "bootstrap"
         });
     });
     $("#datepicker").datepicker({
@@ -526,7 +606,7 @@ legend{
         , startDate: "+1d"
         , todayHighlight: true
         , orientation: 'bottom'
-        ,format: 'yyyy-mm-dd'
+        ,format:  "MM dd,yyyy" 
     });
 
 
@@ -590,6 +670,7 @@ legend{
                 , success: function (data) {
                     toastr.success('Successfully Registered!');
                     $("#applyForm")[0].reset();
+                     location.reload();
                     
                 }
             });
@@ -670,7 +751,7 @@ $('#ven_name').on('change',function(){
         
      
 });
-
+ 
 
 </script> 
   @stop 

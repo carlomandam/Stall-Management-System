@@ -8,6 +8,7 @@ use App\Stall;
 use App\StallRate;
 use App\StallType;
 use App\Rent;
+use App\ContractPeriod;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -63,12 +64,13 @@ class ApplicationController extends Controller
       
         //END OF SELECT2 DROPDWON//
 
+        //LENGTH OF DROPDOWN POPULATE//
 
-       
+        $contract_period = ContractPeriod::all();
          
         
         
-        return view('transaction.Application_temporary',compact('nextId','stall','buildingNames','buildingCount'));
+        return view('transaction.Application_temporary',compact('nextId','stall','buildingNames','buildingCount','contract_period'));
     }
  
 
@@ -112,9 +114,9 @@ class ApplicationController extends Controller
         if($vendor->save()){
             try{
                 
-          
-                    $rent = new Rent;
-                    $rent->stallID = $_POST['stallno_name'];
+              foreach($_POST['stallno_name'] as $selectedOption)
+                 {   $rent = new Rent;
+                    $rent->stallID = $selectedOption;
                     $rent->venID = $vendor->venID;
                     $rent->rentStartDate = $_POST['datepicker'];
                     $rent->rentRegDate = date('Y-m-d');
@@ -122,8 +124,26 @@ class ApplicationController extends Controller
                     $rent->rentProdDesc = $_POST['prods']; 
                     $rent->assocHolder_1 =$_POST['assoc_one'];
                     $rent->assocHolder_2 =$_POST['assoc_two'];
-                    $rent->save();
-                
+                   
+
+
+                    if( $rent->save())
+                    {
+                      $contract = new Contract;
+                      $contract->rentID = $rent->rentID;
+                      $contract->contractLength->$_POST['specific_no'];
+                      $contract->contractStatus = 0;
+                      $contract-save();
+
+                      $contractInfo = new ContractInfo;
+                      $contractInfo->contractID = $contract->contractID;
+                      $contractInfo->contract_periodID = $_POST['length'];
+                      $contractInfo->save();
+
+                    }
+
+                }
+
             }catch(Exception $e)
             {
               $vendor->forceDelete();
