@@ -206,7 +206,7 @@ legend{
                                     
                                     <div class="col-md-10">
                                         <label for="lastname"><b>*Stall No:</b></label>
-                                      <select class="js-example-basic-single" style="width: 100%; " id = "stallno" name = "stallno_name">
+                                      <select class="js-example-basic-single" style="width: 100%; " id = "stallno" name = "stallno_name[]">
 
                                         @for($i = 0; $i < $buildingCount; $i++)
                                         {<optgroup label = '{{$buildingNames[$i]}}'>
