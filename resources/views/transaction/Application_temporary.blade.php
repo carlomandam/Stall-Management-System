@@ -206,10 +206,11 @@ legend{
                                     
                                     <div class="col-md-10">
                                         <label for="lastname"><b>*Stall No:</b></label>
-                                      <select class="js-example-basic-multiple" style="width: 100%; " id = "stallno" name = "stallno_name">
+                                      <select class="js-example-basic-multiple" style="width: 100%; " id = "stallno" name = "stallno_name" multiple='multiple'>
 
                                         @for($i = 0; $i < $buildingCount; $i++)
-                                        {<optgroup label = '{{$buildingNames[$i]}}'>
+                                        {
+                                        <optgroup label = '{{$buildingNames[$i]}}'>
                                             @foreach($stall as $Stall)
                                             {
                                                 @if($buildingNames[$i] == $Stall->floor->building->bldgName)
@@ -228,8 +229,7 @@ legend{
                                       
                                       
                                         </select>
-
-                                    </div> 
+                                    </div>
 
                                 </div>
                             <div class ="col-md-12 form-group row">
@@ -381,7 +381,7 @@ legend{
         
         $('#applyForm #btn-next').on('click', function () {
 
-            $('#applyForm').validate({
+           /* $('#applyForm').validate({
                 rules:{
                      fname: {required:true}
                     ,lname: {required:true}
@@ -446,7 +446,7 @@ legend{
                 ,errorClass: "error-class"
             , validClass: "valid-class"
 
-            });  
+            });  */
 
 
 
@@ -545,7 +545,6 @@ legend{
                     if($.inArray(newVal[i], val) == -1)
                         index = i;
                 }
-
                 var stall = _.find(stalls,{'stallID': $('#stallno').val()[index]});
                 var util = '';
                 if(stall.stall_util != undefined){
