@@ -18,4 +18,7 @@ class Rent extends Model
     {
     	return $this->hasMany('App\Vendor','venID');
     }
+    public function Contract(){
+        return $this->belongsTo('App\Contract','rentID');
+    }
 }

@@ -9,12 +9,12 @@ class ContractInfo extends Model
     
     protected $table = "tblcontract_info";
     protected $primaryKey = "contract_infoID";
-  
+   public $timestamps = false;
     public function ContractPeriod(){
-        return $this->belongsTo('App\ContractPeriod','contract_periodID');
+        return $this->hasMany('App\ContractPeriod','contract_periodID');
     }
     public function Contract(){
-        return $this->belongsTo('App\Contract','contractID');
+        return $this->hasMany('App\Contract','contractID');
     }
 
 }

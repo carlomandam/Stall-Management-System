@@ -9,6 +9,8 @@ use App\StallRate;
 use App\StallType;
 use App\Rent;
 use App\ContractPeriod;
+use App\Contract;
+use App\ContractInfo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -77,23 +79,61 @@ class ApplicationController extends Controller
     
     function addVendor()
     { 
-      if(isset($_POST['ven_name']))
+      if(isset($_POST['ven_name'])) //if search existing record
       {
         $vendor = Vendor::find($_POST['ven_name']);
-         try{
-                
-          
-                    $rent = new Rent;
-                    $rent->stallID = $_POST['stallno_name'];
+     
+        try{
+                $input = Input::get('stallno_name');
+                $count = count($input);
+                  foreach($input as $Input)
+                 {   $rent = new Rent;
+                    $rent->stallID = $Input;
                     $rent->venID = $vendor->venID;
-                    $rent->rentStartDate = $_POST['datepicker'];
+                    $date1 = $_POST['datepicker'];
+                    $date1 = date('Y-m-d', strtotime($date1));
+                    $rent->rentStartDate = $date1;
                     $rent->rentRegDate = date('Y-m-d');
                     $rent->rentBusinessName = $_POST['businessName'];
                     $rent->rentProdDesc = $_POST['prods']; 
                     $rent->assocHolder_1 =$_POST['assoc_one'];
                     $rent->assocHolder_2 =$_POST['assoc_two'];
-                    $rent->save();
-                
+                   
+
+
+                    if( $rent->save())
+                    {
+                    
+
+                      $contract = new Contract;
+                      $contract->rentID = $rent->rentID;
+                      if(!isset($_POST['specific_no']))
+                        { $length = 1;}
+                      else{
+                        $length = $_POST['specific_no'];
+                      }
+                      $contract->contractLength = $length;
+                      $contract->contractStatus = 0;
+
+                      $contract->save();
+                      if($contract->save())
+                      { $contractInfo = new ContractInfo;
+                      $contractInfo->contractID = $contract->contractID;
+                      $contractInfo->contractPeriodID = $_POST['length'];
+                      $contractInfo->save();
+                      }
+                      else
+                      {
+                        App::abort(500,"Error");
+                      }
+                    
+                    }
+                    else
+                    {
+                      App::abort(500,'Error');
+                    }
+               }
+           
             }catch(Exception $e)
             {
               $vendor->forceDelete();
@@ -110,15 +150,18 @@ class ApplicationController extends Controller
         $vendor->venBday =  $_POST['DOBYear']."-". $_POST['DOBMonth']."-". $_POST['DOBDay'];
         $vendor->venContact = $_POST['mob'];
         $vendor->venEmail =  $_POST['email'];;
-
-        if($vendor->save()){
+        $savedVendor = $vendor->save();
+        if($savedVendor){
             try{
-                
-              foreach($_POST['stallno_name'] as $selectedOption)
+                $input = Input::get('stallno_name');
+                $count = count($input);
+                  foreach($input as $Input)
                  {   $rent = new Rent;
-                    $rent->stallID = $selectedOption;
+                    $rent->stallID = $Input;
                     $rent->venID = $vendor->venID;
-                    $rent->rentStartDate = $_POST['datepicker'];
+                    $date1 = $_POST['datepicker'];
+                    $date1 = date('Y-m-d', strtotime($date1));
+                    $rent->rentStartDate = $date1;
                     $rent->rentRegDate = date('Y-m-d');
                     $rent->rentBusinessName = $_POST['businessName'];
                     $rent->rentProdDesc = $_POST['prods']; 
@@ -129,27 +172,46 @@ class ApplicationController extends Controller
 
                     if( $rent->save())
                     {
+                     // $rent->save();
+
                       $contract = new Contract;
                       $contract->rentID = $rent->rentID;
-                      $contract->contractLength->$_POST['specific_no'];
+                          if(!isset($_POST['specific_no']))
+                        { $length = 1;}
+                      else{
+                        $length = $_POST['specific_no'];
+                      }
+                      $contract->contractLength = $length;
                       $contract->contractStatus = 0;
-                      $contract-save();
 
-                      $contractInfo = new ContractInfo;
+                      $contract->save();
+                      if($contract->save())
+                      { $contractInfo = new ContractInfo;
                       $contractInfo->contractID = $contract->contractID;
-                      $contractInfo->contract_periodID = $_POST['length'];
+                      $contractInfo->contractPeriodID = $_POST['length'];
                       $contractInfo->save();
-
+                      }
+                      else
+                      {
+                        App::abort(500,"Error");
+                      }
+                    
                     }
-
-                }
-
+                    else
+                    {
+                      App::abort(500,'Error');
+                    }
+               }
+           
             }catch(Exception $e)
             {
               $vendor->forceDelete();
             }
         }
+     
       }
+  
+
     }
 function checkEmail()
 {

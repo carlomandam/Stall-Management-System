@@ -12,7 +12,7 @@ class ContractPeriod extends Model
     protected $dates = ['deleted_at'];
     
         public function ContractInfo(){
-        return $this->hasMany('App\ContractInfo','contract_periodID');
+        return $this->belongsTo('App\ContractInfo','contract_periodID');
     }
     
  	
