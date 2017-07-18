@@ -44,7 +44,7 @@ legend{
   @section('content')
    <div class="row">
         <!-- left column -->
-        <form class ="form-horizontal" id="applyForm" method ="post" action = "{{url('/AddVendor')}} " >
+        <form class ="form-horizontal" id="applyForm" method ="post" action = " " >
         <input type="hidden" id="_token" name="_token" value="{{csrf_token() }}">
         <div class="col-md-12">
         	<div class ="box box-primary">
@@ -111,8 +111,8 @@ legend{
         							<label for="sex"><b>Sex</b></label><span class="required">&nbsp*</span>
         						
         						<div class="radio" style="margin-left: 30px;">
-        							<label><input type="radio" name="sex" value="1" checked="checked"><b>Male</b></label>
-        							<label><input type="radio" name="sex" value="0"><b>Female</b></label>
+        							<label><input type="radio" name="sex" id = "sex1" value="1" checked="checked"><b>Male</b></label>
+        							<label><input type="radio" name="sex" id = "sex0" value="0"><b>Female</b></label>
         						</div>
                                 </div>
 
@@ -425,12 +425,37 @@ legend{
 
          //end of validation//
 
-
+        
         // MULTI-STEP FORM///
-  
+
         $('#applyForm #btn-next').on('click', function () {
 
-           /* $('#applyForm').validate({
+            if($('#ven_name').val()==="" || $('#ven_name').val() == null)
+            {  
+                   validateInput();
+
+            }
+            else
+            {
+                  
+                 $('#applyForm fieldset :first-child').fadeIn('slow');
+            var parent_fieldset = $(this).parents('fieldset');
+            var next_step = true;
+           
+            if (next_step) {
+                parent_fieldset.fadeOut(400, function () {
+                    $(this).next().fadeIn();
+                });
+            }
+              recordExists();
+            }
+       
+  
+        });
+
+        function validateInput()
+        {
+            $('#applyForm').validate({
                 rules:{
                      fname: {required:true}
                     ,lname: {required:true}
@@ -506,36 +531,28 @@ legend{
                 }
                 ,errorClass: "error-class"
             , validClass: "valid-class"
-
-            });  */
-
-
-
+            });  
+                 $('#applyForm fieldset :first-child').fadeIn('slow');
+            var parent_fieldset = $(this).parents('fieldset');
+            var next_step = true;
             
-
-
             if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
                            return false;
                  }
 
-
-            $('#applyForm fieldset :first-child').fadeIn('slow');
-            var parent_fieldset = $(this).parents('fieldset');
-            var next_step = true;
             if (next_step) {
                 parent_fieldset.fadeOut(400, function () {
                     $(this).next().fadeIn();
                 });
             }
-        });
-    //SHOW CONTRACT DETAILS///
+             //SHOW CONTRACT DETAILS///
      $('#applyForm #btn-next2').on('click', function () {
            var parent_fieldset = $(this).parents('fieldset');
             var next_step = true;
-               if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
+            
+      if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
                            return false;
                  }
-
             if (next_step) {
                 parent_fieldset.fadeOut(400, function () {
 
@@ -544,6 +561,39 @@ legend{
                 });
             }
     });
+        }
+        //check if email exists
+        $('#email').on('blur',function(){
+
+            $('#applyForm').validate({
+                rules:{
+                    email:  {
+                        remote:{
+                            url: '/checkEmail',
+                            type: 'post',
+                            data:{
+                                email:function(){
+                                    return $('#applyForm').find("input[name=email]").val();
+                                },
+                                _token: function(){
+                                    return $('#_token').val();
+                                }
+                            }
+                        }
+                    }
+                },
+                messages:{
+                    email:{remote: "Email is already taken"},
+
+                }
+                 ,errorClass: "error-class"
+            , validClass: "valid-class"
+            });
+        
+        });
+
+
+   
 
         //CLICK PREVIOUS BUTTON///
         $('#applyForm #btn-prev').on('click', function () {
@@ -553,8 +603,56 @@ legend{
         });
     });
    
+  
+   function recordExists()
+   {
+    $('#applyForm').validate({
+                rules:{
+                     stallno_name:{required:true}
+                    ,prods: {required:true}
+                    ,datepicker:   {required:true }
+                    ,specific_no: {required:true,number:true}
+                }
+                , messages:{
+                   
+                    stallno_name: {
+                        required: "Select a Stall No."
+                    },
+                    prods: {
+                        required: "List of products is required"
+                    },
+                    datepicker: {
+                        required: "Starting Date is required"
+                    },
+                    specific_no:{
+                        required: "Input specific number",
+                        number: "Numbers only"
+                    }
 
+                  
+                }
+                ,errorClass: "error-class"
+            , validClass: "valid-class"
 
+            });  
+               
+             //SHOW CONTRACT DETAILS///
+     $('#applyForm #btn-next2').on('click', function () {
+           var parent_fieldset = $(this).parents('fieldset');
+            var next_step = true;
+            
+      if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
+                           return false;
+                 }
+            if (next_step) {
+                parent_fieldset.fadeOut(400, function () {
+
+                    $(this).next().fadeIn();
+                   
+                });
+            }
+    });
+   }
      //LENGTH OF CONTRACT//
 
      $('#length').on('change',function(){
@@ -661,15 +759,16 @@ legend{
             var formData = new FormData($(this)[0]);
             $.ajax({
                 type: "POST"
-                ,url:'/AddVendor'
+                ,url:"{{url('AddVendor')}}"
              , data: formData
-                , processData: false
+              , processData: false
                 , contentType: false
                 , context: this
                 , success: function (data) {
-                    toastr.success('Successfully Registered!');
+                    toastr.success('Successfully Registered');
+
                     $("#applyForm")[0].reset();
-                     location.reload();
+                    location.reload();
                     
                 }
             });
@@ -718,19 +817,27 @@ $('#ven_name').on('change',function(){
                $leftval = "SH-" + 2017;
                $stallholderno = $leftval + String("00000" + obj.venID).slice(-5);
                  $('#applyForm').find('input[name=orgname]').val(obj.venOrgName);
+                 $('#orgname').attr('disabled',true);
+
               $('#vendor_no').val($stallholderno);  
-              $('#fname').val(obj.venFName);
-              $('#mname').val(obj.venMName);
-              $('#lname').val(obj.venLName);
+              $('#fname').val(obj.venFName); $('#fname').attr('disabled',true);
+              $('#mname').val(obj.venMName); $('#mname').attr('disabled',true);
+                if($('#mname').val() == null || $('#mname').val()==""){
+                    $('#mname').removeAttr('placeholder');
+                }
+              $('#lname').val(obj.venLName); $('#lname').attr('disabled',true);
+
               if(obj.venSex==1)
                     {
-                    $('#applyForm').find('input[name=sex][value = 1]').attr('checked', true);}
+                    $('#applyForm').find('input[name=sex][value = 1]').attr('checked', true);
+                   }
                     else{
-                       $('#applyForm').find('input[name=sex][value = 0]').attr('checked', true);
+                       $('#applyForm').find('input[name=sex][value = 0]').attr('checked', true);     
                     }
-
-                    $('#applyForm').find('input[name = email]').val(obj.venEmail);
-                    $('#applyForm').find('input[name = mob]').val(obj.venContact);
+                          $('#sex1').attr('disabled',true);
+                     $('#sex0').attr('disabled',true);
+                    $('#applyForm').find('input[name = email]').val(obj.venEmail); $('#email').attr('disabled',true);
+                    $('#applyForm').find('input[name = mob]').val(obj.venContact); $('#mob').attr('disabled',true);
                     var bday = obj.venBDay;
                    
                     $splitDate = bday.split("-");
@@ -738,8 +845,9 @@ $('#ven_name').on('change',function(){
                   //  $('#DOBYear').selectmenu('refresh',true);
                     $('#DOBMonth').val($splitDate[1]).attr('selected',true).siblings('option').removeAttr('selected');
                     $('#DOBDay').val($splitDate[2]).attr('selected',true).siblings('option').removeAttr('selected');
-
-                    $('#address').val(obj.venAddress);
+                    $('.dropdown-toggle').addClass('disabled');
+                    $('#DOBYear').attr('disabled',true); $('#DOBDay').attr('disabled',true); $('#DOBMonth').attr('disabled',true);
+                    $('#address').val(obj.venAddress); $('#address').attr('disabled',true);
               
               }
 
