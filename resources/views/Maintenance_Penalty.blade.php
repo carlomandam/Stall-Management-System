@@ -39,7 +39,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="penName">Penalty Name*</label>
-                                <input type="text" class="form-control" name="penName" placeholder="Fee Name" /> </div>
+                                <input type="text" class="form-control" name="penName" placeholder="Penalty Name" /> </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -92,7 +92,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="penName">Penalty Name*</label>
-                                <input type="text" class="form-control" name="penName" placeholder="Fee Name" /> </div>
+                                <input type="text" class="form-control" name="penName" placeholder="Penalty Name" /> </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -145,6 +145,10 @@
                     required: true
                     , number: true
                 }
+                ,days: {
+                    required: true
+                    ,digits : true
+                }
             }
             , messages: {
                 penName: {
@@ -153,6 +157,10 @@
                 , penAmount: {
                     required: "Please enter Amount"
                     , number: "Invalid Amount"
+                }
+                , days: {
+                    required: "Please enter numbe of days"
+                    , digits: "Please enter a valid number of days"
                 }
             }
             , errorClass: "error-class"
@@ -167,6 +175,10 @@
                     required: true
                     , number: true
                 }
+                ,days: {
+                    required: true
+                    ,digits : true
+                }
             }
             , messages: {
                 penName: {
@@ -175,6 +187,10 @@
                 , penAmount: {
                     required: "Please enter Amount"
                     , number: "Invalid Amount"
+                }
+                , days: {
+                    required: "Please enter numbe of days"
+                    , digits: "Please enter a valid number of days"
                 }
             }
             , errorClass: "error-class"

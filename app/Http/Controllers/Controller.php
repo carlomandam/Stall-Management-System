@@ -39,7 +39,6 @@ class Controller extends BaseController
                 for($j = 1;$j < $_POST['noOfStall'][$i-1]+1;$j++){
                     $stall = new Stall;
                     $stall->stallID = $this->stallID($building->bldgCode,$floor->floorNo);
-                    $stall->stypeID = 1;
                     $stall->floorID = $floor->floorID;
                     $stall->stallStatus = 1;
                     $stall->save();
@@ -295,7 +294,7 @@ class Controller extends BaseController
     }
     
     function getStallID(){
-    	$stall = Stall::where('stallID','LIKE',$_POST['code']."-".$_POST['floor']."%")->orderBy('stallID','desc')->first();
+    	$stall = Stall::withTrashed()->where('stallID','LIKE',$_POST['code']."-".$_POST['floor']."%")->orderBy('stallID','desc')->first();
         $id = "";
         if(Empty($stall)){
             $id = $_POST['code']."-".$_POST['floor']."01";
@@ -354,33 +353,34 @@ class Controller extends BaseController
     function updateStall(){
         $hasChange = false;
         $stall = Stall::where('stallID',$_POST['stallID'])->first();
-        $stall->stypeID = $_POST['type'];
+        $stall->stypeID = (isset($_POST['type'])) ? $_POST['type'] : null;
         if($stall->isDirty()){
             $stall->save();
             $hasChange = true;
         }
-        
-        for($i = 0; $i < count($_POST['util']);$i++){
-            $stallutil = StallUtil::where('stallID',$_POST['stallID'])->where('utilID',$_POST['util'][$i])->first();
-            if(Empty($stallutil)){
-                $stallutil = new StallUtil;
-                $stallutil->stallID = $stall->stallID;
-                $stallutil->utilID = $_POST['util'][$i];
-                $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
-                $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
-                $stallutil->meterID = $_POST['meter'.$_POST['util'][$i]];
-                if($stallutil->isDirty()){
-                    $stallutil->save();
-                    $hasChange = true;  
+        if(isset($_POST['util'])){
+            for($i = 0; $i < count($_POST['util']);$i++){
+                $stallutil = StallUtil::where('stallID',$_POST['stallID'])->where('utilID',$_POST['util'][$i])->first();
+                if(Empty($stallutil)){
+                    $stallutil = new StallUtil;
+                    $stallutil->stallID = $stall->stallID;
+                    $stallutil->utilID = $_POST['util'][$i];
+                    $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
+                    $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
+                    $stallutil->meterID = $_POST['meter'.$_POST['util'][$i]];
+                    if($stallutil->isDirty()){
+                        $stallutil->save();
+                        $hasChange = true;  
+                    }
                 }
-            }
-            else{
-                $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
-                $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
-                $stallutil->meterID = $_POST['meter'.$_POST['util'][$i]];
-                if($stallutil->isDirty()){
-                    $stallutil->save();
-                    $hasChange = true;
+                else{
+                    $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
+                    $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
+                    $stallutil->meterID = $_POST['meter'.$_POST['util'][$i]];
+                    if($stallutil->isDirty()){
+                        $stallutil->save();
+                        $hasChange = true;
+                    }
                 }
             }
         }
@@ -454,6 +454,14 @@ class Controller extends BaseController
             $changed = 'true';   
         }
         echo $changed;
+    }
+    
+    function checkRate(){
+        $rate = StallRate::where('stypeID',$_POST['stype'])->where('bldgID',$_POST['bldgID'])->where('srateID','!=',isset($_POST['id']) ? $_POST['id'] : null)->get();
+        if(count($rate) > 0)
+            return "false";
+        else
+            return "true";
     }
     
     function getFees(){

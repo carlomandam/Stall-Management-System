@@ -141,7 +141,14 @@
                         "data": "stallID"
                     }
                     , {
-                        "data": "stall_type.stypeName"
+                        "data": function (data, type, dataToSet) {
+                            if(data.stall_type != null){
+                                return data.stall_type.stypeName;
+                            }
+                            else{
+                                return "N/A";
+                            }
+                        }
                     }
                     , {
                         "data": function (data, type, dataToSet) {
@@ -210,6 +217,10 @@
                 $('#newform').find('.bldgSelect').trigger('change');
                 $('#newform').find('.floorSelect').trigger('change');
                 if ($(this)[0] == $('#update')[0]) {
+                    if(obj.stall_type != null)
+                        $(this).find('select[name=type]').val(obj.stall_type.stypeID);
+                    else
+                        $(this).find('select[name=type]')[0].selectedIndex = -1;
                     $(this).find('input[name=stallID]').val(obj.stallID);
                     $(this).find('input[name=floor]').val(obj.floor.floorNo);
                     $(this).find('input[name=building]').val(obj.floor.building.bldgName);

@@ -40,7 +40,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="name">Utility Name*</label>
-                                                <input type="text" class="form-control" name="name" placeholder="Fee Name" /> </div>
+                                                <input type="text" class="form-control" name="name" placeholder="Utility Name" /> </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">

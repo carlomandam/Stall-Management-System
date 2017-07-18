@@ -45,7 +45,7 @@
         }
         
         .error-class {
-            color: #a94442;
+            color: red;
             border-color: 2px solid #ebccd1;
             padding: 1px 20px 1px 20px;
         }
