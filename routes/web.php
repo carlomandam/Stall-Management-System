@@ -34,6 +34,9 @@ Route::get('/rentInfo','ContractController@getRentInfo');
 Route::get('/searchVendor','ApplicationController@searchVendor');
 Route::get('displaySearch','ApplicationController@displaySearch');
 Route::get('/Stalls','ApplicationController@stall');
+Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfview',
+										'as' => 'htmltopdfview']);
+
 //Route::post('/Registration/Create','Controller@addVendorInfo');
 //Route::resource('transaction','ApplicationController');
 //STALLS ROUTE//
