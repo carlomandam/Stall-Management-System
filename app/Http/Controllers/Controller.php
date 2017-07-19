@@ -321,7 +321,7 @@ class Controller extends BaseController
                 $stallutil->utilID = $_POST['util'][$i];
                 $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
                 $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
-                $stallutil->meterID = $_POST['meter'.$_POST['util'][$i]];
+                $stallutil->meterID = (isset($_POST['meter'.$_POST['util'][$i]])) ? $_POST['meter'.$_POST['util'][$i]] : null;
                 if($stallutil->isDirty()){
                     $stallutil->save();
                     $hasChange = true;  
@@ -330,7 +330,7 @@ class Controller extends BaseController
             else{
                 $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
                 $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
-                $stallutil->meterID = $_POST['meter'.$_POST['util'][$i]];
+                $stallutil->meterID = (isset($_POST['meter'.$_POST['util'][$i]])) ? $_POST['meter'.$_POST['util'][$i]] : null;
                 if($stallutil->isDirty()){
                     $stallutil->save();
                     $hasChange = true;
@@ -367,7 +367,7 @@ class Controller extends BaseController
                     $stallutil->utilID = $_POST['util'][$i];
                     $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
                     $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
-                    $stallutil->meterID = $_POST['meter'.$_POST['util'][$i]];
+                    $stallutil->meterID = (isset($_POST['meter'.$_POST['util'][$i]])) ? $_POST['meter'.$_POST['util'][$i]] : null;
                     if($stallutil->isDirty()){
                         $stallutil->save();
                         $hasChange = true;  
@@ -376,9 +376,9 @@ class Controller extends BaseController
                 else{
                     $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
                     $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
-                    $stallutil->meterID = $_POST['meter'.$_POST['util'][$i]];
+                    $stallutil->meterID = (isset($_POST['meter'.$_POST['util'][$i]])) ? $_POST['meter'.$_POST['util'][$i]] : null;
                     if($stallutil->isDirty()){
-                        $stallutil->save();
+                        $stallutil->save();(isset($_POST['meter'.$_POST['util'][$i]])) ? $_POST['meter'.$_POST['util'][$i]] : null;
                         $hasChange = true;
                     }
                 }
@@ -640,7 +640,8 @@ class Controller extends BaseController
     function addUtility(){
         $util = new Utility;
         $util->utilName = $_POST['name'];
-        $util->utilDefaultMR = $_POST['rate'];
+        $util->utilDesc = $_POST['desc'];
+        $util->isMetered = (isset($_POST['metered'])) ? $_POST['metered'] : 2;
         $util->save();
     }
     
@@ -648,7 +649,8 @@ class Controller extends BaseController
         $hasChange = false;
         $util = Utility::where('utilID',$_POST['id'])->first();
         $util->utilName = $_POST['name'];
-        $util->utilDefaultMR = $_POST['rate'];
+        $util->utilDesc = $_POST['desc'];
+        $util->isMetered = (isset($_POST['metered'])) ? $_POST['metered'] : 2;
         
         if($util->isDirty()){
             $util->save();

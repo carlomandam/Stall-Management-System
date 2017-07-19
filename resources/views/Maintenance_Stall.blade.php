@@ -31,7 +31,7 @@
                 <div class="modal fade" tabindex="-1" id="new" role="dialog">
                     <div class="modal-dialog modal-md" role="document">
                         <form action="" method="post" id="newform">
-                            <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -64,7 +64,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="stypeDesc">Description</label>
-                                                <textarea class="form-control" id="stypeDesc" name="desc" placeholder="Stall Type Description"></textarea>
+                                                <textarea class="form-control" name="desc" placeholder="Stall Type Description"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +111,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="stypeDesc">Description</label>
-                                                <textarea class="form-control" id="stypeDesc" name="desc" placeholder="Stall Type Description"></textarea>
+                                                <textarea class="form-control" name="desc" placeholder="Stall Type Description"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -133,6 +133,14 @@
         $(document).ready(function () {
             getBuildings();
             getStallTypes();
+            $("#newform").validate({
+                errorClass: "error-class"
+                , validClass: "valid-class"
+            });
+            $("#updateform").validate({
+                errorClass: "error-class"
+                , validClass: "valid-class"
+            });
             $('#table').DataTable({
                 ajax: '/stallTable'
                 , responsive: true
@@ -359,12 +367,24 @@
                         var rate = response[i].utilDefaultMR;
                         if (i % 2 == 0)
                             utilities += "<div class='col-md-12 removable'>";
-                        utilities += "<div class='col-md-6'><div class='form-group'><input type='checkbox' value='" + id + "' name='util[]'><label>" + name.toUpperCase() + "</label><br><ul><li><input type='radio' name='utilRadio"+id+"' value='1' onclick='$(this).parent().next().find(&#039input[type=text]&#039).prop(&#039disabled&#039, true);' value='1' disabled><label>Monthly Reading</label></li><li><input type='radio' value='2' name='utilRadio"+id+"' onclick='$(this).siblings(&#039input[type=text]&#039).prop(&#039disabled&#039, false);' disabled><label>Fixed Rate</label><input type='text' name='utilAmount"+id+"' disabled></li><li><label>Meter ID</label><input type='text' name='meter"+id+"'></li></ul></div></div>";
+                        utilities += "<div class='col-md-6'><div class='form-group'><input type='checkbox' value='" + id + "' name='util[]'><label>" + name.toUpperCase() + "</label><br><ul><li><input type='radio' name='utilRadio"+id+"' value='1' onclick='$(this).parent().next().find(&#039input[type=text]&#039).prop(&#039disabled&#039, true);' value='1' disabled><label>Monthly Reading</label></li><li><input type='radio' value='2' name='utilRadio"+id+"' onclick='$(this).siblings(&#039input[type=text]&#039).prop(&#039disabled&#039, false);' disabled><label>Fixed Rate</label><input class='rate' type='text' name='utilAmount"+id+"' disabled></li>";
+                        if(response[i].isMetered == 1)
+                            utilities += "<li><label>Meter ID</label><input type='text' name='meter"+id+"' disabled></li>";
+                        utilities += "</ul></div></div>";
                         if (i % 2 != 0) utilities += '</div>';
                     }
+                    
                     $('.modal-body').each(function () {
                         $(this).append(utilities);
                     });
+                    
+                    $('.rate').each(function() {
+                        $(this).rules("add", 
+                            {
+                                required: true
+                            })
+                    });
+                    
                     if(elem == $('#update')[0]){
                         var evt = new CustomEvent('utilready',{detail:{ message : "yow"}});
                         $('#update')[0].dispatchEvent(evt);

@@ -217,14 +217,13 @@ legend{
                     <select class="js-example-basic-multiple" style="width: 100%; " id = "stallno" name = "stallno_name[]" multiple = "multiple">
 
                                         @for($i = 0; $i < $buildingCount; $i++)
-                                        {
-                                        <optgroup label = '{{$buildingNames[$i]}}'>
+                                        {<optgroup label = '{{$buildingNames[$i]}}'>
                                             @foreach($stall as $Stall)
                                             {
                                                 @if($buildingNames[$i] == $Stall->floor->building->bldgName)
                                                 {
                                                     
-                                                        <option value = "{{$Stall->stallID}}">{{$Stall->stallID.'( Floor '. $Stall->floor->floorNo. ', '.$Stall->stalltype->stypeName.')' }}</option>
+                                                        <option value = "{{$Stall->stallID}}">{{$Stall->stallID.'( Floor '. $Stall->floor->floorNo. ', '.((count($Stall->stalltype) > 0) ? $Stall->stalltype->stypeName : 'N/A').')' }}</option>
                                                  
                                                 }@endif
                                                       
@@ -237,7 +236,8 @@ legend{
                                       
                                       
                                         </select>
-                                    </div>
+
+                                    </div> 
 
                                 </div>
                             <div class ="col-md-12 form-group row">
@@ -374,6 +374,7 @@ legend{
         }
     });
     $(document).ready(function () {
+        console.log('{{$stall}}'.replace(/&quot;/g, '"'));
         //Set selected value in length of contract//
         $("#length").val($("#length option:first").val());
         var placeholderValue;
@@ -432,8 +433,38 @@ legend{
 
             if($('#ven_name').val()==="" || $('#ven_name').val() == null)
             {  
-                   validateInput();
+                    
+                validateInput();
+                  $('#applyForm fieldset :first-child').fadeIn('slow');
+            var parent_fieldset = $(this).parents('fieldset');
+            var next_step = true;
+            if ((!$('#applyForm').valid())) {
+           //I added an extra parenthesis at the end
+                return false;
+                 }
+                 
 
+            if (next_step) {
+                parent_fieldset.fadeOut(400, function () {
+                    $(this).next().fadeIn();
+                });
+            }
+             //SHOW CONTRACT DETAILS///
+     $('#applyForm #btn-next2').on('click', function () {
+           var parent_fieldset = $(this).parents('fieldset');
+            var next_step = true;
+            
+      if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
+                           return false;
+                 }
+            if (next_step) {
+                parent_fieldset.fadeOut(400, function () {
+
+                    $(this).next().fadeIn();
+                   
+                });
+            }
+    });
             }
             else
             {
@@ -452,10 +483,9 @@ legend{
        
   
         });
-
         function validateInput()
         {
-            $('#applyForm').validate({
+             $('#applyForm').validate({
                 rules:{
                      fname: {required:true}
                     ,lname: {required:true}
@@ -531,37 +561,12 @@ legend{
                 }
                 ,errorClass: "error-class"
             , validClass: "valid-class"
+
             });  
-                 $('#applyForm fieldset :first-child').fadeIn('slow');
-            var parent_fieldset = $(this).parents('fieldset');
-            var next_step = true;
-            
-            if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
-                           return false;
-                 }
+               
 
-            if (next_step) {
-                parent_fieldset.fadeOut(400, function () {
-                    $(this).next().fadeIn();
-                });
-            }
-             //SHOW CONTRACT DETAILS///
-     $('#applyForm #btn-next2').on('click', function () {
-           var parent_fieldset = $(this).parents('fieldset');
-            var next_step = true;
-            
-      if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
-                           return false;
-                 }
-            if (next_step) {
-                parent_fieldset.fadeOut(400, function () {
-
-                    $(this).next().fadeIn();
-                   
-                });
-            }
-    });
         }
+      
         //check if email exists
         $('#email').on('blur',function(){
 
@@ -589,6 +594,7 @@ legend{
                  ,errorClass: "error-class"
             , validClass: "valid-class"
             });
+
         
         });
 
@@ -723,6 +729,7 @@ legend{
                     if($.inArray(newVal[i], val) == -1)
                         index = i;
                 }
+
                 var stall = _.find(stalls,{'stallID': $('#stallno').val()[index]});
                 var util = '';
                 if(stall.stall_util != undefined){

@@ -20,7 +20,8 @@
                             <thead>
                                 <tr>
                                     <th>Utility Name</th>
-                                    <th>Amount</th>
+                                    <th>Description</th>
+                                    <th>Metered</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -42,13 +43,15 @@
                                                 <label for="name">Utility Name*</label>
                                                 <input type="text" class="form-control" name="name" placeholder="Utility Name" /> </div>
                                         </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="rate">Description</label>
+                                                <textarea class="form-control" name="desc"></textarea>
+                                            </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="rate">Default Monthly Rate*</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-addon"><i>Php</i></div>
-                                                    <input type="text" class="form-control" name="rate"/> 
-                                                </div>
+                                                <input name="metered" type="checkbox" value="1">&nbsp;<label>Metered</label>
                                             </div>
                                         </div>
                                     </div>
@@ -77,13 +80,15 @@
                                                 <label for="name">Utility Name*</label>
                                                 <input type="text" class="form-control" name="name" placeholder="Utility Name" /> </div>
                                         </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="rate">Description</label>
+                                                <textarea class="form-control" name="desc"></textarea>
+                                            </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="rate">Default Monthly Rate*</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-addon"><i>Php</i></div>
-                                                    <input type="text" class="form-control" name="rate"/> 
-                                                </div>
+                                                <input name="metered" type="checkbox" value="1">&nbsp;<label>Metered</label>
                                             </div>
                                         </div>
                                     </div>
@@ -108,18 +113,10 @@
                     name: {
                         required: true
                     }
-                    , rate: {
-                        required: true,
-                        number:true
-                    }
                 }
                 , messages: {
                     name: {
                         required: "Please enter Utility Name"
-                    }
-                    , rate: {
-                        required: "Please enter Amount",
-                        number: "Invalid Amount"
                     }
                 }
                 , errorClass: "error-class"
@@ -130,18 +127,10 @@
                     name: {
                         required: true
                     }
-                    , rate: {
-                        required: true,
-                        number:true
-                    }
                 }
                 , messages: {
                     name: {
                         required: "Please enter Penalty Name"
-                    }
-                    , rate: {
-                        required: "Please enter Amount",
-                        number: "Invalid Amount"
                     }
                 }
                 , errorClass: "error-class"
@@ -155,7 +144,15 @@
                         "data": "utilName"
                     }
                     , {
-                        "data": "utilDefaultMR"
+                        "data": "utilDesc"
+                    }
+                    , {
+                        "data": function(data, type, dataToSet){
+                            if(data.isMetered == 1)
+                                return "Yes";
+                            else
+                                return "No";
+                        }
                     }
                     , {
                         "data": "actions"
@@ -166,7 +163,7 @@
                         "width": "180px"
                         , "searchable": false
                         , "sortable": false
-                        , "targets": 2
+                        , "targets": 3
                     }
   ]
             });
