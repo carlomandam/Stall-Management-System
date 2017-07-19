@@ -743,7 +743,11 @@ legend{
                             util += ', ';
                     }
                 }
-                $('#selectedtbl tbody').append('<tr><td>'+stall.stallID+'</td><td>'+stall.stall_type.stypeName+'</td><td>'+util+'</td><td>Floor '+stall.floor.floorNo+', '+stall.floor.building.bldgName+'</td></tr>')
+                var stype = '';
+                if(stall.stall_type != null)
+                    stype = stall.stall_type.stypeName;
+                
+                $('#selectedtbl tbody').append('<tr><td>'+stall.stallID+'</td><td>'+stype+'</td><td>'+util+'</td><td>Floor '+stall.floor.floorNo+', '+stall.floor.building.bldgName+'</td></tr>')
             }
             else if($('#stallno').val().length < sel){
                 var id = val.filter(function(obj) { return newVal.indexOf(obj) == -1; });
