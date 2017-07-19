@@ -1,6 +1,17 @@
 @extends('layout.app')
 @section('content-header')
+<style>
+.required {
+    color: red;
+} 
+.col-md-12 column {  
+   text-align:center;
+}
+.col-md-12 column form {
+   display:inline-block;
+}
 
+</style>
 <h1>List of Contracts</h1>
   @stop
 
@@ -19,7 +30,7 @@
                   <th>No</th>
                   <th>Stall ID</th>
                   <th>Name</th>
-                  <th>Starting Date</th>
+                  <th>Contract Effectivity Date</th>
                   <th>Contract Ends</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -57,85 +68,87 @@
 
 <!--/.modal new contract=-->
 <!--modal view-->
- <div class="modal fade" tabindex="-1" id="new" role="dialog">
-                    <div class="modal-dialog modal-lg" role="document">
-                        
-                            <input type="hidden" name="_token" value="<{{ csrf_token() }}">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">New Contract</h4> </div>
-                                <div class="modal-body">
-                                    <div class = "col-md-12 form-group row">
-                                        <div class = "col-md-12">
-                                        <label><b>Stall Holder Name:</b></label>
-                                    
-                                        <input type = "text" class = "form-control" id = "searchbox" name = "searchbox" value = "" placeholder="Search..."  />
-                                      </div>
-
-                                      
-                            
-                                     </div>
-                                     <form action="" method="post" id="newform">
-                            <div class = "col-md-12 form-group row">
-                            <div class = "col-md-12">
-                            <label for = "org"><b>Name of Group/Organization</b></label>
-                            <label for ="ven_orgname" class = "form-control" ></label>
+ <div class="modal fade" id="newcontract" 
+     tabindex="-1" role="dialog" 
+     aria-labelledby="newModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" 
+          data-dismiss="modal" 
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" 
+        id="newModalLabel">New Contract</h4>
+      </div>
+      <div class="modal-body">
+                        <div class = "col-md-12 form-group row">
+                            <div class = "col-md-6">
+                              <label for = "name">Stall Holder Name/ Organization:&nbsp</label> 
+                              </div>
+                              <div class = "col-md-6">
+                              <p id = "nameAndOrg">Iwa motors of Tanya Markova</p>
+                          </div>
                         </div>
+                         <div class = "col-md-12 form-group row">
+                            <div class = "col-md-6">
+                              <label for = "name">Stall ID:&nbsp</label> 
+                              </div>
+                              <div class = "col-md-6">
+                              <p id = "stall_no">bldg2-00001</p>
+                          </div>
                         </div>
-                  <div class="col-md-12 form-group row">
-
-                    <div class="col-md-12">
-
-                      <label for="sh_name"><b>Stall Holder Name:</b></label>
-                    
-                      <label for = "vendor_name" id="ven_name" ></label>
-                    </div>
-                  </div>
-                  
-                  
-               
-
-                               
-                                 <div class = "col-md-12 form-group row">
-                                <div class = "col-md-6">
-                                        <label for = "email">*Email Address:</label>
-                                        <input type = "email" class = "form-control" id = "email" name = "email"/>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="phone"><b>* Mobile:</b></label>
-                                    <input type="text" class="form-control" id="mob" name="mob"required>
-                                 </div>
-                                 </div>
-
-
+                        <div class = "col-md-12 form-group row">
+                          <div class = "col-md-4">
+                            <label for = "length">Length of Contract</label><span class="required">&nbsp*</span>
+                           </div>
+                           <div class = "col-md-8">
+                            <input type = "text" id = "specific_no" name = "specific_no" placeholder="" />
                            
-                            <div class="col-md-12 form-group row">
-                                <div class = "col-md-12">
-                                    <label for="address"><b>*Home Address:</b></label>
                             
-                                    <textarea rows="4" class="form-control" id="address" name="address"></textarea>
-                                </div>
-                            </div>
-                            
-                                
-                                </div>
-                                <div class="modal-footer">
-                                    
-                                    <button class="btn btn-info pull-right" style="background-color:#191966" id = "btn-submit">Submit</button>
-                                </div>
-                            </div>
-
-                        </form>
+                            <select name = "length" id = "length">
+                                @foreach($contract_period as $period)
+                               {
+                                <option value = "{{$period['contract_periodID']}}">{{$period['contract_periodDesc']}}</option>
+                               }
+                            @endforeach
+                            </select>
+                                 
+                          </div>
+                  <p class="small text-danger" style="margin-top: 40px; margin-left: 20px;">Fields with asterisks(*) are required</p>
                     </div>
-                </div>
-                <!--end of modal view-->
+                  
+                       
+      </div>
+      <div class="modal-footer">
+         <button class="btn btn-info" style="background-color:#191966">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
   @stop
 
   @section('script')
     <script>
       $(document).ready(function () {
+         //Set selected value in length of contract//
+        $("#length").val($("#length option:first").val());
+        var placeholderValue;
+   
+                if($("#length option:selected").text().indexOf('Week') > -1)
+                {
+                    placeholderValue = "No. of Week/s";
+                }
+                else if($("#length option:selected").text().indexOf('Month') > -1)
+                {
+                    placeholderValue = "No. of Month/s";
+                }
+                else
+                {
+                    placeholderValue = "No. of Year/s";
+                }
+            $('#specific_no').attr('placeholder',""+placeholderValue);
+
             $('#tblcontract').DataTable({
                 ajax: '/rentInfo'
             , responsive: true
@@ -176,21 +189,64 @@
 
       $('#newform').attr('disabled',true);
           });
+
       function printpdf(id)
       {
           $.ajax({
             type:"POST",
-            url: '/printPdf',
+            url: '/htmltopdfview',
             data: {
               "_token" : "{{ csrf_token() }}",
               "id" : id
             },
             success : function (){
-               window.open( '_blank');
+               
             }
           })
 
       }
+
+       //LENGTH OF CONTRACT//
+
+     $('#length').on('change',function(){
+       var placeholderValue;
+     if($("#length option:selected").text().indexOf("(") > -1)
+        { 
+                if($("#length option:selected").text().indexOf('Week') > -1)
+                {
+                    placeholderValue = "No. of Week/s";
+                }
+                else if($("#length option:selected").text().indexOf('Month') > -1)
+                {
+                    placeholderValue = "No. of Month/s";
+                }
+                else
+                {
+                    placeholderValue = "No. of Year/s";
+                }
+            $('#specific_no').attr('placeholder',""+placeholderValue);
+            
+             $('#specific_no').removeAttr('disabled',false);
+            
+             $('#specific_no').val('');
+        }
+        else{
+            
+             $('#specific_no').val('N/A');
+             $('#specific_no').attr('disabled',true);
+             $('#specific_no').removeAttr('placeholder',false);
+        }
+     })
+     
+     
+     
+     //END OF LENGTH OF CONTRACT//
+
+     function callRoute(rentid)
+     {
+      window.open('/htmltopdfview/' +rentid,'_blank');
+
+     }
 </script>
 
   @stop
