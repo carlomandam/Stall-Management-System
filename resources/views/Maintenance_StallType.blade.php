@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 @extends('layout.app') 
 
 @section('title')
@@ -9,7 +9,8 @@
 <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
     <li class="active">Stall Type</li>
-</ol> @stop
+</ol> 
+@stop
 
  @section('content')
 
@@ -29,37 +30,7 @@
                     <th style="width: 120px;">Area</th>
                     <th>Description</th>
                     <th style="width: 300px;">Actions</th>
-=======
-@extends('layout.app') @section('content-header')
-<h1>
-        Stall Type 
-        
-      </h1>
-<ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
-    <li class="active">Stall Type</li>
-</ol> @stop @section('content')
-<div style="margin-top:2%;">
-    <button class="btn btn-primary" data-toggle="modal" data-target="#new"><span class='glyphicon glyphicon-plus'></span>Add Stall Type </button>
-</div>
-<div style="border:2px solid black;">
-    <div class="table-responsive">
-        <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
-            <thead>
-                <tr>
-                    <th>Stall Type</th>
-                    <th>Area</th>
-                    <th>Description</th>
-                    <th>Actions</th>
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
-                </tr>
-            </thead>
-        </table>
-    </div>
-<<<<<<< HEAD
-    </div>
-=======
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
+
 </div>
 <div class="modal fade" id="new" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
@@ -68,20 +39,18 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<<<<<<< HEAD
+
                     <h4 class="modal-title">New Stall Type</h4> </div>
-=======
-                    <h4 class="modal-title">Add Stall Type</h4> </div>
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-<<<<<<< HEAD
+
                                 <label for="stypeName">Stall Type Name</label><span class="required">&nbsp*</span>
-=======
+
                                 <label for="stypeName">Stall Type Name*</label>
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
+
                                 <input type="text" class="form-control" id="stypeName" name="stypeName" placeholder="Stall Type Name" /> </div>
                         </div>
                         <div class="col-md-6">
@@ -105,11 +74,8 @@
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-<<<<<<< HEAD
                      <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
-=======
-                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
+
                 </div>
             </div>
         </form>
@@ -123,21 +89,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<<<<<<< HEAD
+
                     <h4 class="modal-title">Update Stall Type</h4> </div>
-=======
-                    <h4 class="modal-title">Update Stall Type Information</h4> </div>
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-<<<<<<< HEAD
+
                                 <label for="stypeNameUp">Stall Type Name</label>
                                 <span class="required">&nbsp*</span>
-=======
-                                <label for="stypeNameUp">Stall Type Name*</label>
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
+
                                 <input type="text" class="form-control" id="stypeNameUp" name="stypeName" placeholder="Stall Type Name" /> </div>
                         </div>
                         <div class="col-md-6">
@@ -161,16 +123,16 @@
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-<<<<<<< HEAD
+
                        <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
-=======
-                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
+
                 </div>
             </div>
         </form>
     </div>
-</div> @stop @section('script')
+</div> 
+@stop
+ @section('script')
 <script>
     var obj;
     var chk;
@@ -361,4 +323,5 @@
             }
         });
     }
-</script> @stop
+</script> 
+@stop
