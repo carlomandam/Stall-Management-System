@@ -10,8 +10,8 @@ class Contract extends Model
     protected $primaryKey = "contractID";
     public $timestamps = false;
   	//protected $fillable = array('rentID', 'contractLength', 'contractStatus'); 
-  public function ContractInfo(){
-        return $this->belongsTo('App\ContractInfo','contractID');
+  public function contractPeriods(){
+        return $this->belongsToMany('App\ContractPeriod','tblcontract_info', 'contractID', 'contractPeriodID')->withPivot('contractLength');
     }
 
     public function Rent(){

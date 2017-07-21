@@ -223,7 +223,7 @@ legend{
                                                 @if($buildingNames[$i] == $Stall->floor->building->bldgName)
                                                 {
                                                     
-                                                        <option value = "{{$Stall->stallID}}">{{$Stall->stallID.'( Floor '. $Stall->floor->floorNo. ', '.$Stall->stalltype->stypeName.')' }}</option>
+                                                        <option value = "{{$Stall->stallID}}">{{$Stall->stallID.'( Floor '. $Stall->floor->floorNo. ', '.((count($Stall->stalltype) > 0) ? $Stall->stalltype->stypeName : 'N/A').')' }}</option>
                                                  
                                                 }@endif
                                                       
@@ -374,7 +374,59 @@ legend{
         }
     });
     $(document).ready(function () {
+        console.log('{{$stall}}'.replace(/&quot;/g, '"'));
         //Set selected value in length of contract//
+        //SELECTED STALL ID AND ITS RATES
+    var stalls = JSON.parse(("{{$stall}}").replace(/&quot;/g,'"'));
+    console.log(stalls);
+    var val;
+    var sel = 0;
+    $('#stallno').on('change',function(){
+        var newVal = $(this).val();
+        if($('#stallno').val() != null){
+            if($('#stallno').val().length > sel){
+                index = 0;
+
+                for(var i=0; i<newVal.length; i++) {
+                    if($.inArray(newVal[i], val) == -1)
+                        index = i;
+                }
+
+                var stall = _.find(stalls,{'stallID': $('#stallno').val()[index]});
+                var util = '';
+                if(stall.stall_util != undefined || stall.stall_util.length > 0){
+                  
+                    for(var i = 0 ; i < stall.stall_util.length; i++){
+                        
+                        util += stall.stall_util[i].utility.utilName;
+                        if(stall.stall_util[i].RateType == 1)
+                            util += '(Monthly Reading)';
+                        else
+                            util += '(Php.'+stall.stall_util[i].Rate+'/Month)';
+                        if(i < stall.stall_util.length - 1)
+                            util += ', ';
+                    }
+                }
+                var stype = '';
+                if(stall.stall_type != null)
+                    stype = stall.stall_type.stypeName;
+                
+                $('#selectedtbl tbody').append('<tr><td>'+stall.stallID+'</td><td>'+stype+'</td><td>'+util+'</td><td>Floor '+stall.floor.floorNo+', '+stall.floor.building.bldgName+'</td></tr>')
+            }
+            else if($('#stallno').val().length < sel){
+                var id = val.filter(function(obj) { return newVal.indexOf(obj) == -1; });
+                $("td").filter(function() {
+                    return $(this).text() == id;
+                }).closest("tr").remove();
+            }
+            sel = $('#stallno').val().length; 
+        }else{
+            $('#selectedtbl tbody td').remove();
+            sel = 0;
+        }
+        val = newVal;
+    });
+ 
         $("#length").val($("#length option:first").val());
         var placeholderValue;
    
@@ -432,8 +484,38 @@ legend{
 
             if($('#ven_name').val()==="" || $('#ven_name').val() == null)
             {  
-                   validateInput();
+                    
+                validateInput();
+                  $('#applyForm fieldset :first-child').fadeIn('slow');
+            var parent_fieldset = $(this).parents('fieldset');
+            var next_step = true;
+            if ((!$('#applyForm').valid())) {
+           //I added an extra parenthesis at the end
+                return false;
+                 }
+                 
 
+            if (next_step) {
+                parent_fieldset.fadeOut(400, function () {
+                    $(this).next().fadeIn();
+                });
+            }
+             //SHOW CONTRACT DETAILS///
+     $('#applyForm #btn-next2').on('click', function () {
+           var parent_fieldset = $(this).parents('fieldset');
+            var next_step = true;
+            
+      if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
+                           return false;
+                 }
+            if (next_step) {
+                parent_fieldset.fadeOut(400, function () {
+
+                    $(this).next().fadeIn();
+                   
+                });
+            }
+    });
             }
             else
             {
@@ -452,10 +534,9 @@ legend{
        
   
         });
-
         function validateInput()
         {
-            $('#applyForm').validate({
+             $('#applyForm').validate({
                 rules:{
                      fname: {required:true}
                     ,lname: {required:true}
@@ -533,35 +614,10 @@ legend{
             , validClass: "valid-class"
 
             });  
-                 $('#applyForm fieldset :first-child').fadeIn('slow');
-            var parent_fieldset = $(this).parents('fieldset');
-            var next_step = true;
-            if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
-                           return false;
-                 }
+               
 
-            if (next_step) {
-                parent_fieldset.fadeOut(400, function () {
-                    $(this).next().fadeIn();
-                });
-            }
-             //SHOW CONTRACT DETAILS///
-     $('#applyForm #btn-next2').on('click', function () {
-           var parent_fieldset = $(this).parents('fieldset');
-            var next_step = true;
-            
-      if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end
-                           return false;
-                 }
-            if (next_step) {
-                parent_fieldset.fadeOut(400, function () {
-
-                    $(this).next().fadeIn();
-                   
-                });
-            }
-    });
         }
+      
         //check if email exists
         $('#email').on('blur',function(){
 
@@ -589,6 +645,7 @@ legend{
                  ,errorClass: "error-class"
             , validClass: "valid-class"
             });
+
         
         });
 
@@ -709,50 +766,7 @@ legend{
 
 
 
-    //SELECTED STALL ID AND ITS RATES
-    var stalls = JSON.parse(("{{$stall}}").replace(/&quot;/g,'"'));
-    var val;
-    var sel = 0;
-    $('#stallno').on('change',function(){
-        var newVal = $(this).val();
-        if($('#stallno').val() != null){
-            if($('#stallno').val().length > sel){
-                index = 0;
 
-                for(var i=0; i<newVal.length; i++) {
-                    if($.inArray(newVal[i], val) == -1)
-                        index = i;
-                }
-
-                var stall = _.find(stalls,{'stallID': $('#stallno').val()[index]});
-                var util = '';
-                if(stall.stall_util != undefined){
-                    for(var i = 0 ; i < stall.stall_util.length; i++){
-                        util += stall.stall_util[i].utility.utilName;
-                        if(stall.stall_util[i].RateType == 1)
-                            util += '(Monthly Reading)';
-                        else
-                            util += '(Php.'+stall.stall_util[i].Rate+'/Month)';
-                        if(i < stall.stall_util.length - 1)
-                            util += ', ';
-                    }
-                }
-                $('#selectedtbl tbody').append('<tr><td>'+stall.stallID+'</td><td>'+stall.stall_type.stypeName+'</td><td>'+util+'</td><td>Floor '+stall.floor.floorNo+', '+stall.floor.building.bldgName+'</td></tr>')
-            }
-            else if($('#stallno').val().length < sel){
-                var id = val.filter(function(obj) { return newVal.indexOf(obj) == -1; });
-                $("td").filter(function() {
-                    return $(this).text() == id;
-                }).closest("tr").remove();
-            }
-            sel = $('#stallno').val().length; 
-        }else{
-            $('#selectedtbl tbody td').remove();
-            sel = 0;
-        }
-        val = newVal;
-    });
- 
     /// SUBMIT REGISTRATION//
     $("#applyForm").submit(function (e) {
             e.preventDefault();

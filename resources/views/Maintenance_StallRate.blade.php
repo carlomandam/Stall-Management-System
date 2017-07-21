@@ -89,7 +89,7 @@
                             <div class="form-group">
                                 <label for="stype">Stall Type*</label>
                                 <input class="form-control" name="stype" readonly>
-                            </div>
+                                <input type="hidden" name="stypeID" /> </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -163,6 +163,66 @@
                     }
   ]
         });
+        $("#newform").validate({
+            rules: {
+                amt: 'required'
+            }
+            , messages: {
+                amt: "Please Enter Amount"
+            }
+            , errorClass: "error-class"
+            , validClass: "valid-class"
+        });
+        $("#updateform").validate({
+            rules: {
+                amt: 'required'
+                , bldgID: {
+                    remote: {
+                        url: '/checkRate'
+                        , type: 'post'
+                        , data: {
+                            bldgID: function () {
+                                return $("#updateform").find("select[name=bldgID]").val();
+                            }
+                            , _token: function () {
+                                return $("#_token").val();
+                            }
+                            , stype: function () {
+                                return $("#updateform").find("input[name=stypeID]").val();
+                            }
+                            , id: function () {
+                                return $("#updateform").find("input[name=id]").val();
+                            }
+                        }
+                    }
+                }
+            }
+            , submitHandler: function () {
+                var formData = new FormData($("#updateform")[0]);
+                $.ajax({
+                    type: "POST"
+                    , url: '/updateRate'
+                    , data: formData
+                    , processData: false
+                    , contentType: false
+                    , context: this
+                    , success: function (data) {
+                        if (data == 'true') {
+                            toastr.success('Updated Stall Rate');
+                            $('#table').DataTable().ajax.reload();
+                            $('#update').modal('hide');
+                            getStallTypes()
+                        }
+                    }
+                });
+            }
+            , messages: {
+                amt: "Please Enter Amount"
+                , bldgID: "Stall rate for selected building is set"
+            }
+            , errorClass: "error-class"
+            , validClass: "valid-class"
+        });
         $("#newform").submit(function (e) {
             e.preventDefault();
             if (!$("#newform").valid()) return;
@@ -175,7 +235,7 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
-                    if(data == 'exist'){
+                    if (data == 'exist') {
                         toastr.warning('Stall Rate is already set');
                         return;
                     }
@@ -186,7 +246,7 @@
                 }
             });
         });
-        $("#updateform").unbind('submit').bind('submit', function (e) {
+        /*$("#updateform").unbind('submit').bind('submit', function (e) {
             e.preventDefault();
             if (!$("#updateform").valid()) return;
             var formData = new FormData($(this)[0]);
@@ -201,9 +261,10 @@
                     toastr.success('Updated Stall Rate');
                     $('#table').DataTable().ajax.reload();
                     $('#update').modal('hide');
+                    getStallTypes()
                 }
             });
-        });
+        });*/
         $(".modal").on('hidden.bs.modal', function () {
             $(this).find('form').validate().resetForm();
             $(this).find('form')[0].reset();
@@ -222,13 +283,12 @@
                 obj = JSON.parse(data)[0];
                 $("#update").find('input[name=id]').val(obj.srateID);
                 $("#update").find('input[name=stype]').val(obj.stall_type.stypeName);
-                if(obj.building != null)
-                    $("#update").find('select[name=bldgID]').val(obj.building.bldgID);
-                else
-                    $("#update").find('select[name=bldgID]').val(0);
+                if (obj.building != null) $("#update").find('select[name=bldgID]').val(obj.building.bldgID);
+                else $("#update").find('select[name=bldgID]').val(0);
                 $("#update").find('input[name=amt]').val(obj.sratePrice);
                 $("#update").find('select[name=collection]').val(obj.collection);
                 $("#update").find('select[name=id]').val(obj.srateID);
+                $("#update").find('input[name=stypeID]').val(obj.stypeID);
                 $('#update').modal('show');
             }
         });
@@ -245,7 +305,13 @@
                 stype = JSON.parse(data);
                 var opt = "";
                 for (var i = 0; i < stype.length; i++) {
-                    if (stype[i].stall_rate.length < 1) opt += '<option value="' + stype[i].stypeID + '">' + stype[i].stypeName + '</option>';
+                    var rate = null;
+                    if (stype[i].stall_rate.length > 0) {
+                        rate = _.find(stype[i].stall_rate, {
+                            'bldgID': null
+                        });
+                    }
+                    if (rate == null) opt += '<option value="' + stype[i].stypeID + '">' + stype[i].stypeName + '</option>';
                 }
                 $(".stypeSelect").each(function () {
                     $(this).html(opt);

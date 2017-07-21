@@ -4,21 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MySeoul Admin</title>
-    <!-- Tell the browser to be responsive to screen width -->
+    <title>MySeoul-@yield('title')</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.6 -->
+
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-    <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
-    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
-        page. However, you can choose any other skin. Make sure you
-        apply the skin class to the body tag so the changes take effect.
-  -->
     <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
     <link rel="stylesheet" type="text/css" href="css/dataTables.bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/dataTables.foundation.css">
@@ -28,13 +20,12 @@
     <link rel="stylesheet" type="text/css" href="css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="datepicker/datepicker3.css">
     <link rel="stylesheet" href="css/select2-bootstrap.css">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+    
+
     <style>
+	    *{
+	    	font-family: "Trebuchet MS"
+	    }
         .modal-header {
             background-color: dodgerblue;
             color: aliceblue;
@@ -42,10 +33,11 @@
         
         .table-responsive {
             overflow: visible !important;
+
         }
-        
+     
         .error-class {
-            color: #a94442;
+            color: red;
             border-color: 2px solid #ebccd1;
             padding: 1px 20px 1px 20px;
         }
@@ -59,7 +51,21 @@
         .content {
             margin-top: 20px;
         }
+        .defaultNewButton{
+            margin-left:5px;
+            margin-top:10px;
+            margin-bottom: 10px;
+        }
+        #archive{
+            margin-right:20px;
+        }
+        .required {
+            color: red;
+        } 
+
+
     </style>
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini" style="height:auto;min-height:100%;">
@@ -68,7 +74,9 @@
             <!-- Logo -->
             <a href="index2.html" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels --><span class="logo-mini"><b>M</b>SA</span>
-                <!-- logo for regular state and mobile devices --><span class="logo-lg"><b>My Seoul</b>Admin</span> </a>
+                <!-- logo for regular state and mobile devices --><span class="logo-lg"><b>MySeoul </b>Admin</span> 
+              </a>
+
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-fixed-top">
                 <!-- Sidebar toggle button-->
@@ -86,43 +94,35 @@
                 <div class="user-panel">
                     <div class="pull-left image"> <img src="image/JohnAlfred.jpg" class="img-circle" alt="User Image"> </div>
                     <div class="pull-left info">
-                        <p>John Alfred C. Clave</p>
+                        <p id = "userName">John Alfred C. Clave</p>
                     </div>
                 </div>
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
-                    <li class="header" style="font-size: 15px;"><span>Transaction</li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Registration' ? 'active' : ''}}"><a href="/Registration"><i class="fa fa-pencil-square"></i><span> Registration</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'List' ? 'active' : ''}}"><a href="/List"><i class="fa fa-list-alt"></i><span>Stall Holders</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Contract' ? 'active' : ''}}"><a href="/Contract"><i class="glyphicon glyphicon-modal-window "></i><span>Contracts</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stalls' ? 'active' : ''}}"><a href="/Stalls"><i class=" fa fa-building-o "></i><span>Stalls</span></a></li>
-                    <li class="treeview">
-                        <a href="#"> <i class="fa fa-laptop"></i> <span>Payments and Collection</span> <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span> </a>
-                        <ul class="treeview-menu">
-                            <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> General</a></li>
-                            <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> Icons</a></li>
-                            <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> Buttons</a></li>
-                            <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> Sliders</a></li>
-                            <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> Timeline</a></li>
-                            <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Modals</a></li>
-                        </ul>
+                	 <li class="treeview">
+                        <a href="">
+                            <i class="fa fa-bar-chart-o"></i>
+                            <span>Dashboard</span>
+                        </a>
                     </li>
-                    <li class="treeview">
-                        <a href="#"> <i class="fa fa-laptop"></i> <span>Request Management</span> <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span> </a>
+                    <li class="header"><span>TRANSACTION</li>
+                    	<li class="{{Route::getFacadeRoot()->current()->uri() == 'Stalls' ? 'active' : ''}}"><a href="#"><i class=" fa fa-building-o "></i><span>Directory</span></a></li>
+		                <li class="treeview">
+		                        <a href="#"> <i class="fa fa-laptop"></i> <span>Payments</span> <span class="pull-right-container">
+		             		   <i class="fa fa-angle-left pull-right"></i>
+		                       </span> </a>
+		                        <ul class="treeview-menu">
+		                           
+		                        </ul>
+		                </li>
+                   		<li class="treeview">
+                       		    <a href="#"> <i class="fa fa-laptop"></i> <span>Manage Requests</span> <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
+           					    </span> </a>
                         <ul class="treeview-menu">
-                            <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> General</a></li>
-                            <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> Icons</a></li>
-                            <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> Buttons</a></li>
-                            <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> Sliders</a></li>
-                            <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> Timeline</a></li>
-                            <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Modals</a></li>
+                          
                         </ul>
-                    </li>
-                    <li class="header" style="font-size: 15px;">Maintenance</li>
+                        </li>
+                    <li class="header">MAINTENANCE</li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Building' ? 'active' : ''}}"><a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
@@ -150,13 +150,19 @@
             <section class="content"> @yield('content') </section>
             <!-- /.content -->
         </div>
+         <footer class="main-footer">
+    
+    <strong>Copyright © 2017<a href="https://adminlte.io">MySeoul Stalls Management System</a>.</strong> All rights
+    reserved.
+  </footer>
         <!-- /.content-wrapper -->
         <!-- Control Sidebar -->
         <!-- /.control-sidebar -->
         <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
-    </div>
+      
+     
+    
     <!-- ./wrapper -->
     <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>

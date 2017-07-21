@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('title')
-    {{ 'Building'}}
+    {{ 'Building Archive'}}
 @stop
 @section('content-header')
 
@@ -13,29 +13,13 @@
 
         @section('content')
 
-    <style>
-      #floortbl td{
-             padding-bottom:5px;
-       }
-      #floortbl th, #floortbl td{
-        text-align: center;
-      }
 
-
-
-
-</style>
    
 <div class = "box box-primary">
         <div class = "box-body">
 
             <div class="table-responsive">
-             <div  class = "defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Building</button>
-                    <div class = " pull-right" id = "archive">
-                         <button class="btn btn-default btn-flat" onclick=""><span class='fa fa-archive'></span>&nbspArchive</button>
-                    </div>
-              </div>
+          
                 <table id="prodtbl" class="table table-bordered table-striped" role="grid" >
                     <thead>
                         <tr>
@@ -50,129 +34,7 @@
             </div>
        </div>
     
-        <div class="modal fade" id="new" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-md" role="document">
-                <form class="building" action="" method="post" id="newform">
-                    <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">New Building</h4> </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="bldgName">Building Name</label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="bldgName" name="bldgName" placeholder="Building Name" /> </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="bldgCode">Building Code</label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="bldgCode" name="bldgCode" placeholder="Building Code" /> </div>
-                                </div>
-                               
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="bldgDesc">Description</label>
-                                        <textarea class="form-control" id="bldgDesc" name="bldgDesc" placeholder="Building Description"></textarea>
-                                    </div>
-                                </div>
-                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="noOfFloor">No. of Floors</label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="noOfFloor" name="noOfFloor" placeholder="No. of Floors" oninput="showTable('#floortbl')" /> </div>
-                                        <table id='floortbl' style="display:none">
-                                            <thead>
-                                                <tr>
-                                                    <th width='50%'>Floor</th>
-                                                    <th width='50%'>No. Of Stalls</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody> </tbody>
-                                        </table>
-                                </div>
-                            </div>
-                             <p class="small text-danger">Fields with asterisks(*) are required</p>
-                        </div>
-                        <div class="modal-footer">
-                            <!-- <label style="float:left">All labels with "*" are required</label> -->
-                                <div class = "pull-right">
-
-                                     <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
-
-                                </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="modal fade" id="update" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-md" role="document">
-                <form class="building" action="" method="post" id="updateform">
-                    <input type="hidden" id="_tokenUp" name="_token" value="<?php echo csrf_token(); ?>">
-                    <input type="hidden" name="id" id="idUp">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Update Building</h4> </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="bldgNameUp">Building Name</label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="bldgNameUp" name="bldgName" placeholder="Building Name" /> </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="bldgCodeUp">Building Code</label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="bldgCodeUp" name="bldgCode" placeholder="Building Code" /> </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="noOfFloorUp">No. of Floors</label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="noOfFloorUp" name="noOfFloor" placeholder="No. of Floors" readonly/> </div>
-                                </div>
-                             
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="bldgDescUp">Description</label>
-                                        <textarea class="form-control" id="bldgDescUp" name="bldgDesc" placeholder="Building Description"></textarea>
-                                    </div>
-                                </div>
-                                   <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="noOfFloorUp">Add/Remove Floors</label><br>
-                                        <input type="radio" value="1" name="addRemoveRadio"><label>Add</label>&emsp;
-                                        <input type="radio" value="2" name="addRemoveRadio"><label>Remove</label>
-                                        <input type="text" class="form-control" name="addRemove" id="addRemove" placeholder="No. of Floors" disabled/> 
-                                        <table id='floortblup' style="display:none">
-                                            <thead>
-                                                <tr>
-                                                    <th width='50%'>Floor</th>
-                                                    <th width='50%'>No. Of Stalls</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody> </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                             <p class="small text-danger">Fields with asterisks(*) are required</p>
-                        </div>
-                        <div class="modal-footer">
-                            <!-- <label style="float:left">All labels with "*" are required</label> -->
-                             <div class = "pull-right">
-
-                                     <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
-
-                                </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+    
  </div>
           @stop
 

@@ -1,0 +1,45 @@
+[1mdiff --git a/resources/views/transaction/Application_temporary.blade.php b/resources/views/transaction/Application_temporary.blade.php[m
+[1mindex 825cf87..0307b77 100644[m
+[1m--- a/resources/views/transaction/Application_temporary.blade.php[m
+[1m+++ b/resources/views/transaction/Application_temporary.blade.php[m
+[36m@@ -224,7 +224,7 @@[m [mlegend{[m
+                                                 @if($buildingNames[$i] == $Stall->floor->building->bldgName)[m
+                                                 {[m
+                                                     [m
+[31m-                                                        <option value = "{{$Stall->stallID}}">{{$Stall->stallID.'( Floor '. $Stall->floor->floorNo. ', '.$Stall->stalltype->stypeName.')' }}</option>[m
+[32m+[m[32m                                                        <option value = "{{$Stall->stallID}}">{{$Stall->stallID.'( Floor '. $Stall->floor->floorNo. ', '.((count($Stall->stalltype) > 0) ? $Stall->stalltype->stypeName : 'N/A').')' }}</option>[m
+                                                  [m
+                                                 }@endif[m
+                                                       [m
+[36m@@ -430,7 +430,7 @@[m [mlegend{[m
+ [m
+         $('#applyForm #btn-next').on('click', function () {[m
+ [m
+[31m-            if($('#ven_name').val()==="" || $('#ven_name').val() == null)[m
+[32m+[m[32m            if($('#ven_name').val() === "" || $('#ven_name').val() == null)[m
+             {  [m
+                    validateInput();[m
+ [m
+[36m@@ -531,16 +531,20 @@[m [mlegend{[m
+                 }[m
+                 ,errorClass: "error-class"[m
+             , validClass: "valid-class"[m
+[31m-            });  [m
+[31m-                 $('#applyForm fieldset :first-child').fadeIn('slow');[m
+[32m+[m[32m            });[m
+[32m+[m[32m            alert('yowww');[m
+[32m+[m[32m            $('#applyForm fieldset :first-child').fadeIn('slow');[m
+[32m+[m[32m            alert('asasasas');[m
+             var parent_fieldset = $(this).parents('fieldset');[m
+             var next_step = true;[m
+             [m
+             if ((!$('#applyForm').valid())) { //I added an extra parenthesis at the end[m
+[32m+[m[32m                alert('false');[m
+                            return false;[m
+                  }[m
+ [m
+             if (next_step) {[m
+[32m+[m[32m                alert('true');[m
+                 parent_fieldset.fadeOut(400, function () {[m
+                     $(this).next().fadeIn();[m
+                 });[m

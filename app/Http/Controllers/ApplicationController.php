@@ -107,20 +107,17 @@ class ApplicationController extends Controller
 
                       $contract = new Contract;
                       $contract->rentID = $rent->rentID;
-                      if(!isset($_POST['specific_no']))
-                        { $length = 1;}
-                      else{
-                        $length = $_POST['specific_no'];
-                      }
-                      $contract->contractLength = $length;
+                     
                       $contract->contractStatus = 0;
 
                       $contract->save();
                       if($contract->save())
-                      { $contractInfo = new ContractInfo;
-                      $contractInfo->contractID = $contract->contractID;
-                      $contractInfo->contractPeriodID = $_POST['length'];
-                      $contractInfo->save();
+                      { $periodID = $_POST['length'];
+                        $length = (!isset($_POST['specific_no']) ? 1 : $_POST['specific_no']);
+                            
+                         
+                        $contract->contractPeriods()->attach($periodID, ['contractLength' => $length ]);
+                        
                       }
                       else
                       {
@@ -174,27 +171,26 @@ class ApplicationController extends Controller
                     {
                      // $rent->save();
 
+                     
                       $contract = new Contract;
                       $contract->rentID = $rent->rentID;
-                          if(!isset($_POST['specific_no']))
-                        { $length = 1;}
-                      else{
-                        $length = $_POST['specific_no'];
-                      }
-                      $contract->contractLength = $length;
+                     
                       $contract->contractStatus = 0;
 
                       $contract->save();
                       if($contract->save())
-                      { $contractInfo = new ContractInfo;
-                      $contractInfo->contractID = $contract->contractID;
-                      $contractInfo->contractPeriodID = $_POST['length'];
-                      $contractInfo->save();
+                      { $periodID = $_POST['length'];
+                        $length = (!isset($_POST['specific_no']) ? 1 : $_POST['specific_no']);
+                            
+                         
+                        $contract->contractPeriods()->attach($periodID, ['contractLength' => $length ]);
+                        
                       }
                       else
                       {
                         App::abort(500,"Error");
                       }
+                    
                     
                     }
                     else
@@ -269,6 +265,7 @@ function checkEmail()
     {
         $hasChange = false;
         $vendor =  Vendor::find($_POST['id']);
+        $vendor->venOrgName = $_POST['orgname'];
         $vendor->venFName = $_POST['fname'];
         $vendor->venMName = $_POST['mname'];
         $vendor->venLName =  $_POST['lname'];

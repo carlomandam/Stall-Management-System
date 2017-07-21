@@ -1,9 +1,9 @@
 @extends('layout.app')
+@section('title')
+    {{"Stall"}}
+@stop
 @section('content-header')
-  <h1>
-        Stall 
-        
-      </h1>
+ 
                 <ol class="breadcrumb">
                     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
                     <li class="active">Stall</li>
@@ -11,12 +11,16 @@
 @stop
 
 @section('content')
-<div style="margin-top:2%;">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#new"><span class='glyphicon glyphicon-plus'></span>Add New Stall</button>
-                </div>
-                <div style="border:2px solid black;">
+<div class = "box box-primary">
+    <div class = "box-body">             
                     <div class="table-responsive">
-                        <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
+                        <div class = "defaultNewButton">
+                            <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall</button>
+                              <div class = " pull-right" id = "archive">
+                                         <button class="btn btn-default btn-flat" onclick=""><span class='fa fa-archive'></span>&nbspArchive</button>
+                             </div>
+                        </div>
+                        <table id="table" class="table table-bordered table-striped" role="grid">
                             <thead>
                                 <tr>
                                     <th>Stall</th>
@@ -27,52 +31,53 @@
                             </thead>
                         </table>
                     </div>
-                </div>
+              
                 <div class="modal fade" tabindex="-1" id="new" role="dialog">
                     <div class="modal-dialog modal-md" role="document">
                         <form action="" method="post" id="newform">
-                            <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">Add Stall</h4> </div>
+                                    <h4 class="modal-title">New Stall</h4> </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="stallID">Stall ID*</label>
+                                                <label for="stallID">Stall ID</label><span class="required">&nbsp*</span>
                                                 <input type="text" class="form-control" id="stallID" name="stallID" placeholder="Stall ID" readonly /> </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Stall Type*</label>
+                                                <label>Stall Type</label><span class="required">&nbsp*</span>
                                                 <select class="form-control stypeSelect" style="width: 100%;" name="type"> </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Building*</label>
+                                                <label>Building</label><span class="required">&nbsp*</span>
                                                 <select class="form-control bldgSelect" style="width: 100%;" name="building"> </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Floor*</label>
+                                                <label>Floor</label><span class="required">&nbsp*</span>
                                                 <select class="form-control floorSelect" name="floor" style="width: 100%;"> </select>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="stypeDesc">Description</label>
-                                                <textarea class="form-control" id="stypeDesc" name="desc" placeholder="Stall Type Description"></textarea>
+                                                <textarea class="form-control" name="desc" placeholder="Stall Type Description"></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
+                                    <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                                 </div>
+                               
                             </div>
                         </form>
                     </div>
@@ -89,41 +94,45 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="stallID">Stall ID*</label>
+                                                <label for="stallID">Stall ID</label><span class="required">&nbsp*</span>
                                                 <input type="text" class="form-control" name="stallID" placeholder="Stall ID" readonly/> </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Stall Type*</label>
+                                                <label>Stall Type</label><span class="required">&nbsp*</span>
                                                 <select class="form-control stypeSelect" style="width: 100%;" name="type"> </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Building*</label>
+                                                <label>Building</label><span class="required">&nbsp*</span>
                                                 <input class="form-control" type="text" style="width: 100%;" name="building" readonly> </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Floor*</label>
+                                                <label>Floor</label><span class="required">&nbsp*</span>
                                                 <input name="floor" class="form-control" type="text" name="floor" style="width: 100%;" readonly> </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="stypeDesc">Description</label>
-                                                <textarea class="form-control" id="stypeDesc" name="desc" placeholder="Stall Type Description"></textarea>
+                                                <textarea class="form-control" name="desc" placeholder="Stall Type Description"></textarea>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
+                                <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                                 </div>
+                                  
                             </div>
                         </form>
                     </div>
                 </div>
+    </div>
+</div>
 @stop
 @section('script')
 <script type="text/javascript">
@@ -133,6 +142,14 @@
         $(document).ready(function () {
             getBuildings();
             getStallTypes();
+            $("#newform").validate({
+                errorClass: "error-class"
+                , validClass: "valid-class"
+            });
+            $("#updateform").validate({
+                errorClass: "error-class"
+                , validClass: "valid-class"
+            });
             $('#table').DataTable({
                 ajax: '/stallTable'
                 , responsive: true
@@ -141,7 +158,14 @@
                         "data": "stallID"
                     }
                     , {
-                        "data": "stall_type.stypeName"
+                        "data": function (data, type, dataToSet) {
+                            if(data.stall_type != null){
+                                return data.stall_type.stypeName;
+                            }
+                            else{
+                                return "N/A";
+                            }
+                        }
                     }
                     , {
                         "data": function (data, type, dataToSet) {
@@ -210,6 +234,10 @@
                 $('#newform').find('.bldgSelect').trigger('change');
                 $('#newform').find('.floorSelect').trigger('change');
                 if ($(this)[0] == $('#update')[0]) {
+                    if(obj.stall_type != null)
+                        $(this).find('select[name=type]').val(obj.stall_type.stypeID);
+                    else
+                        $(this).find('select[name=type]')[0].selectedIndex = -1;
                     $(this).find('input[name=stallID]').val(obj.stallID);
                     $(this).find('input[name=floor]').val(obj.floor.floorNo);
                     $(this).find('input[name=building]').val(obj.floor.building.bldgName);
@@ -348,12 +376,24 @@
                         var rate = response[i].utilDefaultMR;
                         if (i % 2 == 0)
                             utilities += "<div class='col-md-12 removable'>";
-                        utilities += "<div class='col-md-6'><div class='form-group'><input type='checkbox' value='" + id + "' name='util[]'><label>" + name.toUpperCase() + "</label><br><ul><li><input type='radio' name='utilRadio"+id+"' value='1' onclick='$(this).parent().next().find(&#039input[type=text]&#039).prop(&#039disabled&#039, true);' value='1' disabled><label>Monthly Reading</label></li><li><input type='radio' value='2' name='utilRadio"+id+"' onclick='$(this).siblings(&#039input[type=text]&#039).prop(&#039disabled&#039, false);' disabled><label>Fixed Rate</label><input type='text' name='utilAmount"+id+"' disabled></li><li><label>Meter ID</label><input type='text' name='meter"+id+"'></li></ul></div></div>";
+                        utilities += "<div class='col-md-6'><div class='form-group'><input type='checkbox' value='" + id + "' name='util[]'><label>" + name.toUpperCase() + "</label><br><ul><li><input type='radio' name='utilRadio"+id+"' value='1' onclick='$(this).parent().next().find(&#039input[type=text]&#039).prop(&#039disabled&#039, true);' value='1' disabled><label>Monthly Reading</label></li><li><input type='radio' value='2' name='utilRadio"+id+"' onclick='$(this).siblings(&#039input[type=text]&#039).prop(&#039disabled&#039, false);' disabled><label>Fixed Rate</label><input class='rate' type='text' name='utilAmount"+id+"' disabled></li>";
+                        if(response[i].isMetered == 1)
+                            utilities += "<li><label>Meter ID</label><input type='text' name='meter"+id+"' disabled></li>";
+                        utilities += "</ul></div></div>";
                         if (i % 2 != 0) utilities += '</div>';
                     }
+                    
                     $('.modal-body').each(function () {
                         $(this).append(utilities);
                     });
+                    
+                    $('.rate').each(function() {
+                        $(this).rules("add", 
+                            {
+                                required: true
+                            })
+                    });
+                    
                     if(elem == $('#update')[0]){
                         var evt = new CustomEvent('utilready',{detail:{ message : "yow"}});
                         $('#update')[0].dispatchEvent(evt);
