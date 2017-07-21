@@ -6,7 +6,7 @@
 @section('content-header')
 
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
+            <li><i class="fa fa-dashboard"></i> Maintenance</li>
             <li class="active">Building</li>
         </ol>
         @stop

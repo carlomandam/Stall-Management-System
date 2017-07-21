@@ -28,12 +28,13 @@
                 <tr>
                     <th style="width: 200px;">Stall Type</th>
                     <th style="width: 120px;">Area</th>
-                    <th>Description</th>
-                    <th style="width: 300px;">Actions</th>
-
-</div>
-<div class="modal fade" id="new" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-md" role="document">
+                    <th style="width: 300px;">Description</th>
+                    <th >Actions</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="modal fade" id="new" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md" role="document">
         <form action="" method="post" id="newform">
             <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
             <div class="modal-content">
@@ -48,8 +49,6 @@
                             <div class="form-group">
 
                                 <label for="stypeName">Stall Type Name</label><span class="required">&nbsp*</span>
-
-                                <label for="stypeName">Stall Type Name*</label>
 
                                 <input type="text" class="form-control" id="stypeName" name="stypeName" placeholder="Stall Type Name" /> </div>
                         </div>
@@ -131,6 +130,8 @@
         </form>
     </div>
 </div> 
+</div>
+
 @stop
  @section('script')
 <script>
@@ -273,12 +274,9 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
-<<<<<<< HEAD
+
                     toastr.success('Updated Stall Type');
-=======
-                    toastr.success('Updated Stall Type Information');
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
-                    $('#table').DataTable().ajax.reload();
+                     $('#table').DataTable().ajax.reload();
                     $('#update').modal('hide');
                 }
             });

@@ -35,7 +35,7 @@
             overflow: visible !important;
 
         }
-     
+        
         .error-class {
             color: red;
             border-color: 2px solid #ebccd1;
