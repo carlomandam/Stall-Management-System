@@ -1,13 +1,13 @@
 @extends('layout.app')
 
 @section('title')
-    {{ 'Building Archive'}}
+    {{ 'Stall Archive'}}
 @stop
 @section('content-header')
 
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
-            <li class="active">Building</li>
+            <li class="active">Stall</li>
         </ol>
         @stop
 
@@ -20,23 +20,22 @@
 
             <div class="table-responsive">
               <div  class = "defaultNewButton">
-               <a href="{{ url('/Building') }}" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack</a>
+               <a href="{{ url('/Stall') }}" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack</a>
               </div>
           
                 <table id="prodtbl" class="table table-bordered table-striped" role="grid" >
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th style="width: 100px;">No. of Floors</th>
-                            <th>Description</th>
-                            <th style="width: 280px;">Actions</th>
+                            <th style="width: 100px;">Stall Code</th>
+                            <th style="width: 180px;">Type</th>
+                            <th style="width: 280px;">Location</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                         <tr>
-                        <td>Building 3</td>
-                        <td>BLDG3</td>
-                        <td>4</td>
+                        <td>BLDG-201</td>
+                        <td>Cart</td>
+                        <td>Floor 2, Building 3</td>
                         <td></td>
                         <td>  <button class="btn btn-primary btn-flat"><span class='fa fa-mail-reply'></span>&nbspReactivate </button></td>
 

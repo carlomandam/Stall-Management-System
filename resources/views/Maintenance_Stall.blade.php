@@ -17,15 +17,15 @@
                         <div class = "defaultNewButton">
                             <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall</button>
                               <div class = " pull-right" id = "archive">
-                                         <button class="btn btn-default btn-flat" onclick=""><span class='fa fa-archive'></span>&nbspArchive</button>
+                                          <a href="{{ url('/StallArchive') }}" class="btn btn-primary btn-flat" ><span class='fa fa-archive'></span>&nbspArchive</a>
                              </div>
                         </div>
                         <table id="table" class="table table-bordered table-striped" role="grid">
                             <thead>
                                 <tr>
-                                    <th>Stall</th>
-                                    <th>Type</th>
-                                    <th>Location</th>
+                                    <th style="width: 100px;">Stall Code</th>
+                                    <th style="width: 180px;">Type</th>
+                                    <th style="width: 280px;">Location</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -44,7 +44,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="stallID">Stall ID</label><span class="required">&nbsp*</span>
+                                                <label for="stallID">Stall Code</label><span class="required">&nbsp*</span>
                                                 <input type="text" class="form-control" id="stallID" name="stallID" placeholder="Stall ID" readonly /> </div>
                                         </div>
                                         <div class="col-md-6">
@@ -68,7 +68,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="stypeDesc">Description</label>
-                                                <textarea class="form-control" name="desc" placeholder="Stall Type Description"></textarea>
+                                                <textarea class="form-control" name="desc" placeholder="Stall Description"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -116,7 +116,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="stypeDesc">Description</label>
-                                                <textarea class="form-control" name="desc" placeholder="Stall Type Description"></textarea>
+                                                <textarea class="form-control" name="desc" placeholder="Stall Description"></textarea>
                                             </div>
                                         </div>
 

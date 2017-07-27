@@ -33,7 +33,7 @@
              <div  class = "defaultNewButton">
                 <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Building</button>
                     <div class = " pull-right" id = "archive">
-                         <button class="btn btn-default btn-flat" onclick=""><span class='fa fa-archive'></span>&nbspArchive</button>
+                        <a href="{{ url('/BuildingArchive') }}" class="btn btn-primary btn-flat" ><span class='fa fa-archive'></span>&nbspArchive</a>
                     </div>
               </div>
                 <table id="prodtbl" class="table table-bordered table-striped" role="grid" >
@@ -82,7 +82,10 @@
                                  <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="noOfFloor">No. of Floors</label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="noOfFloor" name="noOfFloor" placeholder="No. of Floors" oninput="showTable('#floortbl')" /> </div>
+                                        <div class="input-group">
+                                        <input type="text" class="form-control" id="noOfFloor" name="noOfFloor" placeholder="Number of" oninput="showTable('#floortbl')" />
+                                          <span class="input-group-addon">Floor(s)</span>
+                                        </div>
                                         <table id='floortbl' style="display:none">
                                             <thead>
                                                 <tr>
@@ -92,6 +95,8 @@
                                             </thead>
                                             <tbody> </tbody>
                                         </table>
+
+                                    </div>
                                 </div>
                             </div>
                              <p class="small text-danger">Fields with asterisks(*) are required</p>
@@ -132,7 +137,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="noOfFloorUp">No. of Floors</label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="noOfFloorUp" name="noOfFloor" placeholder="No. of Floors" readonly/> </div>
+                                        <input type="text" class="form-control" id="noOfFloorUp" name="noOfFloor" placeholder="No.of floors" readonly/> 
+                                    </div>
                                 </div>
                              
                                 <div class="col-md-12">
@@ -144,9 +150,12 @@
                                    <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="noOfFloorUp">Add/Remove Floors</label><br>
-                                        <input type="radio" value="1" name="addRemoveRadio"><label>Add</label>&emsp;
+                                        <input type="radio" value="1" name="addRemoveRadio" checked><label>Add</label>&emsp;
                                         <input type="radio" value="2" name="addRemoveRadio"><label>Remove</label>
-                                        <input type="text" class="form-control" name="addRemove" id="addRemove" placeholder="No. of Floors" disabled/> 
+                                        <div class = "input-group">
+                                        <input type="text" class="form-control" name="addRemove" id="addRemove" placeholder="Number of"/>
+                                        <span class="input-group-addon">Floor(s)</span>
+                                        </div>
                                         <table id='floortblup' style="display:none">
                                             <thead>
                                                 <tr>
@@ -158,6 +167,7 @@
                                         </table>
                                     </div>
                                 </div>
+                              
                             </div>
                              <p class="small text-danger">Fields with asterisks(*) are required</p>
                         </div>

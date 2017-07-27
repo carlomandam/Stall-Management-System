@@ -20,7 +20,7 @@
         <div class = "defaultNewButton">
             <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall Type </button>
              <div class = " pull-right" id = "archive">
-                                 <button class="btn btn-default btn-flat" onclick=""><span class='fa fa-archive'></span>&nbspArchive</button>
+                                 <a href="{{ url('/StallTypeArchive') }}" class="btn btn-primary btn-flat" ><span class='fa fa-archive'></span>&nbspArchive</a>
              </div>
         </div>
         <table id="table" class="table table-bordered table-striped" role="grid">
@@ -54,13 +54,20 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeLength">Stall Type Length(meter)</label>
-                                <input type="text" class="form-control" id="stypeLength" name="stypeLength" placeholder="Stall Type Length" /> </div>
+                                <label for="stypeLength">Stall Type Length</label>
+                                <div class = "input-group">
+                                <input type="text" class="form-control" id="stypeLength" name="stypeLength" placeholder="Length" /> 
+                                <span class = "input-group-addon">meter(s)</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeWidth">Stall Type Width(meter)</label>
-                                <input type="text" class="form-control" id="stypeWidth" name="stypeWidth" placeholder="Stall Type Width" /> </div>
+                                <label for="stypeWidth">Stall Type Width</label>
+                                <div class = "input-group">
+                                <input type="text" class="form-control" id="stypeWidth" name="stypeWidth" placeholder="Stall Type" /> 
+                                <span class = "input-group-addon">meter(s)</span></div>
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -103,13 +110,24 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeLengthUp">Stall Type Length(meter)</label>
-                                <input type="text" class="form-control" id="stypeLengthUp" name="stypeLength" placeholder="Length" /> </div>
+                                <label for="stypeLengthUp">Stall Type Length</label>
+                                <div class = "input-group">
+                                <input type="text" class="form-control" id="stypeLengthUp" name="stypeLength" placeholder="Length" /> 
+                                <span class="input-group-addon">
+                                 meter(s)   
+                                </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeWidthUp">Stall Type Width(meter)</label>
-                                <input type="text" class="form-control" id="stypeWidthUp" name="stypeWidth" placeholder="Width" /> </div>
+                                <label for="stypeWidthUp">Stall Type Width</label>
+                                <div class = "input-group">
+                                <input type="text" class="form-control" id="stypeWidthUp" name="stypeWidth" placeholder="Width" /> 
+                                <span class="input-group-addon">meter(s)</span>
+                                </div>
+
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">

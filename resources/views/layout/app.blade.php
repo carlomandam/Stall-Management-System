@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MySeoul-@yield('title')</title>
+    <title>MySeoul | @yield('title')</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -62,6 +62,8 @@
         .required {
             color: red;
         } 
+
+        
 
 
     </style>
@@ -123,9 +125,9 @@
                         </ul>
                         </li>
                     <li class="header">MAINTENANCE</li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Building' ? 'active' : ''}}"><a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
+                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Building' || Route::getFacadeRoot()->current()->uri() == 'BuildingArchive'  ? 'active' : ''}}"><a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a></li>
+                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
+                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall'  || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' ? 'active' : ''}}"><a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Fee' ? 'active' : ''}}"><a href="/Fee"><i class="fa fa-file-o"></i> <span>Fees</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Penalty' ? 'active' : ''}}"><a href="/Penalty"><i class="fa fa-link"></i> <span>Penalties</span></a></li>
@@ -152,7 +154,7 @@
         </div>
          <footer class="main-footer">
     
-    <strong>Copyright © 2017<a href="https://adminlte.io">MySeoul Stalls Management System</a>.</strong> All rights
+    <strong>Copyright ©<a href="https://adminlte.io"></a>.</strong> All rights
     reserved.
   </footer>
         <!-- /.content-wrapper -->
