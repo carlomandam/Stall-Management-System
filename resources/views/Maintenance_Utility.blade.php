@@ -223,7 +223,9 @@
                     obj = JSON.parse(data)[0];
                     $('#update').find('input[name=id]').val(obj.utilID);
                     $('#update').find('input[name=name]').val(obj.utilName);
-                    $('#update').find('input[name=rate]').val(obj.utilDefaultMR);
+                    $('#update').find('textarea[name=desc]').val(obj.utilDesc);
+                    if(obj.isMetered == 1)
+                        $('#update').find('input[name=metered]').prop('checked',true);
                     $('#update').modal('show');
                 }
             });

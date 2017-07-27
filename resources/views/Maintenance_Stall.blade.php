@@ -1,9 +1,9 @@
 @extends('layout.app')
+@section('title')
+    {{"Stall"}}
+@stop
 @section('content-header')
-  <h1>
-        Stall 
-        
-      </h1>
+ 
                 <ol class="breadcrumb">
                     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
                     <li class="active">Stall</li>
@@ -11,12 +11,16 @@
 @stop
 
 @section('content')
-<div style="margin-top:2%;">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#new"><span class='glyphicon glyphicon-plus'></span>Add New Stall</button>
-                </div>
-                <div style="border:2px solid black;">
+<div class = "box box-primary">
+    <div class = "box-body">             
                     <div class="table-responsive">
-                        <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
+                        <div class = "defaultNewButton">
+                            <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall</button>
+                              <div class = " pull-right" id = "archive">
+                                         <button class="btn btn-default btn-flat" onclick=""><span class='fa fa-archive'></span>&nbspArchive</button>
+                             </div>
+                        </div>
+                        <table id="table" class="table table-bordered table-striped" role="grid">
                             <thead>
                                 <tr>
                                     <th>Stall</th>
@@ -27,7 +31,7 @@
                             </thead>
                         </table>
                     </div>
-                </div>
+              
                 <div class="modal fade" tabindex="-1" id="new" role="dialog">
                     <div class="modal-dialog modal-md" role="document">
                         <form action="" method="post" id="newform">
@@ -35,29 +39,29 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">Add Stall</h4> </div>
+                                    <h4 class="modal-title">New Stall</h4> </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="stallID">Stall ID*</label>
+                                                <label for="stallID">Stall ID</label><span class="required">&nbsp*</span>
                                                 <input type="text" class="form-control" id="stallID" name="stallID" placeholder="Stall ID" readonly /> </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Stall Type*</label>
+                                                <label>Stall Type</label><span class="required">&nbsp*</span>
                                                 <select class="form-control stypeSelect" style="width: 100%;" name="type"> </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Building*</label>
+                                                <label>Building</label><span class="required">&nbsp*</span>
                                                 <select class="form-control bldgSelect" style="width: 100%;" name="building"> </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Floor*</label>
+                                                <label>Floor</label><span class="required">&nbsp*</span>
                                                 <select class="form-control floorSelect" name="floor" style="width: 100%;"> </select>
                                             </div>
                                         </div>
@@ -71,8 +75,9 @@
                                 </div>
                                 <div class="modal-footer">
                                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
+                                    <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                                 </div>
+                               
                             </div>
                         </form>
                     </div>
@@ -89,23 +94,23 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="stallID">Stall ID*</label>
+                                                <label for="stallID">Stall ID</label><span class="required">&nbsp*</span>
                                                 <input type="text" class="form-control" name="stallID" placeholder="Stall ID" readonly/> </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Stall Type*</label>
+                                                <label>Stall Type</label><span class="required">&nbsp*</span>
                                                 <select class="form-control stypeSelect" style="width: 100%;" name="type"> </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Building*</label>
+                                                <label>Building</label><span class="required">&nbsp*</span>
                                                 <input class="form-control" type="text" style="width: 100%;" name="building" readonly> </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Floor*</label>
+                                                <label>Floor</label><span class="required">&nbsp*</span>
                                                 <input name="floor" class="form-control" type="text" name="floor" style="width: 100%;" readonly> </div>
                                         </div>
                                         <div class="col-md-12">
@@ -114,16 +119,20 @@
                                                 <textarea class="form-control" name="desc" placeholder="Stall Type Description"></textarea>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
+                                <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                                 </div>
+                                  
                             </div>
                         </form>
                     </div>
                 </div>
+    </div>
+</div>
 @stop
 @section('script')
 <script type="text/javascript">

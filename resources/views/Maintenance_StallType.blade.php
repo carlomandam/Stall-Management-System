@@ -1,42 +1,55 @@
-@extends('layout.app') @section('content-header')
-<h1>
-        Stall Type 
-        
-      </h1>
+
+@extends('layout.app') 
+
+@section('title')
+    {{'Stall Type'}}
+@stop
+
+@section('content-header')
 <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
     <li class="active">Stall Type</li>
-</ol> @stop @section('content')
-<div style="margin-top:2%;">
-    <button class="btn btn-primary" data-toggle="modal" data-target="#new"><span class='glyphicon glyphicon-plus'></span>Add Stall Type </button>
-</div>
-<div style="border:2px solid black;">
+</ol> 
+@stop
+
+ @section('content')
+
+<div class = "box box-primary">
+    <div class = "box-body">
     <div class="table-responsive">
-        <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
+        <div class = "defaultNewButton">
+            <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall Type </button>
+             <div class = " pull-right" id = "archive">
+                                 <button class="btn btn-default btn-flat" onclick=""><span class='fa fa-archive'></span>&nbspArchive</button>
+             </div>
+        </div>
+        <table id="table" class="table table-bordered table-striped" role="grid">
             <thead>
                 <tr>
-                    <th>Stall Type</th>
-                    <th>Area</th>
-                    <th>Description</th>
-                    <th>Actions</th>
+                    <th style="width: 200px;">Stall Type</th>
+                    <th style="width: 120px;">Area</th>
+                    <th style="width: 300px;">Description</th>
+                    <th >Actions</th>
                 </tr>
             </thead>
         </table>
-    </div>
-</div>
-<div class="modal fade" id="new" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-md" role="document">
+        <div class="modal fade" id="new" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md" role="document">
         <form action="" method="post" id="newform">
             <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Stall Type</h4> </div>
+
+                    <h4 class="modal-title">New Stall Type</h4> </div>
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="stypeName">Stall Type Name*</label>
+
+                                <label for="stypeName">Stall Type Name</label><span class="required">&nbsp*</span>
+
                                 <input type="text" class="form-control" id="stypeName" name="stypeName" placeholder="Stall Type Name" /> </div>
                         </div>
                         <div class="col-md-6">
@@ -56,10 +69,12 @@
                             </div>
                         </div>
                     </div>
+                         <p class="small text-danger">Fields with asterisks(*) are required</p>
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
+                     <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+
                 </div>
             </div>
         </form>
@@ -73,12 +88,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Update Stall Type Information</h4> </div>
+
+                    <h4 class="modal-title">Update Stall Type</h4> </div>
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="stypeNameUp">Stall Type Name*</label>
+
+                                <label for="stypeNameUp">Stall Type Name</label>
+                                <span class="required">&nbsp*</span>
+
                                 <input type="text" class="form-control" id="stypeNameUp" name="stypeName" placeholder="Stall Type Name" /> </div>
                         </div>
                         <div class="col-md-6">
@@ -98,15 +118,22 @@
                             </div>
                         </div>
                     </div>
+                         <p class="small text-danger">Fields with asterisks(*) are required</p>
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
+
+                       <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+
                 </div>
             </div>
         </form>
     </div>
-</div> @stop @section('script')
+</div> 
+</div>
+
+@stop
+ @section('script')
 <script>
     var obj;
     var chk;
@@ -247,8 +274,9 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
-                    toastr.success('Updated Stall Type Information');
-                    $('#table').DataTable().ajax.reload();
+
+                    toastr.success('Updated Stall Type');
+                     $('#table').DataTable().ajax.reload();
                     $('#update').modal('hide');
                 }
             });
@@ -293,4 +321,5 @@
             }
         });
     }
-</script> @stop
+</script> 
+@stop

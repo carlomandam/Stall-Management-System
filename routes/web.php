@@ -37,10 +37,6 @@ Route::get('/Stalls','ApplicationController@stall');
 Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfview',
 										'as' => 'htmltopdfview']);
 
-//Route::post('/Registration/Create','Controller@addVendorInfo');
-//Route::resource('transaction','ApplicationController');
-//STALLS ROUTE//
-
 
 Route::get('/getStalls','StallController@getStalls');
 
@@ -122,3 +118,7 @@ Route::post('/checkRate', 'Controller@checkRate');
 Route::get('/pdfview',array('as'=>'pdfview','uses'=>'PDFController@pdfview'));
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
 Route::get('/getVendor', 'ApplicationController@getVendor');
+
+///////////////////ARCHIVES IN MAINTENANCE////////////////
+
+Route::get('/BuildingArchive','ArchiveController@buildingIndex');

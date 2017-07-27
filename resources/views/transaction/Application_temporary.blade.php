@@ -376,6 +376,57 @@ legend{
     $(document).ready(function () {
         console.log('{{$stall}}'.replace(/&quot;/g, '"'));
         //Set selected value in length of contract//
+        //SELECTED STALL ID AND ITS RATES
+    var stalls = JSON.parse(("{{$stall}}").replace(/&quot;/g,'"'));
+    console.log(stalls);
+    var val;
+    var sel = 0;
+    $('#stallno').on('change',function(){
+        var newVal = $(this).val();
+        if($('#stallno').val() != null){
+            if($('#stallno').val().length > sel){
+                index = 0;
+
+                for(var i=0; i<newVal.length; i++) {
+                    if($.inArray(newVal[i], val) == -1)
+                        index = i;
+                }
+
+                var stall = _.find(stalls,{'stallID': $('#stallno').val()[index]});
+                var util = '';
+                if(stall.stall_util != undefined || stall.stall_util.length > 0){
+                  
+                    for(var i = 0 ; i < stall.stall_util.length; i++){
+                        
+                        util += stall.stall_util[i].utility.utilName;
+                        if(stall.stall_util[i].RateType == 1)
+                            util += '(Monthly Reading)';
+                        else
+                            util += '(Php.'+stall.stall_util[i].Rate+'/Month)';
+                        if(i < stall.stall_util.length - 1)
+                            util += ', ';
+                    }
+                }
+                var stype = '';
+                if(stall.stall_type != null)
+                    stype = stall.stall_type.stypeName;
+                
+                $('#selectedtbl tbody').append('<tr><td>'+stall.stallID+'</td><td>'+stype+'</td><td>'+util+'</td><td>Floor '+stall.floor.floorNo+', '+stall.floor.building.bldgName+'</td></tr>')
+            }
+            else if($('#stallno').val().length < sel){
+                var id = val.filter(function(obj) { return newVal.indexOf(obj) == -1; });
+                $("td").filter(function() {
+                    return $(this).text() == id;
+                }).closest("tr").remove();
+            }
+            sel = $('#stallno').val().length; 
+        }else{
+            $('#selectedtbl tbody td').remove();
+            sel = 0;
+        }
+        val = newVal;
+    });
+ 
         $("#length").val($("#length option:first").val());
         var placeholderValue;
    
@@ -715,16 +766,9 @@ legend{
 
 
 
-    //SELECTED STALL ID AND ITS RATES
-    var stalls = JSON.parse(("{{$stall}}").replace(/&quot;/g,'"'));
-    var val;
-    var sel = 0;
-    $('#stallno').on('change',function(){
-        var newVal = $(this).val();
-        if($('#stallno').val() != null){
-            if($('#stallno').val().length > sel){
-                index = 0;
 
+<<<<<<< HEAD
+=======
                 for(var i=0; i<newVal.length; i++) {
                     if($.inArray(newVal[i], val) == -1)
                         index = i;
@@ -763,6 +807,7 @@ legend{
         val = newVal;
     });
  
+>>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
     /// SUBMIT REGISTRATION//
     $("#applyForm").submit(function (e) {
             e.preventDefault();

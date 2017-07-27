@@ -22,7 +22,7 @@ class ContractController extends Controller
 {
     public function index(){
           $contract_period = ContractPeriod::all();
-         
+          
         
             return view('transaction.Contracts',compact('contract_period'));
    
@@ -44,6 +44,7 @@ class ContractController extends Controller
      //   $rent = Rent::with('Vendor')->get();
            $rent = Rent::join('tblvendor','tblrent_info.venID','=','tblvendor.venID')
             ->get();
+          
      //   $contract = ContractInfo::with('Contract','ContractPeriod')->get();
         $data = array();
       //  $contractData = array();
@@ -84,7 +85,7 @@ class ContractController extends Controller
     {
       
         
-        $vendorData = Rent::join('tblvendor','tblrent_info.venID' ,'=','tblvendor.venID')
+    $vendorData = Rent::join('tblvendor','tblrent_info.venID' ,'=','tblvendor.venID')
                       ->where('rentID','=',$rentid)->get();
 
        $pluckStallId = Rent::where('rentID','=',$rentid)
@@ -104,8 +105,7 @@ class ContractController extends Controller
         $util = StallUtil::where('stallID','=',$pluckStallId)
         ->select('utilID','RateType','Rate','meterID')->get();
 
-       $contract = Contract::all()->where('rentID','=',$rentid)
-       ->first();
+        //$contractinfo = \DB::select("");
         if($util->isEmpty())
         {
             $util = "";
@@ -119,15 +119,16 @@ class ContractController extends Controller
                 ->get();*/
        // view()->share('vendorData',$vendorData);
        
-            
+     /*       
        $pdf = new Dompdf();
-       $pdf= PDF::loadView('transaction.pdfview',compact('vendorData','stall','stypeCollection','fees','util','utilityNames'));
+       $pdf= PDF::loadView('transaction.pdfview',compact('vendorData','stall','stypeCollection','fees','util','utilityNames'));*/
       
      // return $pdf->stream();
         //return $pdf->stream('contract.pdf',array('Attachment'=>false));
-       
-       //return view('transaction.pdfview',compact('vendorData','stall','stypeCollection','fees','util','utilityNames'));
-    return view($contract);
+     
+   return view('transaction.pdfview',compact('vendorData','stall','stypeCollection','fees',
+       'util','utilityNames'));
+ //  return view($contractinfo);
     }
 
    

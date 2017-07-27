@@ -68,10 +68,10 @@ class Controller extends BaseController
     	$data = array();
     	foreach ($building as $building) {
             $building['floor'] = count(Floor::where('bldgID',$building->bldgID)->get());
-            $building['actions'] = "<button class='btn btn-success' onclick='getInfo(this.value)' value = '".$building['bldgID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
+            $building['actions'] = "<button class='btn btn-primary btn-flat' onclick='getInfo(this.value)' value = '".$building['bldgID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
             
             <div class='btn-group'>
-                <button type='button' class='btn btn-danger dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
+                <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
                 <ul class='dropdown-menu pull-right opensleft' role='menu'>
                     <center>
                         <h4>Are You Sure?</h4>
@@ -180,10 +180,10 @@ class Controller extends BaseController
     	$STypes = StallType::all();
     	$data = array();
     	foreach ($STypes as $SType) {
-            $SType['actions'] = "<button class='btn btn-success' onclick='getInfo(this.value)' value = '".$SType['stypeID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
+            $SType['actions'] = "<button class='btn btn-primary btn-flat' onclick='getInfo(this.value)' value = '".$SType['stypeID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
             
             <div class='btn-group'>
-                <button type='button' class='btn btn-danger dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
+                <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
                 <ul class='dropdown-menu pull-right opensleft' role='menu'>
                     <center>
                         <h4>Are You Sure?</h4>
@@ -253,10 +253,10 @@ class Controller extends BaseController
     	$stalls = Stall::with('StallType','Floor.Building')->get();
     	$data = array();
     	foreach ($stalls as $stall) {
-            $stall['actions'] = "<button class='btn btn-success' onclick='getInfo(this.value)' value = '".$stall['stallID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
+            $stall['actions'] = "<button class='btn btn-primary btn-flat' onclick='getInfo(this.value)' value = '".$stall['stallID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
             
             <div class='btn-group'>
-                <button type='button' class='btn btn-danger dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
+                <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
                 <ul class='dropdown-menu pull-right opensleft' role='menu' data-container='body'>
                     <center>
                         <h4>Are You Sure?</h4>

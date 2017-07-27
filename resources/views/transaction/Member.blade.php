@@ -13,8 +13,13 @@
                 <thead>
                     <tr>
                         <th>Stall Holder No.</th>
+<<<<<<< HEAD
+                        <th>Organization Name / Full Name</th>
+                        <th>Mobile Number</th>
+=======
                         <th>Name</th>
                         <th>Contact</th>
+>>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
                         <th>Email</th>
                         <th>Action</th>
                     </tr>
@@ -323,7 +328,16 @@
                     
             , {
                 "data": function (data, type, dataToSet) {
+<<<<<<< HEAD
+                    if(data.venOrgName != null)
+                    {
+                        return (data.venOrgName+" / "+data.venFName + " " +data.venMName+ " "+data.venLName);
+                    }
+                    else{
+                    return (data.venFName + " " +data.venMName+ " "+data.venLName);}
+=======
                     return (data.venFName + " " + data.venLName);
+>>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
                 }
                     }
             , {
