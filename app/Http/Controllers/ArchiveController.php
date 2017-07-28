@@ -11,4 +11,14 @@ class ArchiveController extends Controller
     {
     	return view('archives.Archive_Building');
     }
+
+    function stallTypeIndex()
+    {
+    	return view('archives.Archive_StallType');
+    }
+
+    function stallIndex()
+    {
+    	return view('archives.Archive_Stall');
+    }
 }

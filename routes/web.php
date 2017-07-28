@@ -39,7 +39,6 @@ Route::get('/Stalls','ApplicationController@stall');
 Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfview',
 										'as' => 'htmltopdfview']);
 
-
 Route::get('/getStalls','StallController@getStalls');
 
 /////MAINTENANCE///////
@@ -128,3 +127,5 @@ Route::get('/getVendor', 'ApplicationController@getVendor');
 ///////////////////ARCHIVES IN MAINTENANCE////////////////
 
 Route::get('/BuildingArchive','ArchiveController@buildingIndex');
+Route::get('/StallTypeArchive','ArchiveController@stallTypeIndex');
+Route::get('/StallArchive','ArchiveController@stallIndex');

@@ -116,35 +116,32 @@
                       </ul>
                       <ul class="nav nav-tabs pull-right" >
                             
-                            <li class="active"><a href="#tab1default" data-toggle="tab">Map</a></li>
+                            <li class="active"><a href="#holder" data-toggle="tab">Map</a></li>
                             <li><a href="#tab2default" data-toggle="tab">Table</a></li>
                         </ul>
                  
                   
                   </div>
-                  <div class="panel-body nav-tabs-custom" style="height: 525px;overflow:scroll;">
+                  <div class="panel-body nav-tabs-custom" style="height: 550px;">
                       <div class="tab-content">
-                        <div class="tab-pane fade in active" id="tab1default">
+                        <div class="tab-pane fade in active" id="holder" style="overflow: scroll;">
+                            
+                              <ul  id="place">
+                              </ul>    
+                            <!-- <div style="float:left;"> 
+                              <ul id="seatDescription">
+                                <li style="background:url('images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Available Seat</li>
+                                <li style="background:url('images/booked_seat_img.gif') no-repeat scroll 0 0 transparent;">Booked Seat</li>
+                                <li style="background:url('images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Selected Seat</li>
+                              </ul>
+                            </div>
+                            <div style="clear:both;width:100%">
+                              <input type="button" id="btnShowNew" value="Show Selected Seats" />
+                              <input type="button" id="btnShow" value="Show All" />           
+                            </div>
+ -->
 
-                       <h2> Choose seats by clicking the corresponding seat in the layout below:</h2>
-    <div id="holder"> 
-        <ul  id="place">
-        </ul>    
-    </div>
-    <div style="float:left;"> 
-    <ul id="seatDescription">
-        <li style="background:url('images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Available Seat</li>
-        <li style="background:url('images/booked_seat_img.gif') no-repeat scroll 0 0 transparent;">Booked Seat</li>
-        <li style="background:url('images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Selected Seat</li>
-    </ul>
-    </div>
-        <div style="clear:both;width:100%">
-        <input type="button" id="btnShowNew" value="Show Selected Seats" />
-        <input type="button" id="btnShow" value="Show All" />           
-        </div>
-                        
-
-                        </div>
+                          </div>
                         <div class="tab-pane fade" id="tab2default">Default 2</div>
                     </div>
 
@@ -188,7 +185,7 @@
                       <span class="glyphicon glyphicon-minus"></span>
                     </button>
                   </span>
-                  <input style="text-align: center;" type="text" name="quant[1]" class="form-control input-number" value="0" min="0" max="10">
+                  <input style="text-align: center;" type="text" name="quant[1]" class="form-control input-number" value="0" min="0" max="200">
                   <span class="input-group-btn">
                     <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
                       <span class="glyphicon glyphicon-plus"></span>

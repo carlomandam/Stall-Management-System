@@ -37,12 +37,12 @@ $(document).on('change','.floors',function(){
 
 
 var settings = {
-               rows: 5,
-               cols: 15,
+               rows: 10,
+               cols: 20,
                rowCssPrefix: 'row-',
                colCssPrefix: 'col-',
-               seatWidth: 35,
-               seatHeight: 35,
+               seatWidth: 45,
+               seatHeight: 45,
                seatCss: 'seat',
                selectedSeatCss: 'selectedSeat',
                selectingSeatCss: 'selectingSeat'
@@ -69,7 +69,7 @@ var init = function (reservedSeat) {
             //init();
  
             //Case II: If already booked
-            var bookedSeats = [5, 10, 25];
+            var bookedSeats = [5, 25];
             init(bookedSeats);
 
 

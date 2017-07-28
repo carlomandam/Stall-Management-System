@@ -20,7 +20,7 @@
         <div class = "defaultNewButton">
             <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall Type </button>
              <div class = " pull-right" id = "archive">
-                                 <button class="btn btn-default btn-flat" onclick=""><span class='fa fa-archive'></span>&nbspArchive</button>
+                                 <a href="{{ url('/StallTypeArchive') }}" class="btn btn-primary btn-flat" ><span class='fa fa-archive'></span>&nbspArchive</a>
              </div>
         </div>
         <table id="table" class="table table-bordered table-striped" role="grid">
@@ -28,12 +28,13 @@
                 <tr>
                     <th style="width: 200px;">Stall Type</th>
                     <th style="width: 120px;">Area</th>
-                    <th>Description</th>
-                    <th style="width: 300px;">Actions</th>
-
-</div>
-<div class="modal fade" id="new" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-md" role="document">
+                    <th style="width: 300px;">Description</th>
+                    <th >Actions</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="modal fade" id="new" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md" role="document">
         <form action="" method="post" id="newform">
             <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
             <div class="modal-content">
@@ -49,19 +50,24 @@
 
                                 <label for="stypeName">Stall Type Name</label><span class="required">&nbsp*</span>
 
-                                <label for="stypeName">Stall Type Name*</label>
-
                                 <input type="text" class="form-control" id="stypeName" name="stypeName" placeholder="Stall Type Name" /> </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeLength">Stall Type Length(meter)</label>
-                                <input type="text" class="form-control" id="stypeLength" name="stypeLength" placeholder="Stall Type Length" /> </div>
+                                <label for="stypeLength">Stall Type Length</label>
+                                <div class = "input-group">
+                                <input type="text" class="form-control" id="stypeLength" name="stypeLength" placeholder="Length" /> 
+                                <span class = "input-group-addon">meter(s)</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeWidth">Stall Type Width(meter)</label>
-                                <input type="text" class="form-control" id="stypeWidth" name="stypeWidth" placeholder="Stall Type Width" /> </div>
+                                <label for="stypeWidth">Stall Type Width</label>
+                                <div class = "input-group">
+                                <input type="text" class="form-control" id="stypeWidth" name="stypeWidth" placeholder="Stall Type" /> 
+                                <span class = "input-group-addon">meter(s)</span></div>
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -104,13 +110,24 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeLengthUp">Stall Type Length(meter)</label>
-                                <input type="text" class="form-control" id="stypeLengthUp" name="stypeLength" placeholder="Length" /> </div>
+                                <label for="stypeLengthUp">Stall Type Length</label>
+                                <div class = "input-group">
+                                <input type="text" class="form-control" id="stypeLengthUp" name="stypeLength" placeholder="Length" /> 
+                                <span class="input-group-addon">
+                                 meter(s)   
+                                </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeWidthUp">Stall Type Width(meter)</label>
-                                <input type="text" class="form-control" id="stypeWidthUp" name="stypeWidth" placeholder="Width" /> </div>
+                                <label for="stypeWidthUp">Stall Type Width</label>
+                                <div class = "input-group">
+                                <input type="text" class="form-control" id="stypeWidthUp" name="stypeWidth" placeholder="Width" /> 
+                                <span class="input-group-addon">meter(s)</span>
+                                </div>
+
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -131,6 +148,8 @@
         </form>
     </div>
 </div> 
+</div>
+
 @stop
  @section('script')
 <script>
@@ -273,12 +292,9 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
-<<<<<<< HEAD
+
                     toastr.success('Updated Stall Type');
-=======
-                    toastr.success('Updated Stall Type Information');
->>>>>>> 4293ab81339785a1f4f24c6ea939ed4ec7caf038
-                    $('#table').DataTable().ajax.reload();
+                     $('#table').DataTable().ajax.reload();
                     $('#update').modal('hide');
                 }
             });
