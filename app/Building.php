@@ -13,6 +13,12 @@ class Building extends Model
     protected $primaryKey = "bldgID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
+    protected $fillable = [
+    	'bldgName',
+    	'bldgCode',
+    	'bldgDesc',
+    		
+    ];
     
     public function Floor(){
         return $this->hasMany('App\Floor','bldgID');

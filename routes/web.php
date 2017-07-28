@@ -11,9 +11,11 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('layout.app');
 });
+
 
 Route::get('/Registration', 'ApplicationController@create');
 Route::get('/List', 'ApplicationController@member');
@@ -54,6 +56,10 @@ Route::get('/StallType', function () {
 Route::get('/Stall', function () {
     return view('Maintenance_Stall');
 });
+
+Route::resource('/kioskmap', 'MappingController');
+Route::get('/kioskmap/load/{id}', 'MappingController@load');
+Route::get('/kioskmap/head/{id}', 'MappingController@head');
 
 Route::get('/StallRate', function () {
     return view('Maintenance_StallRate');

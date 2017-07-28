@@ -13,6 +13,10 @@ class Floor extends Model
     protected $primaryKey = "floorID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
+     protected $fillable = [
+        'floorNo',
+        'floorDesc',
+    ];
     
     public function Building(){
         return $this->belongsTo('App\Building','bldgID');
