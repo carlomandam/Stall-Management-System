@@ -52,13 +52,7 @@
         .required {
             color: red;
         } 
-<<<<<<< HEAD
-=======
 
-        
-
-
->>>>>>> fa4d12f4f43cc1481597bcb11e545fd9003eeb6e
     </style>
 </head>
 
@@ -110,16 +104,16 @@
                         </ul>
                         </li>
                     <li class="header">MAINTENANCE</li>
-<<<<<<< HEAD
+
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Building' ? 'active' : ''}}"><a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
                     <li id="mKiosk"><a href="/kioskmap"><i class="fa fa-map"></i><span>Kiosk Map</span></a></li>
-=======
+
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Building' || Route::getFacadeRoot()->current()->uri() == 'BuildingArchive'  ? 'active' : ''}}"><a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall'  || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
->>>>>>> fa4d12f4f43cc1481597bcb11e545fd9003eeb6e
+
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' ? 'active' : ''}}"><a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Fee' ? 'active' : ''}}"><a href="/Fee"><i class="fa fa-file-o"></i> <span>Fees</span></a></li>
                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Penalty' ? 'active' : ''}}"><a href="/Penalty"><i class="fa fa-link"></i> <span>Penalties</span></a></li>
@@ -138,11 +132,11 @@
             <!-- /.content -->
         </div>
          <footer class="main-footer">
-<<<<<<< HEAD
+
             <strong>Copyright © 2017<a href="https://adminlte.io">MySeoul Stalls Management System</a>.</strong> All rights reserved.
          </footer>
         
-=======
+
     
     <strong>Copyright ©<a href="https://adminlte.io"></a>.</strong> All rights
     reserved.
@@ -155,7 +149,7 @@
       
      
     
->>>>>>> fa4d12f4f43cc1481597bcb11e545fd9003eeb6e
+
     <!-- ./wrapper -->
     <script src ="{{ URL::asset('assets/jQuery/jquery-2.2.3.min.js')}}"></script>
     <script src ="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>

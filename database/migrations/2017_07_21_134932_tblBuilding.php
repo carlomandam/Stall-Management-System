@@ -13,7 +13,7 @@ class TblBuilding extends Migration
      */
     public function up()
     {
-        Schema::create('tblStallType', function (Blueprint $table) {
+        Schema::create('TblBuilding', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('Name',200);
             $table->string('Code',10)->unique();
@@ -30,6 +30,6 @@ class TblBuilding extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblStallType');
+        Schema::dropIfExists('TblBuilding');
     }
 }

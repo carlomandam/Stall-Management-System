@@ -23,8 +23,8 @@ background-color:yellow;
 } 
 #place .seat{
 /*background:url("images/stall.png") no-repeat scroll 0 0 transparent;*/
-height:40px;
-width:40px;
+height:42px;
+width:42px;
 display:block;
 border: 2px solid black;   
 }
@@ -39,9 +39,9 @@ background-image:url("desktop/stall2.png");
       */
 background-color: blue;
 }
-#place .row-3, #place .row-4{
+/*#place .row-3, #place .row-4{
 margin-top:10px;
-}
+}*/
 #seatDescription li{
 verticle-align:middle;    
 list-style: none outside none;
