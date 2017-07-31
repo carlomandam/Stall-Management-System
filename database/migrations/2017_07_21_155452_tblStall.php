@@ -14,14 +14,14 @@ class TblStall extends Migration
     public function up()
     {
         Schema::create('tblStall', function (Blueprint $table) {
-            $table->string('ID')->primary();
+            $table->string('stallID')->primary();
             $table->integer('bldgID')->unsigned();
             $table->string('Level',200);
-            $table->string('Description',200)->nullable();
+            $table->string('stallDesc',200)->nullable();
             $table->timestamps();
             $table->softDeletes();
             
-            $table->foreign('bldgID')->references('ID')->on('tblbuilding');
+            $table->foreign('bldgID')->references('bldgID')->on('tblBuilding');
         });
     }
 

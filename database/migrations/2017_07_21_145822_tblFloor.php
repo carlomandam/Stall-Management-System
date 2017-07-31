@@ -14,14 +14,13 @@ class TblFloor extends Migration
     public function up()
     {
         Schema::create('tblFloor', function (Blueprint $table) {
-            $table->increments('ID');
+            $table->increments('floorID');
             $table->integer('bldgID')->unsigned();
-            $table->string('Level',200);
-            $table->string('Description',200)->nullable();
+            $table->string('floorDesc',200)->nullable();
             $table->timestamps();
             $table->softDeletes();
             
-            $table->foreign('bldgID')->references('ID')->on('tblbuilding');
+            $table->foreign('bldgID')->references('bldgID')->on('tblBuilding');
         });
     }
 

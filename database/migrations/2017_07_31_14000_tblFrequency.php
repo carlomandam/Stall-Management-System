@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblStallType extends Migration
+class TblFrequency extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class TblStallType extends Migration
      */
     public function up()
     {
-        Schema::create('tblStallType', function (Blueprint $table) {
-            $table->increments('stypeID');
-            $table->string('stypeName',200);
-            $table->string('stypeDesc',200)->nullable();
-            $table->timestamps();
+        Schema::create('tblFrequency', function (Blueprint $table) {
+            $table->increments('frequencyID');
+            $table->string('frequencyDesc');
+             $table->timestamps();
             $table->softDeletes();
-
-
         });
     }
 
@@ -31,6 +28,6 @@ class TblStallType extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblStallType');
+        Schema::dropIfExists('tblFrequency');
     }
 }

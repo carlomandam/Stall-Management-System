@@ -13,11 +13,11 @@ class TblBuilding extends Migration
      */
     public function up()
     {
-        Schema::create('TblBuilding', function (Blueprint $table) {
-            $table->increments('ID');
-            $table->string('Name',200);
-            $table->string('Code',10)->unique();
-            $table->string('Description',200)->nullable();
+        Schema::create('tblBuilding', function (Blueprint $table) {
+            $table->increments('bldgID');
+            $table->string('bldgName',200);
+            $table->string('bldgCode',10)->unique();
+            $table->string('bldgDesc',200)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +30,6 @@ class TblBuilding extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('TblBuilding');
+        Schema::dropIfExists('tblBuilding');
     }
 }

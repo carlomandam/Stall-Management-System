@@ -14,8 +14,8 @@ class TblStallTypeSize extends Migration
     public function up()
     {
         Schema::create('tblStallType_Size', function (Blueprint $table) {
-            $table->increments('ID');
-            $table->double('Area')->nullable();
+            $table->increments('stypeSizeID');
+            $table->double('stypeArea')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
