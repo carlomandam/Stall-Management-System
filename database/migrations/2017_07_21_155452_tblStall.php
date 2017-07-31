@@ -16,7 +16,6 @@ class TblStall extends Migration
         Schema::create('tblStall', function (Blueprint $table) {
             $table->string('stallID')->primary();
             $table->integer('bldgID')->unsigned();
-            $table->string('Level',200);
             $table->string('stallDesc',200)->nullable();
             $table->timestamps();
             $table->softDeletes();
