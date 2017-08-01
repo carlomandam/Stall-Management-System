@@ -15,12 +15,14 @@ class TblStall extends Migration
     {
         Schema::create('tblStall', function (Blueprint $table) {
             $table->string('stallID')->primary();
-            $table->integer('bldgID')->unsigned();
+            $table->integer('floorID')->unsigned();
+            $table->integer('stype_SizeID')->unsigned();
             $table->string('stallDesc',200)->nullable();
             $table->timestamps();
             $table->softDeletes();
             
-            $table->foreign('bldgID')->references('bldgID')->on('tblBuilding');
+            $table->foreign('floorID')->references('floorID')->on('tblFloor');
+             $table->foreign('stype_SizeID')->references('stype_SizeID')->on('tblstallType_stallSize');
         });
     }
 

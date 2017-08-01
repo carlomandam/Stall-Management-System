@@ -95,7 +95,7 @@ class MappingController extends Controller
 
          $building = Building::with('Floor')->findOrFail($id);
         return response()->json(['bldg'=>$building]);
-
+         // return ($building);
     }
     public function head($id)
     {   

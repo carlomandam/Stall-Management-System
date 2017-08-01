@@ -25,7 +25,13 @@
          <div class="col-md-12" >
 
               <div class="panel panel-primary">
-                  <div class="panel-heading" style=""></div>
+                  <div class="panel-heading" style="">
+                    <h5>
+                      <span>Stall Capacity</span>
+                      <span>40</span>
+                       <span class="caps"></span>
+                    </h5>
+                  </div>
                   <div class="panel-body">
 
                           <div class="form-group">
@@ -45,9 +51,10 @@
                               </select>
                           </div>
                           <!-- /.form-group -->
+                      
                   </div>
                   <!-- panel-body -->
-                  
+
               </div>
             
           </div>
@@ -63,15 +70,8 @@
 
                         <ul class="nav nav-tabs">
 
-                            <li class="active"><a href="#tab1default" data-toggle="tab">Map</a></li>
-                            <li><a href="#tab2default" data-toggle="tab">Table</a></li>
-                            <li style="margin-left: 20px;">
-                              <h5>
-                                <i class="fa fa-shopping-cart"></i>
-                                <i>0</i>
-                              </h5>
-                            </li>
-                            
+                            <li class="active"><a href="#stalltpyetab" data-toggle="tab">Type</a></li>
+                            <li><a href="#otherstab" data-toggle="tab">Others</a></li>
                         </ul>
                         <!-- nav nav-tabs -->
 
@@ -80,20 +80,26 @@
 
                   <div class="panel-body" style="height: 290px; overflow-y: scroll;">
                       <div class="tab-content">
-                        <div class="tab-pane fade in active" id="tab1default">
-                            <div style="text-align: right;">
-                                                       
-                            </div>
-                            
-
-
-
-
-                          <div style="text-align: center;">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Stalls</button>
-                          </div>
+                        <div class="tab-pane fade in active" id="stalltpyetab">
+                              <table class="table table-striped">
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <th>Type</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  
+                                </tbody>
+                              </table>
+                              
                         </div>
-                        <div class="tab-pane fade" id="tab2default">Default 2</div>
+
+                        <div class="tab-pane fade" id="otherstab">
+                        Default 2
+                        </div>
                     </div>
                           
                   </div>
@@ -121,7 +127,7 @@
                           <li class="">
                           <h4>
                           <span class="buildingname">Choose Building</span>
-                          <small class="floorname" style="margin-left: 5px;color: white;">Floor No:</small>
+                          <small class="floorname" style="margin-left: 5px;color: white;"></small>
                           </h4>
                           </li>
                             

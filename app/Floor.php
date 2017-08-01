@@ -14,7 +14,7 @@ class Floor extends Model
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
      protected $fillable = [
-        'floorNo',
+        'floorCapacity',
         'floorDesc',
     ];
     
