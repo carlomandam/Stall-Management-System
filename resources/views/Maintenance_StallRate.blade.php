@@ -1,27 +1,34 @@
-@extends('layout.app') @section('content-header')
-<h1>
-        Stall Rate 
-      </h1>
+@extends('layout.app') 
+
+@section('title')
+    {{'Stall Rate'}}
+@stop
+@section('content-header')
 <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
     <li class="active">Stall Rate</li>
 </ol> @stop @section('content')
-<div style="margin-top:2%;">
-    <button class="btn btn-primary" data-toggle="modal" data-target="#new"><span class='glyphicon glyphicon-plus'></span>Add New Stall Rate</button>
-</div>
-<div style="border:2px solid black;">
+<div class = "box box-primary">
+
+    <div class = "box-body">
     <div class="table-responsive">
+         <div class = "defaultNewButton">
+            <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall Rate </button>
+             <div class = " pull-right" id = "archive">
+                                 <a href="{{ url('/StallRateArchive') }}" class="btn btn-primary btn-flat" ><span class='fa fa-archive'></span>&nbspArchive</a>
+             </div>
+        </div>
         <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Stall Type</th>
-                    <th>Building</th>
                     <th>Collection</th>
                     <th>Actions</th>
                 </tr>
             </thead>
         </table>
+    </div>
     </div>
 </div>
 <div class="modal fade" id="new" tabindex="-1" role="dialog">
@@ -34,29 +41,15 @@
                     <h4 class="modal-title">Add Stall Rate</h4> </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="stype">Stall Type*</label>
+                                <label for="stype">Stall Type</label><span class="required">&nbsp*</span>
                                 <select class="form-control stypeSelect" name="stypeID"> </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stype">Building*</label>
-                                <select class="form-control bldgSelect" name="bldgID"> </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stype">Amount*</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"> <i>Php</i> </div>
-                                    <input type="text" class="form-control" name="amt" placeholder="Php." /> </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Collection*</label>
+                                <label>Collection</label><span class="required">&nbsp*</span>
                                 <select class="form-control" name="collection">
                                     <option value='1'>Daily</option>
                                     <option value='2'>Weekly</option>
@@ -65,10 +58,11 @@
                             </div>
                         </div>
                     </div>
+                       <p class="small text-danger">Fields with asterisks(*) are required</p>
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
+                     <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                 </div>
             </div>
         </form>
@@ -85,29 +79,15 @@
                     <h4 class="modal-title">Update Stall Rate</h4> </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="stype">Stall Type*</label>
-                                <input class="form-control" name="stype" readonly>
-                                <input type="hidden" name="stypeID" /> </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stype">Building*</label>
-                                <select class="form-control bldgSelect" name="bldgID"> </select>
+                                <label for="stype">Stall Type</label><span class="required">&nbsp*</span>
+                                <select class="form-control stypeSelect" name="stypeID"> </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stype">Amount*</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"> <i>Php</i> </div>
-                                    <input type="text" class="form-control" name="amt" placeholder="Php." /> </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Collection*</label>
+                                <label>Collection</label><span class="required">&nbsp*</span>
                                 <select class="form-control" name="collection">
                                     <option value='1'>Daily</option>
                                     <option value='2'>Weekly</option>
@@ -116,10 +96,11 @@
                             </div>
                         </div>
                     </div>
+                       <p class="small text-danger">Fields with asterisks(*) are required</p>
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                    <button class="btn btn-info" style="background-color:#191966">Submit</button>
+                     <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                 </div>
             </div>
         </form>

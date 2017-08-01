@@ -25,6 +25,7 @@
 
 
 </style>
+
    
 <div class = "box box-primary">
         <div class = "box-body">
@@ -79,12 +80,21 @@
                                         <textarea class="form-control" id="bldgDesc" name="bldgDesc" placeholder="Building Description"></textarea>
                                     </div>
                                 </div>
-                                 <div class="col-md-6">
+                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="noOfFloor">No. of Floors</label><span class="required">&nbsp*</span>
+                                       <label for="bldgDesc">No. of Floors</label>
                                         <div class="input-group">
-                                        <input type="text" class="form-control" id="noOfFloor" name="noOfFloor" placeholder="Number of" oninput="showTable('#floortbl')" />
-                                          <span class="input-group-addon">Floor(s)</span>
+                                          <span class="input-group-btn">
+                                          <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="quant[1]">
+                                          <span class="glyphicon glyphicon-minus"></span>
+                                          </button>
+                                          </span>
+                                          <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" oninput="showTable('#floortbl')">
+                                          <span class="input-group-btn">
+                                              <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+                                                  <span class="glyphicon glyphicon-plus"></span>
+                                              </button>
+                                          </span>
                                         </div>
                                         <table id='floortbl' style="display:none">
                                             <thead>
@@ -134,12 +144,7 @@
                                         <label for="bldgCodeUp">Building Code</label><span class="required">&nbsp*</span>
                                         <input type="text" class="form-control" id="bldgCodeUp" name="bldgCode" placeholder="Building Code" /> </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="noOfFloorUp">No. of Floors</label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="noOfFloorUp" name="noOfFloor" placeholder="No.of floors" readonly/> 
-                                    </div>
-                                </div>
+                               
                              
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -149,12 +154,19 @@
                                 </div>
                                    <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="noOfFloorUp">Add/Remove Floors</label><br>
-                                        <input type="radio" value="1" name="addRemoveRadio" checked><label>Add</label>&emsp;
-                                        <input type="radio" value="2" name="addRemoveRadio"><label>Remove</label>
-                                        <div class = "input-group">
-                                        <input type="text" class="form-control" name="addRemove" id="addRemove" placeholder="Number of"/>
-                                        <span class="input-group-addon">Floor(s)</span>
+                                     <label for="bldgDesc">No. of Floors</label>
+                                        <div class="input-group">
+                                          <span class="input-group-btn">
+                                          <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="quant[1]">
+                                          <span class="glyphicon glyphicon-minus"></span>
+                                          </button>
+                                          </span>
+                                          <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" oninput="showTable('#floortbl')">
+                                          <span class="input-group-btn">
+                                              <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+                                                  <span class="glyphicon glyphicon-plus"></span>
+                                              </button>
+                                          </span>
                                         </div>
                                         <table id='floortblup' style="display:none">
                                             <thead>
@@ -187,7 +199,10 @@
           @stop
 
   @section('script')
+  <script type="text/javascript" src="{{ URL::asset('js/floor_js.js') }}"></script>
   <script type="text/javascript">
+
+
     var obj;
     $(document).ready(function () {
         $("#newform").validate({

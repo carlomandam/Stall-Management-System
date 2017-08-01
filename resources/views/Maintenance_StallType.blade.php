@@ -52,27 +52,23 @@
 
                                 <input type="text" class="form-control" id="stypeName" name="stypeName" placeholder="Stall Type Name" /> </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stypeLength">Stall Type Length</label>
-                                <div class = "input-group">
-                                <input type="text" class="form-control" id="stypeLength" name="stypeLength" placeholder="Length" /> 
-                                <span class = "input-group-addon">meter(s)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stypeWidth">Stall Type Width</label>
-                                <div class = "input-group">
-                                <input type="text" class="form-control" id="stypeWidth" name="stypeWidth" placeholder="Stall Type" /> 
-                                <span class = "input-group-addon">meter(s)</span></div>
-                            </div>
-                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="stypeDesc">Description</label>
                                 <textarea class="form-control" id="stypeDesc" name="stypeDesc" placeholder="Stall Type Description"></textarea>
+                            </div>
+                        </div>
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="stypeLength">Stall Type Area</label>
+                               <div class="form-group input-group">
+                                    <input type="text" name="multiple[]" class="form-control" placeholder="Area">
+                                        <span class="input-group-addon">
+                                         meter(s)   
+                                         </span>
+                                        <span class="input-group-btn"><button type="button" class="btn btn-primary btn-add">+
+                                        </button></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -108,34 +104,28 @@
 
                                 <input type="text" class="form-control" id="stypeNameUp" name="stypeName" placeholder="Stall Type Name" /> </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stypeLengthUp">Stall Type Length</label>
-                                <div class = "input-group">
-                                <input type="text" class="form-control" id="stypeLengthUp" name="stypeLength" placeholder="Length" /> 
-                                <span class="input-group-addon">
-                                 meter(s)   
-                                </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stypeWidthUp">Stall Type Width</label>
-                                <div class = "input-group">
-                                <input type="text" class="form-control" id="stypeWidthUp" name="stypeWidth" placeholder="Width" /> 
-                                <span class="input-group-addon">meter(s)</span>
-                                </div>
-
-                            </div>
-                        </div>
+                        
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="stypeDescUp">Description</label>
                                 <textarea class="form-control" id="stypeDescUp" name="stypeDesc" placeholder="Stall Type Description"></textarea>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="stypeLength">Stall Type Area</label>
+                               <div class="form-group input-group">
+                                    <input type="text" name="multiple[]" class="form-control" placeholder="Area">
+                                        <span class="input-group-addon">
+                                         meter(s)   
+                                         </span>
+                                        <span class="input-group-btn"><button type="button" class="btn btn-primary btn-add">+
+                                        </button></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                          <p class="small text-danger">Fields with asterisks(*) are required</p>
                 </div>
                 <div class="modal-footer">
@@ -152,6 +142,7 @@
 
 @stop
  @section('script')
+ <script type="text/javascript" src="{{ URL::asset('js/multipleAddinArea.js') }}"></script>
 <script>
     var obj;
     var chk;
