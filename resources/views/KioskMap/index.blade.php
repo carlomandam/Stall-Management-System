@@ -148,7 +148,9 @@
                         <div class="tab-pane fade in active" id="map">
 
                            <div id="platform">
-                             
+                             <ul id ="place">
+                               
+                             </ul>
                            </div>
 
                         </div>

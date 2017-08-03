@@ -17,9 +17,11 @@ class MappingController extends Controller
      */
     public function index()
     {
-        $buildings = Building::all();
+        $buildings = Building::whereNULL('deleted_at')->get();
+        
         return View('/KioskMap/index',compact('buildings'));
-       
+        // return ($buildings);
+    
         
         
     }
@@ -97,13 +99,13 @@ class MappingController extends Controller
         return response()->json(['bldg'=>$building]);
          // return ($building);
     }
-    public function head($id)
+    public function floor($id)
     {   
 
-         $floor = Floor::with('Building')->findOrFail($id);
+         $floor = Floor::with('')->findOrFail($id);
          // return ($floor);
-        return response()->json(['flr'=>$floor]);
-        return View(flr);
+        return response()->json(['floor'=>$floor]);
+        return View($floor);
 
     }
 }

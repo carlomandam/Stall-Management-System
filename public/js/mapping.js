@@ -7,14 +7,14 @@ $(document).on('change','.building',function(){
 		$('.floorname').text("Choose Floor:");
 		$.ajax({
 		type: "GET",
-		url: '/kioskmap/load/'+id,
+		url: '/kioskmap/bldg/'+id,
 		success: function(data)	{	
       		
 				$('.buildingname').text(data.bldg.bldgName);
 			 $('.floors').append('<option disabled selected="selected" class="floor">--Select</option>');
 			$.each(data.bldg.floor,function(key,value){
-				$('.floors').append('<option class="floor" id="'+value.floorID+'" value="'+value.floorID+'">'+value.floorDesc+'</option>');
-			
+				$('.floors').append('<option class="floor"value="'+value.floorID+'">'+value.floorDesc+'</option>');
+					
 			});
 
 		}
@@ -23,13 +23,21 @@ $(document).on('change','.building',function(){
 	
 	
 })
-  $(document).on('change','.floors',function(){
-    id = $(this).val();
-    console.log(id);
+$(document).on('change','.floors',function(){
+  id = $(this).val();
+  console.log(id);
+	console.log('succes');		
+		$.ajax({
+		type: "GET",
+		url: '/kioskmap/floor/'+id,
+		success: function(data)	{	
+      		
+		}
 
-            // $('.floorname').text(value.floorDesc);
-            // $('.caps').text("/"+value.floorCapacity);
-  }); 
+	});
+	
+	
+})
 
 
 
@@ -67,44 +75,44 @@ $(document).on('change','.building',function(){
 
 
 
-// var settings = {
-//                rows: 5,
-//                cols: 5,
-//                rowCssPrefix: 'row-',
-//                colCssPrefix: 'col-',
-//                seatWidth: 50,
-//                seatHeight: 50,
-//                seatCss: 'seat',
-//                selectedSeatCss: 'selectedSeat',
-//                selectingSeatCss: 'selectingSeat'
-//            };
+var settings = {
+               rows: 5,
+               cols: 5,
+               rowCssPrefix: 'row-',
+               colCssPrefix: 'col-',
+               seatWidth: 50,
+               seatHeight: 50,
+               seatCss: 'seat',
+               selectedSeatCss: 'selectedSeat',
+               selectingSeatCss: 'selectingSeat'
+           };
 
-// var init = function (reservedSeat) {
-//                 var str = [], seatNo, className;
-//                 for (i = 0; i < settings.rows; i++) {
-//                     for (j = 0; j < settings.cols; j++) {
-//                         seatNo = (i + j * settings.rows + 1);
-//                         className = settings.seatCss + ' ' + settings.rowCssPrefix + i.toString() + ' ' + settings.colCssPrefix + j.toString();
-//                         if ($.isArray(reservedSeat) && $.inArray(seatNo, reservedSeat) != -1) {
-//                             className += ' ' + settings.selectedSeatCss;
-//                         }
-//                         str.push('<li class="' + className + '"' +
-//                                   'style="top:' + (i * settings.seatHeight).toString() + 'px;left:' + (j * settings.seatWidth).toString() + 'px">' +
-//                                   '<a title="' + seatNo + '">' + seatNo + '</a>' +
-//                                   '</li>');
-//                         console.log(className);
-//                         console.log(seatNo);
-//                         console.log(str[j]);
-//                     }
-//                 }
-//                 $('#place').html(str.join(''));
-//             };
-//             //case I: Show from starting
-//             init();
+var init = function (reservedSeat) {
+                var str = [], seatNo, className;
+                for (i = 0; i < settings.rows; i++) {
+                    for (j = 0; j < settings.cols; j++) {
+                        seatNo = (i + j * settings.rows + 1);
+                        className = settings.seatCss + ' ' + settings.rowCssPrefix + i.toString() + ' ' + settings.colCssPrefix + j.toString();
+                        if ($.isArray(reservedSeat) && $.inArray(seatNo, reservedSeat) != -1) {
+                            className += ' ' + settings.selectedSeatCss;
+                        }
+                        str.push('<li class="' + className + '"' +
+                                  'style="top:' + (i * settings.seatHeight).toString() + 'px;left:' + (j * settings.seatWidth).toString() + 'px">' +
+                                  '<a title="' + seatNo + '">' + seatNo + '</a>' +
+                                  '</li>');
+                        console.log(className);
+                        console.log(seatNo);
+                        console.log(str[j]);
+                    }
+                }
+                $('#place').html(str.join(''));
+            };
+            //case I: Show from starting
+            init();
  
             //Case II: If already booked
-            // var bookedSeats = [5, 25];
-            // init(bookedSeats);
+            var bookedSeats = [5, 25];
+            init(bookedSeats);
 
 
 

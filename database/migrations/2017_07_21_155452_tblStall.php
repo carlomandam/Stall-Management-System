@@ -18,6 +18,7 @@ class TblStall extends Migration
             $table->integer('floorID')->unsigned();
             $table->integer('stype_SizeID')->unsigned();
             $table->string('stallDesc',200)->nullable();
+            $table->string('stallPos',200);
             $table->timestamps();
             $table->softDeletes();
             

@@ -78,7 +78,7 @@ class FloorTableSeeder extends Seeder
         ]);
         DB::table('tblFloor')->insert([
             'floorID' => 9,
-            'bldgID' => 5,
+            'bldgID' => 4,
             'floorCapacity' => 33,
             'floorDesc' => 'Ground Floor',
             'created_at' => date('Y-m-d H:i:s'),
