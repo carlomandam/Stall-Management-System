@@ -57,8 +57,8 @@ Route::get('/Stall', function () {
 });
 
 Route::resource('/kioskmap', 'MappingController');
-Route::get('/kioskmap/load/{id}', 'MappingController@load');
-Route::get('/kioskmap/head/{id}', 'MappingController@head');
+Route::get('/kioskmap/bldg/{id}', 'MappingController@load');
+Route::get('/kioskmap/floor/{id}', 'MappingController@floor');
 
 Route::get('/StallRate', function () {
     return view('Maintenance_StallRate');

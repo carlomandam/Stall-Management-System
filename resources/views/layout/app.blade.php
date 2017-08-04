@@ -81,39 +81,88 @@
                     </div>
                 </div>
                 <ul class="sidebar-menu">
+                    <li class="header"><span>MAIN NAVIGATION</span></li>
                 	 <li class="treeview">
-                        <a href="">
+                        <a href="#">
                             <i class="fa fa-bar-chart-o"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="header"><span>TRANSACTION</li>
-                    	<li class="{{Route::getFacadeRoot()->current()->uri() == 'Stalls' ? 'active' : ''}}"><a href="#"><i class=" fa fa-building-o "></i><span>Directory</span></a></li>
-		                <li class="treeview">
-		                        <a href="#"> <i class="fa fa-laptop"></i> <span>Payments</span> <span class="pull-right-container">
-		             		   <i class="fa fa-angle-left pull-right"></i>
-		                       </span> </a>
-		                        <ul class="treeview-menu">
-		                           
-		                        </ul>
-		                </li>
-                   		<li class="treeview">
-                       		    <a href="#"> <i class="fa fa-laptop"></i> <span>Manage Requests</span> <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
-           					    </span> </a>
-                        <ul class="treeview-menu">
-                          
-                        </ul>
-                        </li>
-                    <li class="header">MAINTENANCE</li>
+                        <li class = "treeview">    
+                              <a href="#"> 
+                              <i class="fa fa-laptop"></i> <span>Transaction</span>
+                               <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i> 
+                                </span> 
+                              </a> 
+                              <ul class="treeview-menu">
+                                    <li class = "active"><a href="#"><i class="fa fa-building-o "></i> Directory</a></li>
+                                     <li><a href="/Contract"><i class="fa fa-circle-o"></i> Contract List</a></li>
+                                    <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Payments</a></li>
+                                    <li class = "treeview">
+                                        <a href="#">
+                                        <i class="fa fa-circle-o"></i> <span>Manage Requests</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i> 
+                                        </span> 
+                                        </a>
 
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Building' || Route::getFacadeRoot()->current()->uri() == 'BuildingArchive'  ? 'active' : ''}}"><a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
-                   <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''}}"><a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a></li>
-                    <li id="mKiosk"><a href="/kioskmap"><i class="fa fa-map"></i><span>Kiosk Map</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Fee' ? 'active' : ''}}"><a href="/Fee"><i class="fa fa-file-o"></i> <span>Fees</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Penalty' ? 'active' : ''}}"><a href="/Penalty"><i class="fa fa-link"></i> <span>Penalties</span></a></li>
-                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Utility' ? 'active' : ''}}"><a href="/Utility"><i class="fa fa-link"></i> <span>Utilities</span></a></li>
+                                        <ul class="treeview-menu">
+                                            <li><a href="#"><i class="fa fa-circle-o"></i> Request List</a></li>
+
+                                        </ul>
+                                    </li>
+                              </ul>
+                        </li>
+                        <li class="treeview">
+                            <a href="#"> 
+                              <i class="fa fa-gear"></i> <span>Maintenance</span>
+                               <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i> 
+                                </span> 
+                            </a> 
+                            <ul class="treeview-menu">
+                                     <li><a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a></li>
+                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
+                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
+                                   <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''}}"><a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a></li>
+                                    <li id="mKiosk"><a href="/kioskmap"><i class="fa fa-map"></i><span>Kiosk Map</span></a></li>
+                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Fee' ? 'active' : ''}}"><a href="/Fee"><i class="fa fa-file-o"></i> <span>Fees</span></a></li>
+                                              </ul>
+                        </li>
+
+                         <li class = "treeview">    
+                              <a href="#"> 
+                              <i class="fa fa-circle"></i> <span>Queries</span>
+                              </a> 
+                        </li>
+
+                         <li class = "treeview">    
+                              <a href="#"> 
+                              <i class="fa fa-laptop"></i> <span>Utilities</span>
+                               <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i> 
+                                </span> 
+                              </a> 
+                              <ul class="treeview-menu">
+                                    <li class = "active"><a href="#"><i class="fa fa-building-o "></i> Vendor Collection Status</a></li>
+                              </ul>
+                        </li>
+
+                        <li class = "treeview">    
+                              <a href="#"> 
+                              <i class="fa fa-laptop"></i> <span>Reports</span>
+                               <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i> 
+                                </span> 
+                              </a>
+
+                              <ul class="treeview-menu">
+                                      <li class = "active"><a href="#"><i class="fa fa-circle-o "></i> Collection Summary</a></li>
+                                         <li><a href="../../index2.html"><i class="fa fa-circle-o"></i>Balance Summary</a></li>
+                              </ul>
+                        </li>
+                   
                 </ul>
             </section>
         </aside>
@@ -129,11 +178,11 @@
         </div>
          <footer class="main-footer">
 
-            <strong>Copyright © 2017<a href="https://adminlte.io">MySeoul Stalls Management System</a>.</strong> All rights reserved.
+            <strong>Copyright © 2017</strong> All rights reserved.
          </footer>
         
-
     </div>
+
         <!-- /.content-wrapper -->
         <!-- Control Sidebar -->
         <!-- /.control-sidebar -->
@@ -154,6 +203,16 @@
     <script src="{{ URL::asset('assets/datatables/dataTables.bootstrap.min.js')}}"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <script type="text/javascript">
+      /** add active class and stay opened when selected */
+var url = window.location;
+
+
+// for treeview
+$('ul.treeview-menu a').filter(function() {
+     return this.href == url;
+}).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
     </script>
     
     @yield('script') 
