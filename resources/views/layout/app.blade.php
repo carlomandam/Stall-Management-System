@@ -8,6 +8,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
    
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/dataTables.bootstrap.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/skins/skin-blue.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/font-awesome/css/font-awesome.min.css')}}">
@@ -132,10 +133,7 @@
          </footer>
         
 
-    
-    <strong>Copyright ©<a href="https://adminlte.io"></a>.</strong> All rights
-    reserved.
-  </footer>
+    </div>
         <!-- /.content-wrapper -->
         <!-- Control Sidebar -->
         <!-- /.control-sidebar -->
@@ -150,6 +148,10 @@
     <script src ="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
     <script src="{{ URL::asset('assets/jQueryUI/jquery-ui.min.js')}}"></script>
+    <script src="{{ URL::asset('assets/jQueryUI/jquery-ui.min.js')}}"></script>
+    <script src="{{ URL::asset('assets/jQuery/jquery.validate.js')}}"></script>
+    <script src="{{ URL::asset('assets/datatables/jquery.dataTables.js')}}"></script>
+    <script src="{{ URL::asset('assets/datatables/dataTables.bootstrap.min.js')}}"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button);
     </script>
