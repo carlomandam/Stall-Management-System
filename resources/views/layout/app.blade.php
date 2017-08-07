@@ -83,21 +83,35 @@
                     <li class="header"><span>MAIN NAVIGATION</span></li>
                 	 <li class="treeview">
                         <a href="#">
-                            <i class="fa fa-bar-chart-o"></i>
+                            <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                         <li class = "treeview">    
                               <a href="#"> 
-                              <i class="fa fa-laptop"></i> <span>Transaction</span>
+                              <i class="fa fa-tasks"></i> <span>Transactions</span>
                                <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> 
                               </a> 
+
                               <ul class="treeview-menu">
-                                    <li class = "active"><a href="#"><i class="fa fa-building-o "></i> Directory</a></li>
-                                     <li><a href="/Contract"><i class="fa fa-circle-o"></i> Contract List</a></li>
-                                    <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Payments</a></li>
+                                     <li class = "treeview">
+                                        <a href="#">
+                                        <i class="fa fa-circle-o"></i> <span>Manage Contracts</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i> 
+                                        </span> 
+                                        </a>
+
+                                        <ul class="treeview-menu">
+                                            <li><a href="/StallList"><i class="fa fa-circle-o"></i> Stall List</a></li>
+                                            <li><a href="#"><i class="fa fa-circle-o"></i> Registration List</a></li>
+                                            <li><a href="#"><i class="fa fa-circle-o"></i>Stall Holder List</a></li>
+
+                                        </ul>
+                                    </li>
+                                    <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Payment and Collections</a></li>
                                     <li class = "treeview">
                                         <a href="#">
                                         <i class="fa fa-circle-o"></i> <span>Manage Requests</span>
@@ -138,7 +152,7 @@
 
                          <li class = "treeview">    
                               <a href="#"> 
-                              <i class="fa fa-laptop"></i> <span>Utilities</span>
+                              <i class="fa fa-cogs"></i> <span>Utilities</span>
                                <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> 
@@ -150,7 +164,7 @@
 
                         <li class = "treeview">    
                               <a href="#"> 
-                              <i class="fa fa-laptop"></i> <span>Reports</span>
+                              <i class="fa fa-bar-chart"></i> <span>Reports</span>
                                <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> 

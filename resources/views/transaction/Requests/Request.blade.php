@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('title')
-    {{ 'List of Contracts'}}
+    {{ 'List of Requests'}}
 @stop
 @section('content-header')
 <style>
@@ -15,7 +15,7 @@
 }
 
 </style>
-<h1>List of Contracts</h1>
+<h1>List of Requests</h1>
   @stop
 
   @section('content')
@@ -30,12 +30,11 @@
               
                 <thead>
                 <tr>
-                  <th>No</th>
-                  <th>Stall ID</th>
-                  <th>Name</th>
-                  <th>Contract Effectivity Date</th>
-                  <th>Contract Ends</th>
-                  <th>Status</th>
+                  <th>Request No</th>
+                  <th>Requestor's Name</th>
+                  <th>Request Type</th>
+                  <th>Date Sent</th>
+                  <th>Request Status</th>
                   <th>Actions</th>
                 </tr>
                 </thead>
@@ -71,7 +70,7 @@
 
 <!--/.modal new contract=-->
 <!--modal view-->
- <div class="modal fade" id="newcontract" 
+ <div class="modal fade" id="newrequest" 
      tabindex="-1" role="dialog" 
      aria-labelledby="newModalLabel">
   <div class="modal-dialog" role="document">
@@ -82,7 +81,7 @@
           aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" 
-        id="newModalLabel">New Contract</h4>
+        id="newModalLabel">New Request</h4>
       </div>
       <div class="modal-body">
                         <div class = "col-md-12 form-group row">
@@ -110,7 +109,11 @@
                            
                             
                             <select name = "length" id = "length">
-                             
+                                @foreach($contract_period as $period)
+                               {
+                                <option value = "{{$period['contract_periodID']}}">{{$period['contract_periodDesc']}}</option>
+                               }
+                            @endforeach
                             </select>
                                  
                           </div>

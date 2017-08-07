@@ -42,37 +42,11 @@ class ApplicationController extends Controller
      public function create()
      {  //GET NEXT STALL HOLDER ID///
 
-        $nextId = "SH-" . date('Y'); 
-         $def = DB::table('tblvendor')->max('venID')+1; 
-        
-        if($def == null || $def == 0)
-        {
-            $def = 1; //if there is no data in database
-        }
-        $nextId = $nextId. str_pad($def, 5, 0, STR_PAD_LEFT);
-        //END OF GET NEXT STALL HOLDER ID///
-
-        /// SELECT2 DROPDOWN POPULATE///
-
        
-        $stallinRent = DB::table('tblrent_info')
-                     ->pluck('stallID')->toArray();
-
-         $stall = Stall::with('StallType','Floor.Building','StallUtil.Utility')
-         ->whereNotIn('stallID',$stallinRent)->get();
-        $buildingNames = DB::table('tblbuilding')->pluck('bldgName');
-        $buildingNames = $buildingNames->toArray();
-        $buildingCount = DB::table('tblbuilding')->count();
-      
-        //END OF SELECT2 DROPDWON//
-
-        //LENGTH OF DROPDOWN POPULATE//
-
-        $contract_period = ContractPeriod::all();
          
         
         
-        return view('transaction.Application_temporary',compact('nextId','stall','buildingNames','buildingCount','contract_period'));
+        return view('transaction.Application_temporary'/*,compact('nextId','stall','buildingNames','buildingCount','contract_period')*/);
     }
  
 

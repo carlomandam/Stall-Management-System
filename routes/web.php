@@ -130,3 +130,7 @@ Route::get('/BuildingArchive','ArchiveController@buildingIndex');
 Route::get('/StallTypeArchive','ArchiveController@stallTypeIndex');
 Route::get('/StallArchive','ArchiveController@stallIndex');
 Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
+
+////////////////////MANAGE CONTRACTS////////////////////
+
+Route::get('/StallList','ManageContractsController@stallListIndex');
