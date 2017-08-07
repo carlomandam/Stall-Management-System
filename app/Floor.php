@@ -13,7 +13,7 @@ class Floor extends Model
     protected $primaryKey = "floorID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
-     protected $fillable = [
+    protected $fillable = [
         'floorCapacity',
         'floorDesc',
     ];

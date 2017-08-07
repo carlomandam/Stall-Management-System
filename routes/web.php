@@ -76,13 +76,17 @@ Route::get('/Utility', function () {
     return view('Maintenance_Utility');
 });
 
-Route::post('/AddBuilding', 'Controller@addBuilding');
-Route::get('/bldgTable', 'Controller@getBuildings');
-Route::post('/checkBldgName', 'Controller@checkBldgName');
-Route::post('/checkBldgCode', 'Controller@checkBldgCode');
-Route::post('/getBuildingInfo', 'Controller@getBuildingInfo');
-Route::post('/UpdateBuilding', 'Controller@UpdateBuilding');
-Route::post('/deleteBuilding', 'Controller@deleteBuilding');
+//Building
+
+Route::post('/AddBuilding', 'BuildingController@addBuilding');
+Route::get('/bldgTable', 'BuildingController@getBuildings');
+Route::post('/checkBldgName', 'BuildingController@checkBldgName');
+Route::post('/checkBldgCode', 'BuildingController@checkBldgCode');
+Route::post('/getBuildingInfo', 'BuildingController@getBuildingInfo');
+Route::post('/UpdateBuilding', 'BuildingController@UpdateBuilding');
+Route::post('/deleteBuilding', 'BuildingController@deleteBuilding');
+Route::post('/getCode', 'BuildingController@getBuildingCode');
+
 Route::get('/stypeTable', 'Controller@getStallTypes');
 Route::post('/checkSTypeName', 'Controller@checkSTypeName');
 Route::post('/addStallType', 'Controller@addStallType');

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App;
-use App\Building;
-use App\Floor;
 use App\StallType;
 use App\StallRate;
 use App\Stall;
@@ -21,35 +19,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    function addBuilding(){
-        $building = new Building;
-        
-        $building->bldgName = $_POST['bldgName'];
-        $building->bldgCode = $_POST['bldgCode'];
-        $building->bldgDesc = $_POST['bldgDesc'];
-        
-        if($building->save()){
-            try{
-            for($i = 1;$i <= $_POST['noOfFloor']; $i++){
-                $floor = new Floor;
-                $floor->floorNo = $i;
-                $floor->bldgID = $building->bldgID;
-                $floor->save();
-                
-                for($j = 1;$j < $_POST['noOfStall'][$i-1]+1;$j++){
-                    $stall = new Stall;
-                    $stall->stallID = $this->stallID($building->bldgCode,$floor->floorNo);
-                    $stall->floorID = $floor->floorID;
-                    $stall->stallStatus = 1;
-                    $stall->save();
-                }
-            }
-            }catch(Exception $e){
-               $building->forceDelete();
-            }
-        }
-    }
-    
     function stallID($code,$floor){
     	$stall = Stall::where('stallID','LIKE',$code."-".$floor."%")->orderBy('stallID','desc')->first();
         $id = "";
@@ -61,118 +30,6 @@ class Controller extends BaseController
             $id = $code."-".($matches[0][0]+1);
         }
     	return ($id);
-    }
-    
-    function getBuildings(){
-    	$building = Building::all();
-    	$data = array();
-    	foreach ($building as $building) {
-            $building['floor'] = count(Floor::where('bldgID',$building->bldgID)->get());
-            $building['actions'] = "<button class='btn btn-primary btn-flat' onclick='getInfo(this.value)' value = '".$building['bldgID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
-            
-            <div class='btn-group'>
-                <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
-                <ul class='dropdown-menu pull-right opensleft' role='menu'>
-                    <center>
-                        <h4>Are You Sure?</h4>
-                        <li class='divider'></li>
-                        <li><a href='#' onclick='deleteBuilding(".$building['bldgID'].");return false;'>YES</a></li>
-                        <li><a href='#' onclick='return false'>NO</a></li>
-                    </center>
-                </ul>
-            </div>
-            ";
-    		$data['data'][] = $building;
-    	}
-        
-    	if(count($data) == 0){
-       		echo '{
-            	"sEcho": 1,
-            	"iTotalRecords": "0",
-            	"iTotalDisplayRecords": "0",
-            "aaData": []
-        	}';
-
-        	return;
-    	}
-        
-        else
-    		return (json_encode($data));
-    }
-    
-    function checkBldgName(){
-        $building = Building::where('bldgName',$_POST['bldgName'])->get();
-        if(count($building) != 0)
-            return "false";
-        else
-            return "true";
-    }
-    
-    function checkBldgCode(){
-        $building = building::where('bldgCode',$_POST['bldgCode'])->get();
-        
-        if(count($building) != 0)
-            return "false";
-        else
-            return "true";
-    }
-    
-    function getBuildingInfo(){
-        $building = App\Building::where('bldgID',$_POST['id'])->get();
-        $building[0]['noOfFloor'] = App\Building::where('bldgID',$_POST['id'])->first()->Floor()->count();
-        return (json_encode($building));
-    }
-    
-    function UpdateBuilding(){
-        $hasChange = false;
-        $building = Building::find($_POST['id']);
-        $building->bldgName = $_POST['bldgName'];
-        $building->bldgCode = $_POST['bldgCode'];
-        $building->bldgDesc = $_POST['bldgDesc'];
-        if($building->isDirty()){
-            $building->save();
-            $hasChange = true;
-        }
-        
-        if(isset($_POST['addRemoveRadio']) && isset($_POST['addRemove'])){
-            if($_POST['addRemoveRadio'] == 1){
-                for($i = 0;$i < $_POST['addRemove'];$i++){
-                    $floor = new Floor;
-                    $floor->bldgID = $building->bldgID;
-                    $last = Floor::where('bldgID',$building->bldgID)->orderBy('floorNo','desc')->first();
-
-                    if(count($last) > 0)
-                        $floor->floorNo = $last->floorNo + 1;
-                    else
-                         $floor->floorNo = 1;
-
-                    $floor->save();
-
-                    for($j = 1;$j < $_POST['noOfStall'][$i]+1;$j++){
-                        $stall = new Stall;
-                        $stall->stallID = $this->stallID($building->bldgCode,$floor->floorNo);
-                        $stall->stypeID = 1;
-                        $stall->floorID = $floor->floorID;
-                        $stall->stallStatus = 1;
-                        $stall->save();
-                    }
-                }
-            }
-            else if($_POST['addRemoveRadio'] == 2){
-                for($i = 0;$i < $_POST['addRemove'];$i++){
-                    $floor = Floor::where('bldgID',$building->bldgID)->orderBy('floorNo','desc')->first();
-                    $stalls = Stall::where('floorID',$floor->floorID)->delete();
-                    $floor->delete();
-                }
-            }
-            $hasChange = true;
-        }
-        echo $hasChange;
-    }
-    
-    function deleteBuilding(){
-        $building = Building::find($_POST['id']);
-        $building->delete();
     }
     
     ///////////////////////// Stall Type

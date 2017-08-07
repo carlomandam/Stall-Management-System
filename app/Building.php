@@ -16,8 +16,7 @@ class Building extends Model
     protected $fillable = [
     	'bldgName',
     	'bldgCode',
-    	'bldgDesc',
-    		
+    	'bldgDesc'
     ];
     
     public function Floor(){
