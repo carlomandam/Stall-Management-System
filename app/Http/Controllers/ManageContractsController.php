@@ -12,4 +12,14 @@ class ManageContractsController extends Controller
 	{
 		return view('transaction/ManageContracts/MappingTable');
 	}
+
+	public function regListIndex()
+	{
+		return view('transaction/ManageContracts/RegistrationList');
+	}
+
+	public function stallHListIndex()
+	{
+		return view('transaction/ManageContracts/StallHolderList');
+	}
 }

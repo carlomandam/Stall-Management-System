@@ -27,9 +27,9 @@
 
 </style>
 
-<div class="box box-primary">
+<div class="box box-solid box-primary">
 	<div class="box-header with-border">
-		<h3>Stall List</h3>
+		<label class = "box-header-label"> Stall List</label>
 	</div>
 	<div>
 
@@ -49,19 +49,18 @@
 									</tr>
 								</thead>
 								<tr>
-									<th>A001</th>
-									<th>Cart</th>
-									<th>Near Gate</th>
-									<th>Under Maintenance</th>
-									<th>Natanggalan kasi ng gulong kahapon hahahaha xD</th>
-									<th>
+									<td>A001</td>
+									<td>Cart</td>
+									<td>Near Gate</td>
+									<td><span class = "label label-warning">Under Maintenance</span></td>
+									<td>Natanggalan kasi ng gulong kahapon hahahaha xD</td>
+									<td>
 										<div>
-											<button type="Submit" class="btn btn-success">Register</button>
-											<button type="Submit" class="btn btn-default" data-toggle="modal" data-target="#view">View</button>
-											<button type="Submit" class="btn btn-primary" data-toggle="modal" data-target="#update">Update</button>
+											<button type="Submit" class="btn btn-flat btn-success"><span class = "fa fa-angle-double-right"></span>&nbspRegister</button>
+											<button type="Submit" class="btn btn-flat btn-primary" data-toggle="modal" data-target="#view"><span class = "fa fa-eye"></span>&nbspView</button>
+											<button type="Submit" class="btn btn-flat btn-primary" data-toggle="modal" data-target="#update"><span class = "fa fa-pencil"></span>&nbspUpdate</button>
 										</div>
 
-									</th>
 								</tr>
 							</table>
 						</div>

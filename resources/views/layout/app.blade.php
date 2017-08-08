@@ -54,6 +54,11 @@
             color: red;
         } 
 
+        .box-header-label
+        {
+          font-size: 18px;
+        }
+
     </style>
 </head>
 
@@ -107,12 +112,12 @@
 
                                         <ul class="treeview-menu">
                                             <li><a href="/StallList"><i class="fa fa-circle-o"></i> Stall List</a></li>
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Registration List</a></li>
-                                            <li><a href="#"><i class="fa fa-circle-o"></i>Stall Holder List</a></li>
+                                            <li><a href="/RegistrationList"><i class="fa fa-circle-o"></i> Registration List</a></li>
+                                            <li><a href="/StallHolderList"><i class="fa fa-circle-o"></i>Stall Holder List</a></li>
 
                                         </ul>
                                     </li>
-                                    <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Payment and Collections</a></li>
+                                    <li><a href="/Payment"><i class="fa fa-circle-o"></i> Payment and Collections</a></li>
                                     <li class = "treeview">
                                         <a href="#">
                                         <i class="fa fa-circle-o"></i> <span>Manage Requests</span>
