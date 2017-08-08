@@ -14,6 +14,10 @@ class StallType extends Model
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     
+    public function STypeSize(){
+        return $this->belongsToMany('App\StallTypeSize','tblStallType_StallSize','stypeID','stypeSizeID');
+    }
+    
     public function Stall(){
         return $this->hasMany('App\Stall','stypeID');
     }

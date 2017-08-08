@@ -86,13 +86,17 @@ Route::post('/getBuildingInfo', 'BuildingController@getBuildingInfo');
 Route::post('/UpdateBuilding', 'BuildingController@UpdateBuilding');
 Route::post('/deleteBuilding', 'BuildingController@deleteBuilding');
 Route::post('/getCode', 'BuildingController@getBuildingCode');
+Route::post('/getFloorsUp', 'BuildingController@getFloors');
 
-Route::get('/stypeTable', 'Controller@getStallTypes');
-Route::post('/checkSTypeName', 'Controller@checkSTypeName');
-Route::post('/addStallType', 'Controller@addStallType');
-Route::post('/getSTypeInfo', 'Controller@getSTypeInfo');
-Route::post('/UpdateSType', 'Controller@UpdateSType');
-Route::post('/deleteSType', 'Controller@deleteSType');
+Route::get('/stypeTable', 'StallTypeController@getStallTypes');
+Route::post('/checkSTypeName', 'StallTypeController@checkSTypeName');
+Route::post('/addStallType', 'StallTypeController@addStallType');
+Route::post('/getSTypeInfo', 'StallTypeController@getSTypeInfo');
+Route::post('/UpdateSType', 'StallTypeController@UpdateSType');
+Route::post('/deleteSType', 'StallTypeController@deleteSType');
+Route::post('/getSizes', 'StallTypeController@getSizes');
+Route::post('/deleteStypeSize', 'StallTypeController@deleteStypeSize');
+
 Route::get('/stallTable', 'Controller@getStalls');
 Route::post('/bldgOptions', 'Controller@getBuildingOption');
 Route::post('/getStallID', 'Controller@getStallID');

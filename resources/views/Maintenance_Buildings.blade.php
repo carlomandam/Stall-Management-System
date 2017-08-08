@@ -73,16 +73,31 @@
                                                   <span class="glyphicon glyphicon-plus"></span> </button>
                                         </span>
                                     </div>
+                                    <div class="" id="errordiv" style="width:200%">
+
+                                    </div>
                                     <table id='floortbl'>
                                         <thead>
                                             <tr>
-                                                <th width='40%'>Floor</th>
-                                                <th width='40%'>No. Of Stalls</th>
-                                                <th width='20%'>Ground Floor</th>
+                                                <th width='33%'>Floor</th>
+                                                <th width='33%'>No. Of Stalls
+                                                    <button onclick="resetNoOfStall()" type="button">reset</button>
+                                                </th>
+                                                <th width='33%'>Capacity
+                                                    <button onclick="resetCapacity()" type="button">reset</button>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="removable"><td>1</td><td><input type="text" name="noOfStall[]"></td><td style="text-align:left"><input type="checkbox" class='gf'></td></tr>
+                                            <tr class="removable first">
+                                                <td>1</td>
+                                                <td>
+                                                    <input type="text" name="noOfStall[]"> 
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="capacity[]"> 
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -102,80 +117,93 @@
     </div>
     <div class="modal fade" id="update" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md" role="document">
-            <form class="building" action="" method="post" id="updateform">
-                <input type="hidden" id="_tokenUp" name="_token" value="<?php echo csrf_token(); ?>">
-                <input type="hidden" name="id" id="idUp">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Update Building</h4> </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="bldgNameUp">Building Name</label><span class="required">&nbsp*</span>
-                                    <input type="text" class="form-control" id="bldgNameUp" name="bldgName" placeholder="Building Name" /> </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="bldgCodeUp">Building Code</label><span class="required">&nbsp*</span>
-                                    <input type="text" class="form-control" id="bldgCodeUp" name="bldgCode" placeholder="Building Code" /> </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="bldgDescUp">Description</label>
-                                    <textarea class="form-control" id="bldgDescUp" name="bldgDesc" placeholder="Building Description"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="bldgDescUp">Current No Of Floor</label>
-                                    <input type="text" id="curfloor">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="bldgDesc">Add Floor(/s)</label>
-                                    <div class="input-group"> <span class="input-group-btn">
-                                          <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="noOfFloorUp" disabled>
-                                          <span class="glyphicon glyphicon-minus"></span> </button>
-                                        </span>
-                                        <input type="text" name="noOfFloorUp" class="form-control input-number" value="1" min="1" oninput="showTable('#floortblup')" onchange="showTable('#floortblup')"> <span class="input-group-btn">
-                                              <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="noOfFloorUp">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Update Building</h4> </div>
+                <div class="modal-body">
+                    <div id="tabcontroll" class="container" style="width:100%">
+                        <ul class="nav nav-pills">
+                            <li class="active"> <a href="#1" data-toggle="tab">Building</a> </li>
+                            <li><a href="#2" data-toggle="tab">Floors</a> </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="1">
+                                <form class="building" action="" method="post" id="updateform">
+                                    <input type="hidden" id="_tokenUp" name="_token" value="<?php echo csrf_token(); ?>">
+                                    <input type="hidden" name="id" id="idUp">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="bldgNameUp">Building Name</label><span class="required">&nbsp*</span>
+                                                <input type="text" class="form-control" id="bldgNameUp" name="bldgName" placeholder="Building Name" /> </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="bldgCodeUp">Building Code</label><span class="required">&nbsp*</span>
+                                                <input type="text" class="form-control" id="bldgCodeUp" name="bldgCode" placeholder="Building Code" /> </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="bldgDescUp">Description</label>
+                                                <textarea class="form-control" id="bldgDescUp" name="bldgDesc" placeholder="Building Description"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="bldgDescUp">Current No Of Floor</label>
+                                                <input type="text" id="curfloor" style="text-align:center" readonly> </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="bldgDesc">Add Floor(/s)</label>
+                                                <div class="input-group"> <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="noOfFloorUp" disabled>
+                                                        <span class="glyphicon glyphicon-minus"></span> </button>
+                                                    </span>
+                                                    <input type="text" id="noOfFloorUp" name="noOfFloorUp" class="form-control input-number" value="0" min="0" max="100" oninput="showTable('#floortblup')" onchange="showTable('#floortblup')"> <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="noOfFloorUp">
                                                   <span class="glyphicon glyphicon-plus"></span> </button>
-                                        </span>
+                                                    </span>
+                                                </div>
+                                                <table id='floortblup' style="display:none">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width='50%'>Floor</th>
+                                                            <th width='50%'>No. Of Stalls</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody> </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="bldgDesc">Remove Floor(/s)</label>
+                                                <input id="removefloor" type="text" class="form-control input-number" name="remove" placeholder="Enter number of floors"> </div>
+                                        </div>
                                     </div>
-                                    <table id='floortblup' style="display:none">
-                                        <thead>
-                                            <tr>
-                                                <th width='50%'>Floor</th>
-                                                <th width='50%'>No. Of Stalls</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody> </tbody>
-                                    </table>
-                                </div>
+                                    <p class="small text-danger">Fields with asterisks(*) are required</p>
+                                </form>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="bldgDesc">Remove Floor(/s)</label>
-                                    <input type="text" class="form-control">
-                                    <br>
-                                    <label>Use '-' to specify range ex. 1-10,-1--5</label>
-                                    <label>Basement Floors Starts With -1 ex. Basement 1 = -1</label>
-                                </div>
+                            <div class="tab-pane" id="2">
+                                <table id='floorUpTbl'>
+                                    <th style="width:40%">Floor No.</th>
+                                    <th style="width:40%">Current No. of stalls</th>
+                                    <th></th>
+                                </table>
+                                <tbody> </tbody>
                             </div>
-                        </div>
-                        <p class="small text-danger">Fields with asterisks(*) are required</p>
-                    </div>
-                    <div class="modal-footer">
-                        <!-- <label style="float:left">All labels with "*" are required</label> -->
-                        <div class="pull-right">
-                            <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                         </div>
                     </div>
                 </div>
-            </form>
+                <div class="modal-footer">
+                    <!-- <label style="float:left">All labels with "*" are required</label> -->
+                    <div class="pull-right">
+                        <button class="btn btn-primary btn-flat" onclick="$($('#tabcontroll li.active').find('a').attr('href')).find('form').submit();"><span class='fa fa-save'></span>&nbsp Save</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div> @stop @section('script')
@@ -183,6 +211,12 @@
 <script type="text/javascript">
     var obj;
     $(document).ready(function () {
+        jQuery.validator.addMethod("capacity", function (value, element) {
+            if(parseInt($(element).val()) > parseInt($(element).parent().next().find('input[type=text]').val()))
+                return false;
+            else
+                return true;
+        }, "Number of stall can't be more than the capacity");
         $("#newform").validate({
             rules: {
                 bldgName: {
@@ -204,6 +238,10 @@
                     required: true
                 }
                 , noOfFloor: "required"
+                , "noOfStall[]": {
+                    number: true
+                    , capacity: true
+                }
             }
             , messages: {
                 bldgName: {
@@ -217,6 +255,13 @@
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
+            , errorPlacement: function(error, element) {
+                if($(element).attr('name') == "noOfStall[]"){
+                    error.appendTo('#errordiv');
+                }
+                else
+                    error.insertAfter(element);
+            }
         });
         $("#updateform").validate({
             rules: {
@@ -228,6 +273,9 @@
                         , data: {
                             bldgName: function () {
                                 return $("#bldgNameUp").val();
+                            }
+                            , id: function () {
+                                return $("#idUp").val();
                             }
                             , _token: function () {
                                 return $("#_token").val();
@@ -247,6 +295,9 @@
                         , data: {
                             bldgName: function () {
                                 return $("#bldgCodeUp").val();
+                            }
+                            , id: function () {
+                                return $("#idUp").val();
                             }
                             , _token: function () {
                                 return $("#_token").val();
@@ -348,7 +399,7 @@
         $(".modal").on('hidden.bs.modal', function () {
             $(this).find('form').validate().resetForm();
             $(this).find('form')[0].reset();
-            $('.removable').remove();
+            $('.removable').not('.first').remove();
             $('#floortblup').css('display', 'none');
         })
         $('#addRemove').on('input', function () {
@@ -383,11 +434,8 @@
         });
         //plugin bootstrap minus and plus
         //http://jsfiddle.net/laelitenetwork/puJ6G/
-        $('#bldgName').bind('input', function () {
-            $('#bldgCode').val('');
-        });
         $('#bldgName').bind('blur', function () {
-            if ($('#bldgCode').val() == '' || $('#bldgName').val().length > 4) $.ajax({
+            if ($('#bldgCode').val() == '' && $('#bldgName').val().length > 4) $.ajax({
                 type: "POST"
                 , url: '/getCode'
                 , data: {
@@ -398,6 +446,26 @@
                     $('#bldgCode').val(data);
                 }
             });
+        });
+        $('#bldgName').bind('change', function () {
+            if ($('#bldgName').val().length > 4) $.ajax({
+                type: "POST"
+                , url: '/getCode'
+                , data: {
+                    "_token": "{{ csrf_token() }}"
+                    , "name": $("#newform").find("input[name=bldgName]").val().replace(/\s/g, '').toUpperCase()
+                }
+                , success: function (data) {
+                    $('#bldgCode').val(data);
+                }
+            });
+        });
+        $('#removefloor').bind('input', function () {
+            if ($(this).val() > 0) {
+                $('#noOfFloorUp').val(0);
+                $('#noOfFloorUp').attr('disabled', true);
+            }
+            else $('#noOfFloorUp').attr('disabled', false);
         });
     });
 
@@ -419,6 +487,20 @@
                 $('#update').modal('show');
             }
         });
+        $.ajax({
+            type: "POST"
+            , url: '/getFloorsUp'
+            , data: {
+                "_token": "{{ csrf_token() }}"
+                , "id": id
+            }
+            , success: function (data) {
+                obj = JSON.parse(data);
+                for (i = 0; i < obj.length; i++) {
+                    $('#floorUpTbl tbody').append("<tr class='removable'><td>" + (i + 1) + "</td><td>" + obj[i].stall.length + "</td></tr>");
+                }
+            }
+        });
     }
 
     function deleteBuilding(id) {
@@ -436,50 +518,78 @@
         });
     }
 
-    function showTable(tbl) {        
-        var input = $(tbl).parent().find('input[type=text]');
-        input.parent().find('button[data-type=minus]').prop('disabled',false);
-        input.parent().find('button[data-type=plus]').prop('disabled',false);
-        
-        if(parseInt(input.val()) > input.attr('max')){
+    function showTable(tbl) {
+        var input = $(tbl).parent().find('input[type=text]').first();
+        input.parent().find('button[data-type=minus]').prop('disabled', false);
+        input.parent().find('button[data-type=plus]').prop('disabled', false);
+        if (parseInt(input.val()) > input.attr('max')) {
             input.val(input.attr('max'));
         }
-        
-        else if(parseInt(input.val()) < input.attr('min')){
+        else if (parseInt(input.val()) < input.attr('min')) {
             input.val(input.attr('min'));
         }
-        
-        if(parseInt(input.val()) == input.attr('min')){
-            input.parent().find('button[data-type=minus]').prop('disabled',true);
+        if (parseInt(input.val()) == input.attr('min')) {
+            input.parent().find('button[data-type=minus]').prop('disabled', true);
         }
-        else if(parseInt(input.val()) == input.attr('max')){
-            input.parent().find('button[data-type=plus]').prop('disabled',true);
+        else if (parseInt(input.val()) == input.attr('max')) {
+            input.parent().find('button[data-type=plus]').prop('disabled', true);
         }
-        else{
-            input.parent().find('button[data-type=minus]').prop('disabled',false);
-            input.parent().find('button[data-type=plus]').prop('disabled',false);
+        else {
+            input.parent().find('button[data-type=minus]').prop('disabled', false);
+            input.parent().find('button[data-type=plus]').prop('disabled', false);
         }
-        
-        $(tbl).css('display', 'inline');
+        var noOfStalls = new Array();
+        var capacity = new Array();
+        $('input[name="noOfStall[]"').each(function () {
+            noOfStalls.push($(this).val());
+        });
+        $('input[name="capacity[]"').each(function () {
+            capacity.push($(this).val());
+        });
+        $(tbl).css('display', 'none');
         $('.removable').remove();
-        $(tbl).attr('display', 'inline');
-        for (var i = 0; i < parseInt($(tbl).parent().find('input[type=text]').val()); i++) {
-            $(tbl + ' tbody').append('<tr class="removable"><td>' + (i + 1) + '</td><td><input type="text" name="noOfStall[]"></td><td style="text-align:left"><input type="checkbox" class="gf" onclick="disableCBs(this)" name="gf" value="'+i+'""></td></tr>')
+        var val1 = '';
+        var cap1 = '';
+        if (noOfStalls[0] != undefined) val1 = noOfStalls[0];
+        if (capacity[0] != undefined) cap1 = capacity[0];
+        if (parseInt($(tbl).parent().find('input[type=text]').val()) > 0) {
+            $('#removefloor').attr('disabled', true);
+            $(tbl).css('display', 'inline');
+            $(tbl + ' tbody').append('<tr class="removable first"><td>1</td><td><input type="text" name="noOfStall[]" onchange="addNoOfStall(this)" value="' + val1 + '"></td><td><input type="text" name="capacity[]" onchange="addCapacity(this)" value="' + cap1 + '"></td></tr>');
+        }
+        else $('#removefloor').attr('disabled', false);
+        for (var i = 1; i < parseInt($(tbl).parent().find('input[type=text]').val()); i++) {
+            var stall = '';
+            var cap = '';
+            if (noOfStalls[i] != undefined) stall = noOfStalls[i];
+            if (capacity[i] != undefined) cap = capacity[i];
+            $(tbl + ' tbody').append('<tr class="removable"><td>' + (i + 1) + '</td><td><input type="text" name="noOfStall[]" value="' + stall + '"></td><td><input type="text" name="capacity[]" onchange="addCapacity(this)" value="' + cap + '"></td></tr>')
         }
     }
-    function disableCBs(elem){
-        var gf = $(elem);
-        if(gf.prop('checked')){
-            $(".gf").each(function(){
-                if(!$(this).is(gf))
-                    $(this).prop("disabled",true);
-            });
-        }
-        else{
-            $(".gf").each(function(){
-                if(!$(this).is(gf))
-                    $(this).prop("disabled",false);
-            });
-        }
+
+    function addNoOfStall(e) {
+        var elem = $(e);
+        $('input[name="noOfStall[]"').each(function () {
+            if (!$(this).is(elem) && $(this).val().length == 0) {
+                $(this).val(elem.val());
+            }
+        });
+    }
+    
+    function addCapacity(e) {
+        var elem = $(e);
+        $('input[name="capacity[]"').each(function () {
+            if (!$(this).is(elem) && $(this).val().length == 0) {
+                $(this).val(elem.val());
+            }
+        });
+    }
+
+    function resetNoOfStall() {
+        $('input[name="noOfStall[]"').val('');
+    }
+    
+    function resetCapacity() {
+        $('input[name="capacity[]"').val('');
     }
 </script> @stop
