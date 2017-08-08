@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/skins/skin-blue.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/font-awesome/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/toastr.min.css')}}">
     @yield('style')
     <style>
 	    *{
@@ -220,6 +221,7 @@
     <script src="{{ URL::asset('assets/jQuery/jquery.validate.js')}}"></script>
     <script src="{{ URL::asset('assets/datatables/jquery.dataTables.js')}}"></script>
     <script src="{{ URL::asset('assets/datatables/dataTables.bootstrap.min.js')}}"></script>
+    <script src="{{ URL::asset('assets/datatables/toastr.min.js')}}"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button);
     </script>

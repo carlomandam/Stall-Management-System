@@ -23,7 +23,7 @@ class BuildingController extends Controller
                 $floor = new Floor;
                 $floor->floorLevel = $i+1;
                 $floor->bldgID = $building->bldgID;
-                $floor->floorCapacity = 100;
+                $floor->floorCapacity = $_POST['capacity'][$i];
                 $floor->save();
                 
                 for($j = 1;$j <= $_POST['noOfStall'][$i];$j++){
@@ -51,6 +51,10 @@ class BuildingController extends Controller
     }
     
     function getBuildingCode(){
+        if($_POST['name'] == null)
+            return;
+        else if(strlen($_POST['name'])<5)
+            return "short";
         $startTime = time();
         $string = $_POST['name'];
         $codes = array('mbldig','mnbig','mildg');
@@ -116,6 +120,12 @@ class BuildingController extends Controller
     }
     
     function checkBldgName(){
+        if(isset($_POST['id'])){
+            $building = Building::where('bldgName',$_POST['bldgName'])->where('bldgID',$_POST['id'])->get();
+            if(count($building) == 1)
+                return "true";
+        }
+        
         $building = Building::where('bldgName',$_POST['bldgName'])->get();
         if(count($building) != 0)
             return "false";
@@ -124,6 +134,12 @@ class BuildingController extends Controller
     }
     
     function checkBldgCode(){
+        if(isset($_POST['id'])){
+            $building = building::where('bldgCode',$_POST['bldgCode'])->where('bldgID',$_POST['id'])->get();
+            if(count($building) == 1)
+                return "true";
+        }
+        
         $building = building::where('bldgCode',$_POST['bldgCode'])->get();
         
         if(count($building) != 0)
@@ -149,38 +165,37 @@ class BuildingController extends Controller
             $hasChange = true;
         }
         
-        if(isset($_POST['addRemoveRadio']) && isset($_POST['addRemove'])){
-            if($_POST['addRemoveRadio'] == 1){
-                for($i = 0;$i < $_POST['addRemove'];$i++){
-                    $floor = new Floor;
-                    $floor->bldgID = $building->bldgID;
-                    $last = Floor::where('bldgID',$building->bldgID)->orderBy('floorNo','desc')->first();
+        if(isset($_POST['noOfFloorUp'])){
+            for($i = 0;$i < $_POST['noOfFloorUp'];$i++){
+                $floor = new Floor;
+                $floor->bldgID = $building->bldgID;
+                $floor->floorCapacity = $_POST['capacity'][$i];
+                $last = Floor::where('bldgID',$building->bldgID)->orderBy('floorLevel','desc')->first();
 
-                    if(count($last) > 0)
-                        $floor->floorNo = $last->floorNo + 1;
-                    else
-                         $floor->floorNo = 1;
+                if(count($last) > 0)
+                    $floor->floorLevel = $last->floorLevel + 1;
+                else
+                     $floor->floorLevel = 1;
 
-                    $floor->save();
+                $floor->save();
 
-                    for($j = 1;$j < $_POST['noOfStall'][$i]+1;$j++){
-                        $stall = new Stall;
-                        $stall->stallID = $this->stallID($building->bldgCode,$floor->floorLevel);
-                        $stall->stype_SizeID = 1;
-                        $stall->floorID = $floor->floorID;
-                        $stall->stallStatus = 1;
-                        $stall->save();
-                    }
+                for($j = 1;$j < $_POST['noOfStall'][$i]+1;$j++){
+                    $stall = new Stall;
+                    $stall->stallID = $this->stallID($building->bldgCode,$floor->floorLevel);
+                    $stall->floorID = $floor->floorID;
+                    $stall->stallStatus = 1;
+                    $stall->save();
                 }
+                $hasChange = true;
             }
-            else if($_POST['addRemoveRadio'] == 2){
-                for($i = 0;$i < $_POST['addRemove'];$i++){
-                    $floor = Floor::where('bldgID',$building->bldgID)->orderBy('floorNo','desc')->first();
-                    $stalls = Stall::where('floorID',$floor->floorID)->delete();
-                    $floor->delete();
-                }
+        }
+        else if(isset($_POST['remove'])){
+            for($i = 0;$i < $_POST['remove'];$i++){
+                $floor = Floor::where('bldgID',$building->bldgID)->orderBy('floorLevel','desc')->first();
+                $stalls = Stall::where('floorID',$floor->floorID)->delete();
+                $floor->delete();
+                $hasChange = true;
             }
-            $hasChange = true;
         }
         echo $hasChange;
     }
@@ -188,5 +203,10 @@ class BuildingController extends Controller
     function deleteBuilding(){
         $building = Building::find($_POST['id']);
         $building->delete();
+    }
+    
+    function getFloors(){
+        $floors = Floor::with('stall')->where('bldgID',$_POST['id'])->get();
+        return (json_encode($floors));
     }
 }
