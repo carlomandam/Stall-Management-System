@@ -19,7 +19,8 @@ class TblStall extends Migration
             $table->integer('stype_SizeID')->unsigned()->nullable();
             $table->string('stallDesc',200)->nullable();
             $table->integer('stallStatus')->unsigned();
-            $table->string('stallPos',200);
+            $table->integer('stallCol');
+             $table->integer('stallRow');
             $table->timestamps();
             $table->softDeletes();
             

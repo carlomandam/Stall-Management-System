@@ -19,12 +19,14 @@ font-size:0.6em;
 }    
 #place li:hover
 {
-background-color:yellow;      
+/*background-image:url("images/market_stand.png");*/
+
+
 } 
 #place .seat{
 /*background:url("images/stall.png") no-repeat scroll 0 0 transparent;*/
-height:42px;
-width:42px;
+height:40px;
+width:40px;
 display:block;
 border: 2px solid black;   
 }

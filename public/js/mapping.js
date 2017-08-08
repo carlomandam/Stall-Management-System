@@ -4,7 +4,7 @@ $(document).on('change','.building',function(){
   id = $(this).val();
   console.log(id);
 		$('.floor').remove();
-		$('.floorname').text("Choose Floor:");
+		$('.floorname').text("Choose Floor no:");
 		$.ajax({
 		type: "GET",
 		url: '/kioskmap/bldg/'+id,
@@ -13,8 +13,8 @@ $(document).on('change','.building',function(){
 				$('.buildingname').text(data.bldg.bldgName);
 			 $('.floors').append('<option disabled selected="selected" class="floor">--Select</option>');
 			$.each(data.bldg.floor,function(key,value){
-				$('.floors').append('<option class="floor"value="'+value.floorID+'">'+value.floorDesc+'</option>');
-					
+        $('.floors').append('<option value="'+value.floorID+'">'+value.floorDesc+'</option>');
+			
 			});
 
 		}
@@ -26,12 +26,30 @@ $(document).on('change','.building',function(){
 $(document).on('change','.floors',function(){
   id = $(this).val();
   console.log(id);
-	console.log('succes');		
+	console.log('succes');
+  	
 		$.ajax({
 		type: "GET",
 		url: '/kioskmap/floor/'+id,
 		success: function(data)	{	
-      		
+          // console.log(data.floor.stall);
+      		$('.floorname').text("Floor No."+data.floor.floorLevel);
+          $('.cap').text("/"+data.floor.floorCapacity);
+          $.each(data.floor.stall,function(key,value){
+            // var stall+value.stallID = {
+            //     type:+value.stype_SizedID+,
+            //     desc:'+value.stallDesc+',
+
+            // }
+            // var stall'value.stallID' = {
+
+            // }
+            // console.log(value.stallID);
+            // console.log(value.stallDesc);
+          });
+          // init();
+
+
 		}
 
 	});
@@ -40,15 +58,12 @@ $(document).on('change','.floors',function(){
 })
 
 
-
-
-
 // // Setitng the Map
 // var settings = {
-//   rows: 10,
-//   cols: 10,
-//   stallHeight: 40,
-//   stallWidth: 40,
+//   rows: 15,
+//   cols: 15,
+//   stallHeight: 55,
+//   stallWidth: 75,
 //   rowCssPrefix: 'row-',
 //   colCssPrefix: 'col-',
 //   stallCss: 'seat',
@@ -95,12 +110,13 @@ var init = function (reservedSeat) {
                         className = settings.seatCss + ' ' + settings.rowCssPrefix + i.toString() + ' ' + settings.colCssPrefix + j.toString();
                         if ($.isArray(reservedSeat) && $.inArray(seatNo, reservedSeat) != -1) {
                             className += ' ' + settings.selectedSeatCss;
+                            console.log(className);
                         }
                         str.push('<li class="' + className + '"' +
                                   'style="top:' + (i * settings.seatHeight).toString() + 'px;left:' + (j * settings.seatWidth).toString() + 'px">' +
                                   '<a title="' + seatNo + '">' + seatNo + '</a>' +
                                   '</li>');
-                        console.log(className);
+                        // console.log(className);
                         console.log(seatNo);
                         console.log(str[j]);
                     }
@@ -108,10 +124,10 @@ var init = function (reservedSeat) {
                 $('#place').html(str.join(''));
             };
             //case I: Show from starting
-            init();
+            // init();
  
             //Case II: If already booked
-            var bookedSeats = [5, 25];
+            var bookedSeats = [5, 25,1,2,3];
             init(bookedSeats);
 
 

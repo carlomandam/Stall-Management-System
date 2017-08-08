@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Building;
 use App\Floor;
+use App\StallTypeStallSize;
+use App\StallTypeSize;
+use App\StallRate;
+use App\Frequency;
+use App\Stall;
 use DB;
 use Response;
 
@@ -17,13 +22,16 @@ class MappingController extends Controller
      */
     public function index()
     {
-        $buildings = Building::whereNULL('deleted_at')->get();
-        
-        return View('/KioskMap/index',compact('buildings'));
-        // return ($buildings);
-    
-        
-        
+        $buildings = Building::all();
+        $rates = DB::table('tblstallType_stallSize as s')
+                    ->join('tblStallType as st' , 'st.stypeID' , 's.stypeID')
+                    ->join('tblStallType_Size as ss', 'ss.stypeSizeID', 's.stypeSizeID')
+                    ->join('tblStallRate as r','r.stype_SizeID','s.stype_SizeID')
+                    ->join('tblFrequency as f', 'f.frequencyID', 'r.frequencyID')
+                    ->join('tblStallRate_Details as sd', 'sd.stallRateID', 'r.stallRateID')
+                    ->get();
+         // return ($rates);           
+        return View('/KioskMap/index',compact('buildings','rates'));
     }
 
     /**
@@ -102,10 +110,10 @@ class MappingController extends Controller
     public function floor($id)
     {   
 
-         $floor = Floor::with('')->findOrFail($id);
+         $floor = Floor::with('Stall')->findOrFail($id);
          // return ($floor);
         return response()->json(['floor'=>$floor]);
-        return View($floor);
+        return ($floor);
 
     }
 }

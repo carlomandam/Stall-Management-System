@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(StallTypeStallSizeTableSeeder::class);
         $this->call(StallRateTableSeeder::class);
         $this->call(StallRateDetailsTableSeeder::class);
+        $this->call(StallTableSeeder::class);
         
 
 

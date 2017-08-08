@@ -21,4 +21,8 @@ class StallRate extends Model
     public function Building(){
         return $this->belongsTo('App\Building','bldgID');
     }
+
+    public function Frequency(){
+        return $this->belongsTo('App\Frequency','frequencyID');
+    }
 }

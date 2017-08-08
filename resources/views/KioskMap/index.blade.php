@@ -28,8 +28,8 @@
                   <div class="panel-heading" style="">
                     <h5>
                       <span>Stall Capacity</span>
-                      <span>40</span>
-                       <span class="caps"></span>
+                      <span></span>
+                       <span class="cap"></span>
                     </h5>
                   </div>
                   <div class="panel-body">
@@ -78,7 +78,7 @@
                   </div>
                   <!-- panel-heading -->
 
-                  <div class="panel-body" style="height: 290px; overflow-y: scroll;">
+                  <div class="panel-body" style="height: 290px; overflow: scroll;">
                       <div class="tab-content">
                         <div class="tab-pane fade in active" id="stalltpyetab">
                               <table class="table table-striped">
@@ -86,12 +86,21 @@
                                   <tr>
                                     <th></th>
                                     <th>Type</th>
+                                    <th>Size</th>
+                                    <th>Frequency</th>
                                     <th>Rate</th>
-                                    <th>Amount</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  
+                                  @foreach($rates as $rate)
+                                    <tr>
+                                      <td id=""><input type="radio" name=""></td>
+                                      <td>{{$rate->stypeName}}</td>
+                                      <td>{{$rate->stypeArea}}<i>meter squared</i></td>
+                                      <td>{{$rate->frequencyDesc}}</td>
+                                      <td>{{$rate->dblRate}}</td>
+                                    </tr>
+                                  @endforeach
                                 </tbody>
                               </table>
                               
