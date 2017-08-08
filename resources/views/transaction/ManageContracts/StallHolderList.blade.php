@@ -74,48 +74,263 @@
 		<div class="box-header with-border">
 			<label class = "box-header-label"> Stall Holder Info</label>
 		</div>
-			<div class="box-body">
+		<div class="box-body">
 
-				<div class="col-xs-12">
-					<div class="box">
-						<div class="row">
-							<div class="col-md-12">
-								<ul class="nav nav-tabs">
-									<li class="active"><a href="#tab_1-1" data-toggle="tab">Personal Info</a></li>
-									<li><a href="#tab_2-2" data-toggle="tab">Stall Info</a></li>
-									<li><a href="#tab_3-2" data-toggle="tab">Contract</a></li>
-								</ul>
-								<div class="tab-content">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="row">
+						<div class="col-md-12">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#tab_1-1" data-toggle="tab">Personal Info</a></li>
+								<li><a href="#tab_2-2" data-toggle="tab">Stall Info</a></li>
+								<li><a href="#tab_3-2" data-toggle="tab">Contract</a></li>
+							</ul>
+							<div class="tab-content">
 
-									<div class="tab-pane active" id="tab_1-1">
-										tab1
+								<div class="tab-pane active" id="tab_1-1">
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Name of Organization</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name=""  disabled="" /> 
+											</div>
+										</div>
 									</div>
-									<div class="tab-pane" id="tab_2-2">
-										tab2
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">First Name</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name=""  disabled=""  /> 
+											</div>
+										</div>
 									</div>
 
-									<div class="tab-pane" id="tab_3-2">
-										tab3
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Middle Name</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name=""  disabled="" /> 
+											</div>
+										</div>
 									</div>
 
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Last Name</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name="" disabled=""  /> 
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="radio">
+												<div class="col-md-4">
+													<label>Sex</label>
+												</div>
+												
+												<div class="col-md-8">
+													<label>
+														<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked disabled="" >
+														Male
+													</label>
+													<label>
+														<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" disabled="" >
+														Female
+													</label>
+												</div>
+											</div>
+										</div>  
+									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="" class="col-sm-4 control-label">Date</label>
+
+											<div class="col-sm-8">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</div>
+													<input type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask  disabled="" />
+												</div>
+											</div>
+										</div>
+									</div>	
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Email Address</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name="" disabled=""  /> 
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Mobile No.</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name="" disabled=""  /> 
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Home Address</label>
+											</div>
+											<div class="col-md-8">
+												<textarea class="form-control" disabled="" ></textarea> 
+											</div>
+										</div>
+									</div>
 								</div>
-								
+
+
+
+
+								<div class="tab-pane" id="tab_2-2">
+									<div class="col-md-12">
+										<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Stall Code</label>
+											</div>
+											<div class="col-md-8">
+												<div class="form-group">
+													<label>Select</label>
+													<select class="form-control">
+														<option>A001</option>
+														<option>A002</option>
+														<option>A003</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									</div>
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Stall Type</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name="" disabled=""  /> 
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Stall Rate</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name="" disabled=""  /> 
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="" class="col-sm-4 control-label">Starting Date</label>
+
+											<div class="col-sm-8">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</div>
+													<input type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask  disabled="" />
+												</div>
+											</div>
+										</div>
+									</div>	
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Business Name</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name="" disabled=""  /> 
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<label>Associate Stall Holder(s)</label>
+									</div>
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Associate 1</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name="" disabled=""  /> 
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Associate 1</label>
+											</div>
+											<div class="col-md-8">
+												<input type="text" class="form-control" id="" name="" disabled=""  /> 
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<div class="col-md-4">
+												<label for="">Home Address</label>
+											</div>
+											<div class="col-md-8">
+												<textarea class="form-control" disabled="" ></textarea> 
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="tab-pane" id="tab_3-2">
+									tab3
+								</div>
+
 							</div>
 
 						</div>
-						<div class="col-md-3 pull-right" id="Update">
-							<button onclick="myFunction()" type="Submit" class="btn btn-success">Update</button>
-						</div>
-						<div class="col-md-8 pull-right" id="Cancel" style="display: none">
-							<button type="Submit" class="btn btn-default" onclick="Cancel()" >Cancel</button>
-							<button type="Submit" class="btn btn-primary" onclick="Cancel()" >Save Changes</button>
-						</div>
+
+					</div>
+					<div class="col-md-3 pull-right" id="Update">
+						<button onclick="myFunction()" type="Submit" class="btn btn-success">Update</button>
+					</div>
+					<div class="col-md-8 pull-right" id="Cancel" style="display: none">
+						<button type="Submit" class="btn btn-default" onclick="Cancel()" >Cancel</button>
+						<button type="Submit" class="btn btn-primary" onclick="Cancel()" >Save Changes</button>
 					</div>
 				</div>
+			</div>
 		</div>
 	</div>
 </div>
-
+@stop
+@section('script')
 <script>
 	function myFunction() {
 		var x = document.getElementById('Update');

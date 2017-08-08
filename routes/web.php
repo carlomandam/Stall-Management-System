@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/Registration', 'ApplicationController@create');
+Route::get('/Registration','ApplicationController@create');
 Route::get('/List', 'ApplicationController@member');
 Route::get('/View', 'ApplicationController@Memview');
 Route::get('/Update', 'ApplicationController@Update');
@@ -140,5 +140,7 @@ Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
+
+
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment','PaymentController@paymentIndex');

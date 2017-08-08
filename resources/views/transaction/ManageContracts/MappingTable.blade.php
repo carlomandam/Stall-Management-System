@@ -50,13 +50,13 @@
 								</thead>
 								<tr>
 									<td>A001</td>
-									<td>Cart</td>
-									<td>Near Gate</td>
-									<td><span class = "label label-warning">Under Maintenance</span></td>
-									<td>Natanggalan kasi ng gulong kahapon hahahaha xD</td>
+									<td>Food Stall</td>
+									<td>Floor 1, Main Building </td>
+									<td><span class = "label label-success">Available</span></td>
+									<td>No Remarks</td>
 									<td>
 										<div>
-											<button type="Submit" class="btn btn-flat btn-success"><span class = "fa fa-angle-double-right"></span>&nbspRegister</button>
+											<button type="Submit"  onclick="window.location='{{ url("/Registration") }}'" class="btn btn-flat btn-success"><span class = "fa fa-angle-double-right"></span>&nbspRegister</button>
 											<button type="Submit" class="btn btn-flat btn-primary" data-toggle="modal" data-target="#view"><span class = "fa fa-eye"></span>&nbspView</button>
 											<button type="Submit" class="btn btn-flat btn-primary" data-toggle="modal" data-target="#update"><span class = "fa fa-pencil"></span>&nbspUpdate</button>
 										</div>
@@ -202,20 +202,22 @@
 							<div class="form-group">
 								<label>Status</label>
 								<select class="form-control">
-									<option>Occupied</option>
-									<option>Unoccupied</option>
+									<option>Available</option>
+									<option>Reserved</option>
 									<option>Under Maintenance</option>
-									<option>Damage</option>
 								</select>
 							</div>
 						</div>	
+
 						<div class="col-sm-12">
-							<label>Location</label>
-							<div class="col-md-12">
-								<textarea type="text" class="form-control"/></textarea>
+							<label>Remarks</label>
+							<div class="col-md-12 form-group">
+								<textarea type="text" class="form-control"  /></textarea>
 							</div>
 						</div>
-						<div class="col-sm-5 pull-right">
+
+
+						<div class="pull-right" style="margin-right: 30px;">
 							<button class="btn btn-danger" class="close" data-dismiss="modal">Cancel</button>
 							<button class="btn btn-primary" class="close" data-dismiss="modal">Save Changes</button>
 						</div>

@@ -114,6 +114,7 @@
                                             <li><a href="/StallList"><i class="fa fa-circle-o"></i> Stall List</a></li>
                                             <li><a href="/RegistrationList"><i class="fa fa-circle-o"></i> Registration List</a></li>
                                             <li><a href="/StallHolderList"><i class="fa fa-circle-o"></i>Stall Holder List</a></li>
+                                            <li><a href="#"><i class="fa fa-circle-o"></i>Contract List</a></li>
 
                                         </ul>
                                     </li>
@@ -195,11 +196,10 @@
               </section>
             <!-- /.content -->
         </div>
-         <footer class="main-footer">
+          <footer class="main-footer">
 
             <strong>Copyright © 2017</strong> All rights reserved.
          </footer>
-        
     </div>
 
         <!-- /.content-wrapper -->
@@ -232,6 +232,9 @@ var url = window.location;
 $('ul.treeview-menu a').filter(function() {
      return this.href == url;
 }).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
+
+
+
     </script>
     
     @yield('script') 
