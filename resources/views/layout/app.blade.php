@@ -12,7 +12,6 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/skins/skin-blue.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/font-awesome/css/font-awesome.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/toastr.min.css')}}">
     @yield('style')
     <style>
 	    *{
@@ -115,7 +114,7 @@
                                             <li><a href="/StallList"><i class="fa fa-circle-o"></i> Stall List</a></li>
                                             <li><a href="/RegistrationList"><i class="fa fa-circle-o"></i> Registration List</a></li>
                                             <li><a href="/StallHolderList"><i class="fa fa-circle-o"></i>Stall Holder List</a></li>
-                                            <li><a href="#"><i class="fa fa-circle-o"></i>Contract List</a></li>
+                                            <li><a href="/ContractList"><i class="fa fa-circle-o"></i>Contract List</a></li>
 
                                         </ul>
                                     </li>
@@ -197,10 +196,7 @@
               </section>
             <!-- /.content -->
         </div>
-          <footer class="main-footer">
-
-            <strong>Copyright © 2017</strong> All rights reserved.
-         </footer>
+          
     </div>
 
         <!-- /.content-wrapper -->
@@ -221,7 +217,6 @@
     <script src="{{ URL::asset('assets/jQuery/jquery.validate.js')}}"></script>
     <script src="{{ URL::asset('assets/datatables/jquery.dataTables.js')}}"></script>
     <script src="{{ URL::asset('assets/datatables/dataTables.bootstrap.min.js')}}"></script>
-    <script src="{{ URL::asset('assets/datatables/toastr.min.js')}}"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button);
     </script>

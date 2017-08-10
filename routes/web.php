@@ -144,6 +144,10 @@ Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
+Route::get('/ContractList','ManageContractsController@contractListIndex');
+Route::get('/UpdateRegistration','ManageContractsController@updateRegistration');
+
+Route::get('/getStallList','ManageContractsController@getStallList');
 
 
 ///////////////////PAYMENT AND COLLECTIONS///////////////

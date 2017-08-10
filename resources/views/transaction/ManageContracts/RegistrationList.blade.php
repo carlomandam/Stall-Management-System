@@ -60,7 +60,7 @@
 									<td>03/21/2017</td>
 									<td>
 											<button type="Submit" class="btn btn-flat btn-success"><span class = "fa  fa-angle-double-right"></span>&nbspCreate Contract</button>
-											<button type="Submit" class="btn btn-flat btn-primary"><span class = "fa fa-pencil"></span>&nbspUpdate</button>
+											<button type="Submit" class="btn btn-flat btn-primary" onclick="window.location='{{ url('/UpdateRegistration') }}'"><span class = "fa fa-pencil"></span>&nbspUpdate</button>
 											<button type="Submit" class="btn btn-flat btn-danger"><span class = "fa fa-ban"></span>&nbspCancel</button>
 									</td>
 								</tr>

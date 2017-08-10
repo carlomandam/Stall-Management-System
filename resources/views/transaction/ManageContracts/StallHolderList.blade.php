@@ -10,9 +10,7 @@
 	<li>Manage Contracts</li>
 	<li class="active">Stall Holder List</li>
 </ol>
-@stop
 
-@section('content')
 
 <style>
 	#floortbl td{
@@ -22,10 +20,15 @@
 		text-align: center;
 	}
 
-
-
+.form-control, .pull-right{
+	margin-top: 14px;
+}
 
 </style>
+@stop
+
+@section('content')
+
 
 <div class="col-md-6">
 	<div class="box box-solid box-primary">
@@ -48,13 +51,13 @@
 										<tr>
 											<th>Name</th>
 											<th>Status</th>
-											<th>Active Stall/s</th>
+											<th>Active Contract/s</th>
 										</tr>
 									</thead>
 									<tr>
 										<th>Brixter Duenas</th>
 										<th>Active</th>
-										<th>3</th>
+										<th>1</th>
 									</div>
 								</tr>
 							</table>
@@ -212,7 +215,7 @@
 											</div>
 											<div class="col-md-8">
 												<div class="form-group">
-													<label>Select</label>
+		
 													<select class="form-control">
 														<option>A001</option>
 														<option>A002</option>
@@ -272,13 +275,9 @@
 										</div>
 									</div>
 									<div class="col-md-12">
-										<label>Associate Stall Holder(s)</label>
-									</div>
-
-									<div class="col-md-12">
 										<div class="form-group">
 											<div class="col-md-4">
-												<label for="">Associate 1</label>
+												<label for="">Associate Holder 1</label>
 											</div>
 											<div class="col-md-8">
 												<input type="text" class="form-control" id="" name="" disabled=""  /> 
@@ -288,7 +287,7 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<div class="col-md-4">
-												<label for="">Associate 1</label>
+												<label for="">Associate Holder 2</label>
 											</div>
 											<div class="col-md-8">
 												<input type="text" class="form-control" id="" name="" disabled=""  /> 

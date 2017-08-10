@@ -1,13 +1,14 @@
 @extends('layout.app')
 
 @section('title')
-{{ 'Building'}}
+{{ 'Payment'}}
 @stop
 @section('content-header')
 
 <ol class="breadcrumb">
-  <li><i class="fa fa-dashboard"></i> Maintenance</li>
-  <li class="active">Building</li>
+  <li>Transactions</li>
+  <li>Payment and Collections</li>
+
 </ol>
 @stop
 

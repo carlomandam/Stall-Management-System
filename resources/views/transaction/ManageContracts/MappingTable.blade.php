@@ -48,23 +48,8 @@
 										<th width = "350px;">Actions</th>
 									</tr>
 								</thead>
-								<tr>
-									<td>A001</td>
-									<td>Food Stall</td>
-									<td>Floor 1, Main Building </td>
-									<td><span class = "label label-success">Available</span></td>
-									<td>No Remarks</td>
-									<td>
-										<div>
-											<button type="Submit"  onclick="window.location='{{ url("/Registration") }}'" class="btn btn-flat btn-success"><span class = "fa fa-angle-double-right"></span>&nbspRegister</button>
-											<button type="Submit" class="btn btn-flat btn-primary" data-toggle="modal" data-target="#view"><span class = "fa fa-eye"></span>&nbspView</button>
-											<button type="Submit" class="btn btn-flat btn-primary" data-toggle="modal" data-target="#update"><span class = "fa fa-pencil"></span>&nbspUpdate</button>
-										</div>
-
-								</tr>
 							</table>
-						</div>
-					
+						</div>		
 			</div>
 		</div>
 	</div>
@@ -228,4 +213,30 @@
 		</form>
 	</div>
 </div>
+@stop
+
+
+@section('script')
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$.get('/getStallList', function(data){
+				var table = $('#tblstall').DataTable().clear();
+				console.log(data);
+				$.each(data, function(i,data){
+					table.row.add([
+						data.stallID,
+						data.stypeName + "("+ data.stypeArea +"m<sup>2</sup>)",
+						"Floor "+data.floorID + "," + data.bldgName,
+                        (data.stallStatus == '1' ? "<label class = 'label label-success'>Available</label>" : (data.stallStatus == '2' ? 'Occupied' : 'Under Maintenance')),
+                        (data.stallRemarks == null ? 'No Remarks Available' : data.stallRemarks),
+                        "<button type='Submit' onclick='window.location="+'"'+"{{ url('/Registration') }}"+'"'+"' class='btn btn-flat btn-success'><span class = 'fa fa-angle-double-right'></span>&nbspRegister</button> <button type='Submit' class='btn btn-flat btn-primary'data-toggle='modal' data-target='#view'><span class = 'fa fa-eye'></span>&nbspView</button> <button type='Submit' class='btn btn-flat btn-primary' data-toggle='modal' data-target='#update'><span class = 'fa fa-pencil'></span>&nbspUpdate</button>"
+                        
+						]).draw();
+				});
+			});
+
+			
+
+		});
+	</script>
 @stop
