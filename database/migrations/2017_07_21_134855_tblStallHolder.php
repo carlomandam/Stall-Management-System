@@ -14,14 +14,14 @@ class TblStallHolder extends Migration
     public function up()
     {
         Schema::create('tblStallHolder', function (Blueprint $table) {
-            $table->increments('ID');
-            $table->string('FirstName',200);
-            $table->string('LastName',200);
-            $table->string('MiddleName',200)->nullable();
-            $table->dateTime('BirthDay');
-            $table->string('ContactNo',13);
-            $table->string('Email',200);
-            $table->string('Address',500);
+            $table->increments('stallHID');
+            $table->string('stallHFName',200);
+            $table->string('stallHMName',200)->nullable();
+            $table->string('stallHLName',200);
+            $table->dateTime('stallHBday');
+            $table->integer('stallHSex');
+            $table->string('stallHEmail',200);
+            $table->string('stallHAddress',500);
             $table->timestamps();
             $table->softDeletes();
         });

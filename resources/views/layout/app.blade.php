@@ -114,11 +114,26 @@
                                             <li><a href="/StallList"><i class="fa fa-circle-o"></i> Stall List</a></li>
                                             <li><a href="/RegistrationList"><i class="fa fa-circle-o"></i> Registration List</a></li>
                                             <li><a href="/StallHolderList"><i class="fa fa-circle-o"></i>Stall Holder List</a></li>
-                                            <li><a href="/ContractList"><i class="fa fa-circle-o"></i>Contract List</a></li>
 
                                         </ul>
                                     </li>
-                                    <li><a href="/Payment"><i class="fa fa-circle-o"></i> Payment and Collections</a></li>
+
+                             
+                                      <li class="treeview"> 
+                                        <a href="#">
+                                        <i class="fa fa-circle-o"></i><span>Payment and Collections</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i> 
+                                        </span> 
+                                        </a>
+
+                                         <ul class="treeview-menu">
+                                            <li><a href="#"><i class="fa fa-circle-o"></i> Billing</a></li>
+                                            <li><a href="#"><i class="fa fa-circle-o"></i> Payment</a></li>
+                                        </ul>
+
+                                      </li>
+                            
                                     <li class = "treeview">
                                         <a href="#">
                                         <i class="fa fa-circle-o"></i> <span>Manage Requests</span>

@@ -158,9 +158,11 @@ label{
                     <label for = "email">Email Address</label><span class="required">&nbsp*</span>
                     <input type = "text" class = "form-control" id = "email" name = "email"  placeholder="email@domain.com"/>
 
-                    <label for="phone"><b>Mobile Number</b></label><span class="required">&nbsp*</span>
-                    <input type="text" class="form-control" id="mob" name="mob"  placeholder="09xxxxxxxxx">
-
+                    <label for="phone"><b>Contact Number/s:</b></label><span class="required">&nbsp*</span>
+                    <div class="form-group input-group removable">
+                              <input type="text" name="size[]" class="form-control" placeholder="09xxxxxxxxx" required>
+                              <span class="input-group-btn"><button type="button" class="btn btn-primary btn-add">+</button></span> 
+                    </div>
                     <label for="address"><b>Home Address</b></label><span class="required">&nbsp*</span>
                     <textarea rows="4" class="form-control" id="address" name="address"></textarea>
 
@@ -268,6 +270,7 @@ label{
 
  @stop
   @section('script')
+<script type="text/javascript" src="{{ URL::asset('js/multipleAddinArea.js') }}"></script>
 <script type="text/javascript">
       $(document).ready(function(){
           $('input').icheck({
@@ -276,7 +279,7 @@ label{
             increaseArea: '20%' // optional
           });
 
-          $
+          
       });
 </script>
   @stop 
