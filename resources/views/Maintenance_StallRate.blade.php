@@ -1,34 +1,26 @@
-@extends('layout.app') 
-
-@section('title')
-    {{'Stall Rate'}}
-@stop
-@section('content-header')
+@extends('layout.app') @section('title') {{'Stall Rate'}} @stop @section('content-header')
 <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
     <li class="active">Stall Rate</li>
 </ol> @stop @section('content')
-<div class = "box box-primary">
-
-    <div class = "box-body">
-    <div class="table-responsive">
-         <div class = "defaultNewButton">
-            <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall Rate </button>
-             <div class = " pull-right" id = "archive">
-                                 <a href="{{ url('/StallRateArchive') }}" class="btn btn-primary btn-flat" ><span class='fa fa-archive'></span>&nbspArchive</a>
-             </div>
+<div class="box box-primary">
+    <div class="box-body">
+        <div class="table-responsive">
+            <div class="defaultNewButton">
+                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp New Stall Rate </button>
+                <div class=" pull-right" id="archive"> <a href="{{ url('/StallRateArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
+            </div>
+            <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
+                <thead>
+                    <tr>
+                        <th>Stall Type</th>
+                        <th>Size</th>
+                        <th>Rate</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
-        <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Stall Type</th>
-                    <th>Collection</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
     </div>
 </div>
 <div class="modal fade" id="new" tabindex="-1" role="dialog">
@@ -43,25 +35,47 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="stype">Stall Type</label><span class="required">&nbsp*</span>
-                                <select class="form-control stypeSelect" name="stypeID"> </select>
+                                <label for="stype">Stall Type</label><span class="required">&nbsp*</span><br>
+                                <select class="js-example-basic-multiple stypeSelect form-control" multiple='multiple' name="stype[]" style="width:100%"> </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="stype">Collection Type</label><span class="required">&nbsp*</span>
+                                <select class="form-control collection" name="collection">
+                                    <option value="1">Monthly</option>
+                                    <option value="2">Weekly</option>
+                                    <option value="3">Daily</option>
+                                    <option value="4">Daily (Different rates per day)</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Collection</label><span class="required">&nbsp*</span>
-                                <select class="form-control" name="collection">
-                                    <option value='1'>Daily</option>
-                                    <option value='2'>Weekly</option>
-                                    <option value='3'>Monthly</option>
-                                </select>
+                            <label for="stype">Date of Effect</label><span class="required">&nbsp*</span>
+                            <div class="input-group date datepicker">
+                                <input type="text" class="form-control" name="effect">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Rate</h4>
+                            <div class="form-group ratediv">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Php.</span>
+                                    <input type="text" class="form-control">
+                                </div>
                             </div>
                         </div>
                     </div>
                        <p class="small text-danger">Fields with asterisks(*) are required</p>
                 </div>
                 <div class="modal-footer">
-                    <!-- <label style="float:left">All labels with "*" are required</label> -->
                      <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                 </div>
             </div>
@@ -81,26 +95,21 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="stype">Stall Type</label><span class="required">&nbsp*</span>
-                                <select class="form-control stypeSelect" name="stypeID"> </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Collection</label><span class="required">&nbsp*</span>
-                                <select class="form-control" name="collection">
-                                    <option value='1'>Daily</option>
-                                    <option value='2'>Weekly</option>
-                                    <option value='3'>Monthly</option>
-                                </select>
-                            </div>
+                                <label for="stype">Stall Type: </label>
+                                <h3 class="typename"></h3> </div>
                         </div>
                     </div>
-                       <p class="small text-danger">Fields with asterisks(*) are required</p>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Sizes</label>
+                        </div>
+                    </div>
+                    <div class="row sizerow"> </div>
+                    <p class="small text-danger">Fields with asterisks(*) are required</p>
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                     <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+                    <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                 </div>
             </div>
         </form>
@@ -109,27 +118,30 @@
 <script type="text/javascript">
     var obj;
     var chk;
+    var today = new Date(Date.now()).toLocaleString();
+    $('.datepicker').datepicker({
+       startDate: today
+        , todayHighlight: true
+     });
     $(document).ready(function () {
+        $('.js-example-basic-multiple').select2({width: 'resolve'});
         getStallTypes();
         getBuildings();
         $('#table').DataTable({
-            ajax: '/rateTable'
+            ajax: '/stypeTable'
             , responsive: true
             , "columns": [
                 {
-                    "data": "srateID"
-                }
-                    , {
-                    "data": "stall_type.stypeName"
+                    "data": "stypeName"
                 }
                     , {
                     "data": function (data, type, dataToSet) {
-                        if (data.building !== null) return data.building.bldgName;
-                        else return "All";
+                        var string = data.s_type_size[0].stypeArea + "m<sup>2</sup>";
+                        for (var i = 1; i < data.s_type_size.length; i++) {
+                            string += ", " + data.s_type_size[i].stypeArea + "m<sup>2</sup>";
+                        }
+                        return string;
                     }
-                }
-                    , {
-                    "data": "collection"
                 }
                     , {
                     "data": "actions"
@@ -140,7 +152,7 @@
                     "width": "180px"
                     , "searchable": false
                     , "sortable": false
-                    , "targets": 4
+                    , "targets": 2
                     }
   ]
         });
@@ -250,6 +262,23 @@
             $(this).find('form').validate().resetForm();
             $(this).find('form')[0].reset();
         })
+        
+        $('.collection').on('change',function(){
+            if($(this).val() == 4){
+                $(this).parents('.row').next().find('.ratediv').html(
+                "<div class='form-group'><label>Sunday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>"
+                + "<label>Monday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>"
+                + "<label>Tuesday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>"
+                + "<label>Wednesday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>"
+                + "<label>Thursday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>"
+                + "<label>Friday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>"
+                + "<label>Saturday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div></div>"
+                );
+            }else{
+                $(this).parents('.row').next().find('.ratediv').html(
+                "<div class='form-group'><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>");
+            }
+        });
     });
 
     function getInfo(id) {
@@ -286,13 +315,11 @@
                 stype = JSON.parse(data);
                 var opt = "";
                 for (var i = 0; i < stype.length; i++) {
-                    var rate = null;
-                    if (stype[i].stall_rate.length > 0) {
-                        rate = _.find(stype[i].stall_rate, {
-                            'bldgID': null
-                        });
+                    opt += "<optgroup label='" + stype[i].stypeName + "'>";
+                    for (var j = 0; j < stype[i].s_type_size.length; j++) {
+                        opt += '<option value="' + stype[i].s_type_size[j].pivot.stype_SizeID + '">' + stype[i].stypeName + "(" + stype[i].s_type_size[j].stypeArea + 'm&sup2; )</option>';
                     }
-                    if (rate == null) opt += '<option value="' + stype[i].stypeID + '">' + stype[i].stypeName + '</option>';
+                    opt += "</optgroup>";
                 }
                 $(".stypeSelect").each(function () {
                     $(this).html(opt);
@@ -320,4 +347,11 @@
             }
         });
     }
-</script> @stop
+</script>
+<style>
+    .input-group-addon{
+        background-color: gray !important;
+        color: white;
+    }
+</style>
+@stop

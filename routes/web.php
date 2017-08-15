@@ -97,34 +97,27 @@ Route::post('/deleteSType', 'StallTypeController@deleteSType');
 Route::post('/getSizes', 'StallTypeController@getSizes');
 Route::post('/deleteStypeSize', 'StallTypeController@deleteStypeSize');
 
-Route::get('/stallTable', 'Controller@getStalls');
-Route::post('/bldgOptions', 'Controller@getBuildingOption');
-Route::post('/getStallID', 'Controller@getStallID');
-Route::post('/addStall', 'Controller@addStall');
-Route::post('/stypeOptions', 'Controller@getSTypeOption');
-Route::post('/getUtilities', 'Controller@getUtilities');
-Route::post('/getStallInfo', 'Controller@getStallInfo');
-Route::post('/UpdateStall', 'Controller@updateStall');
-Route::post('/deleteStall', 'Controller@deleteStall');
-Route::post('/addStallRate', 'Controller@addStallRate');
-Route::get('/rateTable', 'Controller@getStallRates');
-Route::post('/getRateInfo', 'Controller@getRateInfo');
-Route::post('/updateRate', 'Controller@updateRate');
+Route::get('/stallTable', 'StallController@getStalls');
+Route::post('/bldgOptions', 'StallController@getBuildingOption');
+Route::post('/getStallID', 'StallController@getStallID');
+Route::post('/addStall', 'StallController@addStall');
+Route::post('/stypeOptions', 'StallController@getSTypeOption');
+Route::post('/getUtilities', 'StallController@getUtilities');
+Route::post('/getStallInfo', 'StallController@getStallInfo');
+Route::post('/UpdateStall', 'StallController@updateStall');
+Route::post('/deleteStall', 'StallController@deleteStall');
+
+Route::post('/addStallRate', 'RateController@addStallRate');
+Route::get('/rateTable', 'RateController@getStallRates');
+Route::post('/getRateInfo', 'RateController@getRateInfo');
+Route::post('/updateRate', 'RateController@updateRate');
+
 Route::get('/feeTable', 'Controller@getFees');
 Route::post('/addFee', 'Controller@addFee');
 Route::post('/updateFee', 'Controller@updateFee');
 Route::post('/deleteFee', 'Controller@deleteFee');
 Route::post('/getFeeInfo', 'Controller@getFeeInfo');
-Route::get('/penTable', 'Controller@getPenalties');
-Route::post('/addPenalty', 'Controller@addPenalty');
-Route::post('/updatePenalty', 'Controller@updatePenalty');
-Route::post('/deletePenalty', 'Controller@deletePenalty');
-Route::post('/getPenaltyInfo', 'Controller@getPenaltyInfo');
-Route::get('/utilTable', 'Controller@getUtilitiesTable');
-Route::post('/addUtility', 'Controller@addUtility');
-Route::post('/updateUtility', 'Controller@updateUtility');
-Route::post('/deleteUtility', 'Controller@deleteUtility');
-Route::post('/getUtilityInfo', 'Controller@getUtilityInfo');
+
 Route::post('/getFees', 'Controller@getFeesOpt');
 Route::post('/checkRate', 'Controller@checkRate');
 

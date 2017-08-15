@@ -50,8 +50,17 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Stall Type</label><span class="required">&nbsp*</span>
-                                                <select class="form-control stypeSelect" style="width: 100%;" name="type"> </select>
+                                                <!--<div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Stall Type <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu stalltype">
+                                                        
+                                                    </ul>
+                                                </div>-->
+                                                <select class='stalltype form-control' name="type">
+                                                    
+                                                </select>
                                             </div>
+                                            
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -100,8 +109,16 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Stall Type</label><span class="required">&nbsp*</span>
-                                                <select class="form-control stypeSelect" style="width: 100%;" name="type"> </select>
-                                            </div>
+                                                <!--<div class="dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Stall Type <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu stalltype">
+                                                        
+                                                    </ul>
+                                                </div>-->
+                                                <select class='stalltype form-control' name="type">
+                                                    
+                                                </select>
+                                            </div>                                            
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -159,8 +176,8 @@
                     }
                     , {
                         "data": function (data, type, dataToSet) {
-                            if(data.stall_type != null){
-                                return data.stall_type.stypeName;
+                            if(data.stypeName != null){
+                                return data.stypeName + "("+data.stypeArea+"m&sup2;)";
                             }
                             else{
                                 return "N/A";
@@ -169,7 +186,7 @@
                     }
                     , {
                         "data": function (data, type, dataToSet) {
-                            return "Floor " + data.floor.floorNo + ", " + data.floor.building.bldgName;
+                            return "Floor " + data.floorLevel + ", " + data.bldgName;
                         }
                     }
                     , {
@@ -234,12 +251,12 @@
                 $('#newform').find('.bldgSelect').trigger('change');
                 $('#newform').find('.floorSelect').trigger('change');
                 if ($(this)[0] == $('#update')[0]) {
-                    if(obj.stall_type != null)
-                        $(this).find('select[name=type]').val(obj.stall_type.stypeID);
+                    if(obj.stype_SizeID != null)
+                        $(this).find('select[name=type]').val(obj.stype_SizeID);
                     else
                         $(this).find('select[name=type]')[0].selectedIndex = -1;
                     $(this).find('input[name=stallID]').val(obj.stallID);
-                    $(this).find('input[name=floor]').val(obj.floor.floorNo);
+                    $(this).find('input[name=floor]').val(obj.floor.floorLevel);
                     $(this).find('input[name=building]').val(obj.floor.building.bldgName);
                 }
             })
@@ -260,7 +277,7 @@
                 selected = building[$(this).val()];
                 var option = "";
                 for (var i = 0; i < selected.floor.length; i++) {
-                    option += "<option value='" + selected.floor[i].floorID + "'>" + selected.floor[i].floorNo + "</option>";
+                    option += "<option value='" + selected.floor[i].floorID + "'>" + selected.floor[i].floorLevel + "</option>";
                 }
                 $(this).parent().parent().next().find('.floorSelect').html(option).trigger('change');
             })
@@ -335,9 +352,13 @@
                     stype = JSON.parse(data);
                     var opt = "";
                     for (var i = 0; i < stype.length; i++) {
-                        opt += '<option value="' + stype[i].stypeID + '">' + stype[i].stypeName + '</option>';
+                        opt += "<optgroup label='"+stype[i].stypeName+"'>";
+                        for(var j = 0; j < stype[i].s_type_size.length; j++){
+                            opt += '<option value="'+stype[i].s_type_size[j].pivot.stype_SizeID+'">' + stype[i].s_type_size[j].stypeArea + 'm&sup2;</sup></option>';   
+                        }
+                        opt += "</optgroup>";
                     }
-                    $(".stypeSelect").each(function () {
+                    $(".stalltype").each(function () {
                         $(this).html(opt);
                     });
                 }

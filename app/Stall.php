@@ -16,18 +16,10 @@ class Stall extends Model
     public $incrementing = false;
     
     public function StallType(){
-        return $this->belongsTo('App\StallType','stypeID');
+        return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID');
     }
     
     public function Floor(){
         return $this->belongsTo('App\Floor','floorID');
-    }
-    
-    public function Utility(){
-        return $this->belongsToMany('App\Utility','tblStall_Utilities','utilID','stallID');
-    }
-    
-    public function StallUtil(){
-        return $this->hasMany('App\StallUtil','stallID');
     }
 }

@@ -15,7 +15,7 @@ class StallType extends Model
     protected $dates = ['deleted_at'];
     
     public function STypeSize(){
-        return $this->belongsToMany('App\StallTypeSize','tblStallType_StallSize','stypeID','stypeSizeID');
+        return $this->belongsToMany('App\StallTypeSize','tblStallType_StallSize','stypeID','stypeSizeID')->withPivot('stype_SizeID')->orderBy('stypeArea','ASC');
     }
     
     public function Stall(){

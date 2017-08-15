@@ -61,50 +61,42 @@
                                     <textarea class="form-control" id="bldgDesc" name="bldgDesc" placeholder="Building Description"></textarea>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="bldgDesc">No. of Floors</label>
-                                    <div class="input-group"> <span class="input-group-btn">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <label for="bldgDesc">No. of Floors</label>
+                                            <div class="input-group"> <span class="input-group-btn">
                                           <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="noOfFloor" disabled>
                                           <span class="glyphicon glyphicon-minus"></span> </button>
-                                        </span>
-                                        <input type="text" name="noOfFloor" class="form-control input-number" value="1" min="1" max="100" oninput="showTable('#floortbl')" onchange="showTable('#floortbl')"> <span class="input-group-btn">
+                                                </span>
+                                                <input type="text" name="noOfFloor" class="form-control input-number" value="1" min="1" max="100" oninput="showTable('#floortbl')" onchange="showTable('#floortbl')"> <span class="input-group-btn">
                                               <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="noOfFloor">
                                                   <span class="glyphicon glyphicon-plus"></span> </button>
-                                        </span>
-                                    </div>
-                                    <div class="" id="errordiv" style="width:200%">
-
-                                    </div>
-                                    <table id='floortbl'>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" id="errordiv" style="width:200%"> </div>
+                                        <table class="table table-bordered table-striped" role="grid" id='floortbl'>
                                         <thead>
-                                            <tr>
-                                                <th width='33%'>Floor</th>
-                                                <th width='33%'>No. Of Stalls
-                                                    <button onclick="resetNoOfStall()" type="button">reset</button>
-                                                </th>
-                                                <th width='33%'>Capacity
-                                                    <button onclick="resetCapacity()" type="button">reset</button>
-                                                </th>
-                                            </tr>
+                                            <th style="width:40%">Floor No.</th>
+                                            <th style="width:40%">No. of stalls
+                                                <button class="btn btn-default" onclick="resetNoOfStall()" type="button">reset</button>
+                                            </th>
+                                            <th>Capacity
+                                                <button class="btn btn-default" onclick="resetCapacity()" type="button">reset</button>
+                                            </th>
                                         </thead>
                                         <tbody>
-                                            <tr class="removable first">
-                                                <td>1</td>
-                                                <td>
-                                                    <input type="text" name="noOfStall[]"> 
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="capacity[]"> 
-                                                </td>
-                                            </tr>
+                                            <tr class="removable first"><td>1</td><td><input type="text" name="noOfStall[]" onchange="addNoOfStall(this)"></td><td><input type="text" name="capacity[]" onchange="addCapacity(this)"></td></tr>    
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <p class="small text-danger">Fields with asterisks(*) are required</p>
                     </div>
+                    <p class="small text-danger">Fields with asterisks(*) are required</p>
                     <div class="modal-footer">
                         <!-- <label style="float:left">All labels with "*" are required</label> -->
                         <div class="pull-right">
@@ -115,93 +107,93 @@
             </form>
         </div>
     </div>
-    <div class="modal fade" id="update" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Update Building</h4> </div>
-                <div class="modal-body">
-                    <div id="tabcontroll" class="container" style="width:100%">
-                        <ul class="nav nav-pills">
-                            <li class="active"> <a href="#1" data-toggle="tab">Building</a> </li>
-                            <li><a href="#2" data-toggle="tab">Floors</a> </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="1">
-                                <form class="building" action="" method="post" id="updateform">
-                                    <input type="hidden" id="_tokenUp" name="_token" value="<?php echo csrf_token(); ?>">
-                                    <input type="hidden" name="id" id="idUp">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="bldgNameUp">Building Name</label><span class="required">&nbsp*</span>
-                                                <input type="text" class="form-control" id="bldgNameUp" name="bldgName" placeholder="Building Name" /> </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="bldgCodeUp">Building Code</label><span class="required">&nbsp*</span>
-                                                <input type="text" class="form-control" id="bldgCodeUp" name="bldgCode" placeholder="Building Code" /> </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="bldgDescUp">Description</label>
-                                                <textarea class="form-control" id="bldgDescUp" name="bldgDesc" placeholder="Building Description"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="bldgDescUp">Current No Of Floor</label>
-                                                <input type="text" id="curfloor" style="text-align:center" readonly> </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="bldgDesc">Add Floor(/s)</label>
-                                                <div class="input-group"> <span class="input-group-btn">
-                                                        <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="noOfFloorUp" disabled>
-                                                        <span class="glyphicon glyphicon-minus"></span> </button>
-                                                    </span>
-                                                    <input type="text" id="noOfFloorUp" name="noOfFloorUp" class="form-control input-number" value="0" min="0" max="100" oninput="showTable('#floortblup')" onchange="showTable('#floortblup')"> <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="noOfFloorUp">
-                                                  <span class="glyphicon glyphicon-plus"></span> </button>
-                                                    </span>
-                                                </div>
-                                                <table id='floortblup' style="display:none">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width='50%'>Floor</th>
-                                                            <th width='50%'>No. Of Stalls</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody> </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="bldgDesc">Remove Floor(/s)</label>
-                                                <input id="removefloor" type="text" class="form-control input-number" name="remove" placeholder="Enter number of floors"> </div>
+</div>
+<div class="modal fade" id="update" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Update Building</h4> </div>
+            <div class="modal-body">
+                <div id="tabcontroll" class="container" style="width:100%">
+                    <ul class="nav nav-pills">
+                        <li class="active"> <a href="#1" data-toggle="tab">Building</a> </li>
+                        <li><a href="#2" data-toggle="tab">Floors</a> </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="1">
+                            <form class="building" action="" method="post" id="updateform">
+                                <input type="hidden" id="_tokenUp" name="_token" value="<?php echo csrf_token(); ?>">
+                                <input type="hidden" name="id" id="idUp">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="bldgNameUp">Building Name</label><span class="required">&nbsp*</span>
+                                            <input type="text" class="form-control" id="bldgNameUp" name="bldgName" placeholder="Building Name" /> </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="bldgCodeUp">Building Code</label><span class="required">&nbsp*</span>
+                                            <input type="text" class="form-control" id="bldgCodeUp" name="bldgCode" placeholder="Building Code" /> </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="bldgDescUp">Description</label>
+                                            <textarea class="form-control" id="bldgDescUp" name="bldgDesc" placeholder="Building Description"></textarea>
                                         </div>
                                     </div>
-                                    <p class="small text-danger">Fields with asterisks(*) are required</p>
-                                </form>
-                            </div>
-                            <div class="tab-pane" id="2">
-                                <table id='floorUpTbl'>
-                                    <th style="width:40%">Floor No.</th>
-                                    <th style="width:40%">Current No. of stalls</th>
-                                    <th></th>
-                                </table>
-                                <tbody> </tbody>
-                            </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="bldgDescUp">Current No Of Floor</label>
+                                            <input type="text" id="curfloor" style="text-align:center" readonly> </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="bldgDesc">Add Floor(/s)</label>
+                                            <div class="input-group"> <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="noOfFloorUp" disabled>
+                                                        <span class="glyphicon glyphicon-minus"></span> </button>
+                                                </span>
+                                                <input type="text" id="noOfFloorUp" name="noOfFloorUp" class="form-control input-number" value="0" min="0" max="100" oninput="showTable('#floortblup')" onchange="showTable('#floortblup')"> <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="noOfFloorUp">
+                                                  <span class="glyphicon glyphicon-plus"></span> </button>
+                                                </span>
+                                            </div>
+                                            <table class="table table-bordered table-striped" role="grid" id='floortblup' style="display:none">
+                                                <thead>
+                                                    <tr>
+                                                        <th width='50%'>Floor</th>
+                                                        <th width='50%'>No. Of Stalls</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody> </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="bldgDesc">Remove Floor(/s)</label>
+                                            <input id="removefloor" type="text" class="form-control input-number" name="remove" placeholder="Enter number of floors"> </div>
+                                    </div>
+                                </div>
+                                <p class="small text-danger">Fields with asterisks(*) are required</p>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="2">
+                            <table class="table table-bordered table-striped" role="grid" id='floorUpTbl'>
+                                <th style="width:40%">Floor No.</th>
+                                <th style="width:40%">Current No. of stalls</th>
+                                <th>Capacity</th>
+                            </table>
+                            <tbody> </tbody>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <!-- <label style="float:left">All labels with "*" are required</label> -->
-                    <div class="pull-right">
-                        <button class="btn btn-primary btn-flat" onclick="$($('#tabcontroll li.active').find('a').attr('href')).find('form').submit();"><span class='fa fa-save'></span>&nbsp Save</button>
-                    </div>
+            </div>
+            <div class="modal-footer">
+                <!-- <label style="float:left">All labels with "*" are required</label> -->
+                <div class="pull-right">
+                    <button class="btn btn-primary btn-flat" onclick="$($('#tabcontroll li.active').find('a').attr('href')).find('form').submit();"><span class='fa fa-save'></span>&nbsp Save</button>
                 </div>
             </div>
         </div>
@@ -212,10 +204,8 @@
     var obj;
     $(document).ready(function () {
         jQuery.validator.addMethod("capacity", function (value, element) {
-            if(parseInt($(element).val()) > parseInt($(element).parent().next().find('input[type=text]').val()))
-                return false;
-            else
-                return true;
+            if (parseInt($(element).val()) > parseInt($(element).parent().next().find('input[type=text]').val())) return false;
+            else return true;
         }, "Number of stall can't be more than the capacity");
         $("#newform").validate({
             rules: {
@@ -255,12 +245,11 @@
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
-            , errorPlacement: function(error, element) {
-                if($(element).attr('name') == "noOfStall[]"){
+            , errorPlacement: function (error, element) {
+                if ($(element).attr('name') == "noOfStall[]") {
                     error.appendTo('#errordiv');
                 }
-                else
-                    error.insertAfter(element);
+                else error.insertAfter(element);
             }
         });
         $("#updateform").validate({
@@ -401,53 +390,17 @@
             $(this).find('form')[0].reset();
             $('.removable').not('.first').remove();
             $('#floortblup').css('display', 'none');
+            $('#removefloor').attr('disabled', false);
         })
         $('#addRemove').on('input', function () {
             if ($("input[name='addRemoveRadio']:checked").val() == 1) {
                 showTable('#floortblup');
             }
         });
-        $('input[name=addRemoveRadio]').on('mousedown', function (e) {
-            if ($(this).is(':checked')) {
-                $(this).prop('checked', false);
-                $(this).siblings('input[type=text]').prop('disabled', true);
-                $(this).siblings('input[type=text]').val(null);
-            }
-            else {
-                $(this).prop('checked', true);
-                $(this).siblings('input[type=text]').prop('disabled', false);
-            }
-            if (this.value == 2) {
-                $(this).siblings('table').css('display', 'none');
-                $('.removable').remove();
-            }
-            else {
-                if ($(this).is(':checked') && $('input[name=addRemove]').val() > 0) $('input[name=addRemove]').trigger('input');
-                else {
-                    $(this).siblings('table').css('display', 'none');
-                    $('.removable').remove();
-                }
-            }
-        });
-        $('input[name=addRemoveRadio]').on('click', function () {
-            return false;
-        });
         //plugin bootstrap minus and plus
         //http://jsfiddle.net/laelitenetwork/puJ6G/
-        $('#bldgName').bind('blur', function () {
-            if ($('#bldgCode').val() == '' && $('#bldgName').val().length > 4) $.ajax({
-                type: "POST"
-                , url: '/getCode'
-                , data: {
-                    "_token": "{{ csrf_token() }}"
-                    , "name": $("#newform").find("input[name=bldgName]").val().replace(/\s/g, '').toUpperCase()
-                }
-                , success: function (data) {
-                    $('#bldgCode').val(data);
-                }
-            });
-        });
-        $('#bldgName').bind('change', function () {
+        
+        $('#bldgName').on('change', function () {
             if ($('#bldgName').val().length > 4) $.ajax({
                 type: "POST"
                 , url: '/getCode'
@@ -460,7 +413,7 @@
                 }
             });
         });
-        $('#removefloor').bind('input', function () {
+        $('#removefloor').on('input', function () {
             if ($(this).val() > 0) {
                 $('#noOfFloorUp').val(0);
                 $('#noOfFloorUp').attr('disabled', true);
@@ -497,7 +450,7 @@
             , success: function (data) {
                 obj = JSON.parse(data);
                 for (i = 0; i < obj.length; i++) {
-                    $('#floorUpTbl tbody').append("<tr class='removable'><td>" + (i + 1) + "</td><td>" + obj[i].stall.length + "</td></tr>");
+                    $('#floorUpTbl tbody').append("<tr class='removable'><td>" + (i + 1) + "</td><td>" + obj[i].stall.length + "</td><td>" + obj[i].floorCapacity + "</td></tr>");
                 }
             }
         });
@@ -575,7 +528,7 @@
             }
         });
     }
-    
+
     function addCapacity(e) {
         var elem = $(e);
         $('input[name="capacity[]"').each(function () {
@@ -588,7 +541,7 @@
     function resetNoOfStall() {
         $('input[name="noOfStall[]"').val('');
     }
-    
+
     function resetCapacity() {
         $('input[name="capacity[]"').val('');
     }
