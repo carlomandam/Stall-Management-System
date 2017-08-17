@@ -28,22 +28,7 @@ class BuildingTableSeeder extends Seeder
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
-         DB::table('tblBuilding')->insert([
-            'bldgID' => 3,
-            'bldgName' => 'Taytay Stalls Center',
-            'bldgCode' => 'tayt3',
-            'bldgDesc' => 'Garments only',
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
-         DB::table('tblBuilding')->insert([
-            'bldgID' => 4,
-            'bldgName' => 'Stall Center',
-            'bldgCode' => 'Stal4',
-            'bldgDesc' => 'Garments only',
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
+         
 
     }
 }
