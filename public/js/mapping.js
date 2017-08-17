@@ -1,61 +1,44 @@
-
-
 $(document).on('change','.building',function(){
-  id = $(this).val();
-  console.log(id);
-		$('.floor').remove();
-		$('.floorname').text("Choose Floor no:");
-		$.ajax({
-		type: "GET",
-		url: '/kioskmap/bldg/'+id,
-		success: function(data)	{	
-      		
-				$('.buildingname').text(data.bldg.bldgName);
-			 $('.floors').append('<option disabled selected="selected" class="floor">--Select</option>');
-			$.each(data.bldg.floor,function(key,value){
-        $('.floors').append('<option value="'+value.floorID+'">'+value.floorDesc+'</option>');
-			
-			});
-
-		}
-
-	});
-	
-	
+    id = $(this).val();
+    console.log(id);
+		    $('.floor').remove();
+		    $('.floorname').text("Choose Floor no:");
+		    $.ajax({
+		        type: "GET",
+		        url: '/kioskmap/bldg/'+id,
+		        success: function(data)	{	
+				        $('.buildingname').text(data.bldg.bldgName);
+			          $('.floors').append('<option disabled selected="selected" class="floor">--Select</option>');
+			          $.each(data.bldg.floor,function(key,value){
+                    $('.floors').append('<option value="'+value.floorID+'">'+value.floorDesc+'</option>');
+			          });
+		        }
+	      });
 })
+
 $(document).on('change','.floors',function(){
-  id = $(this).val();
-  console.log(id);
-	console.log('succes');
-  	
-		$.ajax({
-		type: "GET",
-		url: '/kioskmap/floor/'+id,
-		success: function(data)	{	
-          // console.log(data.floor.stall);
-      		$('.floorname').text("Floor No."+data.floor.floorLevel);
-          $('.cap').text("/"+data.floor.floorCapacity);
-          $.each(data.floor.stall,function(key,value){
-            // var stall+value.stallID = {
-            //     type:+value.stype_SizedID+,
-            //     desc:'+value.stallDesc+',
+     id = $(this).val();
+		 $.ajax({
+		    type: "GET",
+		    url: '/kioskmap/floor/'+id,
+		    success: function(data)	{	
+      	   $('.floorname').text("Floor No."+data.floor.floorLevel);
+           $('.cap').text("/"+data.floor.floorCapacity);
+            $.each(data.floor.stall,function(key,value){
 
-            // }
-            // var stall'value.stallID' = {
-
-            // }
-            // console.log(value.stallID);
-            // console.log(value.stallDesc);
-          });
-          // init();
-
-
-		}
-
-	});
-	
-	
+            });
+		    }
+  	 });	
 })
+
+var sList = $('#stallList').DataTable({
+    'responsive': true,
+    "searching": true,
+    "paging": true,
+    "info": true,
+    "retrieve": true,
+});
+
 
 
 // // Setitng the Map

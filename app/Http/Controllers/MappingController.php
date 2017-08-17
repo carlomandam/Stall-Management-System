@@ -23,15 +23,15 @@ class MappingController extends Controller
     public function index()
     {
         $buildings = Building::all();
-        $rates = DB::table('tblstallType_stallSize as s')
-                    ->join('tblStallType as st' , 'st.stypeID' , 's.stypeID')
-                    ->join('tblStallType_Size as ss', 'ss.stypeSizeID', 's.stypeSizeID')
-                    ->join('tblStallRate as r','r.stype_SizeID','s.stype_SizeID')
-                    ->join('tblFrequency as f', 'f.frequencyID', 'r.frequencyID')
-                    ->join('tblStallRate_Details as sd', 'sd.stallRateID', 'r.stallRateID')
-                    ->get();
+        // $rates = DB::table('tblstallType_stallSize as s')
+        //             ->join('tblStallType as st' , 'st.stypeID' , 's.stypeID')
+        //             ->join('tblStallType_Size as ss', 'ss.stypeSizeID', 's.stypeSizeID')
+        //             ->join('tblStallRate as r','r.stype_SizeID','s.stype_SizeID')
+        //             ->join('tblFrequency as f', 'f.frequencyID', 'r.frequencyID')
+        //             ->join('tblStallRate_Details as sd', 'sd.stallRateID', 'r.stallRateID')
+        //             ->get();
          // return ($rates);           
-        return View('/KioskMap/index',compact('buildings','rates'));
+        return View('/KioskMap/index',compact('buildings'));
     }
 
     /**

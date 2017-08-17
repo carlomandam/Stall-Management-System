@@ -20,8 +20,7 @@ class TblStall extends Migration
             $table->string('stallDesc',200)->nullable();
             $table->string('stallRemarks',200)->nullable();
             $table->integer('stallStatus')->unsigned();
-            $table->integer('stallCol');
-             $table->integer('stallRow');
+            $table->integer('stallPos');
             $table->timestamps();
             $table->softDeletes();
             

@@ -8,7 +8,6 @@
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/mapping.css')}}">
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/Kioskmap.css')}}">
 @stop
-
 @section('content-header')
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i>Maintenance</a></li>
@@ -18,7 +17,6 @@
 
 @section('content')
   <div class="row">
-
       <div class="col-md-3">
 
           <!-- Border Choose Building -->
@@ -92,15 +90,15 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  @foreach($rates as $rate)
+                                
                                     <tr>
                                       <td id=""><input type="radio" name=""></td>
-                                      <td>{{$rate->stypeName}}</td>
-                                      <td>{{$rate->stypeArea}}<i>meter squared</i></td>
-                                      <td>{{$rate->frequencyDesc}}</td>
-                                      <td>{{$rate->dblRate}}</td>
+                                      <td></td>
+                                      <td><i></i></td>
+                                      <td></td>
+                                      <td></td>
                                     </tr>
-                                  @endforeach
+                                  
                                 </tbody>
                               </table>
                               
@@ -165,23 +163,34 @@
                         </div>
                           <!-- tab-pane fade in active -> map -->
 
-                        <div class="tab-pane fade" id="table">table</div>
+                        <div class="tab-pane fade" id="table">
+                              <table id = "stallList" class=" table table-hover" >
+                                    <thead>
+                                          <tr>
+                                                <th>Description</th>
+                                                <th>Remarks</th>
+                                                <th>Type and Size</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                          </tr>
+                                    </thead>
 
-                      </div>
-                    <!-- tab-content -->
+                                    <tbody>
+                                      
+                                    </tbody>
+                              </table>
+                        </div>
+
+                        </div>
+                        <!-- tab-content -->
                   </div>
                    <!-- panel-body nav-tabs-custom -->
-                 
             </div>
             <!-- panel with-nav-tabs panel-primary -->
-
          </div>
          <!-- col-md-12 -->
-
-         
       </div>
           <!-- col-md-9 -->
-
   </div>
     <!-- row -->
 
