@@ -13,7 +13,15 @@ class TblCharges extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('tblCharges', function (Blueprint $table) {
+            $table->increments('chargeID');
+            $table->string('chargeName',200);
+            $table->double('chargeAmount',10,2);
+            $table->integer('chargeType'); //Fixed or Percent of Billing
+            $table->timestamps();
+            $table->softDeletes();
+           
+        });
     }
 
     /**
@@ -23,6 +31,6 @@ class TblCharges extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('tblCharges');
     }
 }

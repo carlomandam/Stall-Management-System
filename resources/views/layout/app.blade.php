@@ -170,9 +170,13 @@
                         </li>
 
                          <li class = "treeview">    
-                              <a href="#"> 
+                              <a href="/Queries"> 
                               <i class="fa fa-circle"></i> <span>Queries</span>
+                              <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i> 
+                              </span> 
                               </a> 
+
                         </li>
 
                          <li class = "treeview">    
@@ -196,8 +200,8 @@
                               </a>
 
                               <ul class="treeview-menu">
-                                      <li class = "active"><a href="#"><i class="fa fa-circle-o "></i> Collection Summary</a></li>
-                                         <li><a href="../../index2.html"><i class="fa fa-circle-o"></i>Balance Summary</a></li>
+                                      <li class = "active"><a href="#"><i class="fa fa-circle-o "></i>Receivables Report</a></li>
+                                         <li><a href="#"><i class="fa fa-circle-o"></i>Stall Status Report</a></li>
                               </ul>
                         </li>
                    

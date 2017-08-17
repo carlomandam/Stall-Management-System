@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/Registration','ApplicationController@create');
+Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/List', 'ApplicationController@member');
 Route::get('/View', 'ApplicationController@Memview');
 Route::get('/Update', 'ApplicationController@Update');
@@ -138,10 +138,13 @@ Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
-Route::get('/UpdateRegistration','ManageContractsController@updateRegistration');
+Route::get('/UpdateRegistration/{rentID}','ManageContractsController@updateRegistration');
 
 Route::get('/getStallList','ManageContractsController@getStallList');
-
+Route::get('/getRegistrationList','RegistrationListController@getRegistrationList');
 
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment','PaymentController@paymentIndex');
+
+////////////////Queries/////////////
+Route::get('/Queries','QueriesController@index');

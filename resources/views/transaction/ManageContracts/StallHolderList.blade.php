@@ -50,13 +50,13 @@
 									<thead>
 										<tr>
 											<th>Name</th>
-											<th>Status</th>
+											
 											<th>Active Contract/s</th>
 										</tr>
 									</thead>
 									<tr>
 										<th>Brixter Duenas</th>
-										<th>Active</th>
+										
 										<th>1</th>
 									</div>
 								</tr>
@@ -162,7 +162,7 @@
 											<div class="col-sm-8">
 												<div class="input-group">
 													<div class="input-group-addon">
-														<i class="fa fa-calendar"></i>
+														<span class="fa fa-calendar"></span>
 													</div>
 													<input type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask  disabled="" />
 												</div>
@@ -308,7 +308,27 @@
 								</div>
 
 								<div class="tab-pane" id="tab_3-2">
-									tab3
+									<div class = "col-md-12">
+										
+											<div class = "table-responsive" >
+											<table id="prodtbl" class="table table-hover" role="grid" style="font-size:15px;">
+												
+													<th>Name</th>
+													<th>StallID</th>
+													<th>Contract Expiry Date</th>
+													<th style="width: 280px;">Actions</th>
+												
+											<tr>
+												<td>Brixter Duenas</td>
+												<td>1</td>
+												<td>2018-08-09</td>
+												<td><button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Contract</button> <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-print'></span>&nbspPrint</button></td>
+												
+											</tr>
+											</table>
+											</div>
+										
+									</div>
 								</div>
 
 							</div>

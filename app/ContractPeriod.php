@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class ContractPeriod extends Model
 {
     
-    protected $table = "tblcontract_period";
-    protected $primaryKey = "contract_periodID";
+    protected $table = "tblContract_Length";
+    protected $primaryKey = "contractLengthID";
     protected $dates = ['deleted_at'];
     
         public function ContractInfo(){

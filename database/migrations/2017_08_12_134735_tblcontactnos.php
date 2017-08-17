@@ -15,7 +15,7 @@ class Tblcontactnos extends Migration
     {
          Schema::create('tblContactNos', function (Blueprint $table) {
             $table->increments('contactID');
-            $table->integer('contactNumber');
+            $table->string('contactNumber','20');
             $table->softDeletes();
 
          });

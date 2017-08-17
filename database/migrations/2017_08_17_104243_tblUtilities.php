@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Tblutilities extends Migration
+class TblUtilities extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,14 @@ class Tblutilities extends Migration
     public function up()
     {
         Schema::create('tblUtilities', function (Blueprint $table) {
-            $table->increments('utilitiesID');
-            $table->string('utilitiesName',200);
-            $table->double('utilities_default_rate');
+            $table->string('initialFeeDesc',200);
+            $table->double('initialAmt',10,2);
+            $table->string('vendorCollectionStatusName',200);
+            $table->double('vendorCollectionMaxDebtAmt',10,2);
+            $table->timestamps();
             $table->softDeletes();
+            
+           
         });
     }
 

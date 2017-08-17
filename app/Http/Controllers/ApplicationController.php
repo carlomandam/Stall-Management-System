@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 use App;
 use DB;
-use App\Vendor;
+use App\StallHolder;
 use App\Stall;
+use App\StalLRental;
 use App\StallRate;
 use App\StallType;
 use App\Rent;
+use App\ContactNos;
 use App\ContractPeriod;
 use App\Contract;
 use App\ContractInfo;
@@ -39,21 +41,26 @@ class ApplicationController extends Controller
       return view ('transaction.Update');
      }
 
-     public function create()
-     {  //GET NEXT STALL HOLDER ID///
-
-       
+     public function create($stallid)
+     { 
          
-        
-        
-        return view('transaction.Application_temporary'/*,compact('nextId','stall','buildingNames','buildingCount','contract_period')*/);
+        $stall = DB::table('tblStall')
+            ->select('*')
+            ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
+            ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
+            ->leftJoin('tblstalltype_size as size', 'type.stypeSizeID', '=', 'size.stypeSizeID')
+            ->leftJoin('tblFloor as floor','tblStall.floorID','=','floor.floorID')
+            ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
+            ->where('tblStall.stallID',$stallid)
+            ->first();
+        return view('transaction.Application_temporary',compact('stall')/*,compact('nextId','stall','buildingNames','buildingCount','contract_period')*/);
     }
  
 
     
     function addVendor()
     { 
-      if(isset($_POST['ven_name'])) //if search existing record
+      /*if(isset($_POST['ven_name'])) //if search existing record
       {
         $vendor = Vendor::find($_POST['ven_name']);
      
@@ -110,68 +117,79 @@ class ApplicationController extends Controller
               $vendor->forceDelete();
             }
       }
-      else{
-        $vendor = new Vendor;
+      else{*/
+        $stallHolder = new StallHolder;
 
-        $vendor->venFName = $_POST['fname'];
-        $vendor->venMName = $_POST['mname'];
-        $vendor->venLName =  $_POST['lname'];
-        $vendor->venSex =  $_POST['sex'];
-        $vendor->venAddress =  $_POST['address'];
-        $vendor->venBday =  $_POST['DOBYear']."-". $_POST['DOBMonth']."-". $_POST['DOBDay'];
-        $vendor->venContact = $_POST['mob'];
-        $vendor->venEmail =  $_POST['email'];;
-        $savedVendor = $vendor->save();
-        if($savedVendor){
+        $stallHolder->stallHFName = $_POST['fname'];
+        $stallHolder->stallHMName = $_POST['mname'];
+        $stallHolder->stallHLName =  $_POST['lname'];
+        $stallHolder->stallHSex =  $_POST['sex'];
+        $stallHolder->stallHAddress =  $_POST['address'];
+        $stallHolder->stallHBday =  $_POST['DOBYear']."-". $_POST['DOBMonth']."-". $_POST['DOBDay'];
+        $stallHolder->stallHEmail =  $_POST['email'];
+
+        $savedStallHolder = $stallHolder->save();
+
+        if($savedStallHolder){
             try{
-                $input = Input::get('stallno_name');
-                $count = count($input);
-                  foreach($input as $Input)
-                 {   $rent = new Rent;
-                    $rent->stallID = $Input;
-                    $rent->venID = $vendor->venID;
+               
+                    $rent = new StallRental;
+                    if(isset($_POST['dispStallID']))
+                    {
+                      $stallid = $_POST['dispStallID'];
+                    
+                    }
+                    else{
+                    $stallid = $_POST['dispStallID'];
+                    $rent->stallID = $stallid;
+                    $rent->stallHID = $stallHolder->stallHID;
+                    $rent->orgName = $_POST['orgname'];
                     $date1 = $_POST['datepicker'];
                     $date1 = date('Y-m-d', strtotime($date1));
-                    $rent->rentStartDate = $date1;
-                    $rent->rentRegDate = date('Y-m-d');
-                    $rent->rentBusinessName = $_POST['businessName'];
-                    $rent->rentProdDesc = $_POST['prods']; 
-                    $rent->assocHolder_1 =$_POST['assoc_one'];
-                    $rent->assocHolder_2 =$_POST['assoc_two'];
-                   
-
-
+                    $rent->startingDate = $date1;
+                    $rent->businessName = $_POST['businessName'];
+                    $rent->stallRentalStatus = 0;
+                    }
                     if( $rent->save())
                     {
-                     // $rent->save();
+                      
+                     foreach($_POST['numbers'] as $no)
+                     {
+                      $contact = new ContactNos;
+                      $contact->stallRentID = $rent->stallRentID;
+                      $contact->ContactNos()->attach($no);
+                      
+                     }
 
                      
-                      $contract = new Contract;
-                      $contract->rentID = $rent->rentID;
-                     
-                      $contract->contractStatus = 0;
 
-                      $contract->save();
-                      if($contract->save())
-                      { $periodID = $_POST['length'];
-                        $length = (!isset($_POST['specific_no']) ? 1 : $_POST['specific_no']);
-                            
-                         
-                        $contract->contractPeriods()->attach($periodID, ['contractLength' => $length ]);
-                        
-                      }
-                      else
-                      {
-                        App::abort(500,"Error");
-                      }
-                    
-                    
+                    if(isset($_POST['assoc_one']))
+                    {
+                      $stallholder = new StallHolder;
+                      $stallholder->stallH_assocName = $_POST['assoc_one'];
+                      $stallholder->save();
+
+                      $stallholder->stallRentID = $rent->stallRentID;
+                      $associd = $stallholder->stallH_assocID;
+                      $stallholder->StallHolder()->attach($associd);
+                    }
+                    if(isset($_POST['assoc_two']))
+                    {
+                      $stallholder = new StallHolder;
+                      $stallholder->stallH_assocName = $_POST['assoc_two'];
+                      $stallholder->save();
+
+                      $stallholder->stallRentID = $rent->stallRentID;
+                      $associd = $stallholder->stallH_assocID;
+                      $stallholder->StallHolder()->attach($associd);
+                    }
+
                     }
                     else
                     {
                       App::abort(500,'Error');
                     }
-               }
+               
            
             }catch(Exception $e)
             {
@@ -179,7 +197,7 @@ class ApplicationController extends Controller
             }
         }
      
-      }
+     // }
   
 
     }

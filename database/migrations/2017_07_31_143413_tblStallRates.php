@@ -15,13 +15,13 @@ class TblStallRates extends Migration
     {
         Schema::create('tblStallRate', function (Blueprint $table) {
             $table->increments('stallRateID');
-            $table->integer('frequencyID')->unsigned();
+            $table->integer('frequencyDesc');
             $table->date('stallRateEffectivity');
             $table->integer('stype_SizeID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
              
-            $table->foreign('frequencyID')->references('frequencyID')->on('tblFrequency');
+       
             $table->foreign('stype_SizeID')->references('stype_SizeID')->on('tblstallType_stallSize');
         });
     }

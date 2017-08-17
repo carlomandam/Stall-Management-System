@@ -18,7 +18,7 @@ class TblStallHolder extends Migration
             $table->string('stallHFName',200);
             $table->string('stallHMName',200)->nullable();
             $table->string('stallHLName',200);
-            $table->dateTime('stallHBday');
+            $table->date('stallHBday');
             $table->integer('stallHSex');
             $table->string('stallHEmail',200);
             $table->string('stallHAddress',500);

@@ -77,19 +77,25 @@ label{
                 <input type = "text" class = "form-control" id = "orgname" name = "orgname" />
 
                 <label for="firstName"><b>First Name</b></label><span class="required">&nbsp*</span>
-                <input type="text" class="form-control" id="fname" name ="fname" placeholder="E.G. Jose Protacio">
+                <input type="text" class="form-control" id="fname" name ="fname" placeholder="E.G. Jose Protacio" value ="{{$stallHolderDetails->stallHFName}}">
 
                 <label for="middleName"><b>Middle Name</b></label>
-                <input type="text" class="form-control" id="mname" name="mname" placeholder="E.G. Alonso Realonda">
+                <input type="text" class="form-control" id="mname" name="mname" placeholder="E.G. Alonso Realonda" value ="{{$stallHolderDetails->stallHMName}}">
 
                 <label for="lastname"><b>Last Name</b></label><span class="required">&nbsp*</span>
-                <input type="text" class="form-control" id="lname" name="lname"  placeholder="E.G. Mercado Rizal">
+                <input type="text" class="form-control" id="lname" name="lname"  placeholder="E.G. Mercado Rizal" value ="{{$stallHolderDetails->stallHLName}}">
 
-                
                 <label for="sex"><b>Sex</b></label><span class="required">&nbsp*</span>
+                @if($stallHolderDetails->stallHSex == 0)
                 
-                    <label><input type="radio" name="iCheck" id = "sex1" value="1" checked="checked"><b>Male</b></label>
-                    <label><input type="radio" name="iCheck" id = "sex0" value="0"><b>Female</b></label>
+                  <label><input type="radio" name="sex" id = "sex0" value="0"  ><b>Male</b></label>
+                  <label><input type="radio" name="sex" id = "sex0" value="0" checked ><b>Female</b></label>
+                
+                @else
+                  <label><input type="radio" name="sex" id = "sex0" value="0" checked=""><b>Male</b></label>
+                    <label><input type="radio" name="iCheck" id = "sex1" value="1"><b>Female</b></label>
+                    
+                @endif
                 <div class="form-inline">
                 <label for="bday"><b>Birthday</b></label><span class="required">&nbsp*</span>
                     
@@ -156,13 +162,13 @@ label{
                     
                      
                     <label for = "email">Email Address</label><span class="required">&nbsp*</span>
-                    <input type = "text" class = "form-control" id = "email" name = "email"  placeholder="email@domain.com"/>
+                    <input type = "text" class = "form-control" id = "email" name = "email"  placeholder="email@domain.com" value = "{{$stallHolderDetails->stallHEmail}}"/>
 
                     <label for="phone"><b>Mobile Number</b></label><span class="required">&nbsp*</span>
                     <input type="text" class="form-control" id="mob" name="mob"  placeholder="09xxxxxxxxx">
 
                     <label for="address"><b>Home Address</b></label><span class="required">&nbsp*</span>
-                    <textarea rows="4" class="form-control" id="address" name="address"></textarea>
+                    <textarea rows="4" class="form-control" id="address" name="address">{{$stallHolderDetails->stallHAddress}}</textarea>
 
               </div>
                    
@@ -192,7 +198,7 @@ label{
             <div class="col-md-6">
               <div class="form-group">
                  <label>Stall Code</label>
-                 <input type="text" class="form-control" disabled=""  />
+                 <input type="text" class="form-control" disabled="" value ="{{$stallDetails->stallID}}" />
            
                  <label>Stall Rate</label>
                  <textarea type="text" class="form-control" disabled=""></textarea>
@@ -206,23 +212,34 @@ label{
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Stall Type</label>
-                    <input type="text" class="form-control" disabled=""  />
+                    <input type="text" class="form-control" disabled=""   value = " {{$stallDetails->stypeName }} ({{$stallDetails->stypeArea}} m&sup2) " />
 
                     <label>Location</label>
-                    <textarea type="text" class="form-control" disabled=""  /></textarea>
+                    <textarea type="text" class="form-control" disabled=""  />Floor {{$stallDetails->floorLevel}},{{$stallDetails->bldgName}} Building</textarea>
 
                 </div>
+                <div class="col-md-12">
+                <div class="pull-right" style="margin-top: 30px; ">
+                <button type = "button" class="btn btn-flat btn-primary" style="width: 100px;" onclick = "window.location= '{{ (url('/StallList')) }}'">Edit</button>
+                </div>
+            </div>
+
             </div>
             <!--/.col-md-6 -->
 
             <div class="col-md-12">
                 <label for="bussiname">Business Name</label>
-                <input type="text" class="form-control" id="businessName" name ="businessName" />
+                <input type="text" class="form-control" id="businessName" name ="businessName" value = "{{$stallrental->businessName}}"/>
             </div>
 
             <div class="col-md-12">
                 <label for="startdate">Starting Date </label><span class="required">&nbsp*</span>
-                <input type="text" class="form-control" id='datepicker' name='datepicker'  readonly="readonly"  style=" cursor:pointer;background:white;"/> </div>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                <input type="text" class="form-control pull-right" id="datepicker">
+                </div>
             </div>
 
             <div class="col-md-12">
@@ -230,6 +247,7 @@ label{
                 <input type="checkbox" id="check_assoc"><b>Associate Stall Holder(s)</b> <small>(Maximum of 2 people)</small></label>
             </div>
 
+            <div id = "assoc_hold">
             <div class="col-md-6">
                 <label for="assoc1"><b>Associate 1</b></label>
                 <input type="text" class="form-control" placeholder="Full Name" id="assoc_one" name ="assoc_one"> 
@@ -238,6 +256,7 @@ label{
             <div class="col-md-6">
                 <label for="assoc2"><b>Associate 2</b></label>
                 <input type="text" class="form-control" / placeholder="Full Name" id="assoc_two" name ="assoc_two"> 
+            </div>
             </div>
 
             <div class="col-md-12">
@@ -270,13 +289,62 @@ label{
   @section('script')
 <script type="text/javascript">
       $(document).ready(function(){
-          $('input').icheck({
-            checkboxClass: 'icheckbox_square',
-            radioClass: 'iradio_square',
-            increaseArea: '20%' // optional
-          });
+        //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
+        var select = $('#DOBYear');
+        var leastYr = 1960;
+        var nowYr = new Date().getFullYear();
+        for (var v = nowYr; v >= leastYr; v--) {
+            $('#DOBYear').append('<option value ="' + v + '">' + v + '</option');
+        }
+        //HIDE ASSOCIATE HOLDERS//
+        $('#assoc_hold').hide();
+        $(document).on('click', '#check_assoc', function () {
+            if ($('#check_assoc').prop('checked') == true) {
+                $('#assoc_hold').fadeIn();
+            }
+            else {
+                $('#assoc_hold').fadeOut();
+            }
+        });
 
-          $
+      //DISPLAY AGE//
+      $('#DOBYear').on('change',function(){
+        var day = $('#DOBDay').val();
+        var month = $('#DOBMonth').val();
+        var year = $('#DOBYear').val();
+        var today = new Date();
+        var birthday = new Date(year,month,day);
+        var age = today.getFullYear() - birthday.getFullYear();
+        $('#age').val(age);
+
+      });
+
+      //INITIALIZE DATEPICKER//
+      $("#datepicker").datepicker({
+        showOtherMonths: true
+        , selectOtherMonths: true
+        , changeMonth: true
+        , changeYear: true
+        , autoclose: true
+        , startDate: "dateToday"
+        , todayHighlight: true
+        , orientation: 'bottom'
+        ,format: 'mm-dd-yyyy'
+       });
+      //BIRTHDAY SELECTED//
+      var bday = {!! json_encode($stallHolderDetails->toArray(), JSON_HEX_TAG) !!};
+          $splitDate = bday["stallHBday"].split("-");
+          $('#DOBYear').val($splitDate[0]).attr('selected', true).siblings('option').removeAttr('selected');
+          $('#DOBMonth').val($splitDate[1]).attr('selected', true).siblings('option').removeAttr('selected');
+          $('#DOBDay').val($splitDate[2]).attr('selected', true).siblings('option').removeAttr('selected');  
+
+        var day = $('#DOBDay').val();
+        var month = $('#DOBMonth').val();
+        var year = $('#DOBYear').val();
+        var today = new Date();
+        var birthday = new Date(year,month,day);
+        var age = today.getFullYear() - birthday.getFullYear();
+        $('#age').val(age);  
       });
 </script>
   @stop 

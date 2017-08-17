@@ -50,6 +50,7 @@ label{
   @stop
 
   @section('content')
+ 
    <div class="row">
         <div style="margin-left: 20px; margin-bottom: 10px;">
                <a href="{{ url('/StallList') }}" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack to Stall List</a>
@@ -67,6 +68,8 @@ label{
           </div>
         </div>
         <!-- /.box-header -->
+        <form id ="applyForm" method = "post">
+        <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
         <div class="box-body" >
           <div class="row">
             <div class="col-md-12">
@@ -88,8 +91,8 @@ label{
                 
                 <label for="sex"><b>Sex</b></label><span class="required">&nbsp*</span>
                 
-                    <label><input type="radio" name="iCheck" id = "sex1" value="1" checked="checked"><b>Male</b></label>
-                    <label><input type="radio" name="iCheck" id = "sex0" value="0"><b>Female</b></label>
+                    <label><input type="radio" name="sex" id = "sex" value="1" checked="checked"><b>Male</b></label>
+                    <label><input type="radio" name="sex" id = "sex" value="0"><b>Female</b></label>
                 <div class="form-inline">
                 <label for="bday"><b>Birthday</b></label><span class="required">&nbsp*</span>
                     
@@ -160,7 +163,7 @@ label{
 
                     <label for="phone"><b>Contact Number/s:</b></label><span class="required">&nbsp*</span>
                     <div class="form-group input-group removable">
-                              <input type="text" name="size[]" class="form-control" placeholder="09xxxxxxxxx" required>
+                              <input type="text" name="numbers[]" class="form-control" placeholder="" required>
                               <span class="input-group-btn"><button type="button" class="btn btn-primary btn-add">+</button></span> 
                     </div>
                     <label for="address"><b>Home Address</b></label><span class="required">&nbsp*</span>
@@ -193,11 +196,11 @@ label{
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                 <label>Stall Code</label>
-                 <input type="text" class="form-control" disabled=""  />
+                 <label>Stall ID</label>
+                 <input type="text" class="form-control" readonly=""   name = "dispStallID" id = "dispStallID" value = "{{$stall->stallID}}">
            
                  <label>Stall Rate</label>
-                 <textarea type="text" class="form-control" disabled=""></textarea>
+                 <textarea type="text" class="form-control" disabled=""  name = "dispStallRate" id = "dispStallRate"></textarea>
                            
               </div>
 
@@ -208,10 +211,14 @@ label{
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Stall Type</label>
-                    <input type="text" class="form-control" disabled=""  />
+
+                 
+                    
+                               <input type="text" class="form-control" disabled=""  name = "dispStallType" id = "dispStallType" readonly="" value = " {{$stall->stypeName }} ({{$stall->stypeArea}} m&sup2) " />
+         
 
                     <label>Location</label>
-                    <textarea type="text" class="form-control" disabled=""  /></textarea>
+                    <textarea type="text" class="form-control" disabled=""  name = "dispStallLocation" id = "dispStallLocation" readonly="">Floor {{$stall->floorLevel}},{{$stall->bldgName}} Building</textarea>
 
                 </div>
             </div>
@@ -224,14 +231,21 @@ label{
 
             <div class="col-md-12">
                 <label for="startdate">Starting Date </label><span class="required">&nbsp*</span>
-                <input type="text" class="form-control" id='datepicker' name='datepicker'  readonly="readonly"  style=" cursor:pointer;background:white;"/> </div>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                <input type="text" class="form-control pull-right" id="datepicker">
+                </div>
             </div>
 
+           
             <div class="col-md-12">
                 <label class="checkbox-inline">
                 <input type="checkbox" id="check_assoc"><b>Associate Stall Holder(s)</b> <small>(Maximum of 2 people)</small></label>
             </div>
 
+            <div id = "assoc_hold">
             <div class="col-md-6">
                 <label for="assoc1"><b>Associate 1</b></label>
                 <input type="text" class="form-control" placeholder="Full Name" id="assoc_one" name ="assoc_one"> 
@@ -240,6 +254,7 @@ label{
             <div class="col-md-6">
                 <label for="assoc2"><b>Associate 2</b></label>
                 <input type="text" class="form-control" / placeholder="Full Name" id="assoc_two" name ="assoc_two"> 
+            </div>
             </div>
 
             <div class="col-md-12">
@@ -257,6 +272,8 @@ label{
 
           </div>
           <!-- /.row -->
+
+        </form>
         </div>
      
       </div>
@@ -266,6 +283,7 @@ label{
 
 
   </div>
+
 <!-- /.row -->
 
  @stop
@@ -273,13 +291,73 @@ label{
 <script type="text/javascript" src="{{ URL::asset('js/multipleAddinArea.js') }}"></script>
 <script type="text/javascript">
       $(document).ready(function(){
-          $('input').icheck({
-            checkboxClass: 'icheckbox_square',
-            radioClass: 'iradio_square',
-            increaseArea: '20%' // optional
-          });
+      //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
+        var select = $('#DOBYear');
+        var leastYr = 1960;
+        var nowYr = new Date().getFullYear();
+        for (var v = nowYr; v >= leastYr; v--) {
+            $('#DOBYear').append('<option value ="' + v + '">' + v + '</option');
+        }
+        //HIDE ASSOCIATE HOLDERS//
+        $('#assoc_hold').hide();
+        $(document).on('click', '#check_assoc', function () {
+            if ($('#check_assoc').prop('checked') == true) {
+                $('#assoc_hold').fadeIn();
+            }
+            else {
+                $('#assoc_hold').fadeOut();
+            }
+        });
 
-          
+      //DISPLAY AGE//
+      $('#DOBYear').on('change',function(){
+        var day = $('#DOBDay').val();
+        var month = $('#DOBMonth').val();
+        var year = $('#DOBYear').val();
+        var today = new Date();
+        var birthday = new Date(year,month,day);
+        var age = today.getFullYear() - birthday.getFullYear();
+        $('#age').val(age);
+
+      });
+
+      //INITIALIZE DATEPICKER//
+      $("#datepicker").datepicker({
+        showOtherMonths: true
+        , selectOtherMonths: true
+        , changeMonth: true
+        , changeYear: true
+        , autoclose: true
+        , startDate: "dateToday"
+        , todayHighlight: true
+        , orientation: 'bottom'
+        ,format: 'mm-dd-yyyy'
+       });
+
+      /// SUBMIT REGISTRATION//
+    $("#applyForm").submit(function (e) {
+            e.preventDefault();
+          //  if (!$("#applyForm").valid()) return;
+            var formData = new FormData($(this)[0]);
+            
+            
+            $.ajax({
+                type: "POST"
+                ,url:'/AddVendor'
+             , data: formData
+                , processData: false
+                , contentType: false
+                , context: this
+                , success: function (data) {
+                    toastr.success('Successfully Registered!');
+                    $("#applyForm")[0].reset();
+                    window.location(url('/RegistrationList'));
+                    
+                }
+            });
+        
+        });
+
       });
 </script>
   @stop 

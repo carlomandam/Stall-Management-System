@@ -73,45 +73,28 @@
 				<div class="modal-body">
 					<div class="row">
 
-						<div class="col-sm-6">
+						<div class="col-sm-12">
 							<label>Stall Code</label>
-							<div class="col-md-12">
-								<input type="text" class="form-control" disabled=""  />
-							</div>
-						</div>
-
-						<div class="col-sm-6">
-							<label>Status</label>
-							<div class="col-md-12">
-								<input type="text" class="form-control"  disabled="" />
-							</div>
+							<input type="text" class="form-control" disabled=""  />
 						</div>
 
 						<div class="col-sm-6">
 							<label>Stall Type</label>
-							<div class="col-md-12">
-								<input type="text" class="form-control" disabled=""  />
-							</div>
+							<input type="text" class="form-control" disabled=""  />
 						</div>
 
 						<div class="col-sm-6">
-							<label>Stall Rate</label>
-							<div class="col-md-12">
-								<input type="text" class="form-control" disabled=""  />
-							</div>
+							<label>Status</label>
+							<input type="text" class="form-control"  disabled="" />
 						</div>
 
 						<div class="col-sm-12">
 							<label>Location</label>
-							<div class="col-md-12">
 								<textarea type="text" class="form-control" disabled=""  /></textarea>
-							</div>
 						</div>
 						<div class="col-sm-12">
 							<label>Remarks</label>
-							<div class="col-md-12">
-								<textarea type="text" class="form-control" disabled=""  /></textarea>
-							</div>
+							<textarea type="text" class="form-control" disabled=""  /></textarea>
 						</div>
 
 						<div class="col-sm-12">
@@ -224,18 +207,38 @@
 				console.log(data);
 				$.each(data, function(i,data){
 					table.row.add([
+						
 						data.stallID,
 						data.stypeName + "("+ data.stypeArea +"m<sup>2</sup>)",
 						"Floor "+data.floorID + "," + data.bldgName,
-                        (data.stallStatus == '1' ? "<label class = 'label label-success'>Available</label>" : (data.stallStatus == '2' ? 'Occupied' : 'Under Maintenance')),
+                        (data.stallStatus == '1' ? "<label class = 'label label-success'>Available</label>" : (data.stallStatus == '2' ? "<label class = 'label label-danger'>Occupied</label> " : "<label class = 'label label-danger'>Warning</label>")),
                         (data.stallRemarks == null ? 'No Remarks Available' : data.stallRemarks),
-                        "<button type='Submit' onclick='window.location="+'"'+"{{ url('/Registration') }}"+'"'+"' class='btn btn-flat btn-success'><span class = 'fa fa-angle-double-right'></span>&nbspRegister</button> <button type='Submit' class='btn btn-flat btn-primary'data-toggle='modal' data-target='#view'><span class = 'fa fa-eye'></span>&nbspView</button> <button type='Submit' class='btn btn-flat btn-primary' data-toggle='modal' data-target='#update'><span class = 'fa fa-pencil'></span>&nbspUpdate</button>"
+                        data.stallStatus == '1' ? 
+                        "<button type='Submit' onclick='window.location="+'"'+"{{ url('/Registration/"+this.value+"') }}"+'"'+"' class='btn btn-flat btn-success' value = '"+data.stallID+"'><span class = 'fa fa-angle-double-right'></span>&nbspRegister</button> <button type='Submit' class='btn btn-flat btn-primary'data-toggle='modal' data-target='#view' onclick = 'getStallDetails(this.value)' value = '"+data.stallID+"' ><span class = 'fa fa-eye'></span>&nbspView</button> <button type='Submit' class='btn btn-flat btn-primary' data-toggle='modal' data-target='#update'><span class = 'fa fa-pencil'></span>&nbspUpdate</button>"
+                        :
+                          "<button type='Submit' class='btn btn-flat btn-success' value = '"+data.stallID+"' disabled><span class = 'fa fa-angle-double-right'></span>&nbspRegister</button> <button type='Submit' class='btn btn-flat btn-primary'data-toggle='modal' data-target='#view'><span class = 'fa fa-eye'></span>&nbspView</button> <button type='Submit' class='btn btn-flat btn-primary' data-toggle='modal' data-target='#update'><span class = 'fa fa-pencil'></span>&nbspUpdate</button>"
+						
+					
                         
 						]).draw();
 				});
 			});
 
-			
+	function getStallDetails(id)
+	{
+		 $.ajax({
+            type: "POST"
+            , url: '/getStallInfo'
+            , data: {
+                "_token": "{{ csrf_token() }}"
+                , "id": id
+            }
+            , success: function (data) {
+               
+            }
+        });
+	}
+		
 
 		});
 	</script>

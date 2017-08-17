@@ -22,4 +22,11 @@ class Stall extends Model
     public function Floor(){
         return $this->belongsTo('App\Floor','floorID');
     }
+
+    public function StallRental()
+    {
+        return $this->hasMany('App\StallRental','stallID');
+    }
+
+    
 }

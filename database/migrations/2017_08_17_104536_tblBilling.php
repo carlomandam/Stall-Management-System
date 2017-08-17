@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblstallUtility extends Migration
+class TblBilling extends Migration
 {
     /**
      * Run the migrations.
@@ -12,17 +12,17 @@ class TblstallUtility extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::create('tblStall_Utilities', function (Blueprint $table) {
-            $table->increments('stallUtilityID');
-            $table->string('stallID')->index();
-            $table->integer('utilityType'); //1-Electricity // 2-water //3-BOTH
+    { 
+        Schema::create('tblBilling', function (Blueprint $table) {
+            $table->increments('billingID');
+            $table->integer('stallRentID')->unsigned()->index();
+            $table->date('billDueDate');
+            $table->datetime('billDate');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallID')->references('stallID')->on('tblStall')
+            $table->foreign('stallRentID')->references('stallRentID')->on('tblStallRental_Info')
               ->onDelete('cascade');
-            
          });
     }
 
@@ -33,6 +33,6 @@ class TblstallUtility extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblStall_Utilities');
+         Schema::dropIfExists('tblBilling');
     }
 }
