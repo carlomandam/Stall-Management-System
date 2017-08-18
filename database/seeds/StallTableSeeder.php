@@ -18,8 +18,7 @@ class StallTableSeeder extends Seeder
             'stype_SizeID' => 1,
             'stallDesc'=> 'Stall 1',
             'stallStatus'=> 1,
-            'stallCol'=> '3',
-            'stallRow'=> '1',
+            'stallPos'=> '1',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
 
@@ -30,8 +29,7 @@ class StallTableSeeder extends Seeder
             'stype_SizeID' => 1,
             'stallDesc'=> 'Stall 2',
             'stallStatus'=> 1,
-            'stallCol'=> '3',
-            'stallRow'=> '2', 
+            'stallPos'=> '6',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
 
@@ -41,9 +39,8 @@ class StallTableSeeder extends Seeder
             'floorID' => 1,
             'stype_SizeID' => 1,
             'stallDesc'=> 'Stall 3',
-            'stallStatus'=> 1,
-            'stallCol'=> '3',
-            'stallRow'=> '3', 
+            'stallStatus'=> 0,
+            'stallPos'=> '6', 
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
 
@@ -54,8 +51,7 @@ class StallTableSeeder extends Seeder
             'stype_SizeID' => 1,
             'stallDesc'=> 'Stall 4',
             'stallStatus'=> 1,
-            'stallCol'=> '3',
-            'stallRow'=> '4', 
+            'stallPos'=> '9', 
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
 
@@ -66,8 +62,7 @@ class StallTableSeeder extends Seeder
             'stype_SizeID' => 1,
             'stallDesc'=> 'Stall 5',
             'stallStatus'=> 1,
-            'stallCol'=> '3',
-            'stallRow'=> '5', 
+            'stallPos'=> '10', 
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
 

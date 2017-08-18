@@ -32,19 +32,19 @@ class FloorTableSeeder extends Seeder
         ]);
         DB::table('tblFloor')->insert([
             'floorID' => 3,
-            'bldgID' => 1,
+            'bldgID' => 2,
             'floorCapacity' => 50,
             'floorLevel'=>3,
-            'floorDesc' => '3rd Floor',
+            'floorDesc' => '1st Floor',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('tblFloor')->insert([
             'floorID' => 4,
-            'bldgID' => 1,
+            'bldgID' => 2,
             'floorCapacity' => 50,
             'floorLevel'=>4,
-            'floorDesc' => '4th Floor',
+            'floorDesc' => '2nd Floor',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
