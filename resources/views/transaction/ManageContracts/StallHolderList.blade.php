@@ -3,376 +3,106 @@
 @section('title')
 {{ 'Stall Holder List'}}
 @stop
+
+@section('style')
+  <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/panel-tab.css')}}">
+
+  <style>
+  	.take-all-space-you-can{
+    width:100%;
+	}
+  </style>
+@stop
+
 @section('content-header')
 
 <ol class="breadcrumb">
 	<li><i class="fa fa-dashboard"></i>Transactions</li>
-	<li>Manage Contracts</li>
-	<li class="active">Stall Holder List</li>
+	<li class = "active">Manage Contracts</li>
 </ol>
 
 
-<style>
-	#floortbl td{
-		padding-bottom:5px;
-	}
-	#floortbl th, #floortbl td{
-		text-align: center;
-	}
-
-.form-control, .pull-right{
-	margin-top: 14px;
-}
-
-</style>
 @stop
 
 @section('content')
+<div class = "row">
+	<div class="col-md-12" >
+            
+           
+            <div class="panel with-nav-tabs panel-primary">
+                <div class="panel-heading">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab1primary" data-toggle="tab">Stall Holder List</a></li>
+                            <li><a href="#tab2primary" data-toggle="tab">Registration List</a></li>
+                        </ul>
+                </div>
 
-
-<div class="col-md-6">
-	<div class="box box-solid box-primary">
-		<div class="box-header with-border">
-			<label class = "box-header-label"> Stall Holder List </label>
-		</div>
-		<div>
-
-			<div class="box-body" >
-
-				<div class="col-xs-12">
-
-
-					<div class="box">
-						<div>
-
-							<div class="table-responsive">
-								<table id="prodtbl" class="table table-hover" role="grid" style="font-size:15px;">
-									<thead>
-										<tr>
-											<th>Name</th>
-											
-											<th>Active Contract/s</th>
-										</tr>
-									</thead>
-									<tr>
-										<th>Brixter Duenas</th>
-										
-										<th>1</th>
-									</div>
-								</tr>
-							</table>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
-
-
-<div class="col-md-6">
-	<div class="box box-solid box-primary">
-		<div class="box-header with-border">
-			<label class = "box-header-label"> Stall Holder Info</label>
-		</div>
-		<div class="box-body">
-
-			<div class="col-xs-12">
-				<div class="box">
-					<div class="row">
-						<div class="col-md-12">
-							<ul class="nav nav-tabs">
-								<li class="active"><a href="#tab_1-1" data-toggle="tab">Personal Info</a></li>
-								<li><a href="#tab_2-2" data-toggle="tab">Stall Info</a></li>
-								<li><a href="#tab_3-2" data-toggle="tab">Contract</a></li>
-							</ul>
-							<div class="tab-content">
-
-								<div class="tab-pane active" id="tab_1-1">
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Name of Organization</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name=""  disabled="" /> 
-											</div>
-										</div>
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">First Name</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name=""  disabled=""  /> 
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Middle Name</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name=""  disabled="" /> 
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Last Name</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name="" disabled=""  /> 
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="radio">
-												<div class="col-md-4">
-													<label>Sex</label>
-												</div>
-												
-												<div class="col-md-8">
-													<label>
-														<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked disabled="" >
-														Male
-													</label>
-													<label>
-														<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" disabled="" >
-														Female
-													</label>
-												</div>
-											</div>
-										</div>  
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="" class="col-sm-4 control-label">Date</label>
-
-											<div class="col-sm-8">
-												<div class="input-group">
-													<div class="input-group-addon">
-														<span class="fa fa-calendar"></span>
-													</div>
-													<input type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask  disabled="" />
-												</div>
-											</div>
-										</div>
-									</div>	
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Email Address</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name="" disabled=""  /> 
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Mobile No.</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name="" disabled=""  /> 
-											</div>
-										</div>
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Home Address</label>
-											</div>
-											<div class="col-md-8">
-												<textarea class="form-control" disabled="" ></textarea> 
-											</div>
-										</div>
-									</div>
-								</div>
-
-
-
-
-								<div class="tab-pane" id="tab_2-2">
-									<div class="col-md-12">
-										<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Stall Code</label>
-											</div>
-											<div class="col-md-8">
-												<div class="form-group">
-		
-													<select class="form-control">
-														<option>A001</option>
-														<option>A002</option>
-														<option>A003</option>
-													</select>
-												</div>
-											</div>
-										</div>
-									</div>
-									</div>
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Stall Type</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name="" disabled=""  /> 
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Stall Rate</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name="" disabled=""  /> 
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="" class="col-sm-4 control-label">Starting Date</label>
-
-											<div class="col-sm-8">
-												<div class="input-group">
-													<div class="input-group-addon">
-														<i class="fa fa-calendar"></i>
-													</div>
-													<input type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask  disabled="" />
-												</div>
-											</div>
-										</div>
-									</div>	
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Business Name</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name="" disabled=""  /> 
-											</div>
-										</div>
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Associate Holder 1</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name="" disabled=""  /> 
-											</div>
-										</div>
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Associate Holder 2</label>
-											</div>
-											<div class="col-md-8">
-												<input type="text" class="form-control" id="" name="" disabled=""  /> 
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<div class="col-md-4">
-												<label for="">Home Address</label>
-											</div>
-											<div class="col-md-8">
-												<textarea class="form-control" disabled="" ></textarea> 
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="tab-pane" id="tab_3-2">
-									<div class = "col-md-12">
-										
-											<div class = "table-responsive" >
-											<table id="prodtbl" class="table table-hover" role="grid" style="font-size:15px;">
-												
-													<th>Name</th>
-													<th>StallID</th>
-													<th>Contract Expiry Date</th>
-													<th style="width: 280px;">Actions</th>
-												
-											<tr>
-												<td>Brixter Duenas</td>
-												<td>1</td>
-												<td>2018-08-09</td>
-												<td><button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Contract</button> <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-print'></span>&nbspPrint</button></td>
-												
-											</tr>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab1primary">
+                        	<div class="box box-primary">
+                        		<div class="box-body">
+									<div class="col-xs-12">
+										<div class="table-responsive">
+											<table id="tblstall" class="table table-striped" role="grid">
+												<thead>
+													<th width = "150px;">Stall Code</th>
+													<th  width = "200px;">StallHolder Name</th>
+													<th width = "200px;">Collection Status</th>
+													<th  width = "200px;">Start Date</th>
+													<th  width = "200px;">Contract Expiry Date</th>
+													<th width = "350px;">Actions</th>
+												</thead>
 											</table>
-											</div>
-										
+										</div>		
 									</div>
 								</div>
-
 							</div>
+							<!-- box box-primary -->
 
+                        </div>
+                        <!-- tab1primary -->
+
+	                    <div class="tab-pane fade" id="tab2primary">
+	                        <div class="box box-primary">
+								<div class="box-body">
+									<div class="col-xs-12">
+										<div class="table-responsive">
+											<table id="tblreg" class="table table-striped" role="grid">
+												<thead>
+													<th style="width: 300px;">Name</th>
+													<th style="width: 300px;">Address</th>
+													<th style="width: 200px;">Contact No.</th>
+													<th style="width: 200px;">Registration Date</th>
+													<th style="width: 500px;">Actions</th>
+												</thead>
+											</table>
+										</div>	
+									</div>
+								</div>
+							</div>
 						</div>
+						<!-- tab2primary -->
+					</div>
+					<!-- tab content-->
 
-					</div>
-					<div class="col-md-3 pull-right" id="Update">
-						<button onclick="myFunction()" type="Submit" class="btn btn-success">Update</button>
-					</div>
-					<div class="col-md-8 pull-right" id="Cancel" style="display: none">
-						<button type="Submit" class="btn btn-default" onclick="Cancel()" >Cancel</button>
-						<button type="Submit" class="btn btn-primary" onclick="Cancel()" >Save Changes</button>
-					</div>
 				</div>
+				<!-- panel body-->
 			</div>
-		</div>
-	</div>
-</div>
+			<!-- panel with-nav-tabs-->
+	 </div>
+    <!-- col-md-12 -->
+ </div>
+ <!-- row -->
+
+         
+    
+
+
+
 @stop
 @section('script')
 <script>
-	function myFunction() {
-		var x = document.getElementById('Update');
-		var y = document.getElementById('Cancel');
-		if (x.style.display === 'none') {
-			x.style.display = 'block';
-			y.style.display= 'none';
-		} else {
-			x.style.display = 'none';
-			y.style.display= 'block';
-		}
-	}
 
-	function Cancel() {
-		var x = document.getElementById('Update');
-		var y = document.getElementById('Cancel');
-		if (x.style.display === 'block') {
-			x.style.display = 'none';
-			y.style.display= 'block';
-		} else {
-			x.style.display = 'block';
-			y.style.display= 'none';
-		}
-	}
 </script>
 @stop

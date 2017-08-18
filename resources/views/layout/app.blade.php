@@ -106,19 +106,9 @@
 
                               <ul class="treeview-menu">
                                      <li class = "treeview">
-                                        <a href="#">
+                                        <a href="/StallHolderList">
                                         <i class="fa fa-circle-o"></i> <span>Manage Contracts</span>
-                                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-left pull-right"></i> 
-                                        </span> 
                                         </a>
-
-                                        <ul class="treeview-menu">
-                                            <li><a href="/StallList"><i class="fa fa-circle-o"></i> Stall List</a></li>
-                                            <li><a href="/RegistrationList"><i class="fa fa-circle-o"></i> Registration List</a></li>
-                                            <li><a href="/StallHolderList"><i class="fa fa-circle-o"></i>Stall Holder List</a></li>
-
-                                        </ul>
                                     </li>
 
                              
