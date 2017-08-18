@@ -148,3 +148,6 @@ Route::get('/Payment','PaymentController@paymentIndex');
 
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
+
+///////////////Utilities////////
+Route::get('/Utilities','UtilitiesController@index');

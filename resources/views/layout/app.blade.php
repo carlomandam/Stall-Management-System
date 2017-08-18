@@ -170,15 +170,9 @@
                         </li>
 
                          <li class = "treeview">    
-                              <a href="#"> 
+                              <a href="/Utilities"> 
                               <i class="fa fa-cogs"></i> <span>Utilities</span>
-                               <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i> 
-                                </span> 
                               </a> 
-                              <ul class="treeview-menu">
-                                    <li class = "active"><a href="#"><i class="fa fa-building-o "></i> Vendor Collection Status</a></li>
-                              </ul>
                         </li>
 
                         <li class = "treeview">    
