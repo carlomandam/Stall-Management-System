@@ -10,7 +10,7 @@ class StallRate extends Model
     use SoftDeletes;
     
     protected $table = "tblStallRate";
-    protected $primaryKey = "srateID";
+    protected $primaryKey = "stallRateID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     
@@ -18,8 +18,8 @@ class StallRate extends Model
         return $this->belongsTo('App\StallType','stypeID');
     }
     
-    public function RateDetail(){
-        return $this->hasMany('App\RateDetail','rateID');
+    public function StallRateDetail(){
+        return $this->hasMany('App\StallRateDetail','stallRateID');
     }
 
     public function Frequency(){

@@ -10,7 +10,7 @@ $(document).on('change','.building',function(){
 				        $('.buildingname').text(data.bldg.bldgName);
 			          $('.floors').append('<option disabled selected="selected" class="floor">--Select</option>');
 			          $.each(data.bldg.floor,function(key,value){
-                    $('.floors').append('<option value="'+value.floorID+'">'+value.floorDesc+'</option>');
+                    $('.floors').append('<option class="floor" value="'+value.floorID+'">'+value.floorDesc+'</option>');
 			          });
 		        }
 	      });

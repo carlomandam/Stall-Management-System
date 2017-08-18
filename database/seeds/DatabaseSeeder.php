@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(UsersTableSeeder::class);
         $this->call(BuildingTableSeeder::class);
         $this->call(FloorTableSeeder::class);
-        $this->call(frequencyTableSeeder::class);
         $this->call(tblstalltypeSeeder::class);
         $this->call(StallSizeTableSeeder::class);
         $this->call(StallTypeStallSizeTableSeeder::class);

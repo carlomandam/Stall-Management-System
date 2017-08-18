@@ -14,7 +14,7 @@ class StallRateTableSeeder extends Seeder
         //
          DB::table('tblStallRate')->insert([
             'stallRateID' => 1,
-            'frequencyID' => 2,
+            'frequencyDesc' => 1,
             'stype_SizeID' => 1,
             'stallRateEffectivity' => date('Y-m-d H:i:s'),
             
@@ -24,18 +24,18 @@ class StallRateTableSeeder extends Seeder
         ]);
            DB::table('tblStallRate')->insert([
             'stallRateID' => 2,
-            'frequencyID' => 3,
+            'frequencyDesc' => 2,
             'stallRateEffectivity' => date('Y-m-d H:i:s'),
-            'stype_SizeID' => 2,
+            'stype_SizeID' => 3,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
 
         ]);
              DB::table('tblStallRate')->insert([
             'stallRateID' => 3,
-            'frequencyID' => 4,
+            'frequencyDesc' => 3,
             'stallRateEffectivity' => date('Y-m-d H:i:s'),
-            'stype_SizeID' => 3,
+            'stype_SizeID' => 5,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
 

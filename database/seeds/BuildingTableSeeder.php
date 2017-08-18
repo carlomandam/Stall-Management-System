@@ -23,7 +23,7 @@ class BuildingTableSeeder extends Seeder
          DB::table('tblBuilding')->insert([
             'bldgID' => 2,
             'bldgName' => 'Bagpi Taytay',
-            'bldgCode' => 'bagpi2',
+            'bldgCode' => 'bagp2',
             'bldgDesc' => 'Goods and Garments',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),

@@ -90,15 +90,28 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                
-                                    <tr>
-                                      <td id=""><input type="radio" name=""></td>
-                                      <td></td>
-                                      <td><i></i></td>
-                                      <td></td>
-                                      <td></td>
-                                    </tr>
-                                  
+                                  @foreach($types as $type)
+                                              <tr>
+                                                <td id=""><input type="radio" name=""></td>
+                                                <td>{{$type ->StallType->stypeName}}</td>
+                                                <td>{{$type->StallTypeSize->stypeArea}}</td>
+                                                @foreach($rates as $rate)
+                                                    @if(($rate->stype_SizeID)==($type->stype_SizeID))
+                                                         @if(($rate->frequencyDesc)== 1)
+                                                              <td>Daily</td>
+                                                              @foreach($rate->StallRateDetail as $detail)
+                                                              @endforeach
+
+                                                          @elseif(($rate->frequencyDesc)== 2)
+                                                              <td>Weekly</td>
+                                                          @elseif(($rate->frequencyDesc)== 3)       
+                                                              <td>Monthly</td>
+                                                         @endif
+                                                    @endif
+                                                @endforeach
+                                               
+                                              </tr>
+                                  @endforeach
                                 </tbody>
                               </table>
                               
@@ -123,6 +136,11 @@
         <!-- col-md-3 -->
 
       <div class="col-md-9">
+            <div class="col-md-12" style="margin-bottom: 3px;">
+                <button class="btn btn-primary"><i class="fa fa-plus-square"></i> Add</button>
+                <button class="btn btn-info"><i class="fa fa-wrench"></i>Update</button>
+                <button class="btn btn-danger"><i class="fa fa-ban"></i>Delete</button>
+            </div>
                     <!-- Border Choose Building -->
         <div class="col-md-12" >
             
