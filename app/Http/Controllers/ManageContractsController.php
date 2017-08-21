@@ -12,7 +12,7 @@ class ManageContractsController extends Controller
     //'
 
     public function getStallHolderList(){
-        $stalls = Stall::with('StallHolder','StallRental.Contract')->get();
+        $stalls = Stall::with('StallHolder','StallRental.Contract')->has('StallRental','StallRental.Contract')->get();
         $data = array();
         
         foreach ($stalls as $stall) {
