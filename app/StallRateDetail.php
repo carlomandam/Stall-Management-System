@@ -10,7 +10,7 @@ class StallRateDetail extends Model
     use SoftDeletes;
     
     protected $table = "tblStallRate_Details";
-    protected $primaryKey = "srateID";
+    protected $primaryKey = "stallRateID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     

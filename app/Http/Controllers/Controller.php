@@ -40,11 +40,6 @@ class Controller extends BaseController
         return (json_encode($utilities));
     }
     
-    function getStallInfo(){
-        $stall = Stall::with('StallType','Floor.Building')->where('stallID',$_POST['id'])->get();
-        return (json_encode($stall[0]));
-    }
-    
     function deleteStall(){
         $stall = Stall::find($_POST['id']);
         $stall->delete();

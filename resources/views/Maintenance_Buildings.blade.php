@@ -181,11 +181,13 @@
                         </div>
                         <div class="tab-pane" id="2">
                             <table class="table table-bordered table-striped" role="grid" id='floorUpTbl'>
+                                <thead>
                                 <th style="width:40%">Floor No.</th>
                                 <th style="width:40%">Current No. of stalls</th>
                                 <th>Capacity</th>
+                                </thead>
+                                <tbody> </tbody>
                             </table>
-                            <tbody> </tbody>
                         </div>
                     </div>
                 </div>

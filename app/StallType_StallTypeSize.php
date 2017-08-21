@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use DB;
 class StallType_StallTypeSize extends Model
 {
     //use SoftDeletes;
@@ -13,16 +13,16 @@ class StallType_StallTypeSize extends Model
     //protected $softDelete = true;
     //protected $dates = ['deleted_at'];
     
-    public function Utility(){
-        return $this->belongsTo('App\StallType','stypeID');
+    public function StallRate(){
+        return $this->hasMany('App\StallRate','stype_SizeID','stype_SizeID');
     }
     
     public function StallType(){
-        return $this->belongsTo('App\StallType','stypeID');
+        return $this->belongsTo('App\StallType','stypeID','stypeID');
     }
     
     public function StallTypeSize(){
-        return $this->belongsTo('App\StallTypeSize','stypeSizeID');
+        return $this->belongsTo('App\StallTypeSize','stypeSizeID','stypeSizeID');
     }
     
     public function Stall(){

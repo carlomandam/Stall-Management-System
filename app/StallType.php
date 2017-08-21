@@ -22,7 +22,7 @@ class StallType extends Model
         return $this->hasMany('App\Stall','stypeID');
     }
     
-    public function StallRate(){
-        return $this->hasMany('App\StallRate','stypeID');
+    public function typesize(){
+        return $this->hasMany('App\StallType_StallTypeSize','stypeID');
     }
 }

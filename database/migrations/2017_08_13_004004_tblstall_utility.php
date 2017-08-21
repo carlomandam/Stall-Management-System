@@ -16,12 +16,11 @@ class TblstallUtility extends Migration
         Schema::create('tblStall_Utilities', function (Blueprint $table) {
             $table->increments('stallUtilityID');
             $table->string('stallID')->index();
-            $table->integer('utilityType'); //1-Electricity // 2-water //3-BOTH
+            $table->integer('utilityType'); //1-Electricity // 2-water
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallID')->references('stallID')->on('tblStall')
-              ->onDelete('cascade');
+            $table->foreign('stallID')->references('stallID')->on('tblStall')->onDelete('cascade');
             
          });
     }

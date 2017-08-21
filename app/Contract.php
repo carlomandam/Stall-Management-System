@@ -6,15 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contract extends Model
 {
-   protected $table = "tblContractInfo";
+    protected $table = "tblContractInfo";
     protected $primaryKey = "contractID";
-  	//protected $fillable = array('rentID', 'contractLength', 'contractStatus'); 
-  public function contractPeriods(){
-        return $this->belongsToMany('App\ContractPeriod','tblContractInfo', 'contractID', 'contractLengthID')->withPivot('contractLengtNumber');
+  	protected $fillable = array('stallRentID', 'contractLengthID', 'contractStatus'); 
+    
+    public function ContractLength(){
+        return $this->belongsTo('App\ContractLength','contractLengthID');
     }
 
     public function StallRental(){
-        return $this->hasMany('App\StallRental','stallRentID');
+        return $this->belongsTo('App\StallRental','stallRentID');
     }
 
 }

@@ -11,9 +11,32 @@ class ManageContractsController extends Controller
 {
     //'
 
+    public function getStallHolderList(){
+        $stalls = Stall::with('StallHolder','StallRental.Contract')->get();
+        $data = array();
+        
+        foreach ($stalls as $stall) {
+            $stall['actions'] = "<button class='btn btn-success btn-flat' onclick='register(this.value)' value = '".$stall['stallID']."'><span class='glyphicon glyphicon-pencil'></span> Register</button>";
+    		$data['data'][] = $stall;
+    	}
+        
+    	if(count($data) == 0){
+       		echo '{
+            	"sEcho": 1,
+            	"iTotalRecords": "0",
+            	"iTotalDisplayRecords": "0",
+            "aaData": []
+        	}';
+
+        	return;
+    	}
+        
+        else
+    		return (json_encode($data));
+    }
+    
 	public function stallListIndex()
 	{
-
 		return view('transaction/ManageContracts/MappingTable');
 	}
 
