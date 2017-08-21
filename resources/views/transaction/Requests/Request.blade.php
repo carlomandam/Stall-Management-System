@@ -31,9 +31,9 @@
                 <thead>
                 <tr>
                   <th>Request No</th>
-                  <th>Requestor's Name</th>
+                  <th>StallHolder Name</th>
                   <th>Request Type</th>
-                  <th>Date Sent</th>
+                  <th>Submitted</th>
                   <th>Request Status</th>
                   <th>Actions</th>
                 </tr>
@@ -109,11 +109,6 @@
                            
                             
                             <select name = "length" id = "length">
-                                @foreach($contract_period as $period)
-                               {
-                                <option value = "{{$period['contract_periodID']}}">{{$period['contract_periodDesc']}}</option>
-                               }
-                            @endforeach
                             </select>
                                  
                           </div>

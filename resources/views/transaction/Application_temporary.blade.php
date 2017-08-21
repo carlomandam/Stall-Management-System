@@ -36,14 +36,14 @@ legend{
 label{
     margin-top: 10px;
 }
-
-
+#sub{
+  margin:20px;
+  width: 120px;
+}
 </style>
       <ol class="breadcrumb">
         <li><i class="fa fa-dashboard"></i> Transactions</a></li>
         <li>Manage Contracts</li>
-        <li><a href = "/StallList">Stall List</a></li>
-        <li class="active">Registration</li>
       </ol>
 <script type="text/javascript" src ="{{ URL::asset('js/zepto.js')}}"> </script>
 <script type="text/javascript" src ="{{ URL::asset('js/icheck.js')}}"> </script>
@@ -53,7 +53,7 @@ label{
  
    <div class="row">
         <div style="margin-left: 20px; margin-bottom: 10px;">
-               <a href="{{ url('/StallList') }}" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack to Stall List</a>
+               <a href="{{ url('/StallList') }}" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack to StallHolder List</a>
         </div>
 
     <!--left table-->
@@ -61,7 +61,7 @@ label{
         <div class = "col-md-6">
         <div class="box box-primary ">
         <div class="box-header with-border">
-          <h3 class="box-title">Stall Holder Details</h3>
+          <h3 class="box-title"><b>Stall Holder Details</b></h3>
 
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -74,7 +74,8 @@ label{
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-              <input type="checkbox" name="search">Search for Existing Record
+               <label class="checkbox-inline">
+               <input type="checkbox" id="check_existing"><b>Search for Existing Record</b></label>
                 <input type="text" name="" class = "form-control" placeholder="Enter First Name / Last Name ..." disabled="" />
                 <label for = "org">Name of Group/Organization<i><b>&nbsp&nbsp(If Applicable)</i></b></label>
                 <input type = "text" class = "form-control" id = "orgname" name = "orgname" />
@@ -159,7 +160,7 @@ label{
                     
                      
                     <label for = "email">Email Address</label><span class="required">&nbsp*</span>
-                    <input type = "text" class = "form-control" id = "email" name = "email"  placeholder="email@domain.com"/>
+                    <input type = "text" class = "form-control email" id = "email" name = "email"  placeholder="email@domain.com"/>
 
                     <label for="phone"><b>Contact Number/s:</b></label><span class="required">&nbsp*</span>
                     <div class="form-group input-group removable">
@@ -185,7 +186,7 @@ label{
         <div class = "col-md-6">
         <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">Stall Details</h3>
+          <h3 class="box-title"><b>Contract Details</b></h3>
 
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -196,11 +197,12 @@ label{
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                 <label>Stall ID</label>
+
+                 <label>Stall Code</label>
                  <input type="text" class="form-control" readonly=""   name = "dispStallID" id = "dispStallID" value = "{{$stall->stallID}}">
            
                  <label>Stall Rate</label>
-                 <textarea type="text" class="form-control" disabled=""  name = "dispStallRate" id = "dispStallRate"></textarea>
+                 <textarea type="text" class="form-control" readonly="" name = "dispStallRate" id = "dispStallRate"></textarea>
                            
               </div>
 
@@ -230,13 +232,27 @@ label{
             </div>
 
             <div class="col-md-12">
-                <label for="startdate">Starting Date </label><span class="required">&nbsp*</span>
+                
+                <label for="startdate">Rental Starting Date </label><span class="required">&nbsp*</span>
                 <div class="input-group date">
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
                 <input type="text" class="form-control pull-right" id="datepicker">
                 </div>
+              
+            </div>
+
+            <div class="col-md-12">
+                
+                <label for="startdate">Contract Expiry Date </label><span class="required">&nbsp*</span>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                <input type="text" class="form-control pull-right" id="datepicker_end">
+                </div>
+              
             </div>
 
            
@@ -259,20 +275,19 @@ label{
 
             <div class="col-md-12">
                 <label for="address"><b>List of Products</b></label><span class="required">&nbsp*</span>
-                <textarea rows="4" class="form-control" id="prods" name="prods"></textarea>
+               <select class="js-example-basic-multiple js-states form-control" id="id_label_multiple" multiple="multiple"></select>
             </div>
 
-            <p class="small text-danger" style="margin-left: 20px;">Fields with asterisks(*) are required</p>
+           <div class="col-md-12 ">
+            <button type="submit" class="btn btn-primary btn-flat pull-right" id = "sub">Save</button>
+            <p class="small text-danger">Fields with asterisks(*) are required</p>
+           </div>
 
-            <div class="col-md-12">
-                <div class="pull-right" style="margin-top: 30px; ">
-                <button type = "submit" class="btn btn-flat btn-primary" style="width: 100px;">Save</button>
-                </div>
-            </div>
+
 
           </div>
           <!-- /.row -->
-
+      
         </form>
         </div>
      
@@ -292,6 +307,7 @@ label{
 <script type="text/javascript">
       $(document).ready(function(){
       //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
+
         var select = $('#DOBYear');
         var leastYr = 1960;
         var nowYr = new Date().getFullYear();
@@ -333,6 +349,18 @@ label{
         , orientation: 'bottom'
         ,format: 'mm-dd-yyyy'
        });
+      //INITIALIZE DATEPICKER//
+      $("#datepicker_end").datepicker({
+        showOtherMonths: true
+        , selectOtherMonths: true
+        , changeMonth: true
+        , changeYear: true
+        , autoclose: true
+        , startDate: "dateToday"
+        , todayHighlight: true
+        , orientation: 'bottom'
+        ,format: 'mm-dd-yyyy'
+       });
 
       /// SUBMIT REGISTRATION//
     $("#applyForm").submit(function (e) {
@@ -358,6 +386,15 @@ label{
         
         });
 
+    //INPUTMASK INITIALIZATION//
+     Inputmask().mask(document.querySelectorAll("input"));
+      $(".email").inputmask("email");
+
+     $('.js-example-basic-multiple').select2({width: 'resolve'});
       });
 </script>
+<script src ="{{ URL::asset('js/jquery.inputmask.bundle.js')}}"></script>
+<script src ="{{ URL::asset('js/phone-ru.js')}}"></script>
+<script src ="{{ URL::asset('js/phone-be.js')}}"></script>
+<script src ="{{ URL::asset('js/phone.js')}}"></script>
   @stop 

@@ -13,10 +13,13 @@
 
 
 Route::get('/', function () {
-    return view('layout.app');
+    return view('dashboard.dashboard');
 });
 
-
+Auth::routes();
+Route::get('/Dashboard',function(){
+	return view('dashboard.dashboard');
+});
 Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/List', 'ApplicationController@member');
 Route::get('/View', 'ApplicationController@Memview');

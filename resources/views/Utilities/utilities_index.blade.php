@@ -39,8 +39,8 @@
               <div class="callout callout-info">
                   <h4>Info</h4>
                    <p>Security Deposit is applicable to New StallHolders</p>
-                   <p>Stall Maintenance Fee is applicablt</p>
-                   <p>Collection Status depends on total debt amount per Stall</p>
+                   <p>Stall Maintenance Fee is renew annually</p>
+                   <p>Set Collection status that will depend on the maximum debt amount. One vendor with 3 stalls means 3 status as well.</p>
 
 
               </div>
@@ -53,8 +53,7 @@
                    <label>Security Deposit</label>
                   </div>
                   <div class = "col-md-3">
-                   <div class='input-group'><span class='input-group-addon'>Php</span><input type='text' class='form-control' name=''>
-                  </div>
+                    <input type='text' class='form-control money' name='' >
                   </div>
                
                 </div>
@@ -67,8 +66,7 @@
                    <label>Stall Maintenance</label>
                   </div>
                   <div class = "col-md-3">
-                   <div class='input-group'><span class='input-group-addon'>Php</span><input type='text' class='form-control' name=''>
-                  </div>
+                    <input type='text' class='form-control money' name='' >
                   </div>
                
                 </div>
@@ -109,7 +107,7 @@
                     </div>
 
                     <div class = "col-md-3">
-                       <div class='input-group'><span class='input-group-addon'>Php</span><input type='text' class='form-control' name=''></div>
+                        <input type='text' class='form-control money' name='' >
                     </div>
             </div>
 
@@ -127,7 +125,7 @@
                     </div>
 
                     <div class = "col-md-3">
-                       <div class='input-group'><span class='input-group-addon'>Php</span><input type='text' class='form-control' name=''></div>
+                        <input type='text' class='form-control money' name='' >
                     </div>
             </div>
 
@@ -145,7 +143,7 @@
                     </div>
 
                     <div class = "col-md-3">
-                       <div class='input-group'><span class='input-group-addon'>Php</span><input type='text' class='form-control' name=''></div>
+                        <input type='text' class='form-control money' name='' >
                     </div>
             </div>
 
@@ -163,7 +161,7 @@
                     </div>
 
                     <div class = "col-md-3">
-                       <div class='input-group'><span class='input-group-addon'>Php</span><input type='text' class='form-control' name=''></div>
+                        <input type='text' class='form-control money' name='' >
                     </div>
             </div>
 
@@ -181,7 +179,7 @@
                     </div>
 
                     <div class = "col-md-3">
-                       <div class='input-group'><span class='input-group-addon'>Php</span><input type='text' class='form-control' name=''></div>
+                       <input type='text' class='form-control money' name='' >
                     </div>
             </div>
 
@@ -206,4 +204,18 @@
 
  @stop
   @section('script')
+<script src ="{{ URL::asset('js/jquery.inputmask.bundle.js')}}"></script>
+<script src ="{{ URL::asset('js/phone-ru.js')}}"></script>
+<script src ="{{ URL::asset('js/phone-be.js')}}"></script>
+<script src ="{{ URL::asset('js/phone.js')}}"></script>
+  <script type="text/javascript">
+    
+    $(document).ready(function(){
+  Inputmask().mask(document.querySelectorAll("input"));
+
+    $(".money").inputmask("currency",{radixPoint: '.', 
+                                      prefix: "₱ "});
+});
+
+  </script>
   @stop 

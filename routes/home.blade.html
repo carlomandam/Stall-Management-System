@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ config('app.locale') }}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>MySeoul Stalls Management System</title>
+        <title>MySeoul Vendor Portal</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -46,7 +46,7 @@
             }
 
             .title {
-                font-size: 40px;
+                font-size: 84px;
             }
 
             .links > a {
@@ -69,7 +69,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @if (Auth::check())
-                        <a href="{{ url('/welcome') }}">Home</a>
+                        <a href="{{ url('/Home') }}">Home</a>
                     @else
                         <a href="{{ url('/login') }}">Login</a>
                         <a href="{{ url('/register') }}">Register</a>
@@ -79,10 +79,10 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    MySeoul Stalls Management System
+                  
+                   <h6> MySeoul Vendor Portal</h6>
                 </div>
 
-                
             </div>
         </div>
     </body>
