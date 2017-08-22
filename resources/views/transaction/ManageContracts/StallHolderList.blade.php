@@ -14,8 +14,8 @@
         <div class="panel with-nav-tabs panel-primary">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab1primary" data-toggle="tab">Stall Holder List</a></li>
-                    <li><a href="#tab2primary" data-toggle="tab">Registration List</a></li>
+                    <li class="active"><a href="#tab1primary" data-toggle="tab">StallHolders</a></li>
+                    <li><a href="#tab2primary" data-toggle="tab">Pending Registrations</a></li>
                 </ul>
             </div>
             <div class="panel-body">
@@ -27,11 +27,13 @@
                                     <div class="table-responsive">
                                         <table id="tblstall" class="table table-striped" role="grid">
                                             <thead>
-                                                <th width="150px;">Stall Code</th>
                                                 <th width="200px;">StallHolder Name</th>
+                                                <th width="150px;">Stall Code</th>
+                                                <th width="150px;">Stall Location
+                                                </th>
                                                 <th width="200px;">Collection Status</th>
                                                 <th width="200px;">Start Date</th>
-                                                <th width="200px;">Contract Expiry Date</th>
+                                                <th width="200px;">End Date</th>
                                                 <th width="350px;">Actions</th>
                                             </thead>
                                         </table>
@@ -78,15 +80,16 @@
             ajax: '/getStallHolderList'
             , responsive: true
             , "columns": [
-                {
-                    "data": "stallID"
-                }
-                , {
+                 {
                     "data": function (data, type, dataToSet) {
                         if (data.stall_holder.length != 0) return data.stall_holder[0].stallHLName + ", " + data.stall_holder[0].stallHFName + " " + data.stall_holder[0].stallHMName[0] + '.';
                         else return null;
                     }
+                },
+                {
+                    "data": "stallID"
                 }
+                
                 , {
                     "data": function (data, type, dataToSet) {
                         return null;

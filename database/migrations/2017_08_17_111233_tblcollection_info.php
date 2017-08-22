@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblBilling extends Migration
+class TblcollectionInfo extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,11 @@ class TblBilling extends Migration
      * @return void
      */
     public function up()
-    { 
-        Schema::create('tblBilling', function (Blueprint $table) {
-            $table->increments('billingID');
+    {
+       Schema::create('tblCollection_Info', function (Blueprint $table) {
+            $table->increments('collectionID');
             $table->integer('stallRentID')->unsigned()->index();
-            $table->date('billDueDate');
-            $table->datetime('billDate');
+            $table->integer('collectionType'); //0-security deposit, 1-stall maintenance fee, 2-rental rate
             $table->timestamps();
             $table->softDeletes();
 
@@ -33,6 +32,6 @@ class TblBilling extends Migration
      */
     public function down()
     {
-         Schema::dropIfExists('tblBilling');
+       Schema::dropIfExists('tblCollection_Info');
     }
 }
