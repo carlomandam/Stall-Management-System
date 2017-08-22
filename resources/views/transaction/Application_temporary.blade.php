@@ -43,15 +43,18 @@
         width: 120px;
     }
 </style>
+
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i> Transactions </li>
     <li><a href="{{ url('/StallHolderList') }}">Manage Contracts</a></li>
     <li>Registration</li>
 </ol>
-<script type="text/javascript" src="{{ URL::asset('js/zepto.js')}}">
-</script>
-<script type="text/javascript" src="{{ URL::asset('js/icheck.js')}}">
-</script> @stop @section('content')
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/square/blue.css')}}">
+
+
+ @stop
+
+@section('content')
 <div class="row">
     <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp Back to StallHolder List</a> </div>
     <!--left table-->
@@ -71,7 +74,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="checkbox-inline">
-                                    <input type="checkbox" id="check_existing"><b>Search for Existing Record</b></label>
+                                    <input type="checkbox" id="check_existing"><b>Search for Existing StallHolder</b></label>
                                 <input type="text" name="" class="form-control" placeholder="Enter First Name / Last Name ..." disabled="" />
                                 <label for="org">Name of Group/Organization<i><b>&nbsp&nbsp(If Applicable)</i></b>
                                 </label>
@@ -189,21 +192,34 @@
                         </div>
                     </div>
                     <!--/.col-md-6 -->
-                    <div class="col-md-12">
-                        <label for="bussiname">Business Name</label>
-                        <input type="text" class="form-control" id="businessName" name="businessName" /> </div>
-                    <div class="col-md-12">
-                        <label for="startdate">Rental Starting Date </label><span class="required">&nbsp*</span>
+
+
+                    <div class = "col-md-12">
+                        <label for="contracttype">Contract Type</label>
+                        <span class="required">&nbsp*</span>
+                         <label>
+                         <input type="radio" name="ctype" id="ctype" value="1" checked="checked"><b>Fixed</b></label>
+                         <label>
+                          <input type="radio" name="ctype" id="ctype" value="0"><b>At-Will</b></label>
+                    </div>
+
+                    <div class="col-md-6" id = "changeClass">
+                        <label for="startdate">Start Date </label><span class="required">&nbsp*</span>
                         <div class="input-group date">
                             <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
                             <input type="text" class="form-control pull-right" id="datepicker"> </div>
                     </div>
-                    <div class="col-md-12">
-                        <label for="startdate">Contract Expiry Date </label><span class="required">&nbsp*</span>
+                    <div class="col-md-6">
+                        <label for="startdate">End Date </label><span class="required">&nbsp*</span>
                         <div class="input-group date">
                             <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
                             <input type="text" class="form-control pull-right" id="datepicker_end"> </div>
                     </div>
+
+                    <div class="col-md-12">
+                        <label for="bussiname">Business Name</label>
+                        <input type="text" class="form-control" id="businessName" name="businessName" /> </div>
+
                     <div class="col-md-12">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check_assoc"><b>Associate Stall Holder(s)</b> <small>(Maximum of 2 people)</small></label>
@@ -232,6 +248,9 @@
 </div>
 <!-- /.row -->@stop @section('script')
 <script type="text/javascript" src="{{ URL::asset('js/multipleAddinArea.js') }}"></script>
+
+<script type="text/javascript" src="{{ URL::asset('js/icheck.js')}}">
+</script>
 <script type="text/javascript">
     $(document).ready(function () {
         var stall = JSON.parse("{{json_encode($stall)}}".replace(/&quot;/g, '"'));
@@ -333,6 +352,22 @@
         $('.js-example-basic-multiple').select2({
             width: 'resolve'
         });
+
+        //CONTRACT TYPE//
+       $('input[name=ctype]').change(function(){
+            var value = $( 'input[name=ctype]:checked' ).val();
+
+           if(value == 0)
+           {
+            
+            $('#datepicker_end').prop('disabled',true);
+           }
+           else
+           {
+              $('#datepicker_end').removeAttr('disabled',true);
+           }
+        });
+        
     });
 </script>
 <script src="{{ URL::asset('js/jquery.inputmask.bundle.js')}}"></script>
