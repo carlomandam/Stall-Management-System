@@ -160,12 +160,17 @@
                         }
                         , "size[]": {
                             unique: true
+                            , number: true
                         }
                     }
                     , messages: {
                         stypeName: {
                             required: "Please enter Stall Type Name"
                             , remote: "Stall Type Name is taken"
+                        }
+                        , "size[]": {
+                            unique: "Size must be unique"
+                            , number: "Invalid Size"
                         }
                     }
                     , errorClass: "error-class"

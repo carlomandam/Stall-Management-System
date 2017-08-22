@@ -16,15 +16,14 @@ class TblcontractInfo extends Migration
         Schema::create('tblContractInfo', function (Blueprint $table) {
             $table->increments('contractID');
             $table->integer('stallRentID')->unsigned()->index();
-            $table->integer('contractLengthID')->unsigned();
+            $table->date('contractStart');
+            $table->date('contractEnd');
             $table->integer('contractLengthNumber');
             $table->softDeletes();
             $table->timestamps();
 
 
             $table->foreign('stallRentID')->references('stallRentID')->on('tblStallRental_Info')
-              ->onDelete('cascade');
-            $table->foreign('contractLengthID')->references('contractLengthID')->on('tblContractLength')
               ->onDelete('cascade');
          });
     }

@@ -90,6 +90,7 @@ Route::post('/UpdateBuilding', 'BuildingController@UpdateBuilding');
 Route::post('/deleteBuilding', 'BuildingController@deleteBuilding');
 Route::post('/getCode', 'BuildingController@getBuildingCode');
 Route::post('/getFloorsUp', 'BuildingController@getFloors');
+Route::post('/getStallList', 'StallController@getStallList');
 
 Route::get('/stypeTable', 'StallTypeController@getStallTypes');
 Route::post('/checkSTypeName', 'StallTypeController@checkSTypeName');
@@ -108,14 +109,25 @@ Route::post('/stypeOptions', 'StallController@getSTypeOption');
 Route::post('/getUtilities', 'StallController@getUtilities');
 Route::post('/getStallInfo', 'StallController@getStallInfo');
 Route::post('/UpdateStall', 'StallController@updateStall');
+Route::post('/UpdateStalls', 'StallController@updateStalls');
 Route::post('/deleteStall', 'StallController@deleteStall');
 
 Route::post('/addStallRate', 'RateController@addStallRate');
 Route::get('/rateTable', 'RateController@getStallRates');
+Route::post('/prevRatesTable', 'RateController@getPrevStallRates');
+Route::post('/upRatesTable', 'RateController@getUpStallRates');
 Route::post('/getRateInfo', 'RateController@getRateInfo');
-Route::post('/updateRate', 'RateController@updateRate');
+Route::post('/getPrevRateInfo', 'RateController@getPrevRateInfo');
+Route::post('/getUpRateInfo', 'RateController@getUpRateInfo');
+Route::post('/updateStallRate', 'RateController@updateRate');
+Route::post('/stypeRate', 'RateController@getStallTypes');
+Route::post('/getForbidden', 'RateController@getForbidden');
 
-Route::get('/feeTable', 'Controller@getFees');
+Route::get('/chargeTable', 'ChargeController@getCharges');
+Route::post('/addCharge', 'ChargeController@addCharge');
+Route::post('/updateCharge', 'ChargeController@updateCharge');
+Route::post('/chargeInfo', 'ChargeController@getChargeInfo');
+Route::post('/deleteCharge', 'ChargeController@deleteCharge');
 Route::post('/addFee', 'Controller@addFee');
 Route::post('/updateFee', 'Controller@updateFee');
 Route::post('/deleteFee', 'Controller@deleteFee');
@@ -136,6 +148,7 @@ Route::get('/StallArchive','ArchiveController@stallIndex');
 Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 
 ////////////////////MANAGE CONTRACTS////////////////////
+Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
 
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');

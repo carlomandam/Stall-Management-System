@@ -44,16 +44,22 @@ class ApplicationController extends Controller
      public function create($stallid)
      { 
          
-        $stall = DB::table('tblStall')
+        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->where('stallID',$stallid)->first();
+            
+            /*DB::table('tblStall')
             ->select('*')
             ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
             ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
             ->leftJoin('tblstalltype_size as size', 'type.stypeSizeID', '=', 'size.stypeSizeID')
+            ->leftJoin('tblstallrate as rate', 'type.stype_SizeID', '=', 'rate.stype_SizeID')
+            ->leftJoin('tblstallrate_details as detail', 'rate.stallRateID', '=', 'detail.stallRateID')
             ->leftJoin('tblFloor as floor','tblStall.floorID','=','floor.floorID')
             ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
             ->where('tblStall.stallID',$stallid)
-            ->first();
-        return view('transaction.Application_temporary',compact('stall')/*,compact('nextId','stall','buildingNames','buildingCount','contract_period')*/);
+            ->first();*/
+        
+         return view('transaction.Application_temporary',compact('stall')
+                     /*,compact('nextId','stall','buildingNames','buildingCount','contract_period')*/);
     }
  
 

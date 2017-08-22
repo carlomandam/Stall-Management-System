@@ -16,7 +16,7 @@ class Stall extends Model
     public $incrementing = false;
     
     public function StallType(){
-        return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID');
+        return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID','stype_SizeID');
     }
     
     public function Floor(){
@@ -27,6 +27,17 @@ class Stall extends Model
     {
         return $this->hasMany('App\StallRental','stallID');
     }
-
     
+    public function StallUtility()
+    {
+        return $this->hasMany('App\StallUtility','stallID');
+    }
+    
+    public function StallHolder(){
+       return $this->belongsToMany('App\StallHolder', 'tblstallrental_info', 'stallID', 'stallHID')->orderBy('stallID','ASC');
+    }
+    
+    public function RentalInfo(){
+        return $this->hasMany('App\Stallrental','stallID');
+    }
 }

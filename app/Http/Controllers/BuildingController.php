@@ -23,7 +23,7 @@ class BuildingController extends Controller
                 $floor = new Floor;
                 $floor->floorLevel = $i+1;
                 $floor->bldgID = $building->bldgID;
-                $floor->floorCapacity = $_POST['capacity'][$i];
+                $floor->floorCapacity = ($_POST['capacity'][$i] != null) ? $_POST['capacity'][$i] : 0;
                 $floor->save();
                 
                 for($j = 1;$j <= $_POST['noOfStall'][$i];$j++){

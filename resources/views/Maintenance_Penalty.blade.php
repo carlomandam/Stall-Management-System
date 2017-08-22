@@ -1,29 +1,26 @@
-@extends('layout.app') @section('content-header')
-<h1>
-        Penalties 
-        
-      </h1>
+@extends('layout.app') @section('title') {{'Stall Type'}} @stop @section('content-header')
 <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
-    <li class="active">Penalties</li>
+    <li class="active">Stall Type</li>
 </ol> @stop @section('content')
-<div style="margin-top:2%;">
-    <button class="btn btn-primary" data-toggle="modal" data-target="#new"><span class='glyphicon glyphicon-plus'></span>Add New Penalty </button>
-</div>
-<div style="border:2px solid black;">
-    <div class="table-responsive">
-        <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
-            <thead>
-                <tr>
-                    <th>Penalty Name</th>
-                    <th>For</th>
-                    <th>No of Days</th>
-                    <th>Amount</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-        </table>
+<div class="box box-primary">
+    <div class="box-body">
+        <div class="table-responsive">
+            <div class="defaultNewButton">
+                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall Type </button>
+                <div class=" pull-right" id="archive"> <a href="{{ url('/StallTypeArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
+            </div>
+            <table id="table" class="table table-bordered table-striped" role="grid">
+                <thead>
+                    <tr>
+                        <th>Charge Name</th>
+                        <th>Amount/Rate</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 </div>
 <div class="modal fade" id="new" tabindex="-1" role="dialog">
@@ -33,34 +30,24 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Penalty</h4> </div>
+                    <h4 class="modal-title">New Charge</h4> </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="penName">Penalty Name*</label>
-                                <input type="text" class="form-control" name="penName" placeholder="Penalty Name" /> </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="for">For*</label>
-                                <select class="form-control feeSelect" name="for"> </select>
-                            </div>
+                                <label for="penName">Charge Name*</label>
+                                <input type="text" class="form-control" name="Name" placeholder="Charge Name" /> </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeWidth">Penalty*</label>
+                                <label for="stypeWidth">Amount*</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="penAmount" /> </div>
-                                <input type="radio" name="type" value="1"/>&nbsp;<label>Amount</label>
-                                &nbsp;&nbsp;
-                                <input type="radio" name="type" value="2"/>&nbsp;<label>Percent</label>
+                                    <input type="text" class="form-control" name="Amount" /> </div>
+                                <input type="radio" name="Type" value="1" />&nbsp;
+                                <label>Amount</label> &nbsp;&nbsp;
+                                <input type="radio" name="Type" value="2" />&nbsp;
+                                <label>Percent</label>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stypeWidth">Days Delayed*</label>
-                                <input type="text" class="form-control" name="days" /> </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -80,40 +67,30 @@
 </div>
 <div class="modal fade" id="update" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
-        <form method="post" id="updateform">
-            <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
-            <input type="hidden" name='id'>
+        <form action="" method="post" id="updateform">
+            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+            <input type="hidden" name="id">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Update Penalty</h4> </div>
+                    <h4 class="modal-title">Update Charge</h4> </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="penName">Penalty Name*</label>
-                                <input type="text" class="form-control" name="penName" placeholder="Penalty Name" /> </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="for">For*</label>
-                                <select class="form-control feeSelect" name="for"> </select>
-                            </div>
+                                <label for="penName">Charge Name*</label>
+                                <input type="text" class="form-control" name="Name" placeholder="Charge Name" /> </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="stypeWidth">Penalty*</label>
+                                <label for="stypeWidth">Amount*</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="penAmount" /> </div>
-                                <input type="radio" name="type" value="1"/>&nbsp;<label>Amount</label>
-                                &nbsp;&nbsp;
-                                <input type="radio" name="type" value="2"/>&nbsp;<label>Percent</label>
+                                    <input type="text" class="form-control" name="Amount" /> </div>
+                                <input type="radio" name="Type" value="1" />&nbsp;
+                                <label>Amount</label> &nbsp;&nbsp;
+                                <input type="radio" name="Type" value="2" />&nbsp;
+                                <label>Percent</label>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stypeWidth">Days Delayed*</label>
-                                <input type="text" class="form-control" name="days" /> </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -124,18 +101,18 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!-- <label style="float:left">All labels with "*" are required</label> -->
+                    <!-- <label style="float:left">All labels with "*" are required</label> --->
                     <button class="btn btn-info" style="background-color:#191966">Submit</button>
                 </div>
             </div>
         </form>
     </div>
-</div> @stop @section('script')
+</div>
+@stop @section('script')
 <script type="text/javascript">
     var obj;
     var chk;
     $(document).ready(function () {
-        getFees();
         $("#newform").validate({
             rules: {
                 penName: {
@@ -145,9 +122,9 @@
                     required: true
                     , number: true
                 }
-                ,days: {
+                , days: {
                     required: true
-                    ,digits : true
+                    , digits: true
                 }
             }
             , messages: {
@@ -175,9 +152,9 @@
                     required: true
                     , number: true
                 }
-                ,days: {
+                , days: {
                     required: true
-                    ,digits : true
+                    , digits: true
                 }
             }
             , messages: {
@@ -197,34 +174,17 @@
             , validClass: "valid-class"
         });
         $('#table').DataTable({
-            ajax: '/penTable'
+            ajax: '/chargeTable'
             , responsive: true
             , "columns": [
                 {
-                    "data": "penName"
+                    "data": "chargeName"
                     }
                     , {
-                    "data": function(data, type, dataToSet){
-                        if(data.fee == null)
-                            return "Overdue Payment";
-                        else
-                            return data.fee.feeName;
-                    }
+                    "data": "chargeAmount"
                     }
                     , {
-                    "data": "penDays"
-                    }
-                    , {
-                    "data": function(data, type, dataToSet){
-                        if(data.penType == 1)
-                            return "Php." + data.penAmount;
-                        else 
-                            return data.penAmount + "%";
-                        
-                    }
-                    }
-                    , {
-                    "data": "penDesc"
+                    "data": null
                     }
                     , {
                     "data": "actions"
@@ -235,7 +195,7 @@
                     "width": "20%"
                     , "searchable": false
                     , "sortable": false
-                    , "targets": 5
+                    , "targets": 3
                     }
   ]
         });
@@ -245,13 +205,13 @@
             var formData = new FormData($(this)[0]);
             $.ajax({
                 type: "POST"
-                , url: '/addPenalty'
+                , url: '/addCharge'
                 , data: formData
                 , processData: false
                 , contentType: false
                 , context: this
                 , success: function (data) {
-                    toastr.success('Added New Penalty');
+                    toastr.success('Added New Charge');
                     $('#table').DataTable().ajax.reload();
                     $('#new').modal('hide');
                 }
@@ -263,14 +223,14 @@
             var formData = new FormData($(this)[0]);
             $.ajax({
                 type: "POST"
-                , url: '/updatePenalty'
+                , url: '/updateCharge'
                 , data: formData
                 , processData: false
                 , contentType: false
                 , context: this
                 , success: function (data) {
                     if (data) {
-                        toastr.success('Updated Penalty');
+                        toastr.success('Updated Charge');
                         $('#table').DataTable().ajax.reload();
                         $('#update').modal('hide');
                     }
@@ -286,23 +246,18 @@
     function getInfo(id) {
         $.ajax({
             type: "POST"
-            , url: '/getPenaltyInfo'
+            , url: '/chargeInfo'
             , data: {
                 "_token": "{{ csrf_token() }}"
                 , "id": id
             }
             , success: function (data) {
-                obj = JSON.parse(data)[0];
-                $('#update').find('input[name=id]').val(obj.penID);
-                $('#update').find('input[name=penName]').val(obj.penName);
-                if(obj.feeID !== null)
-                    $('#update').find('select[name=for]').val(obj.feeID);
-                else
-                    $('#update').find('select[name=for]').val(0);
-                $('#update').find('input[name=days]').val(obj.penDays);
-                $('#update').find('input[name=penAmount]').val(obj.penAmount);
-                $('#update').find('input[name=type][value='+obj.penType+']').attr('checked',true);
-                $('#update').find('textarea[name=desc]').val(obj.penDesc);
+                obj = JSON.parse(data);
+                $('#update').find('input[name=id]').val(obj.chargeID);
+                $('#update').find('input[name=Name]').val(obj.chargeName);
+                $('#update').find('input[name=Amount]').val(obj.chargeAmount);
+                $('#update').find('input[name=Type][value=' + obj.chargeType + ']').attr('checked', true);
+                //$('#update').find('textarea[name=desc]').val(obj.penDesc);
                 $('#update').modal('show');
             }
         });
@@ -311,35 +266,14 @@
     function deleteBuilding(id) {
         $.ajax({
             type: "POST"
-            , url: '/deletePenalty'
+            , url: '/deleteCharge'
             , data: {
                 "_token": "{{ csrf_token() }}"
                 , "id": id
             }
             , success: function (data) {
                 $('#table').DataTable().ajax.reload();
-                toastr.success('Penalty Deleted');
-            }
-        });
-    }
-
-    function getFees(){
-        $.ajax({
-            type: "POST"
-            , url: '/getFees'
-            , data: {
-                "_token": "{{ csrf_token() }}"
-            }
-            , success: function (data) {
-                fees = JSON.parse(data);
-                var opt = "<option value='0'>Overdue Payment</option>";
-                for (var i = 0; i < fees.length; i++) {
-                    opt += '<option value="' + fees[i].feeID + '">' + fees[i].feeName + '</option>';
-                }
-                
-                $('.feeSelect').each(function(){
-                    $(this).html(opt);
-                });
+                toastr.success('Charge Deleted');
             }
         });
     }

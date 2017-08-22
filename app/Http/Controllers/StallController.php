@@ -8,7 +8,7 @@ use App\Stall;
 use App\StallType;
 use App\Floor;
 use App\Building;
-use App\StallUtil;
+use App\StallUtility;
 class StallController extends Controller
 {
     /*public function getStalls(){
@@ -36,42 +36,6 @@ class StallController extends Controller
     else
         return (json_encode($data));
     }*/
-    function updateStall(){
-        $hasChange = false;
-        $stall = Stall::where('stallID',$_POST['stallID'])->first();
-        $stall->stype_SizeID = (isset($_POST['type'])) ? $_POST['type'] : null;
-        if($stall->isDirty()){
-            $stall->save();
-            $hasChange = true;
-        }
-        if(isset($_POST['util'])){
-            for($i = 0; $i < count($_POST['util']);$i++){
-                $stallutil = StallUtil::where('stallID',$_POST['stallID'])->where('utilID',$_POST['util'][$i])->first();
-                if(Empty($stallutil)){
-                    $stallutil = new StallUtil;
-                    $stallutil->stallID = $stall->stallID;
-                    $stallutil->utilID = $_POST['util'][$i];
-                    $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
-                    $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
-                    $stallutil->meterID = (isset($_POST['meter'.$_POST['util'][$i]])) ? $_POST['meter'.$_POST['util'][$i]] : null;
-                    if($stallutil->isDirty()){
-                        $stallutil->save();
-                        $hasChange = true;  
-                    }
-                }
-                else{
-                    $stallutil->RateType = $_POST['utilRadio'.$_POST['util'][$i]];
-                    $stallutil->Rate =(isset($_POST['utilAmount'.$_POST['util'][$i]]) ? $_POST['utilAmount'.$_POST['util'][$i]] : 0);
-                    $stallutil->meterID = (isset($_POST['meter'.$_POST['util'][$i]])) ? $_POST['meter'.$_POST['util'][$i]] : null;
-                    if($stallutil->isDirty()){
-                        $stallutil->save();(isset($_POST['meter'.$_POST['util'][$i]])) ? $_POST['meter'.$_POST['util'][$i]] : null;
-                        $hasChange = true;
-                    }
-                }
-            }
-        }
-        echo $hasChange;
-    }
     
     function getStalls(){
     	$stalls = DB::table('tblStall')
@@ -137,6 +101,11 @@ class StallController extends Controller
     	return ($id);
     }
     
+    function getStallInfo(){
+        $stall = Stall::with('StallType','Floor.Building','StallUtility')->where('stallID',$_POST['id'])->get();
+        return (json_encode($stall[0]));
+    }
+    
     function addStall(){
         $stall = new Stall;
         $stall->stallID = $_POST['stallID'];
@@ -167,6 +136,83 @@ class StallController extends Controller
                     $hasChange = true;
                 }
             }
+            }
+        }
+    }
+    
+    function getStallList(){
+        $stalls = Building::with('Floor.Stall')->get();
+        return (json_encode($stalls));
+    }
+    
+    function updateStall(){
+        $hasChange = false;
+        $stall = Stall::where('stallID',$_POST['stallID'])->first();
+        $stall->stype_SizeID = (isset($_POST['type'])) ? $_POST['type'] : null;
+        $stall->stallDesc = $_POST['desc'];
+        if($stall->isDirty()){
+            $stall->save();
+            $hasChange = true;
+        }
+        
+        $electricity = StallUtility::where('stallID',$stall->stallID)->where('utilityType','1')->first();
+        if(isset($_POST['electricity']) && count($electricity) == 0){
+            $electricity = new StallUtility;
+            $electricity->stallID = $stall->stallID;
+            $electricity->utilityType = 1;
+            $electricity->save();
+            $hasChange = true;
+        }
+        else if(!isset($_POST['electricity']) && count($electricity) > 0){
+            $electricity->delete();
+            $hasChange = true;
+        }
+        
+        $water = StallUtility::where('stallID',$stall->stallID)->where('utilityType','2')->first();        
+        if(isset($_POST['water']) && count($water) == 0){
+            $water = new StallUtility;
+            $water->stallID = $stall->stallID;
+            $water->utilityType = 2;
+            $water->save();
+            $hasChange = true;
+        }
+        else if(!isset($_POST['water']) && count($water) > 0){
+            $water->delete();
+            $hasChange = true;
+        }
+        
+        echo $hasChange;
+    }
+    
+    function updateStalls(){
+        foreach($_POST['stalls'] as $stall){
+            $temp = Stall::where('stallId',$stall)->first();
+            $temp->stype_SizeID = $_POST['type'];
+            
+            if($_POST['desc'] != '')
+                $temp->stallDesc = $_POST['desc'];
+            
+            if($temp->isDirty())
+                $temp->save();
+            
+            if(isset($_POST['electricity'])){
+                $electricity = StallUtility::where('stallID',$temp->stallID)->where('utilityType','1')->first();
+                if(count($electricity) == 0){
+                    $electricity = new StallUtility;
+                    $electricity->stallID = $temp->stallID;
+                    $electricity->utilityType = 1;
+                }
+                $electricity->save();
+            }
+            
+            if(isset($_POST['water'])){
+                $water = StallUtility::where('stallID',$temp->stallID)->where('utilityType','2')->first();
+                if(count($water) == 0){
+                    $water = new StallUtility;
+                    $water->stallID = $temp->stallID;
+                    $water->utilityType = 2;
+                }
+                $water->save();
             }
         }
     }
