@@ -41,18 +41,11 @@
                         </div>
                         <div class="box-body">
                           <div class="col-md-12">
-                            <label class="col-md-3">Payment No.</label>
+                            <label class="col-md-3">Transaction No</label>
                             <div class="col-md-4"> 
                               <input type="text" disabled="" class="form-control">
                             </div>
-                            <br style="line-height: 40px">
-                          </div>
-                          <div class="col-md-12">
-                            <label class="col-md-3">StallHolder No.</label>
-                            <div class="col-md-4">
-                              <input type="text" class="form-control">
-                            </div>
-                            <label class="col-md-1">Date</label>
+                             <label class="col-md-1">Date</label>
                             <div class="col-md-4">
                              
                                 <input type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask/>
@@ -60,10 +53,18 @@
                             </div>
                             <br style="line-height: 40px">
                           </div>
+                          <div class="col-md-12">
+                            <label class="col-md-3">StallHolder No</label>
+                            <div class="col-md-4">
+                              <input type="text" class="form-control">
+                            </div>
+                           
+                            <br style="line-height: 40px">
+                          </div>
 
                           <div class="col-md-12">
                             <label class="col-md-3">StallHolder Name</label>
-                            <div class="col-md-9">
+                            <div class="col-md-4">
                               <input type="text" class="form-control">
                             </div>
                             <br style="line-height: 40px">
@@ -87,13 +88,13 @@
                               </thead>
                               <tr>
                                 <th>A001</th>
-                                <th>3000</th>
+                                <th>Php 3000</th>
                                 <th><span class="label label-warning">Warning</span></th>
                               </tr>
 
                               <tr>
                                 <th>A002</th>
-                                <th>3000</th>
+                                <th>Php 3000</th>
                                 <th><span class="label label-warning">Warning</span></th>
                               </tr>
                             </table>
@@ -214,7 +215,7 @@
                         <th>Brixter Kim</th>
                         <th>A001</th>
                         <th>12/29/2016</span></th>
-                        <th>1000.00</th>
+                        <th>Php 1000.00</th>
                         <th>
                           <button type="" class="btn btn-warning">Refund</button>
                             <button type="" class="btn btn-danger">Remove</button>

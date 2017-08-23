@@ -98,6 +98,7 @@
                 <div class="col-md-6">
                   <input type="text" class="form-control">
                 </div>
+                <br style="line-height: 40px">
               </div>
 
               <div class="col-md-6" id="display">
@@ -179,11 +180,13 @@
         document.getElementById("pucha").className =('');
         $("#transferstall").show();
         $("#otherdesc").hide();
+         $("#display").show();
       }
       else if(this.value == '2')
       {
         document.getElementById("display").className =('col-md-6');
         document.getElementById("pucha").className =('');
+        $("#display").hide();
         $("#transferstall").hide();
         $("#otherdesc").show();
       }else
@@ -192,6 +195,7 @@
         document.getElementById("pucha").className =('col-md-9');
         $("#transferstall").hide();
         $("#otherdesc").hide();
+         $("#display").show();
       }
     });
   });

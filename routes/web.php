@@ -160,7 +160,7 @@ Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getRegistrationList','RegistrationListController@getRegistrationList');
 
 ///////////////////PAYMENT AND COLLECTIONS///////////////
-Route::get('/PendingPayment',function(){
+Route::get('/Payment',function(){
     return view('transaction.PaymentAndCollection.pendingPayment');
 });
 Route::get('/ViewPayment',function(){
@@ -178,3 +178,4 @@ Route::get('/Queries','QueriesController@index');
 
 ///////////////Utilities////////
 Route::get('/Utilities','UtilitiesController@index');
+Route::get('/testjoin','ApplicationController@testjoin');

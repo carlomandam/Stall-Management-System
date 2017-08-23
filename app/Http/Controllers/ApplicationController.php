@@ -20,6 +20,35 @@ use Illuminate\Support\Facades\Input;
 class ApplicationController extends Controller
 {
    
+    public function testjoin(){
+        $rate = DB::table('tblContractinfo as contract')
+        ->select('*')
+        ->leftJoin('tblStallRental_info as rental','contract.stallRentID',"=","rental.stallRentID")
+        ->leftJoin('tblStall as stall','rental.stallID','=','stall.stallID')
+        ->leftJoin('tblStallType_StallSize as type','stall.stype_SizeID',"=",'type.stype_SizeID')->leftJoin('tblStallRate as rate','rate.stype_SizeID','=','type.stype_SizeID')->where('rate.stallRateEffectivity','=',''->get();
+
+        return json_encode($rate);
+        /*DB::table('tblStall')
+            ->select('*')
+            ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')->leftJoin*/
+
+            /*,function($q){
+            ->on('type.stype_SizeID','=','rate.stype_SizeID')->where('stallRateEffectivity','<=','date(contract.created_at)')->orderBy('rate.stallRateEffectivity','DESC')->first();*/
+
+            /*,function($query)
+        {
+            $query->select('rate.stallRateEffectivity')
+                  ->from('tblContractinfo as contract')
+                  ->leftJoin('tblStallRental_info as rental','contract.stallRentID',"=","rental.stallRentID")
+                  ->leftJoin('tblStall as stall','rental.stallID','=','stall.stallID')
+                  ->leftJoin('tblStallType_StallSize as type','stall.stype_SizeID',"=",'type.stype_SizeID')->leftJoin('tblStallRate as rate','rate.stype_SizeID','=','type.stype_SizeID')
+                  ->where('rate.stallRateEffectivity','<=','date(contract.created_at)')->limit('1');
+                  
+        
+        })
+        */
+    
+    }
 
     public function member()
     {

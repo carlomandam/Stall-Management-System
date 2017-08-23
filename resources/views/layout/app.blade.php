@@ -142,7 +142,7 @@
 
                              
                                       <li class="treeview"> 
-                                        <a href="/PendingPayment">
+                                        <a href="/Payment">
                                         <i class="fa fa-circle-o"></i><span>Payment and Collections</span>
                                         </a>
 
