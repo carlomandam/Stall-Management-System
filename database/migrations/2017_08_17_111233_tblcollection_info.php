@@ -12,15 +12,22 @@ class TblcollectionInfo extends Migration
      * @return void
      */
     public function up()
+/* HEAD:database/migrations/2017_08_17_104536_tblBilling.php
+    { 
+        Schema::create('tblBilling', function (Blueprint $table) {
+            $table->increments('billingID');
+            $table->integer('stallRentalID')->unsigned()->index();
+            $table->date('billDueDate');
+            $table->datetime('billDate');*/
     {
        Schema::create('tblCollection_Info', function (Blueprint $table) {
             $table->increments('collectionID');
-            $table->integer('stallRentID')->unsigned()->index();
+            $table->integer('stallRentalID')->unsigned()->index();
             $table->integer('collectionType'); //0-security deposit, 1-stall maintenance fee, 2-rental rate
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallRentID')->references('stallRentID')->on('tblStallRental_Info')
+            $table->foreign('stallRentalID')->references('stallRentalID')->on('tblStallRental_Info')
               ->onDelete('cascade');
          });
     }

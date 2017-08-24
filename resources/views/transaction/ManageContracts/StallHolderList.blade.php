@@ -4,6 +4,10 @@
     .take-all-space-you-can {
         width: 100%;
     }
+    
+    .glyphicon {
+        vertical-align: middle;
+    }
 </style> @stop @section('content-header')
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i>Transactions</li>
@@ -29,8 +33,7 @@
                                             <thead>
                                                 <th width="200px;">StallHolder Name</th>
                                                 <th width="150px;">Stall Code</th>
-                                                <th width="150px;">Stall Location
-                                                </th>
+                                                <th width="150px;">Stall Location </th>
                                                 <th width="200px;">Collection Status</th>
                                                 <th width="200px;">Start Date</th>
                                                 <th width="200px;">End Date</th>
@@ -49,13 +52,14 @@
                             <div class="box-body">
                                 <div class="col-xs-12">
                                     <div class="table-responsive">
-                                        <table id="tblreg" class="table table-striped" role="grid">
+                                        <table id="tblreg" class="table table-striped" role="grid" style="width:100%">
                                             <thead>
-                                                <th style="width: 300px;">Name</th>
-                                                <th style="width: 300px;">Address</th>
-                                                <th style="width: 200px;">Contact No.</th>
-                                                <th style="width: 200px;">Registration Date</th>
-                                                <th style="width: 500px;">Actions</th>
+                                                <th>Name</th>
+                                                <th>Stall Code</th>
+                                                <th>Address</th>
+                                                <th>Contact No.</th>
+                                                <th>Registration Date</th>
+                                                <th style="width: 350px;">Actions</th>
                                             </thead>
                                         </table>
                                     </div>
@@ -80,16 +84,16 @@
             ajax: '/getStallHolderList'
             , responsive: true
             , "columns": [
-                 {
+                {
                     "data": function (data, type, dataToSet) {
-                        if (data.stall_holder.length != 0) return data.stall_holder[0].stallHLName + ", " + data.stall_holder[0].stallHFName + " " + data.stall_holder[0].stallHMName[0] + '.';
+                        if (data.current_stall_holder != null) return data.current_stall_holder.stall_holder.stallHLName + ", " + data.current_stall_holder.stall_holder.stallHFName + " " + data.current_stall_holder.stall_holder.stallHMName[0] + '.';
                         else return null;
                     }
-                },
-                {
+                }
+                , {
                     "data": "stallID"
                 }
-                
+
                 , {
                     "data": function (data, type, dataToSet) {
                         return null;
@@ -97,25 +101,84 @@
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        if (data.stall_rental.contract != null || data.stall_rental.contract != undefined) 
-                            return data.stall_rental[0].startingDate;
+                        return null;
+                    }
+                }
+                , {
+                    "data": function (data, type, dataToSet) {
+                        if (data.current_stall_holder != null || data.current_stall_holder != undefined) return data.current_stall_holder.startingDate;
                         else return null;
                     }
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        if (data.stall_rental.contract != null || data.stall_rental.contract != undefined) return data.stall_rental[0].contract[0].contractEnd;
+                        if (data.current_stall_holder != null || data.current_stall_holder != undefined) return data.current_stall_holder.contract.contractEnd;
                         else return null;
                     }
                 }
                 , {
-                    "data": "actions"
+                    "data": function (data, type, dataToSet) {
+                        if (data.current_stall_holder != null || data.current_stall_holder != undefined) {
+                            return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "&#39;' style='width:80%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
+                        }
+                        else {
+                            return "<button class='btn btn-success btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "&#39;' style='width:80%'><span class='glyphicon glyphicon-pencil'></span> Register</button>";
+                        }
+                    }
                 }
 			]
             , "columnDefs": [
                 {
                     "width": "20%"
                     , "searchable": false
+                    , "sortable": false
+                    , "targets": 5
+                    }
+            ]
+        });
+        $('#tblreg').DataTable({
+            ajax: '/getRegistrationList'
+            , responsive: true
+            , "columns": [
+                {
+                    "data": function (data, type, dataToSet) {
+                        return data.stall_holder.stallHFName + ' ' + data.stall_holder.stallHMName[0] + '. ' + data.stall_holder.stallHLName;
+                    }
+                }
+                
+                , {
+                    "data": "stallID"
+                }
+
+                , {
+                    "data": function (data, type, dataToSet) {
+                        return data.stall_holder.stallHAddress;
+                    }
+                }
+                , {
+                    "data": function (data, type, dataToSet) {
+                        var string = '';
+                        for (var i = 0; i < data.stall_holder.contact_no.length; i++) {
+                            string += data.stall_holder.contact_no[i].contactNumber + "<br>";
+                        }
+                        return string;
+                    }
+                }
+                , {
+                    "data": function (data, type, dataToSet) {
+                        var date = new Date(data.created_at);
+                        return date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear();
+                    }
+                }
+                , {
+                    "data": function (data, type, dataToSet) {
+                        return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "/" + data.stallRentalID + "&#39;' style='width:80%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";;
+                    }
+                }
+			]
+            , "columnDefs": [
+                {
+                    "searchable": false
                     , "sortable": false
                     , "targets": 5
                     }

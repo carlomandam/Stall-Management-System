@@ -15,9 +15,12 @@ class Tblcontactnos extends Migration
     {
          Schema::create('tblContactNos', function (Blueprint $table) {
             $table->increments('contactID');
+            $table->integer('stallHID')->unsigned();
             $table->string('contactNumber','20');
             $table->softDeletes();
-
+            
+            $table->foreign('stallHID')->references('stallHID')->on('tblStallHolder')
+              ->onDelete('cascade');
          });
     }
 

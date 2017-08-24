@@ -23,9 +23,9 @@ class Stall extends Model
         return $this->belongsTo('App\Floor','floorID');
     }
 
-    public function StallRental()
+    public function CurrentStallHolder()
     {
-        return $this->hasMany('App\StallRental','stallID');
+        return $this->hasOne('App\StallRental','stallID')->whereHas('Contract')->where('stallRentalStatus',1)->with('StallHolder','Contract');
     }
     
     public function StallUtility()
