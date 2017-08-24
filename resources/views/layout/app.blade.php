@@ -142,32 +142,16 @@
 
                              
                                       <li class="treeview"> 
-                                        <a href="#">
+                                        <a href="/Payment">
                                         <i class="fa fa-circle-o"></i><span>Payment and Collections</span>
-                                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-left pull-right"></i> 
-                                        </span> 
                                         </a>
-
-                                         <ul class="treeview-menu">
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Billing</a></li>
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Payment</a></li>
-                                        </ul>
 
                                       </li>
                             
                                     <li class = "treeview">
-                                        <a href="#">
+                                        <a href="/RequestList">
                                         <i class="fa fa-circle-o"></i> <span>Manage Requests</span>
-                                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-left pull-right"></i> 
-                                        </span> 
                                         </a>
-
-                                        <ul class="treeview-menu">
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Request List</a></li>
-
-                                        </ul>
                                     </li>
                               </ul>
                         </li>

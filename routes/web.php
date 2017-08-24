@@ -160,10 +160,22 @@ Route::get('/UpdateRegistration/{rentID}','ManageContractsController@updateRegis
 
 Route::get('/getStallList','ManageContractsController@getStallList');
 ///////////////////PAYMENT AND COLLECTIONS///////////////
-Route::get('/Payment','PaymentController@paymentIndex');
-
+Route::get('/Payment',function(){
+    return view('transaction.PaymentAndCollection.pendingPayment');
+});
+Route::get('/ViewPayment',function(){
+      return view('transaction.PaymentAndCollection.viewPayment');
+});
+////////////////REQUESTS////////////
+Route::get('/RequestList',function(){
+    return view('transaction.Requests.requestList');
+});
+Route::get('/NewRequest',function(){
+    return view('transaction.Requests.newRequest');
+});
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
 
 ///////////////Utilities////////
 Route::get('/Utilities','UtilitiesController@index');
+Route::get('/testjoin','ApplicationController@testjoin');
