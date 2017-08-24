@@ -8,10 +8,11 @@ class ContactNo extends Model
 {
     protected $table = "tblContactNos";
     protected $primaryKey = "contactID";
-
-    public function StallRental()
+    public $timestamps = false;
+    
+    public function StallHolder()
     {
-    	return $this->belongsToMany('App\StallRental');
+    	return $this->belongsTo('App\StallHolder');
     }
 
 }

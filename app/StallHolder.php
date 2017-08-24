@@ -10,7 +10,22 @@ class StallHolder extends Model
     protected $table = "tblStallHolder";
     protected $primaryKey = "stallHID";
 
+
  	public function StallRental(){
  		return $this->belongsToMany('App\Stall', 'tblstallrental_info', 'stallHID', 'stallID')->withPivot('stallRentID')->orderBy('stallHLName','ASC');
+
+ 	public function Stall(){
+ 		return $this->belongsToMany('App\Stall', 'tblstallrental_info', 'stallHID', 'stallID')->withPivot('stallRentalID')->orderBy('stallHLName','ASC');
+
  	}
+    
+    public function StallRental()
+    {
+        return $this->hasMany('App\StallRental','stallHID');
+    }
+    
+    public function ContactNo()
+    {
+        return $this->hasMany('App\ContactNo','stallHID');
+    }
 }

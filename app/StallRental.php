@@ -7,20 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class StallRental extends Model
 {
     protected $table = "tblStallRental_Info";
-    protected $primaryKey = "stallRentID";
+    protected $primaryKey = "stallRentalID";
     protected $fillable = [
         'stallHID',
         'stallID',
         'startingDate'
     ];
-    public function ContactNos()
-    {
-    	return $this->belongsToMany('App\ContactNo','tblStallRental_ContactNos','contactID','stallRentalID');
-    }
 
-     public function StallHolders()
+     public function Assoc()
     {
-        return $this->belongsToMany('App\StallHolder','tblStallRental_StallHAssoc','stallRentID','stallH_assocID');
+        return $this->belongsToMany('App\StallHolder','tblStallRental_StallHAssoc','stallRentalID','stallH_assocID');
     }
 
     public function StallHolder()
@@ -34,7 +30,15 @@ class StallRental extends Model
     }
     
      public function Contract(){
+
         return $this->hasOne('App\Contract','stallRentID');
+
+        return $this->hasOne('App\Contract','stallRentalID');
+    }
+    
+    public function Product(){
+        return $this->belongsToMany('App\Product','tblstallrental_product','stallRentalID','productID');
+
     }
     
 }

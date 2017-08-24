@@ -15,11 +15,16 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/toastr.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/select2/select2.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datepicker/datepicker3.css')}}">
+       <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/dropdown.css')}}">
+
     @yield('style')
     <style>
 	    *{
 	    	font-family: "Trebuchet MS"
 	    }
+      .fa-power-off{
+        margin-right: 20px;
+      }
         .modal-header {
             background-color: dodgerblue;
             color: aliceblue;
@@ -61,7 +66,15 @@
         {
           font-size: 18px;
         }
-
+        .system-name
+        {
+          font-size: 20px;
+          color: white;
+          margin-left: 30px;
+          position: relative;
+          top: 10px;
+       
+        }
     </style>
 </head>
 
@@ -75,9 +88,25 @@
             <nav class="navbar navbar-fixed-top">
                 <!-- Sidebar toggle button-->
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a>
-                <div class="navbar-custom-menu">
-                    <!-- For LOg OUT -->
-                </div>
+                <span class="system-name"><b>Stalls Management System</b></span>
+
+                 <!-- Right Side Of Navbar -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- Authentication Links -->
+                       
+                            <li class="dropdown">
+                                <a href="#" role="button" aria-expanded="false">
+                                  Log Out&nbsp<span class="fa fa-power-off"></span>
+                                </a>
+
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
+                                 
+                            </li>
+                      
+                    </ul>
             </nav>
         </header>
         <aside class="main-sidebar">
@@ -91,7 +120,7 @@
                 <ul class="sidebar-menu">
                     <li class="header"><span>MAIN NAVIGATION</span></li>
                 	 <li class="treeview">
-                        <a href="#">
+                        <a href="/Dashboard" class="{{Route::getFacadeRoot()->current()->uri() == 'Dashboard' ? 'active' : ''}}">
                             <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                         </a>
@@ -113,32 +142,16 @@
 
                              
                                       <li class="treeview"> 
-                                        <a href="#">
+                                        <a href="/Payment">
                                         <i class="fa fa-circle-o"></i><span>Payment and Collections</span>
-                                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-left pull-right"></i> 
-                                        </span> 
                                         </a>
-
-                                         <ul class="treeview-menu">
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Billing</a></li>
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Payment</a></li>
-                                        </ul>
 
                                       </li>
                             
                                     <li class = "treeview">
-                                        <a href="#">
+                                        <a href="/RequestList">
                                         <i class="fa fa-circle-o"></i> <span>Manage Requests</span>
-                                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-left pull-right"></i> 
-                                        </span> 
                                         </a>
-
-                                        <ul class="treeview-menu">
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Request List</a></li>
-
-                                        </ul>
                                     </li>
                               </ul>
                         </li>
@@ -155,30 +168,22 @@
                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''}}"><a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a></li>
                                     <li id="mKiosk"><a href="/kioskmap"><i class="fa fa-map"></i><span>Kiosk Map</span></a></li>
-                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Fee' ? 'active' : ''}}"><a href="/Fee"><i class="fa fa-file-o"></i> <span>Fees</span></a></li>
+                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Charges' ? 'active' : ''}}"><a href="/Charges"><i class="fa fa-file-o"></i> <span>Charges</span></a></li>
                                               </ul>
                         </li>
 
                          <li class = "treeview">    
                               <a href="/Queries"> 
                               <i class="fa fa-circle"></i> <span>Queries</span>
-                              <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i> 
-                              </span> 
+                             
                               </a> 
 
                         </li>
 
                          <li class = "treeview">    
-                              <a href="#"> 
+                              <a href="/Utilities"> 
                               <i class="fa fa-cogs"></i> <span>Utilities</span>
-                               <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i> 
-                                </span> 
                               </a> 
-                              <ul class="treeview-menu">
-                                    <li class = "active"><a href="#"><i class="fa fa-building-o "></i> Vendor Collection Status</a></li>
-                              </ul>
                         </li>
 
                         <li class = "treeview">    
@@ -194,6 +199,15 @@
                                          <li><a href="#"><i class="fa fa-circle-o"></i>Stall Status Report</a></li>
                               </ul>
                         </li>
+
+                     <li class="header"><span>ACCOUNT SETTINGS</span></li>
+                       <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-user"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+
                    
                 </ul>
             </section>
@@ -245,7 +259,10 @@ $('ul.treeview-menu a').filter(function() {
      return this.href == url;
 }).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
 
-
+// for sidebar menu entirely but not cover treeview
+$('ul.sidebar-menu a').filter(function() {
+  return this.href == url;
+}).parent().addClass('active');
 
     </script>
     

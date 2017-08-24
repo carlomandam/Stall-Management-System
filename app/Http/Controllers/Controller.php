@@ -19,6 +19,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     function stallID($code,$floor){
     	$stall = Stall::where('stallID','LIKE',$code."-".$floor."%")->orderBy('stallID','desc')->first();
         $id = "";
@@ -254,4 +255,5 @@ class Controller extends BaseController
         $fees = Fee::all();
         return json_encode($fees);
     }
+
 }

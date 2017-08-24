@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App;
 use DB;
 use App\StallHolder;
+use App\ContactNo;
 use App\Stall;
 use App\StalLRental;
 use App\StallRate;
@@ -12,18 +13,61 @@ use App\Rent;
 use App\ContactNos;
 use App\ContractPeriod;
 use App\Contract;
+use App\Product;
 use App\ContractInfo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Routing\Redirector;
 
 class ApplicationController extends Controller
 {
    
+    public function testjoin(){
+        $rate = DB::table('tblContractinfo as contract')
+        ->select('*')
+        ->leftJoin('tblStallRental_info as rental','contract.stallRentID',"=","rental.stallRentID")
+        ->leftJoin('tblStall as stall','rental.stallID','=','stall.stallID')
+        ->leftJoin('tblStallType_StallSize as type','stall.stype_SizeID',"=",'type.stype_SizeID')->leftJoin('tblStallRate as rate','rate.stype_SizeID','=','type.stype_SizeID')->where('rate.stallRateEffectivity','=','')->get();
 
+        return json_encode($rate);
+        /*DB::table('tblStall')
+            ->select('*')
+            ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')->leftJoin*/
+
+            /*,function($q){
+            ->on('type.stype_SizeID','=','rate.stype_SizeID')->where('stallRateEffectivity','<=','date(contract.created_at)')->orderBy('rate.stallRateEffectivity','DESC')->first();*/
+
+            /*,function($query)
+        {
+            $query->select('rate.stallRateEffectivity')
+                  ->from('tblContractinfo as contract')
+                  ->leftJoin('tblStallRental_info as rental','contract.stallRentID',"=","rental.stallRentID")
+                  ->leftJoin('tblStall as stall','rental.stallID','=','stall.stallID')
+                  ->leftJoin('tblStallType_StallSize as type','stall.stype_SizeID',"=",'type.stype_SizeID')->leftJoin('tblStallRate as rate','rate.stype_SizeID','=','type.stype_SizeID')
+                  ->where('rate.stallRateEffectivity','<=','date(contract.created_at)')->limit('1');
+                  
+        
+        })
+        */
+    
+    }
+
+    public function view($stallid,$rentalid){
+        $prod = Product::all();
+        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentStallHolder')->where('stallID',$stallid)->first();
+        
+        
+        $rental =StallRental::with('StallHolder.ContactNo','Contract','Stall.StallType')->where('stallRentalID',$rentalid)->first();
+        
+        if($stall == null)
+            return redirect('/StallHolderList');
+        else
+            return view('transaction.Application_temporary',compact('stall','rental','prod'));
+    }
+    
     public function member()
     {
-
       return view ('transaction.Member');
     }
 
@@ -43,17 +87,25 @@ class ApplicationController extends Controller
 
      public function create($stallid)
      { 
-         
-        $stall = DB::table('tblStall')
+        $prod = Product::all();
+        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentStallHolder')->where('stallID',$stallid)->first();
+            
+            /*DB::table('tblStall')
             ->select('*')
             ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
             ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
             ->leftJoin('tblstalltype_size as size', 'type.stypeSizeID', '=', 'size.stypeSizeID')
+            ->leftJoin('tblstallrate as rate', 'type.stype_SizeID', '=', 'rate.stype_SizeID')
+            ->leftJoin('tblstallrate_details as detail', 'rate.stallRateID', '=', 'detail.stallRateID')
             ->leftJoin('tblFloor as floor','tblStall.floorID','=','floor.floorID')
             ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
             ->where('tblStall.stallID',$stallid)
-            ->first();
-        return view('transaction.Application_temporary',compact('stall')/*,compact('nextId','stall','buildingNames','buildingCount','contract_period')*/);
+            ->first();*/
+        if($stall == null)
+            return redirect('/StallHolderList');
+        else
+            return view('transaction.Application_temporary',compact('stall','prod')
+                     /*,compact('nextId','stall','buildingNames','buildingCount','contract_period')*/);
     }
  
 
@@ -153,13 +205,13 @@ class ApplicationController extends Controller
                     if( $rent->save())
                     {
                       
-                     foreach($_POST['numbers'] as $no)
-                     {
+                    foreach($_POST['numbers'] as $no)
+                    {
                       $contact = new ContactNos;
-                      $contact->stallRentID = $rent->stallRentID;
+                      $contact->stallRentalID = $rent->stallRentalID;
                       $contact->ContactNos()->attach($no);
                       
-                     }
+                    }
 
                      
 
@@ -169,7 +221,7 @@ class ApplicationController extends Controller
                       $stallholder->stallH_assocName = $_POST['assoc_one'];
                       $stallholder->save();
 
-                      $stallholder->stallRentID = $rent->stallRentID;
+                      $stallholder->stallRentalID = $rent->stallRentalID;
                       $associd = $stallholder->stallH_assocID;
                       $stallholder->StallHolder()->attach($associd);
                     }
@@ -179,7 +231,7 @@ class ApplicationController extends Controller
                       $stallholder->stallH_assocName = $_POST['assoc_two'];
                       $stallholder->save();
 
-                      $stallholder->stallRentID = $rent->stallRentID;
+                      $stallholder->stallRentalID = $rent->stallRentalID;
                       $associd = $stallholder->stallH_assocID;
                       $stallholder->StallHolder()->attach($associd);
                     }
@@ -279,11 +331,13 @@ function checkEmail()
 
         if($request->has('q')){
             $search = $request->q;
-            $data = DB::table("tblvendor")
-                ->select("venID",DB::raw("CONCAT(venFName,' ',venLName) as full_name"))
-                ->where('venFName','LIKE',"%$search%")
-                ->orWhere('venLName','LIKE',"%$search%")
-                ->get();
+            $data = StallHolder::with('ContactNo')->where('stallHFName','LIKE',"%$search%")
+                ->orWhere('stallHLName','LIKE',"%$search%")->get();
+            /*$data = DB::table("tblstallholder")
+                ->select("*",DB::raw("CONCAT(stallHFName,' ',stallHLName) as full_name"))
+                ->where('stallHFName','LIKE',"%$search%")
+                ->orWhere('stallHLName','LIKE',"%$search%")->join('tblContactNos','tblstallholder.stallHID','=','tblContactNos.stallHID')->groupBy('tblstallholder.stallHID')
+                ->get();*/
         }
 
         return response()->json($data);
@@ -309,7 +363,65 @@ function checkEmail()
         return view('pdfview');
     }
 
+    function newApplication(){
+        if(!isset($_POST['ven_name'])){
+            $holder = new StallHolder;
+            $holder->stallHFName = $_POST['fname'];
+            $holder->stallHMName = $_POST['mname'];
+            $holder->stallHLName = $_POST['lname'];
+            $holder->stallHBday = date_format(date_create($_POST['DOBYear'].'-'.$_POST['DOBMonth'].'-'.$_POST['DOBDay']),"Y-m-d");
+            $holder->stallHEmail = $_POST['email'];
+            $holder->stallHSex = $_POST['sex'];
+            $holder->stallHAddress = $_POST['address'];
+            if($holder->save()){
+                foreach($_POST['numbers'] as $no){
+                    if($no != ''){
+                        $contact = new ContactNo;
+                        $contact->contactNumber = $no;
+                        $contact->stallHID = $holder->stallHID; 
+                        $contact->save();
+                    }
+                }
+            }
+        }else{
+            $holder = StallHolder::where('stallHID',$_POST['ven_name'])->first();
+            
+            foreach($_POST['numbers'] as $no){
+                $contact = ContactNo::where('contactNumber',$no)->first();
+                if($no != '' && count($contact) == 0){
+                    $contact = new ContactNo;
+                    $contact->contactNumber = $no;
+                    $contact->stallHID = $holder->stallHID; 
+                    $contact->save();
+                }
+            }
+        }
+        
+        $rental = new StallRental;
+        $rental->stallID = $_POST['dispStallID'];
+        $rental->stallHID = $holder->stallHID;
+        $rental->orgName = $_POST['orgname'];
+        $rental->businessName = $_POST['businessName'];
+        $rental->startingDate = date_format(date_create($_POST['startDate']),"Y-m-d");
+        $rental->stallRentalStatus = 2;
+        
+        if($rental->save()){
+            $contract = new Contract;
+            $contract->stallRentalID = $rental->stallRentalID;
+            $contract->contractStart = date_format(date_create($_POST['startDate']),"Y-m-d");
+            $contract->contractEnd = date_format(date_create($_POST['endDate']),"Y-m-d");
+            $contract->save();
+            
+            foreach($_POST['products'] as $prod){
+                $product = Product::where('productID',$prod)->where('productName',"!=",$prod)->first();
+                if(count($product) == 0){
+                    $product = new Product;
+                    $product->productName = $prod;
+                    if($product->save()){
+                        $product->StallRental()->attach($rental->stallRentalID);
+                    }
+                }
+            }
+        }
+    }
   }
-
-   
-

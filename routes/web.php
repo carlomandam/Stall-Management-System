@@ -13,11 +13,15 @@
 
 
 Route::get('/', function () {
-    return view('layout.app');
+    return view('dashboard.dashboard');
 });
 
-
+Auth::routes();
+Route::get('/Dashboard',function(){
+	return view('dashboard.dashboard');
+});
 Route::get('/Registration/{stallid}','ApplicationController@create');
+Route::get('/Registration/{stallid}/{rentid}','ApplicationController@view');
 Route::get('/List', 'ApplicationController@member');
 Route::get('/View', 'ApplicationController@Memview');
 Route::get('/Update', 'ApplicationController@Update');
@@ -27,7 +31,7 @@ Route::get('/ViewContracts', 'ContractController@view');
 Route::get('/ShowDetails', 'ContractController@showdetails');
 Route::post('/checkEmail','ApplicationController@checkEmail');
 
-Route::post('/AddVendor','ApplicationController@addVendor');
+Route::post('/AddVendor','ApplicationController@newApplication');
 Route::get('/getVendor','ApplicationController@getVendor');
 Route::get('/contractTable','ApplicationController@contractTable');
 Route::post('/getVendorInfo','ApplicationController@getVendorInfo');
@@ -45,37 +49,28 @@ Route::get('/getStalls','StallController@getStalls');
 
 
 Route::get('/Building', function () {
-    return view('Maintenance_Buildings');
+    return view('Maintenance.Maintenance_Buildings');
 });
 
 Route::get('/StallType', function () {
-    return view('Maintenance_StallType');
+    return view('Maintenance.Maintenance_StallType');
 });
 
 Route::get('/Stall', function () {
-    return view('Maintenance_Stall');
+    return view('Maintenance.Maintenance_Stall');
+});
+
+Route::get('/StallRate', function () {
+    return view('Maintenance.Maintenance_StallRate');
+});
+
+Route::get('/Charges', function () {
+    return view('Maintenance.Maintenance_Charges');
 });
 
 Route::resource('/kioskmap', 'MappingController');
 Route::get('/kioskmap/bldg/{id}', 'MappingController@load');
 Route::get('/kioskmap/floor/{id}', 'MappingController@floor');
-
-Route::get('/StallRate', function () {
-    return view('Maintenance_StallRate');
-});
-
-Route::get('/Fee', function () {
-    return view('Maintenance_Fees');
-});
-
-Route::get('/Penalty', function () {
-    return view('Maintenance_Penalty');
-});
-
-Route::get('/Utility', function () {
-    return view('Maintenance_Utility');
-});
-
 //Building
 
 Route::post('/AddBuilding', 'BuildingController@addBuilding');
@@ -125,6 +120,7 @@ Route::post('/addCharge', 'ChargeController@addCharge');
 Route::post('/updateCharge', 'ChargeController@updateCharge');
 Route::post('/chargeInfo', 'ChargeController@getChargeInfo');
 Route::post('/deleteCharge', 'ChargeController@deleteCharge');
+
 Route::post('/addFee', 'Controller@addFee');
 Route::post('/updateFee', 'Controller@updateFee');
 Route::post('/deleteFee', 'Controller@deleteFee');
@@ -132,6 +128,7 @@ Route::post('/getFeeInfo', 'Controller@getFeeInfo');
 
 Route::post('/getFees', 'Controller@getFeesOpt');
 Route::post('/checkRate', 'Controller@checkRate');
+
 
 Route::get('/pdfview',array('as'=>'pdfview','uses'=>'PDFController@pdfview'));
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
@@ -147,6 +144,10 @@ Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 ////////////////////MANAGE CONTRACTS////////////////////
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
 
+Route::get('/getStallHolders','ManageContractsController@getStallHolders');
+Route::get('/getRegistrationList','ManageContractsController@getRegistrationList');
+
+
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
@@ -154,10 +155,23 @@ Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/UpdateRegistration/{rentID}','ManageContractsController@updateRegistration');
 
 Route::get('/getStallList','ManageContractsController@getStallList');
-Route::get('/getRegistrationList','RegistrationListController@getRegistrationList');
-
 ///////////////////PAYMENT AND COLLECTIONS///////////////
-Route::get('/Payment','PaymentController@paymentIndex');
-
+Route::get('/Payment',function(){
+    return view('transaction.PaymentAndCollection.pendingPayment');
+});
+Route::get('/ViewPayment',function(){
+      return view('transaction.PaymentAndCollection.viewPayment');
+});
+////////////////REQUESTS////////////
+Route::get('/RequestList',function(){
+    return view('transaction.Requests.requestList');
+});
+Route::get('/NewRequest',function(){
+    return view('transaction.Requests.newRequest');
+});
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
+
+///////////////Utilities////////
+Route::get('/Utilities','UtilitiesController@index');
+Route::get('/testjoin','ApplicationController@testjoin');

@@ -11,6 +11,9 @@ class ChargeController extends Controller
         $charge->chargeName = $_POST['Name'];
         $charge->chargeAmount = $_POST['Amount'];
         $charge->chargeType = $_POST['Type'];
+
+        $charge->chargeDesc = $_POST['Desc'];
+
         $charge->save();
     }
     
@@ -19,6 +22,9 @@ class ChargeController extends Controller
         $charge->chargeName = $_POST['Name'];
         $charge->chargeAmount = $_POST['Amount'];
         $charge->chargeType = $_POST['Type'];
+
+        $charge->chargeDesc = $_POST['Desc'];
+
         
         if($charge->isDirty()){
             $charge->save();

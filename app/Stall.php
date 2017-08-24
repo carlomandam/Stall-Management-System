@@ -16,16 +16,16 @@ class Stall extends Model
     public $incrementing = false;
     
     public function StallType(){
-        return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID');
+        return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID','stype_SizeID');
     }
     
     public function Floor(){
         return $this->belongsTo('App\Floor','floorID');
     }
 
-    public function StallRental()
+    public function CurrentStallHolder()
     {
-        return $this->hasMany('App\StallRental','stallID');
+        return $this->hasOne('App\StallRental','stallID')->whereHas('Contract')->where('stallRentalStatus',1)->with('StallHolder','Contract');
     }
     
     public function StallUtility()
@@ -33,6 +33,13 @@ class Stall extends Model
         return $this->hasMany('App\StallUtility','stallID');
     }
     
+
+    public function StallUtility()
+    {
+        return $this->hasMany('App\StallUtility','stallID');
+    }
+    
+
     public function StallHolder(){
        return $this->belongsToMany('App\StallHolder', 'tblstallrental_info', 'stallID', 'stallHID')->orderBy('stallID','ASC');
     }

@@ -14,32 +14,25 @@ class tblstalltypeSeeder extends Seeder
         //
          DB::table('tblStallType')->insert([
             'stypeID' => 1,
-            'stypeName' => 'Garments Type',
-            'stypeDesc' => 'For Garments use',
+            'stypeName' => 'Garments Stall',
+            'stypeDesc' => 'Available for all Garments type Products',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
          DB::table('tblStallType')->insert([
             'stypeID' => 2,
-            'stypeName' => 'Food Type',
-            'stypeDesc' => ' ',
+            'stypeName' => 'Food Stall',
+            'stypeDesc' => 'Available for all Food Products ',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]); 
           DB::table('tblStallType')->insert([
             'stypeID' => 3,
-            'stypeName' => 'Food  Type',
-            'stypeDesc' => '',
+            'stypeName' => 'Accesories Stall',
+            'stypeDesc' => 'Available for all Accesories type Products',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
-        ]);
-           DB::table('tblStallType')->insert([
-            'stypeID' => 4,
-            'stypeName' => 'Bags Type',
-            'stypeDesc' => '',
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
+        ]); 
 
     }
 }

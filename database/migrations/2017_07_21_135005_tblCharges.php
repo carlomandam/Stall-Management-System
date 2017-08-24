@@ -18,6 +18,7 @@ class TblCharges extends Migration
             $table->string('chargeName',200);
             $table->double('chargeAmount',10,2);
             $table->integer('chargeType'); //Fixed or Percent of Billing
+            $table->string('chargeDesc',500);
             $table->timestamps();
             $table->softDeletes();
            

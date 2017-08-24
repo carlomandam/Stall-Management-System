@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class PivotTablestallrentalContactnos extends Migration
+class TblpaymentCharge extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class PivotTablestallrentalContactnos extends Migration
      */
     public function up()
     {
-        Schema::create('tblStallRental_ContactNos', function (Blueprint $table) {
-            $table->integer('stallRentID')->unsigned()->index();
-            $table->integer('contactID')->unsigned();
+         Schema::create('tblPayment_Charge', function (Blueprint $table) {
+            $table->integer('paymentID')->unsigned()->index();
+            $table->integer('chargeID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallRentID')->references('stallRentID')->on('tblStallRental_Info')
+            $table->foreign('paymentID')->references('paymentID')->on('tblPayment_Info')
               ->onDelete('cascade');
-            $table->foreign('contactID')->references('contactID')->on('tblContactNos')
+            $table->foreign('chargeID')->references('chargeID')->on('tblCharges')
               ->onDelete('cascade');
          });
     }
@@ -33,7 +33,6 @@ class PivotTablestallrentalContactnos extends Migration
      */
     public function down()
     {
-        
-        Schema::dropIfExists('tblStallRental_ContactNos');
+        Schema::dropIfExists('tblPayment_Charge');
     }
 }
