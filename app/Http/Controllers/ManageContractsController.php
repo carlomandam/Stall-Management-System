@@ -11,6 +11,7 @@ class ManageContractsController extends Controller
 {
     //'
 
+
     public function getStallHolderList(){
 
         $stalls = Stall::with('StallHolder','StallRental.Contract')->has('StallRental','StallRental.Contract')->get();
@@ -21,6 +22,10 @@ class ManageContractsController extends Controller
 
         $stalls = Stall::with('CurrentStallHolder','StallType.StallRate')->has('StallType.StallRate.RateDetail')->get();
         $data = array();
+
+    public function getAvailableStalls(){
+        $stalls = Stall::with('Floor.Building')->withCount('Pending')->has('StallType.StallRate.RateDetail')->doesntHave('CurrentTennant')->get();
+
         
         foreach ($stalls as $stall) {
     		$data['data'][] = $stall;
@@ -42,7 +47,7 @@ class ManageContractsController extends Controller
     }
     
     public function getStallHolders(){
-        $stalls = StallHolder::with('StallRental.Contract')->has('StallRental.Contract')->get();
+        $stalls = StallHolder::with('ActiveStallRental.Contract')->has('ActiveStallRental.Contract')->get();
         $data = array();
         
         foreach ($stalls as $stall) {

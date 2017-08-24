@@ -129,6 +129,9 @@ Route::post('/getFeeInfo', 'Controller@getFeeInfo');
 Route::post('/getFees', 'Controller@getFeesOpt');
 Route::post('/checkRate', 'Controller@checkRate');
 
+Route::resource('/requirements', 'RequirementsController');
+Route::get('/requirements/show/{id}', 'RequirementsController@show');
+
 
 Route::get('/pdfview',array('as'=>'pdfview','uses'=>'PDFController@pdfview'));
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
@@ -153,8 +156,8 @@ Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/UpdateRegistration/{rentID}','ManageContractsController@updateRegistration');
-
 Route::get('/getStallList','ManageContractsController@getStallList');
+Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment',function(){
     return view('transaction.PaymentAndCollection.pendingPayment');
