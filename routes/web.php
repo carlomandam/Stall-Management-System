@@ -49,37 +49,28 @@ Route::get('/getStalls','StallController@getStalls');
 
 
 Route::get('/Building', function () {
-    return view('Maintenance_Buildings');
+    return view('Maintenance.Maintenance_Buildings');
 });
 
 Route::get('/StallType', function () {
-    return view('Maintenance_StallType');
+    return view('Maintenance.Maintenance_StallType');
 });
 
 Route::get('/Stall', function () {
-    return view('Maintenance_Stall');
+    return view('Maintenance.Maintenance_Stall');
+});
+
+Route::get('/StallRate', function () {
+    return view('Maintenance.Maintenance_StallRate');
+});
+
+Route::get('/Charges', function () {
+    return view('Maintenance.Maintenance_Charges');
 });
 
 Route::resource('/kioskmap', 'MappingController');
 Route::get('/kioskmap/bldg/{id}', 'MappingController@load');
 Route::get('/kioskmap/floor/{id}', 'MappingController@floor');
-
-Route::get('/StallRate', function () {
-    return view('Maintenance_StallRate');
-});
-
-Route::get('/Fee', function () {
-    return view('Maintenance_Fees');
-});
-
-Route::get('/Penalty', function () {
-    return view('Maintenance_Penalty');
-});
-
-Route::get('/Utility', function () {
-    return view('Maintenance_Utility');
-});
-
 //Building
 
 Route::post('/AddBuilding', 'BuildingController@addBuilding');
@@ -129,13 +120,6 @@ Route::post('/addCharge', 'ChargeController@addCharge');
 Route::post('/updateCharge', 'ChargeController@updateCharge');
 Route::post('/chargeInfo', 'ChargeController@getChargeInfo');
 Route::post('/deleteCharge', 'ChargeController@deleteCharge');
-Route::post('/addFee', 'Controller@addFee');
-Route::post('/updateFee', 'Controller@updateFee');
-Route::post('/deleteFee', 'Controller@deleteFee');
-Route::post('/getFeeInfo', 'Controller@getFeeInfo');
-
-Route::post('/getFees', 'Controller@getFeesOpt');
-Route::post('/checkRate', 'Controller@checkRate');
 
 Route::get('/pdfview',array('as'=>'pdfview','uses'=>'PDFController@pdfview'));
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
@@ -150,6 +134,7 @@ Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 
 ////////////////////MANAGE CONTRACTS////////////////////
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
+Route::get('/getStallHolders','ManageContractsController@getStallHolders');
 Route::get('/getRegistrationList','ManageContractsController@getRegistrationList');
 
 Route::get('/StallList','ManageContractsController@stallListIndex');
