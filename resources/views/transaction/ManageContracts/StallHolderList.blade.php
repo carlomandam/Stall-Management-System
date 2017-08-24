@@ -8,6 +8,7 @@
     .glyphicon {
         vertical-align: middle;
     }
+    #tblStallHolder th::after { display: none!important; }
 </style> @stop @section('content-header')
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i>Transactions</li>
@@ -18,13 +19,14 @@
         <div class="panel with-nav-tabs panel-primary">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab1primary" data-toggle="tab">StallHolders</a></li>
+                    <li><a href="#tab1primary" data-toggle="tab">Stall Holders</a></li>
                     <li><a href="#tab2primary" data-toggle="tab">Pending Registrations</a></li>
+                     <li class="active"><a href="#tab3primary" data-toggle="tab">Contracts</a></li>
                 </ul>
             </div>
             <div class="panel-body">
                 <div class="tab-content">
-                    <div class="tab-pane fade in active" id="tab1primary">
+                    <div class="tab-pane fade in" id="tab1primary">
                         <div class="box box-primary">
                             <div class="box-body">
                                 <div class="col-xs-12">
@@ -67,6 +69,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="tab-pane fade in active" id="tab3primary">
+                        <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="col-xs-12">
+                                    <div class="table-responsive">
+                                        <table id="tblStallHolder" class="table table-striped" role="grid">
+                                            <thead>
+                                                <th width="100%">Tenant</th>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- box box-primary -->
+                    </div>
                     <!-- tab2primary -->
                 </div>
                 <!-- tab content-->
@@ -80,6 +98,48 @@
 <!-- row -->@stop @section('script')
 <script>
     $(document).ready(function () {
+        $('#tblStallHolder').DataTable({
+            ajax: '/getStallHolders'
+            , responsive: true
+            , "columns": [
+                {
+                    "data": function (data, type, dataToSet) {
+                        var contracts = '';
+                        for(var i = 0;i < data.stall_rental.length;i++){
+                            contracts += "<tr><td>"+data.stall_rental[i].stallID+"</td></tr>";
+                        }
+                        return '<div class="accordion-group" style="width:100%"><div class="accordion-heading" style="text-align:left;width:100%"><a class="accordion-toggle" data-toggle="collapse-next" style="width:100%">'+ data.stallHFName + ' ' + data.stallHMName[0] + '. ' + data.stallHLName + '<i class="fa fa-angle-left pull-right"></i></a></div><div class="accordion-body collapse" style="margin-top:10px;text-indent:10px"><div class="accordion-inner"><table clas="table"><thead><th>Stall ID</th></thead><tbody>'+ contracts +'</tbody></table></div></div></div>';
+                    }
+                }
+			]
+            , "columnDefs": [
+                {
+                    "sortable": false
+                    , "targets": 0
+                }
+            ]
+            ,"initComplete": function(settings, json) {
+                $('#tblStallHolder tbody tr .accordion-heading').on('click',function(){
+                    $(this).find('[data-toggle=collapse-next]').trigger('click.collapse-next.data-api');
+                    //$(this).find('td div div a').click();
+                });
+            }
+        });
+        
+        $('body').on('click.collapse-next.data-api', '[data-toggle=collapse-next]', function (e) {
+            var $target = $(this).parent().next()
+            $target.collapse('toggle')
+            var icon = $(this).find('i');
+            if(icon.hasClass('fa-angle-left')){
+                icon.removeClass('fa-angle-left');
+                icon.addClass('fa-angle-down');
+            }
+            else{
+                icon.removeClass('fa-angle-down');
+                icon.addClass('fa-angle-left');
+            }
+        })
+        
         $('#tblstall').DataTable({
             ajax: '/getStallHolderList'
             , responsive: true

@@ -1,13 +1,13 @@
-@extends('layout.app') @section('title') {{'Stall Type'}} @stop @section('content-header')
+@extends('layout.app') @section('title') {{'Charges'}} @stop @section('content-header')
 <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
-    <li class="active">Stall Type</li>
+    <li class="active">Charges</li>
 </ol> @stop @section('content')
 <div class="box box-primary">
     <div class="box-body">
         <div class="table-responsive">
             <div class="defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall Type </button>
+                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNewCharge</button>
                 <div class=" pull-right" id="archive"> <a href="{{ url('/StallTypeArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
             </div>
             <table id="table" class="table table-bordered table-striped" role="grid">
@@ -52,7 +52,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="days">Description</label>
-                                <textarea class="form-control" name="desc" placeholder="Fee Description"></textarea>
+                                <textarea class="form-control" name="Desc" placeholder="Fee Description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="days">Description</label>
-                                <textarea class="form-control" name="desc" placeholder="Fee Description"></textarea>
+                                <textarea class="form-control" name="Desc" placeholder="Fee Description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -184,7 +184,7 @@
                     "data": "chargeAmount"
                     }
                     , {
-                    "data": null
+                    "data": "chargeDesc"
                     }
                     , {
                     "data": "actions"
