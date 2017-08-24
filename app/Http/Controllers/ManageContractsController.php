@@ -12,13 +12,10 @@ class ManageContractsController extends Controller
     //'
 
     public function getStallHolderList(){
-        $stalls = Stall::with('StallHolder','StallRental.Contract','StallType.StallRate')->has('StallType.StallRate.RateDetail')->whereDoesntHave('StallRental',function($q){
-            $q->has('Contract');
-        })->get();
+        $stalls = Stall::with('CurrentStallHolder','StallType.StallRate')->has('StallType.StallRate.RateDetail')->get();
         $data = array();
         
         foreach ($stalls as $stall) {
-            $stall['actions'] = "<button class='btn btn-success btn-flat' onclick='window.location=&#39".url('/Registration/'.$stall['stallID'])."&#39'><span class='glyphicon glyphicon-pencil'></span> Register</button>";
     		$data['data'][] = $stall;
     	}
         
@@ -44,7 +41,7 @@ class ManageContractsController extends Controller
 
 	function getStallInfo()
 	{
-		$stallrental = StallRental::where('stallRentID',$_POST[''])->first();
+		$stallrental = StallRental::where('stallRentalID',$_POST[''])->first();
     	$stallHID = $stallrental->stallHID;
     	$stallHolderDetails = StallHolder::where('stallHID',$stallHID)->first();
     	$stallDetails = DB::table('tblStall')
@@ -59,6 +56,32 @@ class ManageContractsController extends Controller
 
     	return view('transaction/ManageContracts/updateRegistration',compact('stallrental','stallHolderDetails','stallDetails'));	
     }
+    
+    function getRegistrationList()
+    {
+       
+        $stalls = StallRental::with('StallHolder.ContactNo','Contract','Stall.StallType')->where('stallRentalStatus',2)->get();
+        $data = array();
+        
+        foreach ($stalls as $stall) {
+    		$data['data'][] = $stall;
+    	}
+        
+    	if(count($data) == 0){
+       		echo '{
+            	"sEcho": 1,
+            	"iTotalRecords": "0",
+            	"iTotalDisplayRecords": "0",
+            "aaData": []
+        	}';
+
+        	return;
+    	}
+        
+        else
+    		return (json_encode($data));
+    }
+    
 	public function getStallList()
 	{       
 
@@ -70,7 +93,7 @@ class ManageContractsController extends Controller
     
     public function updateRegistration($rentID)
     {
-    	$stallrental = StallRental::where('stallRentID',$rentID)->first();
+    	$stallrental = StallRental::where('stallRentalID',$rentID)->first();
     	$stallHID = $stallrental->stallHID;
     	$stallHolderDetails = StallHolder::where('stallHID',$stallHID)->first();
     	$stallDetails = DB::table('tblStall')

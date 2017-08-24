@@ -15,13 +15,13 @@ class TblBilling extends Migration
     { 
         Schema::create('tblBilling', function (Blueprint $table) {
             $table->increments('billingID');
-            $table->integer('stallRentID')->unsigned()->index();
+            $table->integer('stallRentalID')->unsigned()->index();
             $table->date('billDueDate');
             $table->datetime('billDate');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallRentID')->references('stallRentID')->on('tblStallRental_Info')
+            $table->foreign('stallRentalID')->references('stallRentalID')->on('tblStallRental_Info')
               ->onDelete('cascade');
          });
     }

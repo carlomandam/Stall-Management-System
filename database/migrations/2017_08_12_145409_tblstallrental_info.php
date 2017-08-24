@@ -14,7 +14,7 @@ class TblstallrentalInfo extends Migration
     public function up()
     {
          Schema::create('tblStallRental_Info', function (Blueprint $table) {
-            $table->increments('stallRentID');
+            $table->increments('stallRentalID');
             $table->integer('stallHID')->unsigned();
             $table->string('stallID');
             $table->string('orgName','200')->nullable();

@@ -14,12 +14,12 @@ class PivotTablestallrentalStallHAssoc extends Migration
     public function up()
     {
         Schema::create('tblStallRental_StallHAssoc', function (Blueprint $table) {
-            $table->integer('stallRentID')->unsigned()->index();
+            $table->integer('stallRentalID')->unsigned()->index();
             $table->integer('stallH_assocID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallRentID')->references('stallRentID')->on('tblStallRental_Info')
+            $table->foreign('stallRentalID')->references('stallRentalID')->on('tblStallRental_Info')
               ->onDelete('cascade');
             $table->foreign('stallH_assocID')->references('stallH_assocID')->on('tblStallHolderAssoc')
               ->onDelete('cascade');

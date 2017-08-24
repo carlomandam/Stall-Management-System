@@ -726,7 +726,7 @@
                 for (var i = 0; i < stype.length; i++) {
                     opt += "<optgroup label='" + stype[i].stypeName + "'>";
                     for (var j = 0; j < stype[i].typesize.length; j++) {
-                        if (stype[i].typesize[j].stall_rate.length == 0) opt += '<option value="' + stype[i].typesize[j].stype_SizeID + '">' + stype[i].stypeName + "(" + stype[i].typesize[j].stall_type_size.stypeArea + 'm&sup2; )</option>';
+                        if (stype[i].typesize[j].stall_rate == null) opt += '<option value="' + stype[i].typesize[j].stype_SizeID + '">' + stype[i].stypeName + "(" + stype[i].typesize[j].stall_type_size.stypeArea + 'm&sup2; )</option>';
                     }
                     opt += "</optgroup>";
                 }

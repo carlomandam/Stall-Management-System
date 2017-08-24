@@ -21,6 +21,7 @@ Route::get('/Dashboard',function(){
 	return view('dashboard.dashboard');
 });
 Route::get('/Registration/{stallid}','ApplicationController@create');
+Route::get('/Registration/{stallid}/{rentid}','ApplicationController@view');
 Route::get('/List', 'ApplicationController@member');
 Route::get('/View', 'ApplicationController@Memview');
 Route::get('/Update', 'ApplicationController@Update');
@@ -30,7 +31,7 @@ Route::get('/ViewContracts', 'ContractController@view');
 Route::get('/ShowDetails', 'ContractController@showdetails');
 Route::post('/checkEmail','ApplicationController@checkEmail');
 
-Route::post('/AddVendor','ApplicationController@addVendor');
+Route::post('/AddVendor','ApplicationController@newApplication');
 Route::get('/getVendor','ApplicationController@getVendor');
 Route::get('/contractTable','ApplicationController@contractTable');
 Route::post('/getVendorInfo','ApplicationController@getVendorInfo');
@@ -149,6 +150,7 @@ Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 
 ////////////////////MANAGE CONTRACTS////////////////////
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
+Route::get('/getRegistrationList','ManageContractsController@getRegistrationList');
 
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
@@ -157,8 +159,6 @@ Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/UpdateRegistration/{rentID}','ManageContractsController@updateRegistration');
 
 Route::get('/getStallList','ManageContractsController@getStallList');
-Route::get('/getRegistrationList','RegistrationListController@getRegistrationList');
-
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment','PaymentController@paymentIndex');
 

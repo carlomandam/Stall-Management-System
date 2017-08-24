@@ -78,19 +78,27 @@
                                         </div>
                                         <div class="col-md-6" id="errordiv" style="width:200%"> </div>
                                         <table class="table table-bordered table-striped" role="grid" id='floortbl'>
-                                        <thead>
-                                            <th style="width:40%">Floor No.</th>
-                                            <th style="width:40%">No. of stalls
-                                                <button class="btn btn-default" onclick="resetNoOfStall()" type="button">reset</button>
-                                            </th>
-                                            <th>Capacity
-                                                <button class="btn btn-default" onclick="resetCapacity()" type="button">reset</button>
-                                            </th>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="removable first"><td>1</td><td><input type="text" name="noOfStall[]" onchange="addNoOfStall(this)"></td><td><input type="text" name="capacity[]" onchange="addCapacity(this)"></td></tr>    
-                                        </tbody>
-                                    </table>
+                                            <thead>
+                                                <th style="width:40%">Floor No.</th>
+                                                <th style="width:40%">No. of stalls
+                                                    <button class="btn btn-default" onclick="resetNoOfStall()" type="button">reset</button>
+                                                </th>
+                                                <th>Capacity
+                                                    <button class="btn btn-default" onclick="resetCapacity()" type="button">reset</button>
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="removable first">
+                                                    <td>1</td>
+                                                    <td>
+                                                        <input type="text" name="noOfStall[]" onchange="addNoOfStall(this)">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="capacity[]" onchange="addCapacity(this)">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -154,12 +162,12 @@
                                                         <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="noOfFloorUp" disabled>
                                                         <span class="glyphicon glyphicon-minus"></span> </button>
                                                 </span>
-                                                <input type="text" id="noOfFloorUp" name="noOfFloorUp" class="form-control input-number" value="0" min="0" max="100" oninput="showTable('#floortblup')" onchange="showTable('#floortblup')"> <span class="input-group-btn">
+                                                <input type="text" name="noOfFloorUp" id="#noOfFloorUp" class="form-control input-number" value="0" min="0" max="100" oninput="showTable('#floortblup')" onchange="showTable('#floortblup')"> <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="noOfFloorUp">
                                                   <span class="glyphicon glyphicon-plus"></span> </button>
                                                 </span>
                                             </div>
-                                            <table class="table table-bordered table-striped" role="grid" id='floortblup' style="display:none">
+                                            <table class="table table-bordered table-striped" role="grid" id='floortblup'>
                                                 <thead>
                                                     <tr>
                                                         <th width='50%'>Floor</th>
@@ -182,9 +190,9 @@
                         <div class="tab-pane" id="2">
                             <table class="table table-bordered table-striped" role="grid" id='floorUpTbl'>
                                 <thead>
-                                <th style="width:40%">Floor No.</th>
-                                <th style="width:40%">Current No. of stalls</th>
-                                <th>Capacity</th>
+                                    <th style="width:40%">Floor No.</th>
+                                    <th style="width:40%">Current No. of stalls</th>
+                                    <th>Capacity</th>
                                 </thead>
                                 <tbody> </tbody>
                             </table>
@@ -391,17 +399,9 @@
             $(this).find('form').validate().resetForm();
             $(this).find('form')[0].reset();
             $('.removable').not('.first').remove();
-            $('#floortblup').css('display', 'none');
             $('#removefloor').attr('disabled', false);
         })
-        $('#addRemove').on('input', function () {
-            if ($("input[name='addRemoveRadio']:checked").val() == 1) {
-                showTable('#floortblup');
-            }
-        });
-        //plugin bootstrap minus and plus
-        //http://jsfiddle.net/laelitenetwork/puJ6G/
-        
+
         $('#bldgName').on('change', function () {
             if ($('#bldgName').val().length > 4) $.ajax({
                 type: "POST"
@@ -415,10 +415,14 @@
                 }
             });
         });
+        
         $('#removefloor').on('input', function () {
             if ($(this).val() > 0) {
                 $('#noOfFloorUp').val(0);
                 $('#noOfFloorUp').attr('disabled', true);
+                $('#floortblup').find('.removable').each(function(){
+                    $(this).fadeOut(function() { $(this).remove(); });
+                });
             }
             else $('#noOfFloorUp').attr('disabled', false);
         });
@@ -474,6 +478,7 @@
     }
 
     function showTable(tbl) {
+        $('.fadeout').remove();
         var input = $(tbl).parent().find('input[type=text]').first();
         input.parent().find('button[data-type=minus]').prop('disabled', false);
         input.parent().find('button[data-type=plus]').prop('disabled', false);
@@ -493,33 +498,46 @@
             input.parent().find('button[data-type=minus]').prop('disabled', false);
             input.parent().find('button[data-type=plus]').prop('disabled', false);
         }
-        var noOfStalls = new Array();
-        var capacity = new Array();
-        $('input[name="noOfStall[]"').each(function () {
-            noOfStalls.push($(this).val());
-        });
-        $('input[name="capacity[]"').each(function () {
-            capacity.push($(this).val());
-        });
-        $(tbl).css('display', 'none');
-        $('.removable').remove();
-        var val1 = '';
-        var cap1 = '';
-        if (noOfStalls[0] != undefined) val1 = noOfStalls[0];
-        if (capacity[0] != undefined) cap1 = capacity[0];
-        if (parseInt($(tbl).parent().find('input[type=text]').val()) > 0) {
-            $('#removefloor').attr('disabled', true);
-            $(tbl).css('display', 'inline');
-            $(tbl + ' tbody').append('<tr class="removable first"><td>1</td><td><input type="text" name="noOfStall[]" onchange="addNoOfStall(this)" value="' + val1 + '"></td><td><input type="text" name="capacity[]" onchange="addCapacity(this)" value="' + cap1 + '"></td></tr>');
+
+        var count = $(tbl).parent().find('.removable').length;
+        var val = parseInt(input.val());
+        var times = 0;
+        var add = false;
+        if (val > count) {
+            times = val - count;
+            add = true;
         }
-        else $('#removefloor').attr('disabled', false);
-        for (var i = 1; i < parseInt($(tbl).parent().find('input[type=text]').val()); i++) {
-            var stall = '';
-            var cap = '';
-            if (noOfStalls[i] != undefined) stall = noOfStalls[i];
-            if (capacity[i] != undefined) cap = capacity[i];
-            $(tbl + ' tbody').append('<tr class="removable"><td>' + (i + 1) + '</td><td><input type="text" name="noOfStall[]" value="' + stall + '"></td><td><input type="text" name="capacity[]" onchange="addCapacity(this)" value="' + cap + '"></td></tr>')
+        else {
+            times = count - val;
         }
+        if (add) {
+            for (var i = count+1; i <= val; i++) {
+                /*var stall = '';
+                var cap = '';
+                if (noOfStalls[i] != undefined) stall = noOfStalls[i];
+                if (capacity[i] != undefined) cap = capacity[i];*/
+                
+                $(tbl + ' tbody').append('<tr class="removable" style="display:none"><td>' + i + '</td><td><input type="text" name="noOfStall[]"></td><td><input type="text" name="capacity[]" onchange="addCapacity(this)"></td></tr>')
+                
+                $('.removable').fadeIn();
+            }
+        }
+        else{
+            for(i = 0;i < times;i++){
+                $(tbl+' .removable').not('.fadeout').last().addClass('fadeout');
+                //$('.removable').last('.fadeout').fadeOut('');
+                //$('.removable').last().remove();
+            }
+            
+            if(parseInt(input.val()) == 0){
+                //$('floortblup .removable').not('.fadeout').addClass('fadeout');
+                $('#floortblup .removable').fadeOut(function() { $(this).remove(); });
+            }
+            
+            console.log(input.val());
+        }
+        
+        $('.fadeout').fadeOut(function() { $(this).remove(); });
     }
 
     function addNoOfStall(e) {
