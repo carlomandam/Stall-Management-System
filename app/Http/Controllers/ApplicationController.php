@@ -55,7 +55,7 @@ class ApplicationController extends Controller
 
     public function view($stallid,$rentalid){
         $prod = Product::all();
-        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentStallHolder')->where('stallID',$stallid)->first();
+        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentTennant')->where('stallID',$stallid)->first();
         
         
         $rental =StallRental::with('StallHolder.ContactNo','Contract','Stall.StallType')->where('stallRentalID',$rentalid)->first();
@@ -88,7 +88,7 @@ class ApplicationController extends Controller
      public function create($stallid)
      { 
         $prod = Product::all();
-        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentStallHolder')->where('stallID',$stallid)->first();
+        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentTennant')->where('stallID',$stallid)->first();
             
             /*DB::table('tblStall')
             ->select('*')
@@ -362,27 +362,39 @@ function checkEmail()
 
         return view('pdfview');
     }
-
-    function newApplication(){
-        if(!isset($_POST['ven_name'])){
-            $holder = new StallHolder;
-            $holder->stallHFName = $_POST['fname'];
-            $holder->stallHMName = $_POST['mname'];
-            $holder->stallHLName = $_POST['lname'];
-            $holder->stallHBday = date_format(date_create($_POST['DOBYear'].'-'.$_POST['DOBMonth'].'-'.$_POST['DOBDay']),"Y-m-d");
-            $holder->stallHEmail = $_POST['email'];
-            $holder->stallHSex = $_POST['sex'];
-            $holder->stallHAddress = $_POST['address'];
-            if($holder->save()){
-                foreach($_POST['numbers'] as $no){
-                    if($no != ''){
-                        $contact = new ContactNo;
-                        $contact->contactNumber = $no;
-                        $contact->stallHID = $holder->stallHID; 
-                        $contact->save();
-                    }
+    
+    function newStallHolder(){
+        $fname = trim(preg_replace('/\s\s+/',' ', str_replace("\n", " ", $_POST['fname'])));
+        $mname = trim(preg_replace('/\s\s+/',' ', str_replace("\n", " ", $_POST['mname'])));
+        $lname = trim(preg_replace('/\s\s+/',' ', str_replace("\n", " ", $_POST['lname'])));
+        
+        $check = StallHolder::where('stallHFName',$fname)->where('stallHMName',$mname)->where('stallHLName',$lname)->first();
+        if(count($check) != 0)
+            return $check->stallHID;
+        $holder = new StallHolder;
+        $holder->stallHFName = $fname;
+        $holder->stallHMName = $mname;
+        $holder->stallHLName = $lname;
+        $holder->stallHBday = date_format(date_create($_POST['DOBYear'].'-'.$_POST['DOBMonth'].'-'.$_POST['DOBDay']),"Y-m-d");
+        $holder->stallHEmail = $_POST['email'];
+        $holder->stallHSex = $_POST['sex'];
+        $holder->stallHAddress = $_POST['address'];
+        if($holder->save()){
+            foreach($_POST['numbers'] as $no){
+                if($no != ''){
+                    $contact = new ContactNo;
+                    $contact->contactNumber = $no;
+                    $contact->stallHID = $holder->stallHID; 
+                    $contact->save();
                 }
             }
+        }
+        return $holder->stallHID;
+    }
+    
+    function newApplication(){
+        if(!isset($_POST['ven_name'])){
+            $holder = StallHolder::where('stallHID',$this->newStallHolder())->first();
         }else{
             $holder = StallHolder::where('stallHID',$_POST['ven_name'])->first();
             
@@ -396,7 +408,9 @@ function checkEmail()
                 }
             }
         }
-        
+        $rental = StallRental::where('stallHID',$holder->stallHID)->where('stallID',$_POST['dispStallID'])->get();
+        if(count($rental) != 0)
+            return 'exist';
         $rental = new StallRental;
         $rental->stallID = $_POST['dispStallID'];
         $rental->stallHID = $holder->stallHID;

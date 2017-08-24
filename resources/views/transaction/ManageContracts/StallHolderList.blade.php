@@ -8,7 +8,10 @@
     .glyphicon {
         vertical-align: middle;
     }
-    #tblStallHolder th::after { display: none!important; }
+    
+    #tblStallHolder th::after {
+        display: none!important;
+    }
 </style> @stop @section('content-header')
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i>Transactions</li>
@@ -19,9 +22,9 @@
         <div class="panel with-nav-tabs panel-primary">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
-                    <li><a href="#tab1primary" data-toggle="tab">Stall Holders</a></li>
-                    <li><a href="#tab2primary" data-toggle="tab">Pending Registrations</a></li>
-                     <li class="active"><a href="#tab3primary" data-toggle="tab">Contracts</a></li>
+                    <li class="active"><a href="#tab3primary" data-toggle="tab">Contracts</a></li>
+                    <li><a href="#tab1primary" data-toggle="tab">Available Stalls</a></li>
+                    <li><a href="#tab2primary" data-toggle="tab">Pending Registrations</a></li>                    
                 </ul>
             </div>
             <div class="panel-body">
@@ -31,15 +34,12 @@
                             <div class="box-body">
                                 <div class="col-xs-12">
                                     <div class="table-responsive">
-                                        <table id="tblstall" class="table table-striped" role="grid">
+                                        <table id="tblstall" class="table table-striped" role="grid" style="width:100%">
                                             <thead>
-                                                <th width="200px;">StallHolder Name</th>
-                                                <th width="150px;">Stall Code</th>
-                                                <th width="150px;">Stall Location </th>
-                                                <th width="200px;">Collection Status</th>
-                                                <th width="200px;">Start Date</th>
-                                                <th width="200px;">End Date</th>
-                                                <th width="350px;">Actions</th>
+                                                <th>Stall Code</th>
+                                                <th>Stall Location</th>
+                                                <th>No. Pending Applications</th>
+                                                <th>Actions</th>
                                             </thead>
                                         </table>
                                     </div>
@@ -60,8 +60,8 @@
                                                 <th>Stall Code</th>
                                                 <th>Address</th>
                                                 <th>Contact No.</th>
-                                                <th>Registration Date</th>
-                                                <th style="width: 350px;">Actions</th>
+                                                <th style="width:5%">Registration Date</th>
+                                                <th style="width:15%">Actions</th>
                                             </thead>
                                         </table>
                                     </div>
@@ -105,10 +105,10 @@
                 {
                     "data": function (data, type, dataToSet) {
                         var contracts = '';
-                        for(var i = 0;i < data.stall_rental.length;i++){
-                            contracts += "<tr><td>"+data.stall_rental[i].stallID+"</td></tr>";
+                        for (var i = 0; i < data.active_stall_rental.length; i++) {
+                            contracts += "<tr><td>" + data.active_stall_rental[i].stallID + "</td></tr>";
                         }
-                        return '<div class="accordion-group" style="width:100%"><div class="accordion-heading" style="text-align:left;width:100%"><a class="accordion-toggle" data-toggle="collapse-next" style="width:100%">'+ data.stallHFName + ' ' + data.stallHMName[0] + '. ' + data.stallHLName + '<i class="fa fa-angle-left pull-right"></i></a></div><div class="accordion-body collapse" style="margin-top:10px;text-indent:10px"><div class="accordion-inner"><table clas="table"><thead><th>Stall ID</th></thead><tbody>'+ contracts +'</tbody></table></div></div></div>';
+                        return '<div class="accordion-group" style="width:100%"><div class="accordion-heading" style="text-align:left;width:100%"><a class="accordion-toggle" data-toggle="collapse-next" style="width:100%">' + data.stallHFName + ' ' + data.stallHMName[0] + '. ' + data.stallHLName + '<i class="fa fa-angle-left pull-right"></i></a></div><div class="accordion-body collapse" style="margin-top:10px;text-indent:10px"><div class="accordion-inner"><table clas="table"><thead><th>Stall ID</th></thead><tbody>' + contracts + '</tbody></table></div></div></div>';
                     }
                 }
 			]
@@ -118,81 +118,58 @@
                     , "targets": 0
                 }
             ]
-            ,"initComplete": function(settings, json) {
-                $('#tblStallHolder tbody tr .accordion-heading').on('click',function(){
+            , "initComplete": function (settings, json) {
+                $('#tblStallHolder tbody tr .accordion-heading').on('click', function (e) {
                     $(this).find('[data-toggle=collapse-next]').trigger('click.collapse-next.data-api');
                     //$(this).find('td div div a').click();
                 });
+                $('#tblStallHolder tbody tr a').on('click', function (e) {
+                    e.stopPropagation();
+                    $(this).trigger('click.collapse-next.data-api');
+                });
+                $('.collapse').on('show.bs.collapse', function () {
+                    $(this).prev().find('i').removeClass('fa-angle-left');
+                    $(this).prev().find('i').addClass('fa-angle-down');
+                });
+                $('.collapse').on('hide.bs.collapse', function () {
+                    $(this).prev().find('i').removeClass('fa-angle-down');
+                    $(this).prev().find('i').addClass('fa-angle-left');
+                });
             }
         });
-        
         $('body').on('click.collapse-next.data-api', '[data-toggle=collapse-next]', function (e) {
             var $target = $(this).parent().next()
-            $target.collapse('toggle')
-            var icon = $(this).find('i');
-            if(icon.hasClass('fa-angle-left')){
-                icon.removeClass('fa-angle-left');
-                icon.addClass('fa-angle-down');
-            }
-            else{
-                icon.removeClass('fa-angle-down');
-                icon.addClass('fa-angle-left');
-            }
+            $target.collapse('toggle');
         })
-        
         $('#tblstall').DataTable({
-            ajax: '/getStallHolderList'
+            ajax: '/getAvailableStalls'
             , responsive: true
             , "columns": [
                 {
-                    "data": function (data, type, dataToSet) {
-                        if (data.current_stall_holder != null) return data.current_stall_holder.stall_holder.stallHLName + ", " + data.current_stall_holder.stall_holder.stallHFName + " " + data.current_stall_holder.stall_holder.stallHMName[0] + '.';
-                        else return null;
-                    }
-                }
-                , {
                     "data": "stallID"
                 }
-
                 , {
                     "data": function (data, type, dataToSet) {
-                        return null;
+                        return ((data.floor.floorLevel == '1') ? data.floor.floorLevel+'st' : ((data.floor.floorLevel == '2') ? data.floor.floorLevel+'nd' : ((data.floor.floorLevel == '3') ? data.floor.floorLevel+'rd' : data.floor.floorLevel+'th'))) + " Floor, " + data.floor.building.bldgName;
                     }
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        return null;
+                        return data.pending_count;
                     }
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        if (data.current_stall_holder != null || data.current_stall_holder != undefined) return data.current_stall_holder.startingDate;
-                        else return null;
-                    }
-                }
-                , {
-                    "data": function (data, type, dataToSet) {
-                        if (data.current_stall_holder != null || data.current_stall_holder != undefined) return data.current_stall_holder.contract.contractEnd;
-                        else return null;
-                    }
-                }
-                , {
-                    "data": function (data, type, dataToSet) {
-                        if (data.current_stall_holder != null || data.current_stall_holder != undefined) {
-                            return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "&#39;' style='width:80%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
-                        }
-                        else {
-                            return "<button class='btn btn-success btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "&#39;' style='width:80%'><span class='glyphicon glyphicon-pencil'></span> Register</button>";
-                        }
+                        return "<button class='btn btn-success btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-pencil'></span> Register</button>";
                     }
                 }
 			]
             , "columnDefs": [
                 {
-                    "width": "20%"
+                    "width": "10%"
                     , "searchable": false
                     , "sortable": false
-                    , "targets": 5
+                    , "targets": 3
                     }
             ]
         });
@@ -205,7 +182,7 @@
                         return data.stall_holder.stallHFName + ' ' + data.stall_holder.stallHMName[0] + '. ' + data.stall_holder.stallHLName;
                     }
                 }
-                
+
                 , {
                     "data": "stallID"
                 }
@@ -232,7 +209,7 @@
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "/" + data.stallRentalID + "&#39;' style='width:80%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";;
+                        return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "/" + data.stallRentalID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
                     }
                 }
 			]
