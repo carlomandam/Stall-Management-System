@@ -19,6 +19,11 @@ class StallHolder extends Model
         return $this->hasMany('App\StallRental','stallHID');
     }
     
+    public function ActiveStallRental()
+    {
+        return $this->hasMany('App\StallRental','stallHID')->where('stallRentalStatus','1');
+    }
+    
     public function ContactNo()
     {
         return $this->hasMany('App\ContactNo','stallHID');

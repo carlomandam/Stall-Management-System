@@ -142,8 +142,8 @@ Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/UpdateRegistration/{rentID}','ManageContractsController@updateRegistration');
-
 Route::get('/getStallList','ManageContractsController@getStallList');
+Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment',function(){
     return view('transaction.PaymentAndCollection.pendingPayment');

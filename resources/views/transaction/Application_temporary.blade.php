@@ -195,7 +195,7 @@
                             <label for="startdate">Start Date </label><span class="required">&nbsp*</span>
                             <div class="input-group date">
                                 <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-                                <input type="text" class="form-control pull-right" id="datepicker" name="startDate" onchange="alert(this.value);"> </div>
+                                <input type="text" class="form-control pull-right" id="datepicker" name="startDate"> </div>
                         </div>
                         <div class="col-md-6">
                             <label for="startdate">End Date </label><span class="required">&nbsp*</span>
@@ -309,7 +309,6 @@
                             var j = 0;
                             $('input[name="numbers[]"]').each(function(){
                                $(this).val(item.contact_no[j].contactNumber);
-                                alert();
                                 j++;
                             });
                             return {
@@ -425,6 +424,10 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
+                    if(data == 'exist'){
+                        toastr.warning("User's application already exist");
+                        return;
+                    }
                     toastr.success('Successfully Registered!');
                     $("#applyForm")[0].reset();
                     window.location(url('/RegistrationList'));

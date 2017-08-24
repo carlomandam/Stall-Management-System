@@ -15,6 +15,10 @@ class Stall extends Model
     protected $dates = ['deleted_at'];
     public $incrementing = false;
     
+    public function Pending(){
+        return $this->hasMany('App\StallRental','stallID','stallID')->where('stallRentalStatus','=','2');
+    }
+    
     public function StallType(){
         return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID','stype_SizeID');
     }
@@ -23,7 +27,7 @@ class Stall extends Model
         return $this->belongsTo('App\Floor','floorID');
     }
 
-    public function CurrentStallHolder()
+    public function CurrentTennant()
     {
         return $this->hasOne('App\StallRental','stallID')->whereHas('Contract')->where('stallRentalStatus',1)->with('StallHolder','Contract');
     }
