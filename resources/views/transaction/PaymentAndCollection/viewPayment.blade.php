@@ -133,18 +133,16 @@
                         </div>
                       </div>
 
-                      <div class="box box-primary">
-                        <div class="box-header with-border">
-                          <label>Accounts Payable</label>
-                        </div>
-                        <div class="box-body">
+                    
+                        
+                        
                           <div class="col-md-12">
                             <div class="col-md-12">
                               <label class="col-md-3">Total Payable:</label>
                               <div class="col-md-6">
                                 <div class="input-group">
                                   <div class="input-group-addon"><i>Php</i></div>
-                                  <input type="text" class="form-control" name="" style="text-align: right" /> 
+                                  <input type="text" class="form-control" name="" style="text-align: right"  readonly="" /> 
                                 </div>
                               </div>
                             </div>
@@ -180,7 +178,7 @@
                               <div class="col-md-6">
                                 <div class="input-group">
                                   <div class="input-group-addon"><i>Php</i></div>
-                                  <input type="text" class="form-control" name="" style="text-align: right" /> 
+                                  <input type="text" class="form-control" name="" style="text-align: right" readonly="" /> 
                                 </div>
                               </div>
                             </div>
@@ -188,8 +186,8 @@
                           </div>
                           <button type="Submit" class="btn btn-primary pull-right">Confirm</button>
                           <button type="Submit" class="btn btn-default pull-right">Cancel</button>
-                        </div>
-                      </div>
+                       
+                    
                     </div>
                   </div>
                   
