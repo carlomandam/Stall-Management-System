@@ -166,12 +166,7 @@ Route::get('/ViewPayment',function(){
       return view('transaction.PaymentAndCollection.viewPayment');
 });
 ////////////////REQUESTS////////////
-Route::get('/RequestList',function(){
-    return view('transaction.Requests.requestList');
-});
-Route::get('/NewRequest',function(){
-    return view('transaction.Requests.newRequest');
-});
+Route::resource('/requestList', 'RequestController');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
 

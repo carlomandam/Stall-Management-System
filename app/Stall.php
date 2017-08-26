@@ -1,10 +1,7 @@
 <?php
-
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 class Stall extends Model
 {
     use SoftDeletes;
@@ -26,7 +23,6 @@ class Stall extends Model
     public function Floor(){
         return $this->belongsTo('App\Floor','floorID');
     }
-
     public function CurrentTennant()
     {
         return $this->hasOne('App\StallRental','stallID')->whereHas('Contract')->where('stallRentalStatus',1)->with('StallHolder','Contract');
@@ -37,13 +33,6 @@ class Stall extends Model
         return $this->hasMany('App\StallUtility','stallID');
     }
     
-
-    public function StallUtility()
-    {
-        return $this->hasMany('App\StallUtility','stallID');
-    }
-    
-
     public function StallHolder(){
        return $this->belongsToMany('App\StallHolder', 'tblstallrental_info', 'stallID', 'stallHID')->orderBy('stallID','ASC');
     }

@@ -90,7 +90,9 @@ $(document).on('click','#updateModal',function(e){
 	           				success: function(data) {
 	           					if($.isEmptyObject(data.error)){
 	           						alert(data.success);
-	           						location.reload();
+	           						rList.ajax.reload();
+	           						// $("#reqList").DataTable.ajax.reload();
+	           						// location.reload();
 	           					}else{
 	           						printErrorMsg(data.error);
 	           					}

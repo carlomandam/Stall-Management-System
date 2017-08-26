@@ -31,9 +31,8 @@ class StallRental extends Model
     
      public function Contract(){
 
-        return $this->hasOne('App\Contract','stallRentID');
-
         return $this->hasOne('App\Contract','stallRentalID');
+
     }
     
     public function Product(){
