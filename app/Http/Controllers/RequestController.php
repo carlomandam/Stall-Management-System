@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\StallRental;
+use App\StallHolder;
+use App\Stall;
 
 class RequestController extends Controller
 {
@@ -14,6 +17,10 @@ class RequestController extends Controller
     public function index()
     {
         //
+        
+
+        // return ($stalls);
+
         return view('transaction/Requests/index');
     }
 
@@ -25,7 +32,10 @@ class RequestController extends Controller
     public function create()
     {
         //
-        return view('transaction/Requests/create');
+        $stalls = StallHolder::with('ActiveStallRental.Contract')->has('ActiveStallRental.Contract')->get();
+         $avails = Stall::with('Floor.Building')->withCount('Pending')->has('StallType.StallRate.RateDetail')->doesntHave('CurrentTennant')->get();
+        // return ($stalls);
+        return view('transaction/Requests/create',compact('stalls','avails'));
     }
 
     /**
@@ -84,4 +94,17 @@ class RequestController extends Controller
     {
         //
     }
+    public function getStall($id){
+        $active = StallHolder::with('ActiveStallRental.Contract')
+                             ->has('ActiveStallRental.Contract')
+                             ->findOrFail($id);
+        // return($active);
+        return response()->json(['active'=>$active]);
+    }
+    public function getAvail(){
+         
+        return($avail);
+        
+    }
+
 }
