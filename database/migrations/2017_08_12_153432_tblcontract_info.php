@@ -1,9 +1,7 @@
 <?php
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
 class TblcontractInfo extends Migration
 {
     /**
@@ -20,13 +18,10 @@ class TblcontractInfo extends Migration
             $table->date('contractEnd');
             $table->softDeletes();
             $table->timestamps();
-
-
             $table->foreign('stallRentalID')->references('stallRentalID')->on('tblStallRental_Info')
               ->onDelete('cascade');
          });
     }
-
     /**
      * Reverse the migrations.
      *

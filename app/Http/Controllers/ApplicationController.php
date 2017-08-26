@@ -26,7 +26,7 @@ class ApplicationController extends Controller
     public function testjoin(){
         $rate = DB::table('tblContractinfo as contract')
         ->select('*')
-        ->leftJoin('tblStallRental_info as rental','contract.stallRentID',"=","rental.stallRentID")
+        ->leftJoin('tblStallRental_info as rental','contract.stallRentalID',"=","rental.stallRentalID")
         ->leftJoin('tblStall as stall','rental.stallID','=','stall.stallID')
         ->leftJoin('tblStallType_StallSize as type','stall.stype_SizeID',"=",'type.stype_SizeID')->leftJoin('tblStallRate as rate','rate.stype_SizeID','=','type.stype_SizeID')->where('rate.stallRateEffectivity','=','')->get();
 

@@ -121,6 +121,18 @@ Route::post('/updateCharge', 'ChargeController@updateCharge');
 Route::post('/chargeInfo', 'ChargeController@getChargeInfo');
 Route::post('/deleteCharge', 'ChargeController@deleteCharge');
 
+Route::post('/addFee', 'Controller@addFee');
+Route::post('/updateFee', 'Controller@updateFee');
+Route::post('/deleteFee', 'Controller@deleteFee');
+Route::post('/getFeeInfo', 'Controller@getFeeInfo');
+
+Route::post('/getFees', 'Controller@getFeesOpt');
+Route::post('/checkRate', 'Controller@checkRate');
+
+Route::resource('/requirements', 'RequirementsController');
+Route::get('/requirements/show/{id}', 'RequirementsController@show');
+
+
 Route::get('/pdfview',array('as'=>'pdfview','uses'=>'PDFController@pdfview'));
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
 Route::get('/getVendor', 'ApplicationController@getVendor');
@@ -134,8 +146,10 @@ Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 
 ////////////////////MANAGE CONTRACTS////////////////////
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
+
 Route::get('/getStallHolders','ManageContractsController@getStallHolders');
 Route::get('/getRegistrationList','ManageContractsController@getRegistrationList');
+
 
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
@@ -152,12 +166,7 @@ Route::get('/ViewPayment',function(){
       return view('transaction.PaymentAndCollection.viewPayment');
 });
 ////////////////REQUESTS////////////
-Route::get('/RequestList',function(){
-    return view('transaction.Requests.requestList');
-});
-Route::get('/NewRequest',function(){
-    return view('transaction.Requests.newRequest');
-});
+Route::resource('/requestList', 'RequestController');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
 

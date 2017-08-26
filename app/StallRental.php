@@ -30,11 +30,14 @@ class StallRental extends Model
     }
     
      public function Contract(){
+
         return $this->hasOne('App\Contract','stallRentalID');
+
     }
     
     public function Product(){
         return $this->belongsToMany('App\Product','tblstallrental_product','stallRentalID','productID');
+
     }
     
 }

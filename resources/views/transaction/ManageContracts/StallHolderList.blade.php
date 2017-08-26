@@ -111,7 +111,7 @@
                         return '<div class="accordion-group" style="width:100%"><div class="accordion-heading" style="text-align:left;width:100%"><a class="accordion-toggle" data-toggle="collapse-next" style="width:100%">' + data.stallHFName + ' ' + data.stallHMName[0] + '. ' + data.stallHLName + '<i class="fa fa-angle-left pull-right"></i></a></div><div class="accordion-body collapse" style="margin-top:10px;text-indent:10px"><div class="accordion-inner"><table clas="table"><thead><th>Stall ID</th></thead><tbody>' + contracts + '</tbody></table></div></div></div>';
                     }
                 }
-			]
+            ]
             , "columnDefs": [
                 {
                     "sortable": false
@@ -163,7 +163,7 @@
                         return "<button class='btn btn-success btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-pencil'></span> Register</button>";
                     }
                 }
-			]
+            ]
             , "columnDefs": [
                 {
                     "width": "10%"
@@ -182,11 +182,9 @@
                         return data.stall_holder.stallHFName + ' ' + data.stall_holder.stallHMName[0] + '. ' + data.stall_holder.stallHLName;
                     }
                 }
-
                 , {
                     "data": "stallID"
                 }
-
                 , {
                     "data": function (data, type, dataToSet) {
                         return data.stall_holder.stallHAddress;
@@ -212,7 +210,7 @@
                         return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "/" + data.stallRentalID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
                     }
                 }
-			]
+            ]
             , "columnDefs": [
                 {
                     "searchable": false
