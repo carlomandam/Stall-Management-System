@@ -14,6 +14,7 @@ class TblUtilities extends Migration
     public function up()
     {
         Schema::create('tblUtilities_Initial', function (Blueprint $table) {
+            $table->increments('initialFeeID');
             $table->string('initialFeeDesc',200);
             $table->double('initialAmt');
          

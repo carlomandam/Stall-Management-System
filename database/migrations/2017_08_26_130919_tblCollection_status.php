@@ -16,7 +16,7 @@ class TblCollectionStatus extends Migration
         Schema::create('tblCollection_Status', function (Blueprint $table) {
             $table->increments('collectionID');
             $table->string('collectionStatusName');
-            $table->string('collectionStatusColor');
+            $table->string('collectionStatusColor')->nullable();
             $table->double('collectionDebtAmt',10,2);
          
             $table->timestamps();

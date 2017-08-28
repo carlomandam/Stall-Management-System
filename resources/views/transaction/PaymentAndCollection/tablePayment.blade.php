@@ -39,7 +39,7 @@
                                 <div class="col-xs-12">
                                   <div class="table-striped-responsive">
                                       <div class="defaultNewButton">
-                                          <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new_billing"><span class='fa fa-plus'></span>&nbspCreate a Bill</button>
+                                          <a class="btn btn-primary btn-flat" href="{{ url('/CreateBill')}}"><span class='fa fa-plus'></span>&nbspRecord Utilities Bill</a>
                                          
                                       </div>
                                         <table id="tblstall" class="table table-striped" role="grid" style="width:100%">
@@ -65,7 +65,7 @@
                                 <div class="col-xs-12">
                                     <div class="table-striped-responsive">
                                        <div class="defaultNewButton">
-                                          <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new_billing"><span class='fa fa-plus'></span>&nbspAdd Bulk Payments</button>
+                                          <a class="btn btn-primary btn-flat" ><span class='fa fa-plus'></span>&nbspAdd Bulk Payments</a>
                                          
                                       </div>
                                         <table id="tblreg" class="table table-striped" role="grid" style="width:100%">
@@ -95,66 +95,10 @@
 </div>
 <!-- row -->
 
-<div class = "modal fade" id = "new_billing"  role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-   <form class="billing" action="" method="post" id="new_billing">
-     <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
-     <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Billing Information</h4> </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <div class = "col-md-3">
-                                    <label for="billno">Bill Number</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control" id="billno" name="billno" readonly="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <div class = "col-md-3">
-                                    <label for="billto">Select Stallholder</label><span class="required">&nbsp*</span>
-                                    </div>
-                                    <div class = "col-md-6">
-                                        <input type="text" class="form-control" id="billto" name="billto" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <div class = "col-md-2">
-                                    <label for="billperiod">Billing Period</label>
-                                    </div>
-                                    <div class = "col-md-6">
-                                        <select>
-                                            <option>Week</option>
-                                            <option>Month</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                      <p class="small text-danger">Fields with asterisks(*) are required</p>
-                    </div>
-                  
-                    <div class="modal-footer">
-                        <!-- <label style="float:left">All labels with "*" are required</label> -->
-                        <div class="pull-right">
-                            <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
-                        </div>
-                    </div>
-                </div>
-   </form>
-  </div>
+@stop
+@section('script')
+    <script type="text/javascript">
+     
+    </script>
 @stop

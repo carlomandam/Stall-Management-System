@@ -17,7 +17,7 @@ class TblBilling extends Migration
             $table->increments('billID');
             $table->date('billDateFrom');
             $table->date('billDateTo');
-            $table->date('billDueDate');
+            $table->date('billDueDate')->nullable();
 
             $table->integer('stallRentalID')->unsigned()->index();
 

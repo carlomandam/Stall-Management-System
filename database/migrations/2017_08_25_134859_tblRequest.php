@@ -23,7 +23,6 @@ class TblRequest extends Migration
             $table->string('remarks',200)->nullable();
             $table->dateTime('submitDate');
             $table->dateTime('approvedDate')->nullable();
-            $table->string('requestText',300)->nullable();
 
             
 

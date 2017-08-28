@@ -13,4 +13,9 @@ class PaymentController extends Controller
 
     		//return $data;
     	}
+
+    	public function createBill()
+    	{
+    		return view('transaction/PaymentAndCollection/createBill');
+    	}
  }
