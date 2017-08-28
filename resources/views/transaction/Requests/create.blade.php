@@ -37,7 +37,7 @@
                                               <label>Stall Holder:</label>
                                             </div>
                                             <div class="col-md-4">
-                                                <select class="form-control stallHolder" style="width: 100%;">
+                                                <select class="form-control stallHolder" style="width: 100%;" name="newHolderName">
                                                       <option disabled selected="selected">--Select--</option>
                                                       @foreach($stalls as $stall)
                                                         <option value="{{$stall->stallHID}}" >{{$stall->stallHFName}}{{$stall->stallHMName}}{{$stall->stallHLName}}</option>
@@ -53,7 +53,7 @@
                                               <label>Request Type:</label>
                                             </div>
                                             <div class="col-md-4">
-                                                <select class="form-control requestType" style="width: 100%;">
+                                                <select class="form-control requestType" style="width: 100%;" name="newType"> 
                                                       <option disabled selected="selected">--Select--</option>
                                                       <option value="1">Transfer Request</option>
                                                       <option value="2">Cancel Contract</option>
@@ -75,7 +75,7 @@
                                                         <th>To:</th>
                                                       </tr>
                                                     </thead>
-                                                    <tbody class="active">
+                                                    <tbody class='activeStall'>
                                                         
                                                     </tbody>
                                                 </table> 
@@ -108,13 +108,13 @@
                                               <label>Request Description:</label>
                                             </div>
                                             <div class="col-md-6">
-                                              <textarea class="form-control"></textarea>
+                                              <textarea class="form-control" name="newDesc"></textarea>
                                             </div>
                                           </div>
                                         </div>
                                          <div class="col-md-12" style="margin-top: 10px;">
                                             <div class="pull-right">
-                                                <button class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+                                                <button class="btn btn-primary" id="save" ><i class="fa fa-save"></i> Save</button>
                                                  <button class="btn btn-danger"><a href="/requestList">Cancel</a> </button>
                                             </div>
                                         </div>
@@ -145,13 +145,38 @@
         url: '/requestList/getStall/'+id,
         success: function(data)  {
            $.each(data.active.active_stall_rental,function(key,value){
-              $('.active').append('<tr class="aList" ><td>'+value.stallID+'</td><td><select class ="form-control"><option disabled selected="selected">--Select--</option>@foreach($avails as $avail)<option value ="{{$avail->stallID}}">{{$avail->stallID}}</option>@endforeach</select></td></tr>');
+              $('.activeStall').append('<tr class="aList" ><td>'+value.stallID+'</td><td><select class ="form-control" name="newStall"><option selected="selected"></option>@foreach($avails as $avail)<option value ="{{$avail->stallID}}">{{$avail->stallID}}</option>@endforeach</select></td></tr>');
               $('.contract').append('<tr class="cList"><td><input type="checkbox" value="'+value.stallID+'" ></td><td>'+value.stallID+'</td></tr>');
-
+             
+              
            });
           
         }  
      });
+  })
+  $(document).on('click','#save', function(e){
+    e.preventDefault();
+    var count1 = $('.activeStall').children('tr').length;
+    var count2 = $('.contract').children('tr').length;
+    var getStall = [];
+    var _token = $("input[name='_token']").val();
+    var newName = $("select[name='newHolderName']").val();
+    var newType = $("select[name='newType']").val();
+    var newDesc = $("textarea[name='newDesc']").val();
+        if(newType==1){
+              for (var i = 0; i <count1 ; i++) {
+                 var temp;
+                 temp = $('select[name="newStall"]').eq(i).find('option:selected').val();
+                 console.log(temp);
+                 if(temp!=''){
+                  getStall[i]= temp;
+                 
+                 }
+              }
+              console.log(getStall);
+        }
+   
+    
   })
   $(document).on('change', '.requestType',function(){
     id=$(this).val();
@@ -169,6 +194,16 @@
       $('#typeCancel').hide();
     }
   })
+
+  
+  // $(document).on('change', '#pickStall',function(){
+  //   id=$(this).val();
+  //   console.log(id);
+  // })
+
+
+
+
 </script>
 
 @stop

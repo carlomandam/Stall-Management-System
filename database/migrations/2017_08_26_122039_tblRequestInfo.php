@@ -15,10 +15,10 @@ class TblRequestInfo extends Migration
     {
         //
           Schema::create('tblRequestInfo', function (Blueprint $table) {
-            $table->integer('requestID');->unsigned();
+            $table->integer('requestID')->unsigned();
             $table->string('stallRequested',20);
             $table->softDeletes();
-             $table->foreign('requestID')->references('requestID')->on('tblRequest');
+            $table->foreign('requestID')->references('requestID')->on('tblRequest');
         });
     }
 
