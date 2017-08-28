@@ -166,6 +166,7 @@ Route::get('/ViewBill',function(){
 }); 
 ////////////////REQUESTS////////////
 Route::resource('/requestList', 'RequestController');
+Route::get('requestList/getStall/{id}','RequestController@getStall');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
 

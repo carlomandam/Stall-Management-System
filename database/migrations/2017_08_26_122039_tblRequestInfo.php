@@ -18,11 +18,15 @@ class TblRequestInfo extends Migration
             $table->integer('requestID')->unsigned();
             $table->string('stallRequested',20);
             $table->softDeletes();
+<<<<<<< HEAD
 
              $table->foreign('requestID')->references('requestID')
                    ->on('tblRequest') 
                    ->onUpdate('cascade')
                    ->onDelete('restrict');
+=======
+            $table->foreign('requestID')->references('requestID')->on('tblRequest');
+>>>>>>> c19182f945fc63078981ae1cf252cf11aff53171
         });
     }
 
