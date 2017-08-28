@@ -15,7 +15,7 @@ class StallType_StallTypeSize extends Model
     
     public function StallRate(){
 
-        return $this->hasMany('App\StallRate','stype_SizeID','stype_SizeID');
+        //return $this->hasMany('App\StallRate','stype_SizeID','stype_SizeID');
 
         return $this->hasOne('App\StallRate','stype_SizeID','stype_SizeID')->where('stallRateEffectivity','<=',date('y-m-d'))->orderBy('stallRateEffectivity','DESC');
 

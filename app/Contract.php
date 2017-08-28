@@ -13,4 +13,7 @@ class Contract extends Model
     public function StallRental(){
         return $this->belongsTo('App\StallRental','stallRentalID');
     }
+    public function StallRate(){
+        return $this->belongsTo('App\StallRate','stallRateID');
+    }
 }

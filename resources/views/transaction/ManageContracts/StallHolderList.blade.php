@@ -209,7 +209,7 @@
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "/" + data.stallRentalID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
+                        return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/UpdateRegistration/')}}/"+ data.stallRentalID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
                     }
                 }
             ]

@@ -5,12 +5,13 @@ use DB;
 use App\StallRental;
 use App\StallHolder;
 use App\Stall;
+use App\ContactNo;
 class ManageContractsController extends Controller
 {
     //'
     public function getAvailableStalls(){
         $stalls = Stall::with('Floor.Building')->withCount('Pending')->has('StallType.StallRate.RateDetail')->doesntHave('CurrentTennant')->get();
-        
+        $data = array();
         foreach ($stalls as $stall) {
             $data['data'][] = $stall;
         }
@@ -106,10 +107,13 @@ class ManageContractsController extends Controller
     
     public function updateRegistration($rentID)
     {
-        $stallrental = StallRental::where('stallRentalID',$rentID)->first();
-        $stallHID = $stallrental->stallHID;
-        $stallHolderDetails = StallHolder::where('stallHID',$stallHID)->first();
-        $stallDetails = DB::table('tblStall')
+    	$stallrental = StallRental::with('Contract.StallRate')->where('stallRentalID',$rentID)->first();
+        if(count($stallrental) == 0)
+            return redirect('/StallHolderList');
+    	$stallHID = $stallrental->stallHID;
+    	$stallHolderDetails = StallHolder::where('stallHID',$stallHID)->first();
+        $contacts = ContactNo::where('stallHID',$stallHolderDetails->stallHID)->get();
+    	$stallDetails = DB::table('tblStall')
             ->select('*')
             ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
             ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
@@ -118,7 +122,7 @@ class ManageContractsController extends Controller
             ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
             ->where('tblStall.stallID',$stallrental->stallID)
             ->first();
-        return view('transaction/ManageContracts/updateRegistration',compact('stallrental','stallHolderDetails','stallDetails'));
+        return view('transaction/ManageContracts/Application_View',compact('stallrental','stallHolderDetails','stallDetails','contacts'));
     }
     public function regListIndex()
     {

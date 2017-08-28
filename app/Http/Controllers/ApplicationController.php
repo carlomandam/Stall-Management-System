@@ -396,6 +396,7 @@ function checkEmail()
             $contract->stallRentalID = $rental->stallRentalID;
             $contract->contractStart = date_format(date_create($_POST['startDate']),"Y-m-d");
             $contract->contractEnd = date_format(date_create($_POST['endDate']),"Y-m-d");
+            $contract->stallRateID = $_POST['rateid'];
             $contract->save();
             
             foreach($_POST['products'] as $prod){

@@ -50,6 +50,7 @@
 </ol>
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/square/blue.css')}}"> @stop @section('content')
 <form id="applyForm" method="post">
+    <input type="hidden" name="rateid" id="rateid"/>
     <div class="row">
         <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp Back to StallHolder List</a> </div>
         <!--left table-->
@@ -252,11 +253,7 @@
     $(document).ready(function () {
         var stall = JSON.parse("{{json_encode($stall)}}".replace(/&quot;/g, '"'));
         console.log(stall);
-        <?php
-            if(isset($rental)){ ?>
-        var rental = JSON.parse("{{(isset($rental)) ? json_encode($rental) : null}}".replace(/&quot;/g, '"'));
-        console.log(rental);
-        <?php } ?>
+        $('#rateid').val(stall.stall_type.stall_rate.stallRateID);
         var rate = function () {
             if (stall.stall_type.stall_rate.rate_detail.length > 1) {
                 var det = stall.stall_type.stall_rate.rate_detail;
@@ -337,7 +334,7 @@
         $("#ven_name").on('change', function () {});
         //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
         var select = $('#DOBYear');
-        var leastYr = 1960;
+        var leastYr = 1900;
         var nowYr = new Date().getFullYear();
         for (var v = nowYr; v >= leastYr; v--) {
             $('#DOBYear').append('<option value ="' + v + '">' + v + '</option');

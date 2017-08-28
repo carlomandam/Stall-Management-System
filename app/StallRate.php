@@ -25,4 +25,8 @@ class StallRate extends Model
     public function typeSize(){
         return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID','stype_SizeID');
     }
+    
+    public function Contract(){
+        return $this->hasMany('App\Contract','stallRateID');
+    }
 }

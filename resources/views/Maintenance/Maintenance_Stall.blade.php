@@ -328,6 +328,8 @@
         
         $("#newform .bldgSelect").on("change", function () {
             selected = building[$(this).val()];
+            if (selected == undefined)
+                return;
             var option = "";
             for (var i = 0; i < selected.floor.length; i++) {
                 option += "<option value='" + selected.floor[i].floorID + "'>" + selected.floor[i].floorLevel + "</option>";
