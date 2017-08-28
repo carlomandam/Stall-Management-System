@@ -18,14 +18,18 @@ class TblRequest extends Migration
             $table->increments('requestID');
             $table->integer('stallRentalID')->unsigned();
             $table->integer('status');
-            $table->string('stallFrom',20);
+            $table->integer('requestType');
             $table->string('remarks',200)->nullable();
             $table->dateTime('submitDate');
             $table->dateTime('approvedDate')->nullable();
-            $table->string('requestText'300)->nullable();
+            $table->string('requestText',300)->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('stallRentalID')->references('stallRentalID')->on('tblStallRental_Info');
+
+            $table->foreign('stallRentalID')->references('stallRentalID')
+                    ->on('tblStallRental_Info') 
+                    ->onUpdate('cascade')
+                    ->onDelete('restrict');
         });
     }
 

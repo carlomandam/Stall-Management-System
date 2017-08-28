@@ -20,7 +20,10 @@ class TblstallUtility extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallID')->references('stallID')->on('tblStall')->onDelete('cascade');
+            $table->foreign('stallID')->references('stallID')
+                  ->on('tblStall')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
             
          });
     }

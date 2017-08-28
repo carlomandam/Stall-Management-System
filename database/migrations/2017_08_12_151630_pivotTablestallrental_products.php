@@ -19,10 +19,15 @@ class PivotTablestallrentalProducts extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallRentalID')->references('stallRentalID')->on('tblStallRental_Info')
-              ->onDelete('cascade');
-            $table->foreign('productID')->references('productID')->on('tblProduct')
-              ->onDelete('cascade');
+            $table->foreign('stallRentalID')->references('stallRentalID')
+                  ->on('tblStallRental_Info')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+
+            $table->foreign('productID')->references('productID')
+                  ->on('tblProduct')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
          });
     }
 

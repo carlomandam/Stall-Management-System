@@ -98,6 +98,8 @@
 <!-- row -->@stop @section('script')
 <script>
     $(document).ready(function () {
+
+        
         $('#tblStallHolder').DataTable({
             ajax: '/getStallHolders'
             , responsive: true

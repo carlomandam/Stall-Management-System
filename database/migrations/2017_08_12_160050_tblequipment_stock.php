@@ -21,10 +21,15 @@ class TblequipmentStock extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('equipmentID')->references('equipmentID')->on('tblEquipment')
-              ->onDelete('cascade');
-            $table->foreign('stockStatusID')->references('stockStatusID')->on('tblStockStatus')
-              ->onDelete('cascade');
+            $table->foreign('equipmentID')->references('equipmentID')
+                  ->on('tblEquipment')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+
+            $table->foreign('stockStatusID')->references('stockStatusID')
+                  ->on('tblStockStatus')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
          });
     }
 

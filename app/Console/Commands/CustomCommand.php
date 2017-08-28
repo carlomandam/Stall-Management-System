@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Contract;
 use App\StallRental;
+use App\ContractInfo;
 use DB;
 
 class CustomCommand extends Command
@@ -19,9 +20,9 @@ class CustomCommand extends Command
     /**
      * The console command description.
      *
-     * @var string
+     * @var string,,iiii
      */
-    protected $description = 'Insert collections';
+    protected $description = 'Insert products';
 
     /**
      * Create a new command instance.
@@ -40,18 +41,22 @@ class CustomCommand extends Command
      */
     public function handle()
     {
-        $rate = DB::table('tblContract as contract')
-        ->select('*')
-        ->leftJoin('tblStallRental_info as rental','contract.stallRentID',"=","rental.stallRentID")->groupBy('contract.contractID')
-        ->leftJoin('tblStall as stall','rental.stallID','=','stall.stallID')
-        ->leftJoin('tblStallType_StallSize as type','stall.stype_SizeID',"=",'type.stype_SizeID')
-        ->leftJoin('tblStallRate as rate',function($q){
-            $q->leftJoin('type.stype_SizeID','=','rate.stype_SizeID')->where('stallRateEffectivity','<=','date(contract.created_at)')->orderBy('rate.stallRateEffectivity','DESC')->first();
-        })->groupBy('type.stype_SizeID')->get();
 
-        return json_encode($rate);
-        /*DB::table('tblStall')
-            ->select('*')
-            ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')->leftJoin*/
+        $insert = \DB::table('tblProduct')->insert(
+            ['productName' => 'sample1']
+        );
+
+     /*   $checkNewContracts = ContractInfo::all()
+                             ->where('contractStart','=',date('Y-m-d'));
+        if(count($checkNewContracts) > 0)
+        {
+            insertCurrentCollection();
+        }*/
+        $this->info('New Insert');
+
+    }
+    public function insertCurrentCollection()
+    {
+        
     }
 }

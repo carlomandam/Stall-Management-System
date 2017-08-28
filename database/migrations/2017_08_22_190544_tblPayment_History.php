@@ -16,13 +16,15 @@ class TblPaymentHistory extends Migration
        Schema::create('tblPayment_History', function (Blueprint $table) {
             $table->increments('paymentHistoryID');
             $table->integer('paymentID')->unsigned()->index();
-            $table->double('paymentAmt');
+            $table->double('paymentAmt',10,2);
             $table->date('paymentDate');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('paymentID')->references('paymentID')->on('tblPayment_Info')
-              ->onDelete('cascade');
+            $table->foreign('paymentID')->references('paymentID')
+                  ->on('tblPayment_Info')
+                  ->onUpdate('cascade')
+                 ->onDelete('restrict');
          });
     }
 

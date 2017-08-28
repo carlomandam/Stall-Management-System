@@ -17,9 +17,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/Dashboard',function(){
-	return view('dashboard.dashboard');
-});
+Route::get('/Dashboard','dashboardController@index');
 Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/Registration/{stallid}/{rentid}','ApplicationController@view');
 Route::get('/List', 'ApplicationController@member');
@@ -159,12 +157,13 @@ Route::get('/UpdateRegistration/{rentID}','ManageContractsController@updateRegis
 Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
 ///////////////////PAYMENT AND COLLECTIONS///////////////
-Route::get('/Payment',function(){
-    return view('transaction.PaymentAndCollection.pendingPayment');
-});
+Route::get('/Payment','PaymentController@index');
 Route::get('/ViewPayment',function(){
       return view('transaction.PaymentAndCollection.viewPayment');
 });
+Route::get('/ViewBill',function(){
+    return view('transaction.PaymentAndCollection.bill');
+}); 
 ////////////////REQUESTS////////////
 Route::resource('/requestList', 'RequestController');
 ////////////////Queries/////////////

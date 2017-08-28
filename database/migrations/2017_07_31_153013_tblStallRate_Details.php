@@ -17,11 +17,14 @@ class TblStallRateDetails extends Migration
             
             $table->integer('stallRateID')->unsigned()->index();
             $table->integer('stallRateDesc'); // 1- if Monday 2- Tues or 1- if weekly,monthly,etc.
-            $table->double('dblRate');
+            $table->double('dblRate',10,2);
             $table->timestamps();
             $table->softDeletes();
              
-            $table->foreign('stallRateID')->references('stallRateID')->on('tblStallRate');
+            $table->foreign('stallRateID')->references('stallRateID')
+                  ->on('tblStallRate')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
         });
     }
 

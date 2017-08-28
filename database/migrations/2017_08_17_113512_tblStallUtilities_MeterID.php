@@ -20,8 +20,10 @@ class TblStallUtilitiesMeterID extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallUtilityID')->references('stallUtilityID')->on('tblStall_Utilities')
-              ->onDelete('cascade');
+            $table->foreign('stallUtilityID')->references('stallUtilityID')
+                  ->on('tblStall_Utilities')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
             
          });
     }

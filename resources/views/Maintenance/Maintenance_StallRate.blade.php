@@ -217,7 +217,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="stype">Date of Effect</label><span class="required">&nbsp*</span>
+                                        <label for="stype">Date of Effectivity</label><span class="required">&nbsp*</span>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="effect">
                                             <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div>

@@ -24,8 +24,15 @@ class TblstallrentalInfo extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallHID')->references('stallHID')->on('tblStallHolder');
-            $table->foreign('stallID')->references('stallID')->on('tblStall');
+            $table->foreign('stallHID')->references('stallHID')
+                  ->on('tblStallHolder')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+
+            $table->foreign('stallID')->references('stallID')
+                  ->on('tblStall')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
          });
     }
 

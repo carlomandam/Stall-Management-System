@@ -15,7 +15,7 @@ class TblstallholderAssoc extends Migration
     {
           Schema::create('tblStallHolderAssoc', function (Blueprint $table) {
             $table->increments('stallH_assocID');
-            $table->string('stallH_assocName',300);
+            $table->string('stallH_assocName',200);
             $table->softDeletes();
          });
     }

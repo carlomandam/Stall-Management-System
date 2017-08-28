@@ -22,7 +22,10 @@ class TblFloor extends Migration
             $table->timestamps();
             $table->softDeletes();
             
-            $table->foreign('bldgID')->references('bldgID')->on('tblBuilding');
+            $table->foreign('bldgID')->references('bldgID')
+                  ->on('tblBuilding')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
         });
     }
 

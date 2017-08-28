@@ -13,16 +13,21 @@ class PivotTablestallrentalStallHAssoc extends Migration
      */
     public function up()
     {
-        Schema::create('tblStallRental_StallHAssoc', function (Blueprint $table) {
+    Schema::create('tblStallRental_StallHAssoc', function (Blueprint $table) {
             $table->integer('stallRentalID')->unsigned()->index();
             $table->integer('stallH_assocID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallRentalID')->references('stallRentalID')->on('tblStallRental_Info')
-              ->onDelete('cascade');
-            $table->foreign('stallH_assocID')->references('stallH_assocID')->on('tblStallHolderAssoc')
-              ->onDelete('cascade');
+            $table->foreign('stallRentalID')->references('stallRentalID')
+                  ->on('tblStallRental_Info')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+
+            $table->foreign('stallH_assocID')->references('stallH_assocID')
+                  ->on('tblStallHolderAssoc')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
          });
 
 

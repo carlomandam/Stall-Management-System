@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblUtilities extends Migration
+class TblCollectionStatus extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class TblUtilities extends Migration
      */
     public function up()
     {
-        Schema::create('tblUtilities_Initial', function (Blueprint $table) {
-            $table->string('initialFeeDesc',200);
-            $table->double('initialAmt');
+        Schema::create('tblCollection_Status', function (Blueprint $table) {
+            $table->increments('collectionID');
+            $table->string('collectionStatusName');
+            $table->string('collectionStatusColor');
+            $table->double('collectionDebtAmt',10,2);
          
             $table->timestamps();
             $table->softDeletes();
@@ -31,6 +33,6 @@ class TblUtilities extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblUtilities_Initial');
+        Schema::dropIfExists('tblCollection_Status');
     }
 }

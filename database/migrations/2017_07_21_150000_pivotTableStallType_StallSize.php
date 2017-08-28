@@ -13,16 +13,20 @@ class PivotTableStallTypeStallSize extends Migration
      */
     public function up()
     {
-        Schema::create('tblstallType_stallSize', function (Blueprint $table) {
+        Schema::create('tblstallType_stallSize', function (Blueprint $table){
         $table->increments('stype_SizeID');
         $table->integer('stypeID')->unsigned()->index();
-        $table->foreign('stypeID')->references('stypeID')->on('tblStallType')
-              ->onDelete('cascade');
+        $table->foreign('stypeID')->references('stypeID')
+              ->on('tblStallType')
+              ->onUpdate('cascade')
+              ->onDelete('restrict');
 
         $table->integer('stypeSizeID')->unsigned()->index();
         $table->string('stype_SizedColor',200)->nullable();
-        $table->foreign('stypeSizeID')->references('stypeSizeID')->on('tblStallType_Size')
-              ->onDelete('cascade');
+        $table->foreign('stypeSizeID')->references('stypeSizeID')
+              ->on('tblStallType_Size')
+              ->onUpdate('cascade')
+              ->onDelete('restrict');
             //
         });
     }

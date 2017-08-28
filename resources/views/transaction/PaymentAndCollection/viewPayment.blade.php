@@ -45,7 +45,7 @@
                             <div class="col-md-4"> 
                               <input type="text" disabled="" class="form-control">
                             </div>
-                             <label class="col-md-1">Date</label>
+                             <label class="col-md-1">Date Paid</label>
                             <div class="col-md-4">
                              
                                 <input type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask/>
@@ -142,7 +142,7 @@
                               <div class="col-md-6">
                                 <div class="input-group">
                                   <div class="input-group-addon"><i>Php</i></div>
-                                  <input type="text" class="form-control" name="" style="text-align: right"  readonly="" /> 
+                                  <input type="text" class="form-control" name="" style="text-align: right" /> 
                                 </div>
                               </div>
                             </div>
@@ -178,7 +178,7 @@
                               <div class="col-md-6">
                                 <div class="input-group">
                                   <div class="input-group-addon"><i>Php</i></div>
-                                  <input type="text" class="form-control" name="" style="text-align: right" readonly="" /> 
+                                  <input type="text" class="form-control" name="" style="text-align: right" /> 
                                 </div>
                               </div>
                             </div>

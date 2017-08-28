@@ -18,8 +18,11 @@ class TblcontractInfo extends Migration
             $table->date('contractEnd');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('stallRentalID')->references('stallRentalID')->on('tblStallRental_Info')
-              ->onDelete('cascade');
+
+            $table->foreign('stallRentalID')->references('stallRentalID')
+                  ->on('tblStallRental_Info')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
          });
     }
     /**

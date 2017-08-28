@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblstallEquipment extends Migration
+class TblBillCharge extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,19 @@ class TblstallEquipment extends Migration
      */
     public function up()
     {
-       Schema::create('tblStall_Equipment', function (Blueprint $table) {
-            $table->increments('stallEquipmentID');
-            $table->string('stallID')->index();
-            $table->integer('equipmentID')->unsigned();
-            $table->integer('equipmentQty');
+        Schema::create('tblBill_Charge', function (Blueprint $table) {
+            $table->integer('billID')->unsigned()->index();
+            $table->integer('chargeID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallID')->references('stallID')
-                  ->on('tblStall')
+            $table->foreign('billID')->references('billID')
+                  ->on('tblBilling_Info')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
 
-            $table->foreign('equipmentID')->references('equipmentID')
-                  ->on('tblEquipment')
+            $table->foreign('chargeID')->references('chargeID')
+                  ->on('tblCharges')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
          });
@@ -40,6 +38,6 @@ class TblstallEquipment extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblStall_Equipment');
+        Schema::dropIfExists('tblBill_Charge');
     }
 }
