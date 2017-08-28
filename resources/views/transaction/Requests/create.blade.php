@@ -30,6 +30,9 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <form>
+                                    <div class="alert alert-danger print-error-msg" style="display:none">
+                                      <ul></ul>
+                                      </div>
                                          
                                         <div class="col-md-12" style="margin-top: 10px;">
                                           <div class="form-group">
@@ -62,10 +65,10 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="col-md-12" style="margin-top: 10px; display: none;" id="typeTransfer">
+                                        <div class="col-md-12" style="margin-top: 10px;display: none;" id="typeTransfer">
                                           <div class="form-group">
                                             <div class="col-md-2">
-                                              <label>Select stall:</label>
+                                              <label>Transfer stall:</label>
                                             </div>
                                             <div class="col-md-4">
                                                 <table width="100%" class="table table-bordered table-striped">
@@ -76,6 +79,23 @@
                                                       </tr>
                                                     </thead>
                                                     <tbody class='activeStall'>
+                                                          <tr>
+                                                              <td>
+                                                              <select class="form-control stallRentFrom" style="width: 100%;" name="transferStallRentID">
+                                                                   <option disabled selected="selected">--Select Stall--</option>
+                                                                
+                                                                </select> 
+                                                              </td>
+                                                              <td>
+                                                                  <select class="form-control stallRentTo" style="width: 100%;" name="stallRentTo">
+                                                                   <option disabled selected="selected">--Select Stall--</option>
+                                                                    @foreach($avails as $avail)
+                                                                    <option value="{{$avail->stallID}}">{{$avail->stallID}}</option>
+                                                                    @endforeach
+                                                                                                          
+                                                                </select>     
+                                                              </td>
+                                                          </tr>
                                                         
                                                     </tbody>
                                                 </table> 
@@ -85,18 +105,50 @@
                                          <div class="col-md-12" style="margin-top: 10px;display: none;" id="typeCancel">
                                           <div class="form-group">
                                             <div class="col-md-2">
-                                              <label>Select stall:</label>
+                                              <label>Cancel Contract</label>
                                             </div>
                                             <div class="col-md-4">
                                                 <table width="100%" class="table table-bordered table-striped">
                                                     <thead>
                                                       <tr>
-                                                        <th></th>
                                                         <th>Stall Code:</th>
                                                       </tr>
                                                     </thead>
                                                     <tbody class="contract">
-                                                        
+                                                        <tr>
+                                                          <td>
+                                                              <select class="form-control stallRentFrom" style="width: 100%;" name="cancelStallRentID">
+                                                                   <option disabled selected="selected">--Select Stall--</option>
+                                                                                                        
+                                                                </select>    
+                                                          </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table> 
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 10px;display: none;" id="typeOthers">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Others</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <table width="100%" class="table table-bordered table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Stall Code:</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody class="contract">
+                                                        <tr>
+                                                          <td>
+                                                              <select class="form-control stallRentFrom" style="width: 100%;" name="otherStallRentID">
+                                                                   <option disabled selected="selected">--Select Stall--</option>
+                                                                                                        
+                                                                </select>    
+                                                          </td>
+                                                        </tr>
                                                     </tbody>
                                                 </table> 
                                             </div>
@@ -134,21 +186,20 @@
 <script src ="{{ URL::asset('assets/select2/select2.js')}}"></script>
 <!-- <script type="text/javascript" src ="js/request.js"></script> -->
 <script type="text/javascript">
-  $("#stallHolder").select2();
-  $("#stallTo").select2();
+  $(".stallHolder").select2();
+  $(".stallTo").select2();
+  $(".stallRentFrom").select2();
+  $(".stallRentTo").select2();
   $(document).on('change','.stallHolder',function(){
      id = $(this).val();
-     $('.cList').remove();
+    ;
      $('.aList').remove();
      $.ajax({
         type: "GET",
         url: '/requestList/getStall/'+id,
         success: function(data)  {
            $.each(data.active.active_stall_rental,function(key,value){
-              $('.activeStall').append('<tr class="aList" ><td>'+value.stallID+'</td><td><select class ="form-control" name="newStall"><option selected="selected"></option>@foreach($avails as $avail)<option value ="{{$avail->stallID}}">{{$avail->stallID}}</option>@endforeach</select></td></tr>');
-              $('.contract').append('<tr class="cList"><td><input type="checkbox" value="'+value.stallID+'" ></td><td>'+value.stallID+'</td></tr>');
-             
-              
+              $('.stallRentFrom').append('<option class="aList" value="'+value.stallRentalID+'">'+value.stallID+'</option>');  
            });
           
         }  
@@ -156,50 +207,138 @@
   })
   $(document).on('click','#save', function(e){
     e.preventDefault();
-    var count1 = $('.activeStall').children('tr').length;
-    var count2 = $('.contract').children('tr').length;
-    var getStall = [];
     var _token = $("input[name='_token']").val();
-    var newName = $("select[name='newHolderName']").val();
-    var newType = $("select[name='newType']").val();
-    var newDesc = $("textarea[name='newDesc']").val();
-        if(newType==1){
-              for (var i = 0; i <count1 ; i++) {
-                 var temp;
-                 temp = $('select[name="newStall"]').eq(i).find('option:selected').val();
-                 console.log(temp);
-                 if(temp!=''){
-                  getStall[i]= temp;
-                 
-                 }
-              }
-              console.log(getStall);
-        }
+    var Type = $("select[name='newType']").val();
+    var Desc = $("textarea[name='newDesc']").val();
+    var Status = 0;
+    var Remarks = null;
+    var ApprovedDate = null;
+    if(Type==1){
+         var RentalID = $("select[name='transferStallRentID']").val();
+         var RentTo = $("select[name='stallRentTo']").val();
+         console.log(RentTo);
+             $.ajax({
+              type: "POST",
+              url: "/requestList",
+              data: { 
+                '_token' : $('input[name=_token]').val(),
+                'newRentalID':RentalID,
+                'newType': Type,
+                'newDesc': Desc,
+                'newStatus':Status,
+                'newRemarks':Remarks,
+                'newApprovedDate': ApprovedDate,                
+                'newRentTo':RentTo
+                
+                  },
+                success: function(data) {
+                  if($.isEmptyObject(data.error)){
+                    toastr.success('Request Added');
+                    window.location = '/requestList';
+                  }else{
+                    printErrorMsg(data.error);
+                  }
+                }
+
+              });
+             function printErrorMsg (msg) {
+              $(".print-error-msg").find("ul").html('');
+              $(".print-error-msg").css('display','block');
+              $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+              });
+            }
+
+
+    }
+    else if(Type==2){
+       var RentalID = $("select[name='cancelStallRentID']").val();
+            $.ajax({
+              type: "POST",
+              url: "/requestList",
+              data: { 
+                '_token' : $('input[name=_token]').val(),
+                'newRentalID':RentalID,
+                'newType': Type,
+                'newDesc': Desc,
+                'newStatus':Status,
+                'newRemarks':Remarks,
+                'newApprovedDate': ApprovedDate 
+                  },
+                success: function(data) {
+                  if($.isEmptyObject(data.error)){
+                    toastr.success('Request Added');
+                    window.location = '/requestList';
+                  }else{
+                    printErrorMsg(data.error);
+                  }
+                }
+
+              });
+             function printErrorMsg (msg) {
+              $(".print-error-msg").find("ul").html('');
+              $(".print-error-msg").css('display','block');
+              $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+              });
+            }
+    }
+    else if(Type==3){
+      var RentalID = $("select[name='otherStallRentID']").val();
+          $.ajax({
+              type: "POST",
+              url: "/requestList",
+              data: { 
+                '_token' : $('input[name=_token]').val(),
+                'newRentalID':RentalID,
+                'newType': Type,
+                'newDesc': Desc,
+                'newStatus':Status,
+                'newRemarks':Remarks,
+                'newApprovedDate': ApprovedDate
+                  },
+                success: function(data) {
+                  if($.isEmptyObject(data.error)){
+                    toastr.success('Request Added');
+                    window.location = '/requestList';
+                  }else{
+                    printErrorMsg(data.error);
+                  }
+                }
+
+              });
+             function printErrorMsg (msg) {
+              $(".print-error-msg").find("ul").html('');
+              $(".print-error-msg").css('display','block');
+              $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+              });
+            }
+    }
+
+
    
     
   })
   $(document).on('change', '.requestType',function(){
     id=$(this).val();
-    console.log(id);
     if(id==1){
       $('#typeTransfer').show();
       $('#typeCancel').hide();
+      $('#typeOthers').hide();
+
     }
     else if(id==2){
       $('#typeTransfer').hide();
       $('#typeCancel').show();
+      $('#typeOthers').hide();
     }
-    else{
+    else if(id==3){
+      $('#typeOthers').show();
       $('#typeTransfer').hide();
       $('#typeCancel').hide();
     }
   })
-
-  
-  // $(document).on('change', '#pickStall',function(){
-  //   id=$(this).val();
-  //   console.log(id);
-  // })
 
 
 
