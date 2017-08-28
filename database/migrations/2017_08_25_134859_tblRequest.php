@@ -20,18 +20,13 @@ class TblRequest extends Migration
             $table->integer('requestType');
             $table->string('requestText',300)->nullable();
             $table->integer('status');
-<<<<<<< HEAD
-            $table->integer('requestType');
             $table->string('remarks',200)->nullable();
             $table->dateTime('submitDate');
             $table->dateTime('approvedDate')->nullable();
             $table->string('requestText',300)->nullable();
-=======
-            $table->string('remarks',200)->nullable();
-            $table->dateTime('submitDate');
-            $table->dateTime('approvedDate')->nullable();
+
             
->>>>>>> c19182f945fc63078981ae1cf252cf11aff53171
+
             $table->timestamps();
             $table->softDeletes();
 
