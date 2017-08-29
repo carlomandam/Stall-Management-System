@@ -167,8 +167,10 @@ Route::get('/CreateBill','PaymentController@createBill');
 Route::get('/ViewBill',function(){
     return view('transaction.PaymentAndCollection.bill');
 }); 
+Route::get('/CheckBillingRecords','PaymentController@checkRecords');
 ////////////////REQUESTS////////////
 Route::resource('/requestList', 'RequestController');
+Route::get('/requestList/show/{id}', 'RequestController@show');
 Route::get('requestList/getStall/{id}','RequestController@getStall');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');

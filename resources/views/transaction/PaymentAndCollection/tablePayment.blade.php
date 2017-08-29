@@ -65,7 +65,7 @@
                                 <div class="col-xs-12">
                                     <div class="table-striped-responsive">
                                        <div class="defaultNewButton">
-                                          <a class="btn btn-primary btn-flat" ><span class='fa fa-plus'></span>&nbspAdd Bulk Payments</a>
+                                          <a class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new_payment" ><span class='fa fa-plus'></span>&nbspAdd Bulk Payments</a>
                                          
                                       </div>
                                         <table id="tblreg" class="table table-striped" role="grid" style="width:100%">
@@ -95,10 +95,90 @@
 </div>
 <!-- row -->
 
+<div class = "modal fade" id = "new_payment"  role="dialog">
+  <div class="modal-dialog modal-md" role="document">
+   <form class="billing" action="" method="post" id="bulk_payment">
+     <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
+     <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Bulk Payments</h4> </div>
+                    <div class="modal-body">
+              
+
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class = "col-md-3">
+                                    <label for="billto">Select Stallholder</label>
+                                    </div>
+                                    <div class = "col-md-9">
+                                         <select class="js-example-placeholder-multiple" style="width: 100%;  " id="ven_name" name="ven_name"> </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class = "col-md-3">
+                                    <label for="billperiod">Amount Paid</label>
+                                    </div>
+                                    <div class = "col-md-9">
+                                          <input type='text' class='form-control money' name='' >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    <div class="modal-footer">
+                        <!-- <label style="float:left">All labels with "*" are required</label> -->
+                        <div class="pull-right">
+                            <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+                        </div>
+                    </div>
+                </div>
+   </form>
+  </div>
 
 @stop
 @section('script')
+<script src ="{{ URL::asset('js/jquery.inputmask.bundle.js')}}"></script>
+<script src ="{{ URL::asset('js/phone-ru.js')}}"></script>
+<script src ="{{ URL::asset('js/phone-be.js')}}"></script>
+<script src ="{{ URL::asset('js/phone.js')}}"></script>
     <script type="text/javascript">
-     
+     $(document).ready(function(){
+        $('.js-example-placeholder-multiple').select2({
+            width: 'resolve'
+        });
+
+    Inputmask().mask(document.querySelectorAll("input"));
+
+    $(".money").inputmask("currency",{radixPoint: '.', 
+                                      prefix: "₱ "});
+
+    var timeOutId = 0;
+    var ajaxFn = function () {
+        $.ajax({
+            url: '/CheckBillingRecords',
+            success: function (response) {
+                if (response != 0) {
+                   console.log(response);
+                } else {
+                    timeOutId = setTimeout(ajaxFn, 1000);
+
+                   
+                }
+            }
+            });
+}
+
+    ajaxFn();
+
+     });
     </script>
 @stop

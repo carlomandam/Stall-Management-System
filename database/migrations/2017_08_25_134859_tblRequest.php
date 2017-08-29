@@ -21,11 +21,7 @@ class TblRequest extends Migration
             $table->string('requestText',300)->nullable();
             $table->integer('status');
             $table->string('remarks',200)->nullable();
-            $table->dateTime('submitDate');
-            $table->dateTime('approvedDate')->nullable();
-
-            
-
+            $table->dateTime('approvedDate')->nullable();     
             $table->timestamps();
             $table->softDeletes();
 

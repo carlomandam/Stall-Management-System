@@ -37,7 +37,11 @@ class StallRental extends Model
     
     public function Product(){
         return $this->belongsToMany('App\Product','tblstallrental_product','stallRentalID','productID');
+    }
 
+    public function Billing()
+    {
+        return $this->hasMany('App\Billing','stallRentalID');
     }
     
 }
