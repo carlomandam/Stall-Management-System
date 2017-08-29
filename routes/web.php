@@ -133,6 +133,7 @@ Route::resource('/requirements', 'RequirementsController');
 Route::get('/requirements/show/{id}', 'RequirementsController@show');
 
 Route::resource('/equipment', 'EquipmentController');
+Route::get('/equipment/show/{id}', 'EquipmentController@show');
 
 Route::get('/pdfview',array('as'=>'pdfview','uses'=>'PDFController@pdfview'));
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');

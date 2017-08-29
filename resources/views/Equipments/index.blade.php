@@ -31,17 +31,19 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Desc</th>
+                        <th>Daily Rate</th>
+                        <th>Equipment Limit per stall</th>
                         <th style="width: 280px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                
+                @foreach($equips as $equip)
                     <tr>
-                        <td></td>
-                        <td></td>
+                        <td>{{$equip->equipmentName}}</td>
+                        <td>{{number_format($equip->rentDailyRate,2)}}</td>
+                        <td>{{$equip->equipStallLimit}}</td>
                         <td>
-                            <button class='btn btn-primary btn-flat' id="updateModal" data-id=''><span class='glyphicon glyphicon-pencil'></span> Update</button>
+                            <button class='btn btn-primary btn-flat' id="updateModal" data-id='{{$equip->equipmentID}}'><span class='glyphicon glyphicon-pencil'></span> Update</button>
 
                             <div class='btn-group'>
                                 <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
@@ -56,14 +58,14 @@
                             </div>
                         </td>
                     </tr>
-                 
+                 @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 <div class="modal fade" id="new" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
-        <form class="building" action="" method="" id="">
+        <form  action="" method="" id="">
             <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -75,19 +77,31 @@
                             <div class="alert alert-danger print-error-msg" style="display:none">
                                 <ul></ul>
                             </div>
+
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="bldgName">Requirement Name</label><span class="required">&nbsp*</span>
-                                    <input type="text" class="form-control" name="newReqName"
-                                    id="newReqName" placeholder="Requirement Name" /> 
+                                    <label for="bldgName">Name</label><span class="required">&nbsp*</span>
+                                    <input type="text" class="form-control" name="newEquipment"
+                                     placeholder="Equipment Name" required /> 
                                 </div>
                             </div>
+
                             <div class="col-md-12">
-                                 <div class="form-group">
-                                     <label for="bldgName">Description</label>
-                                     <input type="textarea" name="newReqDesc" class="form-control">
+                                <div class="col-md-6">
+                                     <div class="form-group">
+                                        <label for="bldgName">Daily Rate</label><span class="required">&nbsp*</span>
+                                        <input type="text" name="newRate" class="form-control" onkeypress='validate(event)' >
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                        <div class="form-group">
+                                     <label for="bldgName">Equpment Limit Per Stall</label><span class="required">&nbsp*</span>
+                                     <input type="text" name="newLimit" class="form-control" onkeypress='validate(event)'>
                                  </div>
+                                </div>
+                                
                             </div>
+
                             <div class="col-md-12">
                                 <p class="small text-danger">Fields with asterisks(*) are required</p>
                             </div>
@@ -96,7 +110,7 @@
                     <div class="modal-footer">
                                 <!-- <label style="float:left">All labels with "*" are required</label> -->
                                 <div class="pull-right">
-                                    <button class="btn btn-primary btn-flat" id="saveReq"><span class='fa fa-save'></span>&nbspSave</button>
+                                    <button class="btn btn-primary btn-flat" id="newSave"><span class='fa fa-save'></span>&nbspSave</button>
                                 </div>
                             </div>
                     
@@ -105,6 +119,8 @@
         </form>
     </div>
 </div>
+
+
 <div class="modal fade" id="update" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <form class="building" action="" method="" id="">
@@ -112,26 +128,38 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Update Requirement</h4>
+                        <h4 class="modal-title">Update Equipment</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="alert alert-danger print-error-msg" style="display:none">
                                 <ul></ul>
                             </div>
+
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="bldgName">Requirement Name</label><span class="required">&nbsp*</span>
-                                    <input type="text" class="form-control" name="editReqName"
-                                    id="uname" placeholder="Requirement Name" /> 
+                                    <label for="bldgName">Name</label><span class="required">&nbsp*</span>
+                                    <input type="text" class="form-control" name="uEquipment" id="uName" 
+                                     placeholder="Equipment Name" required /> 
                                 </div>
                             </div>
+
                             <div class="col-md-12">
-                                 <div class="form-group">
-                                     <label for="bldgName">Description</label>
-                                     <input type="textarea" name="editReqDesc" id="udesc" class="form-control">
+                                <div class="col-md-6">
+                                     <div class="form-group">
+                                        <label for="bldgName">Daily Rate</label><span class="required">&nbsp*</span>
+                                        <input type="text" name="uRate" class="form-control" onkeypress='validate(event)' id="uRate" >
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                        <div class="form-group">
+                                     <label for="bldgName">Equpment Limit Per Stall</label><span class="required">&nbsp*</span>
+                                     <input type="text" name="uLimit" class="form-control" onkeypress='validate(event)' id="uLimit">
                                  </div>
+                                </div>
+                                
                             </div>
+
                             <div class="col-md-12">
                                 <p class="small text-danger">Fields with asterisks(*) are required</p>
                             </div>
@@ -140,7 +168,7 @@
                     <div class="modal-footer">
                                 <!-- <label style="float:left">All labels with "*" are required</label> -->
                                 <div class="pull-right">
-                                    <button class="btn btn-primary btn-flat" id="uSaveReq"><span class='fa fa-save'></span>&nbspSave</button>
+                                    <button class="btn btn-primary btn-flat" id="uSave"><span class='fa fa-save'></span>&nbspSave</button>
                                 </div>
                             </div>
                     
