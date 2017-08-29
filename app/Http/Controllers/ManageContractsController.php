@@ -107,7 +107,7 @@ class ManageContractsController extends Controller
     
     public function updateRegistration($rentID)
     {
-    	$stallrental = StallRental::with('Contract.StallRate')->where('stallRentalID',$rentID)->first();
+    	$stallrental = StallRental::with('Contract.StallRate.RateDetail','Product')->where('stallRentalID',$rentID)->first();
         if(count($stallrental) == 0)
             return redirect('/StallHolderList');
     	$stallHID = $stallrental->stallHID;

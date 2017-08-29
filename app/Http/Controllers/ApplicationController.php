@@ -364,6 +364,24 @@ function checkEmail()
         return $holder->stallHID;
     }
     
+    function acceptRental(){
+        $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
+        $rejects = StallRental::where('stallRentalID','!=',$_POST['rental'])->get();
+        
+        foreach($rejects as $reject){
+            $reject->stallRentalStatus = 3;
+            $reject->save();
+        }
+        $rental->stallRentalStatus = 1;
+        $rental->save();
+    }
+    
+    function rejectRental(){
+        $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
+        $rental->stallRentalStatus = 3;
+        $rental->save();
+    }
+    
     function newApplication(){
         if(!isset($_POST['ven_name'])){
             $holder = StallHolder::where('stallHID',$this->newStallHolder())->first();

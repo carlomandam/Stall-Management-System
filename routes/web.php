@@ -42,6 +42,8 @@ Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfvie
 										'as' => 'htmltopdfview']);
 
 Route::get('/getStalls','StallController@getStalls');
+Route::post('/acceptRental','ApplicationController@acceptRental');
+Route::post('/rejectRental','ApplicationController@rejectRental');
 
 /////MAINTENANCE///////
 
