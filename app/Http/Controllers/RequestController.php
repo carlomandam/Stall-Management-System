@@ -217,6 +217,22 @@ class RequestController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+
+
+        $rID = $request->rentalID;
+        $req = RequestT::findorFail($id);
+        $con = StallRental::findorFail($rID);       
+        if($request->updateStatus==1){
+            $con->stallRentalStatus = 0;
+            $req->status = $request->updateStatus;
+            $req->remarks = $request->newRemarks;
+            $req->approvedDate = $request->approved;
+            $req->save();
+        }
+
+
+        
     }
 
     /**

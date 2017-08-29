@@ -167,8 +167,12 @@
                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''}}"><a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a></li>
-                                  
-                                              </ul>
+                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Charges' ? 'active' : ''}}"><a href="/Charges"><i class="fa fa-file-o"></i> <span>Charges</span></a></li>
+                                    
+                                    <li id="mReq"><a href="{{url('/requirements')}}"><i class="fa fa-list"></i><span>Requirements</span></a></li>
+                                    <li id="mEquip"><a href="{{url('/equipment')}}"><i class="fa fa-industry"></i><span>Equipments</span></a></li>
+
+                            </ul>
                         </li>
 
                          <li class = "treeview">    

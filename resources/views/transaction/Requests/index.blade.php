@@ -68,8 +68,13 @@
                                                             {{$req->approvedDate}}
                                                           </td>
                                                           <td>
+                                                          @if(($req->status)==0)
                                                           <button class='btn btn-primary btn-flat' id="updateModal" data-id="{{$req->requestID}}"><span class='glyphicon glyphicon-pencil'></span> Update</button>
-
+                                                          @elseif (($req->status)==1)
+                                                          <button class='btn btn-info btn-flat' id="viewModal" data-id="{{$req->requestID}}"><span class='glyphicon glyphicon-eye-open'></span> VIEW</button>
+                                                          @elseif (($req->status)==2)
+                                                          <button class='btn btn-info btn-flat' id="viewModal" data-id="{{$req->requestID}}"><span class='glyphicon glyphicon-eye-open'></span> VIEW</button> 
+                                                          @endif
                                                             <div class='btn-group'>
                                                               <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
                                                               <ul class='dropdown-menu pull-right opensleft' role='menu'>
@@ -115,7 +120,8 @@
                                               <label>Request No.</label>
                                             </div>
                                             <div class="col-md-2">
-                                              <input type="text" class="form-control" disabled id="uRequestID"> 
+                                              <input type="text" class="form-control" disabled id="uRequestID" name="dID">
+                                              <input type="text" name="rentalID" id="rental" hidden=""> 
                                             </div>          
                                           </div>
                                         </div>
@@ -189,8 +195,8 @@
                                             <div class="col-md-2">
                                               <label>Request Description:</label>
                                             </div>
-                                            <div class="col-md-4">
-                                             <textarea class="form-control" id="uDesc" ></textarea>
+                                            <div class="col-md-6">
+                                             <textarea class="form-control" id="uDesc" readonly></textarea>
                                             </div>
                                           </div>
                                         </div>
@@ -214,7 +220,7 @@
                                             <div class="col-md-2">
                                               <label>Remarks:</label>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                               <textarea class="form-control" name="newRemarks"></textarea>
                                             </div>
                                           </div>
@@ -229,7 +235,153 @@
                     <div class="modal-footer">
                                 <div class="col-md-12" style="margin-top: 10px;">
                                             <div class="pull-right">
-                                                <button class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+                                                <button class="btn btn-primary" id="save"><i class="fa fa-save"></i> Save</button>
+                                                 <button class="btn btn-danger"><a href="">Cancel</a> </button>
+                                            </div>
+                                        </div>
+                                
+                            </div>
+                    
+                </div>
+
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="view" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <form class="building" action="" method="" id="">
+            <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">View Request</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                              
+                            <div class="col-md-12">
+                                    <form>
+                                         <div class="col-md-12">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Request No.</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                              <input type="text" class="form-control" disabled id="vRequestID" name="dID"> 
+                                            </div>          
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 10px;">
+                                          <div class="form-group" >
+                                            <div class="col-md-2">
+                                              <label>Request Status</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                              <input type="text" class="form-control" name="" readonly id="vStatus">
+                                            </div>          
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 10px;">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Stall Holder:</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                               <input type="text" class="form-control" name="" readonly id="vStallHolder">
+                                            </div>
+                                          </div>
+                                        </div>
+                                         <div class="col-md-12" style="margin-top: 10px;">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Request Type:</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" name="" readonly id="vType">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 10px; display: none;" id="vtypeTransfer">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Requested Stall:</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                               <label>From:</label>
+                                               <input type="text" id="vfrom" readonly class="form-control">
+                                               <label>To:</label>
+                                               <input type="text" id="vto" readonly class="form-control">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 10px; display: none;" id="vtypeCancel">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Requested Stall:</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                               <label>Stall Cancel:</label>
+                                               <input type="text" id="vcancel" readonly class="form-control">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 10px; display: none;" id="vtypeOther">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Requested Stall:</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                               <label>Stall:</label>
+                                               <input type="text" id="vother" readonly class="form-control">
+                                            </div>
+                                          </div>
+                                        </div>
+                                         <div class="col-md-12" style="margin-top: 10px;">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Request Description:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                             <textarea class="form-control" id="vDesc" readonly></textarea>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 10px;">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Status</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                               <select class="form-control" style="width: 100%;" name="updateStatus" id="vdStatus" disabled > 
+                                                     
+                                                      <option value="0">Pending</option>
+                                                      <option value="1">Approved</option>
+                                                      <option value="2">Reject</option>
+                                                  </select> 
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 10px;">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Remarks:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                              <textarea class="form-control" name="newRemarks" id="vremarks" readonly></textarea>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                                <div class="col-md-12" style="margin-top: 10px;">
+                                            <div class="pull-right">
+                                                <button class="btn btn-primary" id="save"><i class="fa fa-save"></i> Save</button>
                                                  <button class="btn btn-danger"><a href="">Cancel</a> </button>
                                             </div>
                                         </div>

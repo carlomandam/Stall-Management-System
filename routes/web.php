@@ -132,6 +132,7 @@ Route::post('/checkRate', 'Controller@checkRate');
 Route::resource('/requirements', 'RequirementsController');
 Route::get('/requirements/show/{id}', 'RequirementsController@show');
 
+Route::resource('/equipment', 'EquipmentController');
 
 Route::get('/pdfview',array('as'=>'pdfview','uses'=>'PDFController@pdfview'));
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');

@@ -11,7 +11,8 @@ class StallRental extends Model
     protected $fillable = [
         'stallHID',
         'stallID',
-        'startingDate'
+        'startingDate',
+        'stallRentalStatus'
     ];
 
      public function Assoc()
