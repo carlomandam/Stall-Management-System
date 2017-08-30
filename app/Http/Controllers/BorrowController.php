@@ -3,14 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Equipment;
-use App\EquipStocks;
-use DB;
-use Response;
-use Validator;
-use Redirect;
 
-class StocksController extends Controller
+class BorrowController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,10 +14,7 @@ class StocksController extends Controller
     public function index()
     {
         //
-         $equips = Equipment::whereNull('deleted_at')
-                            ->get();
-        $quantity = EquipStocks::all();
-        return view ('/transaction.Inventory.Stocks.index',compact('equips','quantity'));
+        return view('transaction.Inventory.Borrow.index');
     }
 
     /**
@@ -45,32 +36,6 @@ class StocksController extends Controller
     public function store(Request $request)
     {
         //
-          $rules = [
-            'quantity' => 'required',
-        ];
-        $messages = [
-            'required' => 'The :attribute field is required.',
-        ];
-        $niceNames = [
-            'quantity' => 'Quantity',
-        ];
-        $validator = Validator::make($request->all(),$rules,$messages);
-        $validator->setAttributeNames($niceNames); 
-
-         if ($validator->passes()) {
-            
-            $stock = new EquipStocks;
-            
-            $stock->equipmentID = $request->eqID;
-            $stock->stockStatus = $request->status;
-            $stock->stockQty = $request->quantity;
-        
-            $stock->save();
-            return response()->json(['success'=>'Stock Added.']);
-        }
-
-        return response()->json(['error'=>$validator->errors()->all()]);
-
     }
 
     /**
@@ -82,8 +47,6 @@ class StocksController extends Controller
     public function show($id)
     {
         //
-         $equip =Equipment::findorFail($id);
-        return response()->json(['equip'=>$equip]);
     }
 
     /**

@@ -16,18 +16,13 @@ class TblequipmentStock extends Migration
         Schema::create('tblEquipment_Stock', function (Blueprint $table) {
             $table->increments('equipmentStockID');
             $table->integer('equipmentID')->unsigned()->index();
-            $table->integer('stockStatusID')->unsigned();
+            $table->integer('stockStatus');
             $table->integer('stockQty');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('equipmentID')->references('equipmentID')
                   ->on('tblEquipment')
-                  ->onUpdate('cascade')
-                  ->onDelete('restrict');
-
-            $table->foreign('stockStatusID')->references('stockStatusID')
-                  ->on('tblStockStatus')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
          });

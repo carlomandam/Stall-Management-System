@@ -19,9 +19,9 @@
 
     @yield('style')
     <style>
-	    *{
-	    	font-family: "Trebuchet MS"
-	    }
+      *{
+        font-family: "Trebuchet MS"
+      }
       .fa-power-off{
         margin-right: 20px;
       }
@@ -119,7 +119,7 @@
                 </div>
                 <ul class="sidebar-menu">
                     <li class="header"><span>MAIN NAVIGATION</span></li>
-                	 <li class="treeview">
+                   <li class="treeview">
                         <a href="/Dashboard" class="{{Route::getFacadeRoot()->current()->uri() == 'Dashboard' ? 'active' : ''}}">
                             <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
@@ -153,24 +153,21 @@
                                         <i class="fa fa-circle-o"></i> <span>Manage Requests</span>
                                         </a>
                                     </li>
-                                     <li class = "treeview">
+                                    <li class = "treeview">
                                         <a href="#">
-                                        <i class="fa fa-circle-o"></i> <span>Inventory Equipmment</span>
+                                        <i class="fa fa-circle-o"></i> <span>Inventory Equipment</span>
                                         <span class="pull-right-container">
                                           <i class="fa fa-angle-left pull-right"></i> 
                                         </span> 
                                         </a>
                                         <ul class="treeview-menu">
-                                            <li id="mEquip"><a href="{{url('/stocks')}}"><i class="fa fa-plug"></i><span>Equipment Stocks</span></a>
-                                            </li>
-
+                                           <li id="mStocks"><a href="{{url('/stocks')}}"><i class="fa fa-industry"></i><span>List of Equipment</span></a></li>
+                                           <li id="mBorrow"><a href="{{url('/borrow')}}"><i class="fa fa-industry"></i><span>Borrowed Equipment</span></a></li>
                                         </ul>
+
                                     </li>
                               </ul>
                         </li>
-
-
-
                         <li class="treeview">
                             <a href="#"> 
                               <i class="fa fa-gear"></i> <span>Maintenance</span>
