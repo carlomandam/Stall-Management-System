@@ -47,11 +47,5 @@ class tblCollection_Status extends Seeder
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
-
-
-
-
-
-
     }
 }

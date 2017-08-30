@@ -614,9 +614,11 @@
                 $("#upform").find('input[name=stype\\[\\]]').val(obj.stype_SizeID);
                 $('#typename, #uptypename').html(obj.type_size.stall_type.stypeName);
                 $('#typesize, #uptypesize').html(obj.type_size.stall_type_size.stypeArea + 'm&sup2');
-                $("#updateform").find('select').val(obj.frequencyID).trigger('change');
+                $("#updateform").find('select').val(obj.frequencyDesc).trigger('change');
                 var parts = obj.stallRateEffectivity.split('-');
-                $("#updateform .datepicker").datepicker("update",parts[1]+'/'+parts[2]+'/'+parts[0]);
+                var ds = parts[1]+'-'+parts[2]+'-'+parts[0];
+                alert(ds);
+                $("#updateform .datepicker").datepicker("update",ds);
                 var i = 0;
                 $("#updateform input[name='rate\\[\\]']").each(function () {
                     $(this).val(obj.rate_detail[i].dblRate);

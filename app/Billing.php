@@ -19,14 +19,19 @@ class Billing extends Model
         'stallRentalID'
     ];
     
-   public function Payment()
-   {
-   	return $this->hasMany('App\Payment','billID');
-   }
+    public function Payment()
+    {
+    return $this->hasMany('App\Payment','billID');
+    }
 
-   public function StallRental()
-   {
+    public function StallRental()
+    {
     return $this->belongsTo('App\StallRental','stallRentalID');
-   }
+    }
+    
+    public function Billing()
+    {
+        return $this->belongsToMany('App\InitFee','tblbill_initialfee','billID','initialFeeID');
+    }
 
 }

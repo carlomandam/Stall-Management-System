@@ -50,7 +50,7 @@
 </ol>
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/square/blue.css')}}"> @stop @section('content')
 <form id="applyForm" method="post">
-    <input type="hidden" name="rateid" id="rateid"/>
+    <input type="hidden" name="rateid" id="rateid" />
     <div class="row">
         <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp Back to StallHolder List</a> </div>
         <!--left table-->
@@ -143,8 +143,7 @@
                                 <input type="text" class="form-control email" id="email" name="email" placeholder="email@domain.com" />
                                 <label for="phone"><b>Contact Number/s:</b></label><span class="required">&nbsp*</span>
                                 <div class="form-group input-group removable">
-                                    <input type="text" name="numbers[]" class="form-control" placeholder="" required> <span class="input-group-btn"><button type="button" class="btn btn-primary btn-add">+</button></span> 
-                                </div>
+                                    <input type="text" name="numbers[]" class="form-control" placeholder="" required> <span class="input-group-btn"><button type="button" class="btn btn-primary btn-add">+</button></span> </div>
                                 <label for="address"><b>Home Address</b></label><span class="required">&nbsp*</span>
                                 <textarea rows="4" class="form-control" id="address" name="address"></textarea>
                             </div>
@@ -172,7 +171,32 @@
                                 <label>Stall Code</label>
                                 <input type="text" class="form-control" readonly name="dispStallID" id="dispStallID" value="{{$stall->stallID}}">
                                 <label>Stall Rate</label>
-                                <textarea type="text" class="form-control" readonly name="dispStallRate" id="dispStallRate"></textarea>
+                                <textarea type="text" class="form-control" readonly name="dispStallRate" id="dispStallRate"><?php
+                                    switch($stall->StallType->StallRate->frequencyDesc){
+                                        case 1 :
+                                            $freq = "Monthly";
+                                            break;
+                                        case 2 :
+                                            $freq = "Weekly";
+                                            break;
+                                        case 3 :
+                                            $freq = "Daily";
+                                            break;
+                                        case 4 :
+                                            $freq = "Daily (different per day)";
+                                            break;
+                                    }
+                                    echo "Collection Type: ".$freq."\nRate: ";
+                                    if($stall->StallType->StallRate->frequencyDesc == 4){
+                                        $i = 0;
+                                        $days = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+                                        foreach($stall->StallType->StallRate->RateDetail as $detail){
+                                            echo "\n".$days[$i].': ₱'.$detail->dblRate."\n";
+                                            $i++;
+                                        }                                                        
+                                    }else
+                                        echo $stall->StallType->StallRate->RateDetail[0]->dblRate;
+                                ?></textarea>
                             </div>
                         </div>
                         <!-- /.col-md-6 -->
@@ -227,11 +251,10 @@
                                         echo "<option value='".$x['productID']."'>".$x['productName']."</option>";
                                     }
                                 ?>
-                                
                             </select>
                             <br>
                             <br>
-                            <input id="new-product" class='form-control' type="text" style='width:40%'/>
+                            <input id="new-product" class='form-control' type="text" style='width:40%' />
                             <button type="button" id="btn-add-product">Add Product</button>
                         </div>
                         <div class="col-md-12 ">
@@ -254,31 +277,6 @@
         var stall = JSON.parse("{{json_encode($stall)}}".replace(/&quot;/g, '"'));
         console.log(stall);
         $('#rateid').val(stall.stall_type.stall_rate.stallRateID);
-        var rate = function () {
-            if (stall.stall_type.stall_rate.rate_detail.length > 1) {
-                var det = stall.stall_type.stall_rate.rate_detail;
-                var string = "Rate Type: Daily(Different rates per day)\nMonday: ₱" + det[0].dblRate;
-                return string;
-            }
-            else {
-                var freq = '';
-                switch (stall.stall_type.stall_rate.frequencyDesc) {
-                case 1:
-                    freq = 'Monthly';
-                    break;
-                case 2:
-                    freq = 'Weekly';
-                    break;
-                case 3:
-                    freq = 'Daily';
-                    break;
-                }
-                var det = stall.stall_type.stall_rate.rate_detail;
-                var string = "Rate Type: " + freq + "\nRate: ₱" + det[0].dblRate;
-                return string;
-            }
-        };
-        $('#dispStallRate').val(rate);
         $("#ven_name").select2({
             minimumInputLength: 2
             , allowClear: true
@@ -300,12 +298,12 @@
                             $('form input[name=sex][value=' + item.stallHSex + ']').click();
                             $('#email').val(item.stallHEmail);
                             $('#address').val(item.stallHAddress);
-                            for(var i = $('input[name="numbers[]"]').length;i < item.contact_no.length;i++){
-                                    $('input[name="numbers[]"]').last().next().find('button').click();
+                            for (var i = $('input[name="numbers[]"]').length; i < item.contact_no.length; i++) {
+                                $('input[name="numbers[]"]').last().next().find('button').click();
                             }
                             var j = 0;
-                            $('input[name="numbers[]"]').each(function(){
-                               $(this).val(item.contact_no[j].contactNumber);
+                            $('input[name="numbers[]"]').each(function () {
+                                $(this).val(item.contact_no[j].contactNumber);
                                 j++;
                             });
                             return {
@@ -421,7 +419,7 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
-                    if(data == 'exist'){
+                    if (data == 'exist') {
                         toastr.warning("User's application already exist");
                         return;
                     }
@@ -460,7 +458,15 @@
                 $("#products").append(newState).trigger('change');
             }
         });
+        
+        $('textarea').each(function(){textAreaAdjust(this);});
     });
+    
+    function textAreaAdjust(o){
+        o.style.height = '1px';
+        o.style.height = (25+o.scrollHeight)+"px";
+    }
+    
 </script>
 <script src="{{ URL::asset('js/jquery.inputmask.bundle.js')}}"></script>
 <script src="{{ URL::asset('js/phone-ru.js')}}"></script>

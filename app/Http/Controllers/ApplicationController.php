@@ -15,6 +15,9 @@ use App\ContractPeriod;
 use App\Contract;
 use App\Product;
 use App\ContractInfo;
+use App\InitFee;
+use App\InitBill;
+use App\Billing;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -365,8 +368,21 @@ function checkEmail()
     }
     
     function acceptRental(){
+        $bill = new Billing;
+        $bill->billDateFrom = $date = date('Y-m-d');
+        $bill->billDateTo = $date = date('Y-m-d');
+        $bill->billDueDate = $date = date('Y-m-d');
+        $bill->stallRentalID = $_POST['rental'];
+        if($bill->save()){
+            $initialFees = InitFee::all();
+            foreach($initialFees as $fee){
+                $fee->Billing()->attach($bill->billID);
+            }
+        }
+        
+        return;
         $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
-        $rejects = StallRental::where('stallRentalID','!=',$_POST['rental'])->get();
+        $rejects = StallRental::where('stallID',$rental->stallID)->where('stallRentalStatus',2)->where('stallRentalID','!=',$_POST['rental'])->get();
         
         foreach($rejects as $reject){
             $reject->stallRentalStatus = 3;
@@ -426,6 +442,47 @@ function checkEmail()
                         $product->StallRental()->attach($rental->stallRentalID);
                     }
                 }
+            }
+        }
+    }
+    
+    function updateApplication(){
+        $rental = StallRental::with('Product')->where('stallRentalID',$_POST['rental'])->first();
+        $contract = Contract::where('stallRentalID',$_POST['rental'])->first();
+        
+        $rental->businessName = $_POST['businessName'];
+        $rental->orgName = $_POST['orgname'];
+        $rental->startingDate = date_format(date_create($_POST['startdate']),"Y-m-d");
+        if($rental->isDirty()){
+            $rental->save();
+        }
+        
+        $contract->contractStart = date_format(date_create($_POST['startdate']),"Y-m-d");
+        $contract->contractEnd = date_format(date_create($_POST['enddate']),"Y-m-d");
+        if($contract->isDirty()){
+            $contract->save();
+        }
+        
+        $existing = array();
+        foreach($rental->Product as $prod){
+            if(in_array($prod->productID,$_POST['products']))
+                array_push($existing,$prod->productID);
+            else
+                $rental->Product()->detach($prod->productID);
+        }
+        
+        for($i = 0;$i < count($_POST['products']);$i++){
+            if(!in_array($_POST['products'][$i],$existing)){
+                $product = Product::where('productID',$_POST['products'][$i])->where('productName',"!=",$prod)->first();
+                if(count($product) == 0){
+                    $product = new Product;
+                    $product->productName =  $_POST['products'][$i];
+                    if($product->save()){
+                        $product->StallRental()->attach($rental->stallRentalID);
+                    }
+                }
+                else
+                    $product->StallRental()->attach($rental->stallRentalID);
             }
         }
     }

@@ -135,7 +135,7 @@ Route::get('/requirements/show/{id}', 'RequirementsController@show');
 Route::resource('/equipment', 'EquipmentController');
 Route::get('/equipment/show/{id}', 'EquipmentController@show');
 
-Route::get('/pdfview',array('as'=>'pdfview','uses'=>'PDFController@pdfview'));
+Route::get('/pdfview/{rentalid}','PDFController@pdfcreate');
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
 Route::get('/getVendor', 'ApplicationController@getVendor');
 
@@ -185,3 +185,5 @@ Route::get('/Queries','QueriesController@index');
 ///////////////Utilities////////
 Route::get('/Utilities','UtilitiesController@index');
 Route::get('/testjoin','ApplicationController@testjoin');
+
+Route::post('/updateApplication','ApplicationController@updateApplication');

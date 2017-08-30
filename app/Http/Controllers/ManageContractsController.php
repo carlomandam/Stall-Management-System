@@ -6,6 +6,7 @@ use App\StallRental;
 use App\StallHolder;
 use App\Stall;
 use App\ContactNo;
+use App\Product;
 class ManageContractsController extends Controller
 {
     //'
@@ -107,6 +108,7 @@ class ManageContractsController extends Controller
     
     public function updateRegistration($rentID)
     {
+        $prod = Product::all();
     	$stallrental = StallRental::with('Contract.StallRate.RateDetail','Product')->where('stallRentalID',$rentID)->first();
         if(count($stallrental) == 0)
             return redirect('/StallHolderList');
@@ -122,7 +124,7 @@ class ManageContractsController extends Controller
             ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
             ->where('tblStall.stallID',$stallrental->stallID)
             ->first();
-        return view('transaction/ManageContracts/Application_View',compact('stallrental','stallHolderDetails','stallDetails','contacts'));
+        return view('transaction/ManageContracts/Application_View',compact('stallrental','stallHolderDetails','stallDetails','contacts','prod'));
     }
     public function regListIndex()
     {

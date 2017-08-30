@@ -74,11 +74,12 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="col-md-6">
-                                        <label for="org">Name of Group/Organization<i><b>&nbsp&nbsp(If Applicable)</b></i> </label>
-                                        <input type="text" class="form-control" id="orgname" name="orgname" value="{{$stallrental->businessName}}" /> </div>
-                                    <div class="col-md-6">
                                         <label for="firstName"><b>StallHolder Name</b></label><span class="required">&nbsp*</span>
                                         <input type="text" class="form-control" id="fname" name="fname" value="{{$stallHolderDetails->stallHFName.' '.$stallHolderDetails->stallHLName}}" placeholder=""> </div>
+                                    <div class="col-md-6">
+                                        <label for="address"><b>Home Address</b></label><span class="required">&nbsp*</span>
+                                        <textarea class="form-control" id="address" name="address">{{$stallHolderDetails->stallHAddress}}</textarea>
+                                    </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="col-md-6">
@@ -140,7 +141,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="age">Age</label>
-                                        <input type="text" class="form-control" id="age" name="age" placeholder="" disabled="" /> </div>
+                                        <input type="text" class="form-control" id="age" name="age" placeholder="" readonly/> </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="col-md-6">
@@ -158,25 +159,38 @@
                                             <input type="text" name="numbers[]" class="form-control" placeholder="" required> <span class="input-group-btn"><button type="button" class="btn btn-primary btn-add">+</button></span> </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div id="contract">
                                     <div class="col-md-12">
-                                        <label for="address"><b>Home Address</b></label><span class="required">&nbsp*</span>
-                                        <textarea class="form-control" id="address" name="address">{{$stallHolderDetails->stallHAddress}}</textarea>
+                                        <button type='button' id='upbtn' class="btn btn-primary btn-flat pull-right"><span class='fa fa-pencil'></span>&nbspUpdate</button>
                                     </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="col-md-6">
-                                        <label>Stall Code</label>
-                                        <input type="text" class="form-control" readonly="" value="{{$stallDetails->stallID}}" name="dispStallID" id="dispStallID" value=""> </div>
-                                    <div class="col-md-6">
-                                        <label>Stall Type</label>
-                                        <input type="text" class="form-control" disabled="" name="dispStallType" id="dispStallType" readonly="" value="{{$stallDetails->stypeName}}" /> </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div clas="col-md-12">
+                                    <div class="box-header with-border">
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <h3 class="box-title">Contract Details</h3>
+                                        <div class="box-tools pull-right"> </div>
+                                    </div>
+                                    <div class="col-md-12">
                                         <div class="col-md-6">
-                                            <label>Stall Rate</label>
-                                            <textarea type="text" class="form-control" name="dispStallRate" id="dispStallRate" disabled><?php
+                                            <label for="org">Name of Group/Organization<i><b>&nbsp&nbsp(If Applicable)</b></i> </label>
+                                            <input type="text" class="form-control" id="orgname" name="orgname" value="{{$stallrental->orgName}}" /> </div>
+                                        <div class="col-md-6">
+                                            <label for="bussiname">Business Name</label>
+                                            <input type="text" class="form-control" id="businessName" name="businessName" value="{{$stallrental->businessName}}" /> </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <label>Stall Code</label>
+                                            <input type="text" class="form-control" readonly="" value="{{$stallDetails->stallID}}" name="dispStallID" id="dispStallID"> </div>
+                                        <div class="col-md-6">
+                                            <label>Stall Type</label>
+                                            <input type="text" class="form-control" readonly name="dispStallType" id="dispStallType" readonly="" value="{{$stallDetails->stypeName}}" /> </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div clas="col-md-12">
+                                            <div class="col-md-6">
+                                                <label>Stall Rate</label>
+                                                <textarea type="text" class="form-control" name="dispStallRate" id="dispStallRate" disabled><?php
                                                     switch($stallrental->Contract->StallRate->frequencyDesc){
                                                         case 1 :
                                                             $freq = "Monthly";
@@ -201,61 +215,72 @@
                                                         }                                                        
                                                     }else
                                                         echo $stallrental->Contract->StallRate->RateDetail[0]->dblRate;
-                                                ?></textarea>
+                                                ?>
+                                                </textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Location</label>
+                                                <textarea type="text" class="form-control" readonly name="dispStallLocation" id="dispStallLocation" readonly="">{{(($stallDetails->floorLevel == '1') ? $stallDetails->floorLevel.'st' : (($stallDetails->floorLevel == '2') ? $stallDetails->floorLevel.'nd' : (($stallDetails->floorLevel == '3') ? $stallDetails->floorLevel.'rd' : $stallDetails->floorLevel.'th'))).' Floor'}}, {{$stallDetails->bldgName}} Building</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <label for="contracttype">Contract Type</label> <span class="required">&nbsp*</span>
+                                            <br>
+                                            <label>
+                                                <input type="radio" name="ctype" id="ctype" value="1" checked="checked"><b>Fixed</b></label>
+                                            <label>
+                                                <input type="radio" name="ctype" id="ctype" value="0"><b>At-Will</b></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <label for="startdate">Starting Date </label><span class="required">&nbsp*</span>
+                                            <div class="input-group date datepicker">
+                                                <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
+                                                <input name="startdate" type="text" class="form-control pull-right" id="Start"> </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label>Location</label>
-                                            <textarea type="text" class="form-control" disabled="" name="dispStallLocation" id="dispStallLocation" readonly="">{{(($stallDetails->floorLevel == '1') ? $stallDetails->floorLevel.'st' : (($stallDetails->floorLevel == '2') ? $stallDetails->floorLevel.'nd' : (($stallDetails->floorLevel == '3') ? $stallDetails->floorLevel.'rd' : $stallDetails->floorLevel.'th'))).' Floor'}}, {{$stallDetails->bldgName}} Building</textarea>
+                                            <label for="startdate">End Date </label><span class="required">&nbsp*</span>
+                                            <div class="input-group date datepicker">
+                                                <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
+                                                <input name="enddate" type="text" class="form-control pull-right" id="End"> </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="col-md-6">
-                                        <label for="bussiname">Business Name</label>
-                                        <input type="text" class="form-control" id="businessName" name="businessName" value="{{$stallrental->businessName}}" /> </div>
-                                    <div class="col-md-6">
-                                        <label for="contracttype">Contract Type</label> <span class="required">&nbsp*</span>
-                                        <br>
-                                        <label>
-                                            <input type="radio" name="ctype" id="ctype" value="1" checked="checked"><b>Fixed</b></label>
-                                        <label>
-                                            <input type="radio" name="ctype" id="ctype" value="0"><b>At-Will</b></label>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="col-md-6">
-                                        <label for="startdate">Starting Date </label><span class="required">&nbsp*</span>
-                                        <div class="input-group date datepicker">
-                                            <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-                                            <input type="text" class="form-control pull-right" id="Start"> </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="startdate">End Date </label><span class="required">&nbsp*</span>
-                                        <div class="input-group date datepicker">
-                                            <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-                                            <input type="text" class="form-control pull-right" id="End"> </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
                                     <div class="col-md-12">
-                                        <label for="address"><b>List of Products</b></label><span class="required">&nbsp*</span>
-                                        <textarea rows="2" class="form-control" id="prods" name="prods"><?php
-                                            
-                                            for($i = 0;$i < count($stallrental->Product);$i++){
-                                                echo $stallrental->Product[$i]->productName;
-                                                if($i != (count($stallrental->Product) - 1))
-                                                    echo ', ';
-                                            }
-                                            ?></textarea>
+                                        <div class="col-md-12">
+                                            <label for="address"><b>List of Products</b></label><span class="required">&nbsp*</span>
+                                            <select class="js-example-basic-multiple js-states form-control" name="products[]" id="products" multiple="multiple">
+                                                <?php
+                                                    foreach($prod as $x){
+                                                        echo "<option value='".$x['productID']."'>".$x['productName']."</option>";
+                                                    }
+                                                ?>
+                                            </select>
+                                            <br>
+                                            <br>
+                                            <div id="addProd" style="display:none">
+                                                <input id="new-product" class='form-control' type="text" style='width:40%' />
+                                                <button type="button" id="btn-add-product">Add Product</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="small text-danger" style="margin-left: 20px;">Fields with asterisks(*) are required</p>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <p class="small text-danger" style="margin-left: 20px;">Fields with asterisks(*) are required</p>
+                                    <div class="col-md-12" id="registerButtons">
+                                        <div class="pull-right">
+                                            <button type='button' id='upbtn' onclick="updateContract(1)" class="btn btn-primary"><span class='fa fa-pencil'></span>&nbspUpdate</button>
+                                            <button type="button" onclick="reject();" class="btn btn-danger">Cancel</button>
+                                            <button type="submit" class="btn btn-success">Proceed To Payment</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="pull-right" style="margin-top: 30px; ">
-                                        <button type="button" onclick="reject();" class="btn btn-danger" style="width: 100px;">Decline</button>
-                                        <button type="submit" class="btn btn-primary" style="width: 100px;">Proceed To Payment</button>
+                                    <div class="col-md-12" id="updateButtons" onclick="updateContract(2)" style="display:none">
+                                        <div class="pull-right">
+                                            <button type="button" onclick="" class="btn btn-danger">Cancel</button>
+                                            <button type="button" onclick="submitUpdate()" class="btn btn-success">Save</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -270,6 +295,16 @@
 <script type="text/javascript" src="{{ URL::asset('js/multipleAddinArea.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $('.js-example-basic-multiple').select2({
+            width: 'resolve'
+        });
+        
+        $product = JSON.parse("{{json_encode($stallrental->Product)}}".replace(/&quot;/g, '"'));
+        var selected = Array();
+        for(var i = 0; i < $product.length;i++){
+            selected.push($product[i].productID);
+        }
+        $('.js-example-basic-multiple').val(selected).trigger('change');
         //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
         var select = $('#DOBYear');
         var leastYr = 1900;
@@ -316,18 +351,6 @@
         $('#DOBMonth').val("{{date('m',strtotime($stallHolderDetails->stallHBday))}}").trigger('change');
         $('#DOBDay').val("{{date('d',strtotime($stallHolderDetails->stallHBday))}}").trigger('change');
         $('#DOBYear').val("{{date('Y',strtotime($stallHolderDetails->stallHBday))}}").trigger('change');
-        //INITIALIZE DATEPICKER//
-        $(".datepicker").datepicker({
-            showOtherMonths: true
-            , selectOtherMonths: true
-            , changeMonth: true
-            , changeYear: true
-            , autoclose: true
-            , startDate: "dateToday"
-            , todayHighlight: true
-            , orientation: 'bottom'
-            , format: 'mm-dd-yyyy'
-        });
         /// SUBMIT REGISTRATION//
         $("#applyForm").submit(function (e) {
             e.preventDefault();
@@ -343,7 +366,7 @@
                 , success: function (data) {
                     toastr.success('Successfully Registered!');
                     $("#applyForm")[0].reset();
-                    window.location(url('/RegistrationList'));
+                    window.location = data;
                 }
             });
         });
@@ -357,28 +380,116 @@
             $(this).val(contacts[j].contactNumber);
             j++;
         });
-        $("#Start").datepicker("update","{{date('m/d/Y',strtotime($stallrental->Contract->contractStart))}}");
-        $("#End").datepicker("update","{{date('m/d/Y',strtotime($stallrental->Contract->contractEnd))}}");
-        $('input,textarea,select').attr('readonly',true);
-        $('textarea').each(function(){textAreaAdjust(this);});
+        
+        $(".datepicker").datepicker({
+            showOtherMonths: true
+            , selectOtherMonths: true
+            , changeMonth: true
+            , changeYear: true
+            , autoclose: true
+            , startDate: "dateToday"
+            , todayHighlight: true
+            , orientation: 'bottom'
+            , format: 'mm-dd-yyyy'
+        });
+        $("#Start").datepicker("update", "{{date('m/d/Y',strtotime($stallrental->Contract->contractStart))}}");
+        $("#End").datepicker("update", "{{date('m/d/Y',strtotime($stallrental->Contract->contractEnd))}}");
+        
+        $('input').attr('readonly', true);
+        
+        $('textarea,select,input[name=sex],input[name=ctype]').prop('disabled',true);
+        
+        $(".datepicker").each(function(){
+            $(this).datepicker('remove');
+            $(this).prop('disabled',true);
+        });
+        $('textarea').each(function () {
+            textAreaAdjust(this);
+        });
+        
+        $("#btn-add-product").on("click", function () {
+            var newProdVal = $("#new-product").val();
+            // Set the value, creating a new option if necessary
+            if ($("#products").find("option[value='" + newProdVal + "']").length) {
+                $("#products").val(newProdVal).trigger("change");
+            }
+            else {
+                // Create the DOM option that is pre-selected by default
+                var newState = new Option(newProdVal, newProdVal, true, true);
+                // Append it to the select
+                $("#products").append(newState).trigger('change');
+            }
+        });
+        
     });
-    
-    function textAreaAdjust(o){
+
+    function textAreaAdjust(o) {
         o.style.height = '1px';
-        o.style.height = (25+o.scrollHeight)+"px";
+        o.style.height = (25 + o.scrollHeight) + "px";
     }
-    
-    function reject(){
+
+    function reject() {
         $.ajax({
             type: "POST"
             , url: '/rejectRental'
             , data: {
                 "_token": "{{ csrf_token() }}"
-                , "rental" : $('#rental').val()
+                , "rental": $('#rental').val()
             }
             , success: function (data) {
                 toastr.warning('Rental Declined');
                 //window.location;
+            }
+        });
+    }
+
+    function updateContract(x) {
+        if (x == 1) {
+            $('#registerButtons').fadeOut(function () {
+                $('#updateButtons').fadeIn();
+                $('#addProd').fadeIn();
+                $('#contract input,#contract input textarea,#contract input select').attr('readonly', false);
+                $(".datepicker").datepicker({
+                    showOtherMonths: true
+                    , selectOtherMonths: true
+                    , changeMonth: true
+                    , changeYear: true
+                    , autoclose: true
+                    , startDate: "dateToday"
+                    , todayHighlight: true
+                    , orientation: 'bottom'
+                    , format: 'yyyy-mm-dd'
+                });
+                $(".datepicker > .form-control").prop('disabled',false);
+                $('#contract input[name=ctype], #contract select').prop('disabled',false);
+            });
+        }
+        else {
+            $('#updateButtons, #addProd').fadeOut(function () {
+                $('#registerButtons').fadeIn();
+                $("#Start").datepicker("update", "{{date('m/d/Y',strtotime($stallrental->Contract->contractStart))}}");
+                $("#End").datepicker("update", "{{date('m/d/Y',strtotime($stallrental->Contract->contractEnd))}}");
+                $(".datepicker").each(function(){
+                    $(this).datepicker('remove');
+                    $(this).find('.form-control').prop('disabled',true);
+                });
+                $('#contract input[name=ctype], #contract select').prop('disabled',true);
+            });
+        }
+    }
+    
+    function submitUpdate(){
+        var formData = new FormData($('#applyForm')[0]);
+        $.ajax({
+            type: "POST"
+            , url: '/updateApplication'
+            , data: formData
+            , processData: false
+            , contentType: false
+            , context: this
+            , success: function (data) {
+                toastr.success('Updated!');
+                window.location = data;
             }
         });
     }
