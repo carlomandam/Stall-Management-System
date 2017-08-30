@@ -75,7 +75,7 @@
         </div>
         <div class="banner">
             <b>Goods and Garments</b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <b style="margin-left: 30px;">Bill No: {{$billing->billID}}</b>
+            <b style="margin-left: 30px;">Bill No: {{$billID}}</b>
         </div>
          <div class="banner1">
             <b>L4 B5 Manila East Homes St. San juan Taytay,Rizal</b>
@@ -126,11 +126,10 @@
                             @elseif($con->StallRate->frequencyDesc==3)
                                <td>Daily Rate</td>
                             @endif
-                        $temp = 0;
-                        $total = 0;
+                        
                         @foreach($con->StallRate->RateDetail as $rd)
                        
-                        <td>₱ {{number_format($rd->dblRate,2)}} </td>
+                        <td>Php {{number_format($rd->dblRate,2)}} </td>
                         @endforeach
                      
                     </tr>
@@ -140,7 +139,7 @@
         </div>
         <div style="margin-top: 10px;margin-left: 77%;">
             <b style="font-size: 15px;">Total:</b>
-            <b style="font-size: 14px;color: red;">₱ {{number_format($rd->dblRate,2)}}</b>
+            <b style="font-size: 14px;color: red;">Php {{number_format($rd->dblRate,2)}}</b>
         </div>
         <div>
             

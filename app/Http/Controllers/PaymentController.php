@@ -9,7 +9,11 @@ use App\Billing;
 use App\Payment;
 use App\StallHolder;
 use App\StallRate;
+use DateTime;
+use PDF;
+use PDFF;
 use DB;
+use DateTimeZone;
 use Carbon\Carbon;
 class PaymentController extends Controller
 {
@@ -31,13 +35,25 @@ class PaymentController extends Controller
     	{
     		$transaction = "";
     		//validate first if contract is not yet expiring next week before insert
-    		$activeContracts = Contract::with('StallRate')->where('contractStart','<=',Carbon::today())->get();
-
+            $today = date('Y-m-d H:i:s');
+           // $today>
+    		/*$activeContracts = Contract::with('StallRate')
+                              ->where('contractStart','<=',$today->format('Y-m-d'))
+                              ->get();
+*/          return $today;
+             $activeContracts = DB::table('tblContractInfo as a')
+            ->join('tblStallRental_Info as b','b.stallRentalID','a.stallRentalID')
+            ->join('tblStallRate as c','c.stallRateID','a.stallRateID')
+            ->join('tblStallRate_Details as d','d.stallRateID','c.stallRateID')
+            ->where('a.contractStart','=',$today->format('Y-m-d'))
+            ->where('c.frequencyDesc','!=',1)
+            ->get();
+         
     		if(count($activeContracts) > 0)
     		{
     			foreach($activeContracts as $active)
     			{
-    			$checkBill = Billing::where('stallRentalID','=',$active['stallRentalID'])
+    			$checkBill = Billing::where('stallRentalID','=',$active->stallRentalID)
     						->select('billDateFrom','billDateTo')
     						->orderBy('billDateTo','desc')->first();
 
@@ -46,18 +62,30 @@ class PaymentController extends Controller
     				$today = Carbon::now();
     				$getMonday = $today->startOfWeek();
     				$last = $getMonday->addDays(6);
+     
+
     				while(date('Y-m-d',strtotime($today)) >= date('Y-m-d',strtotime($last))) 
     					{
+                            try{
     						$start = date('Y-m-d',strtotime($active->contractStart));
     						$last = date('Y-m-d',strtotime($last));
+
+                            DB::beginTransaction();
     						$bill = Billing::create([
     							'billDateFrom' => $start,
     							'billDateTo' => $last,
     							'stallRentalID' => $active->stallRentalID
     						]);
-	    				
+	    				   
+                            DB::commit();
 	    					$last = $bill->billDateTo;
 	    					$start = $bill->billDateFrom->addDay(1);
+
+                        }
+                        catch(\Illuminate\Database\QueryException $e){
+                            DB::rollback();
+
+                        }
 
     					}
     			}
@@ -67,7 +95,7 @@ class PaymentController extends Controller
     				$transaction = "done"; //may bill na for today
     			}
 
-    			if(Carbon::today() > $checkBill['billDateTo'])
+    			if(Carbon::today(new DateTimeZone('Asia/Manila')) > $checkBill['billDateTo'])
 
     			{		$last = $checkBill['billDateTo'];
     					//check muna kung may record na ba na nag-eexist sa billing
@@ -134,9 +162,13 @@ class PaymentController extends Controller
 
     	public function generateBill($id)
     	{
+            $billID = 'BILL'.str_pad($id, 5, '0', STR_PAD_LEFT); 
     		$billing = Billing::where('billID','=',$id)->first();
     		$contract = Contract::where('stallRentalID','=',$billing->stallRentalID)->get();
-    		return view('transaction/PaymentAndCollection/bill',compact('billing','contract'));
+
+            $pdf = PDF::loadview('transaction.PaymentAndCollection.bill',compact('billing','contract','billID'))->setPaper([0,0,612,396]);
+
+    		return $pdf->stream('bill.pdf');
     	}
 
 

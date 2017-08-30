@@ -167,10 +167,10 @@
                     table.row.add([
                         
                         data.billNo,
-                         (new Date(data.billDate)).toString().split(' ').splice(1,3).join(' '),
+                       data.billDate,
                         data.stallHolderName,
                         (new Date(data.billFrom)).toString().split(' ').splice(1,3).join(' ') + " - " +  (new Date(data.billTo)).toString().split(' ').splice(1,3).join(' '),
-                        "<button class='btn btn-flat btn-success' onclick='window.location="+'"'+"{{ url('/ViewBill/"+this.value+"') }}"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.billNo+"'><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
+                        "<button class='btn btn-flat btn-success' onclick='window.location="+'"'+"{{ url('/ViewBill/"+this.value+"') }}"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.billNo+"'  target ='_blank'><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
                         
                     
                         
@@ -178,24 +178,16 @@
                 });
             });
 
-    var timeOutId = 0;
-    
-    var ajaxFn = function () {
+   
         $.ajax({
             url: '/CheckBillingRecords',
             success: function (response) {
-                if (response != 0) {
-              
-                } else {
-                    timeOutId = setTimeout(ajaxFn,5000);
-
-                   
-                }
+             console.log(response);
             }
             });
-    }
+    
 
-    ajaxFn();
+
 
      });
     </script>
