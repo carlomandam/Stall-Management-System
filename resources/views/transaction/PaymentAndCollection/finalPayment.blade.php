@@ -39,15 +39,16 @@
                                 <div class="col-xs-12">
                                   <div class="table-striped-responsive">
                                       <div class="defaultNewButton">
-                                          <a class="btn btn-primary btn-flat" href="{{ url('/CreateBill')}}"><span class='fa fa-plus'></span>&nbspRecord Utilities Bill</a>
+                                          <a class="btn btn-primary btn-flat" href="{{ url('/CreateBill')}}" disabled><span class='fa fa-plus'></span>&nbspRecord Utilities Bill</a>
                                          
                                       </div>
                                         <table id="tblBills" class="table table-striped" role="grid" style="width:100%">
                                             <thead>
                                                 <th>Bill Number</th>
                                                 <th>Bill Date</th>
-                                                <th>StallHolder Name</th>
+                                                <th>Bill To</th>
                                                 <th>Billing Period</th>
+                                                <th>Amount Due</th>
                                                 <th>Actions</th>
                                             </thead>
                                         </table>
@@ -64,10 +65,10 @@
                                 <div class="col-xs-12">
                                     <div class="table-striped-responsive">
                                        <div class="defaultNewButton">
-                                          <a class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new_payment" ><span class='fa fa-plus'></span>&nbspAdd Bulk Payments</a>
+                                          <a class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new_payment" disabled ><span class='fa fa-plus'></span>&nbspAdd Bulk Payments</a>
                                          
                                       </div>
-                                        <table id="tblPayment" class="table table-striped" role="grid" style="width:100%">
+                                        <table id="tblreg" class="table table-striped" role="grid" style="width:100%">
                                             <thead>
                                                 <th>StallHolder Name</th>
                                                 <th>Stall Code</th>
@@ -150,6 +151,7 @@
 <script src ="{{ URL::asset('js/phone-be.js')}}"></script>
 <script src ="{{ URL::asset('js/phone.js')}}"></script>
     <script type="text/javascript">
+     
      $(document).ready(function(){
         $('.js-example-placeholder-multiple').select2({
             width: 'resolve'
@@ -160,18 +162,32 @@
     $(".money").inputmask("currency",{radixPoint: '.', 
                                       prefix: "₱ "});
     
-   /* $.get('/getBills', function(data){
+   
+   
+       
+          $.get('/getBills', function(data){
                 var table = $('#tblBills').DataTable().clear();
-              
-         
+                console.log(data);
+               
                 $.each(data, function(i,data){
-                   
+                    var str =  "" + data.billNo;
+                    var ans = 'BILL'+('00000'+str).substring(str.length);
+                    var fromDate = new Date(data.billFrom);
+                    var fromDay = fromDate.getDate();
+                    var toDate = new Date(data.billTo);
+                    var toDay = toDate.getDate();
+                    var total = 0;
+                    for(i =fromDay; i <= toDay; i++)
+                    {
+                        total+= data.rate;
+                    }
                     table.row.add([
-                    
-                       /* data.billDate,
-                        data.stallHolderName,
-                        data.billPeriod,
-                        "<button type='Submit' class='btn btn-flat btn-success'  ><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
+                       ans,
+                       data.billDate,
+                        data.stallHolderName + " <p>(Stall "+ data.StallID+")</p>",
+                        (new Date(data.billFrom)).toString().split(' ').splice(1,3).join(' ') + " - " +  (new Date(data.billTo)).toString().split(' ').splice(1,3).join(' '),
+                      total,
+                        "<button class='btn btn-flat btn-success' onclick='window.location="+'"'+"http://127.0.0.1:8000/ViewBill/&quot;+this.value+&quot;"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.billNo+"'  target ='_blank'><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
                         
                     
                         
@@ -179,33 +195,21 @@
                 });
             });
 
-  /*   $.get('/getPaymentStatus', function(data){
-                var table = $('#tblPayment').DataTable().clear();
-                $.each(data, function(i,data){
-                    table.row.add([
-                        
-                        data.billNo,
-                        data.billDate,
-                        data.stallHolderName,
-                        data.billPeriod,
-                        "<button type='Submit' class='btn btn-flat btn-success'  ><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
-                        
-                    
-                        
-                        ]).draw();
-                });
-            });
-     
-     */
-        $.ajax({
+         
+     $.ajax({
             url: '/CheckBillingRecords',
             success: function (response) {
               
                 }
-            }
+            
             });
-  
+
+
+
 
      });
+    
+
+
     </script>
 @stop

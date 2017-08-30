@@ -70,21 +70,23 @@
         </div>
         <div >
             <b style=" font-size: 20px!important">My Seoul</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <b style=" font-size: 14px!important">Date:{{ Carbon\Carbon::now()->format('F d, Y')}}</b>
+            <b style=" font-size: 14px!important">Date:{{ Carbon\Carbon::today()->format('F d, Y')}}</b>
           
         </div>
         <div class="banner">
             <b>Goods and Garments</b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <b style="margin-left: 30px;">Bill No: {{$billID}}</b>
+
         </div>
          <div class="banner1">
             <b>L4 B5 Manila East Homes St. San juan Taytay,Rizal</b>
         </div>
+
         <div>
             <table width="100%" border="1px solid black">
                 <thead >                    
                     <tr>
-                        <th colspan="2">Billing Information</th>
+                        <th colspan="2" style="text-align: left;">Bill To</th>
                         
                     </tr>
                 </thead>
@@ -106,40 +108,59 @@
         </div>
         <div class="col-md-12">
             <table width="100%">
-                <thead >                    
+                <thead >
+           
+                  @foreach($contract as $con)      
+
                     <tr>
-                        <th style="">Date</th>
-                        <th style="">Description</th>
-                        <th style="">Amount</th>
+                        <th style="text-align: left;">Date</th>
+                        <th style="text-align: left;"">Description</th>
+                        <th style="text-align: left;"">Amount</th>
                       
                     </tr>
                 </thead>
                 <tbody>
                    
-                    <tr>
-                        <td>{{$billing->billDateFrom}} to {{$billing->billDateTo}}</td>
-                         @foreach($contract as $con)
+            @foreach($con->StallRate->RateDetail as $rd)    
+           <?php
+           $first = Carbon\Carbon::parse($billing->billDateFrom)->format('d');
+           $last = Carbon\Carbon::parse($billing->billDateTo)->format('d');
+           $nextDay = Carbon\Carbon::parse($billing->billDateFrom);
+           $total = 0;
+           ?>
+                        @for($i = $first; $i<= $last; $i++)
+
+                     
+                        <tr>
+
+                        <td>{{$nextDay->format('F d, Y')}}</td>
+                            
                             @if($con->StallRate->frequencyDesc==1)
                              <td>Monthly Rate</td>
                             @elseif($con->StallRate->frequencyDesc==2)
                                <td>Weekly Rate</td>
                             @elseif($con->StallRate->frequencyDesc==3)
-                               <td>Daily Rate</td>
+                               <td>{{$nextDay->format("l")}} Rental Rate</td>
                             @endif
-                        
-                        @foreach($con->StallRate->RateDetail as $rd)
                        
-                        <td>Php {{number_format($rd->dblRate,2)}} </td>
-                        @endforeach
-                     
-                    </tr>
-                  
+                       
+                        <td>Php {{number_format($rd->dblRate,2)}} <?php
+                        $total += $rd->dblRate;
+                        ?></td>
+                      
+                        <?php
+                        $nextDay = $nextDay->addDays(1);
+                        ?>
+                        </tr>
+                        @endfor
+                        @endforeach 
+                       
                 </tbody>
             </table>
         </div>
-        <div style="margin-top: 10px;margin-left: 77%;">
+        <div style="margin-top: 10px;margin-left: 73%;">
             <b style="font-size: 15px;">Total:</b>
-            <b style="font-size: 14px;color: red;">Php {{number_format($rd->dblRate,2)}}</b>
+            <b style="font-size: 14px;color: red;">Php {{number_format($total,2)}}</b>
         </div>
         <div>
             

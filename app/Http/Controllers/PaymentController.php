@@ -21,7 +21,7 @@ class PaymentController extends Controller
     	{
     	
 
-    		return view('transaction/PaymentAndCollection/paymentAndCollection');
+    		return view('transaction/PaymentAndCollection/finalPayment');
 
     
     	}
@@ -34,23 +34,20 @@ class PaymentController extends Controller
     	function checkRecords()
     	{
     		$transaction = "";
-    		//validate first if contract is not yet expiring next week before insert
-            $today = date('Y-m-d H:i:s');
-           // $today>
-    		/*$activeContracts = Contract::with('StallRate')
-                              ->where('contractStart','<=',$today->format('Y-m-d'))
-                              ->get();
-*/          return $today;
+            $today = Carbon::today();
+        
+    		//FOR DAILY RATES//
              $activeContracts = DB::table('tblContractInfo as a')
             ->join('tblStallRental_Info as b','b.stallRentalID','a.stallRentalID')
             ->join('tblStallRate as c','c.stallRateID','a.stallRateID')
             ->join('tblStallRate_Details as d','d.stallRateID','c.stallRateID')
-            ->where('a.contractStart','=',$today->format('Y-m-d'))
+            ->where('a.contractStart','<=',$today->format('Y-m-d'))
             ->where('c.frequencyDesc','!=',1)
             ->get();
-         
+        
     		if(count($activeContracts) > 0)
     		{
+
     			foreach($activeContracts as $active)
     			{
     			$checkBill = Billing::where('stallRentalID','=',$active->stallRentalID)
@@ -59,87 +56,92 @@ class PaymentController extends Controller
 
     			if(count($checkBill) == 0) //if no records on billing pero start na ng rent//
     			{	
-    				$today = Carbon::now();
-    				$getMonday = $today->startOfWeek();
-    				$last = $getMonday->addDays(6);
-     
+    				$getMonday = Carbon::today()->startOfWeek();
+                    $last = Carbon::parse($getMonday)->addDays(6);
 
-    				while(date('Y-m-d',strtotime($today)) >= date('Y-m-d',strtotime($last))) 
+                    $start = date('Y-m-d',strtotime($active->contractStart));
+                    $getContractMonday = Carbon::parse($start)->startOfWeek();
+                    $nextBillFrom = Carbon::parse($getContractMonday)->addDays(6);
+                
+
+                  
+    				while(date('Y-m-d',strtotime($last)) >= date('Y-m-d',strtotime($nextBillFrom))) 
     					{
-                            try{
-    						$start = date('Y-m-d',strtotime($active->contractStart));
-    						$last = date('Y-m-d',strtotime($last));
+                            
+                            
+                                try
+                                {
+                                    DB::beginTransaction();
 
-                            DB::beginTransaction();
-    						$bill = Billing::create([
-    							'billDateFrom' => $start,
-    							'billDateTo' => $last,
-    							'stallRentalID' => $active->stallRentalID
-    						]);
-	    				   
-                            DB::commit();
-	    					$last = $bill->billDateTo;
-	    					$start = $bill->billDateFrom->addDay(1);
+            						$bill = Billing::create([
+            							'billDateFrom' => $start,
+            							'billDateTo' => $nextBillFrom,
+            							'stallRentalID' => $active->stallRentalID
+            						]);
+        	    				   
+                                    DB::commit();}
 
-                        }
-                        catch(\Illuminate\Database\QueryException $e){
-                            DB::rollback();
+                                    catch(\Illuminate\Database\QueryException $e){
+                                        DB::rollback();}
 
-                        }
+                              $start = Carbon::parse($bill->billDateTo)->addDays(1);
+                              $nextBillFrom = Carbon::parse($bill->billDateTo)->addDays(7);
+                          
 
     					}
     			}
 
-    			if(Carbon::today() >=  $checkBill['billDateFrom'] && Carbon::today() <= $checkBill['billDateTo'])
-    			{
-    				$transaction = "done"; //may bill na for today
-    			}
+    		  
+          
 
-    			if(Carbon::today(new DateTimeZone('Asia/Manila')) > $checkBill['billDateTo'])
+    			if(date('Y-m-d',strtotime($today)) > date('Y-m-d',strtotime($checkBill->billDateTo)))
+                {	
+                        $lastBillDateTo = date('Y-m-d',strtotime($checkBill->billDateTo));
 
-    			{		$last = $checkBill['billDateTo'];
-    					//check muna kung may record na ba na nag-eexist sa billing
-    					while(Carbon::today() > $last) 
-    					{
-	    					$newBill = new Billing;
-	    					//getfirstfrequencyofrates//
-	    					$newBill->billDateFrom = $checkBill['billDateFrom'];//addOneDay
-	    					$newBill->billDateTo = $checkBill['billDateTo'];//addSevenDays
-	    					$newBill->stallRentalID = $active['stallRentalID'];
-	    					$newBill->save();	
+                        $start = Carbon::parse($lastBillDateTo)->addDays(1);
 
-	    					$last = $newBill['billDateTo'];
-    					}
+                        $last = Carbon::parse($lastBillDateTo)->addDays(7);
+                    
+                            
+        					while(date('Y-m-d',strtotime($today)) >= date('Y-m-d',strtotime($last))) 
+        					{  
 
+                                try{
 
-     				
-    			}
-    			 if(Carbon::today() < $checkBill['billDateTo'])
-    			{
-    				
-    				$deleteRecords = Billing::where('stallRentalID','=',$checkBill['stallRentalID'])
-    				->where('billDateFrom','>', Carbon::today())
-    				->orderBy('billDateTo','desc')
-    				->get();
+                                DB::beginTransaction();
+    	    					$newBill = Billing::create([
+                                    'billDateFrom' => $start,
+                                    'billDateTo' => $last,
+                                    'stallRentalID' => $active->stallRentalID
+                                    ]);
+                                DB::commit();
 
-    				foreach($deleteRecords as $del)
-    				{
-    					$del->delete();
-    				}
-    			}
+                                $start = Carbon::parse($newBill->billDateTo)->addDays(1);
+                                $last = Carbon::parse($newBill->billDateTo)->addDays(7);
 
-    			}
-    		
+                                 }
+                                catch(\Illuminate\Database\QueryException $e){
+        	    					DB::rollback();
+                                }
+
+        					}
+
+         				
+        		}
+        			
 
     		}
     		
-    	//	return json_encode($transaction);
+
+    	}
+    		
+    	//	end of checkBillRecords
 
     	}
 
     	public function getBills()
     	{
-    			$data = DB::select('Select a.stallRentalID as stallRentalID, CONCAT_WS(" ",b.stallHFName, b.stallHMName, b.stallHLName) as stallHolderName, a.billID as billNo,a.billDateFrom as billFrom, a.billDateTo as billTo, date(a.created_at) as billDate from tblbilling_info a left JOIN tblstallrental_info c on(c.stallRentalID = a.stallRentalID) left JOIN  tblstallholder b on b.stallHID = c.stallHID');
+    			$data = DB::select('Select a.stallRentalID as stallRentalID, CONCAT_WS(" ",b.stallHFName, b.stallHMName, b.stallHLName) as stallHolderName, a.billID as billNo,a.billDateFrom as billFrom, a.billDateTo as billTo, date(a.created_at) as billDate, c.stallID as StallID, h.dblRate as rate from tblbilling_info a left JOIN tblstallrental_info c on(c.stallRentalID = a.stallRentalID) left JOIN  tblstallholder b on b.stallHID = c.stallHID LEFT JOIN  tblcontractinfo f on f.stallRentalID = c.stallRentalID LEFT JOIN tblstallrate g on g.stallRateID = f.stallRateID LEFT JOIN tblstallrate_details h on h.stallRateID = f.stallRateID');
     			return response()->json($data);
     	}
 
@@ -151,13 +153,9 @@ class PaymentController extends Controller
 
             $contractRate = Contract::where('stallRentalID','=',$bills)->get();
 
-          /* foreach($contractRate->StallRate->RateDetail as $con)
-            {
-                $balance += $con->dblRate;
-            }*/
+            
+          //  return response()->json($contractRate);
 
-          //  $stallHolders = StallRental::with('Stall','StallHolder')->whereIn('stallRentalID',$bills->stallRentalID);
-            return response()->json($contractRate);
         }
 
     	public function generateBill($id)
@@ -169,6 +167,9 @@ class PaymentController extends Controller
             $pdf = PDF::loadview('transaction.PaymentAndCollection.bill',compact('billing','contract','billID'))->setPaper([0,0,612,396]);
 
     		return $pdf->stream('bill.pdf');
+     //   return view('transaction.PaymentAndCollection.bill',compact('billID','billing','contract'));
+            
+          
     	}
 
 

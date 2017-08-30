@@ -46,7 +46,7 @@
                                             <thead>
                                                 <th>Bill Number</th>
                                                 <th>Bill Date</th>
-                                                <th>StallHolder Name</th>
+                                                <th>Bill To</th>
                                                 <th>Billing Period</th>
                                                 <th>Actions</th>
                                             </thead>
@@ -150,6 +150,7 @@
 <script src ="{{ URL::asset('js/phone-be.js')}}"></script>
 <script src ="{{ URL::asset('js/phone.js')}}"></script>
     <script type="text/javascript">
+     
      $(document).ready(function(){
         $('.js-example-placeholder-multiple').select2({
             width: 'resolve'
@@ -160,17 +161,24 @@
     $(".money").inputmask("currency",{radixPoint: '.', 
                                       prefix: "₱ "});
     
-    $.get('/getBills', function(data){
+   
+   
+        $.ajax({
+            url: '/CheckBillingRecords',
+            success: function (response) {
+          $.get('/getBills', function(data){
                 var table = $('#tblBills').DataTable().clear();
                 console.log(data);
+               
                 $.each(data, function(i,data){
+                    var str =  "" + data.billNo;
+                    var ans = 'BILL'+('00000'+str).substring(str.length);
                     table.row.add([
-                        
-                        data.billNo,
+                       ans,
                        data.billDate,
                         data.stallHolderName,
                         (new Date(data.billFrom)).toString().split(' ').splice(1,3).join(' ') + " - " +  (new Date(data.billTo)).toString().split(' ').splice(1,3).join(' '),
-                        "<button class='btn btn-flat btn-success' onclick='window.location="+'"'+"{{ url('/ViewBill/"+this.value+"') }}"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.billNo+"'  target ='_blank'><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
+                        "<button class='btn btn-flat btn-success' onclick='window.location="+'"'+"http://127.0.0.1:8000/ViewBill/&quot;+this.value+&quot;"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.billNo+"'  target ='_blank'><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
                         
                     
                         
@@ -178,11 +186,6 @@
                 });
             });
 
-   
-        $.ajax({
-            url: '/CheckBillingRecords',
-            success: function (response) {
-             console.log(response);
             }
             });
     
@@ -190,5 +193,8 @@
 
 
      });
+    
+
+
     </script>
 @stop
