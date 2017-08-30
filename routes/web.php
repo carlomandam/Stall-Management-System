@@ -174,10 +174,11 @@ Route::get('/CheckBillingRecords','PaymentController@checkRecords');
 Route::resource('/requestList', 'RequestController');
 Route::get('/requestList/show/{id}', 'RequestController@show');
 Route::get('requestList/getStall/{id}','RequestController@getStall');
-// Invetory/////////////////////////////////////
+
 Route::resource('/stocks', 'StocksController');
+Route::get('/stocks/show/{id}', 'StocksController@show');
 
-
+Route::resource('/borrow', 'BorrowController');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
 

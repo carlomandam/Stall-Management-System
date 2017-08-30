@@ -1,6 +1,6 @@
 @extends('layout.app') 
 @section('title') 
-{{ 'Equipments'}} 
+{{ 'Stocks'}} 
 @stop 
 @section('content-header')
 <ol class="breadcrumb">
@@ -20,14 +20,10 @@
     }
 </style>
 <div class="panel panel-primary">
-    <div class="panel-heading">
-        <h4>Equipment Stocks</h4>
-    </div>
-   
+    <div class="panel-heading"><h4>List of Equipment</h4></div>
     <div class="panel-body">
         <div class="table-responsive">
-          
-            <table id="equipList" class="table table-bordered table-striped" role="grid">
+            <table id="stocksList" class="table table-bordered table-striped" role="grid">
                 <thead>
                     <tr>
                         <th>Equipment Name</th>
@@ -38,43 +34,42 @@
                     </tr>
                 </thead>
                 <tbody>
-               <!-- 
+                @foreach($equips as $equip)
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class='btn btn-primary btn-flat' id="updateModal" data-id=''><span class='glyphicon glyphicon-pencil'></span> Update</button>
-
-                            <div class='btn-group'>
-                                <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
-                                <ul class='dropdown-menu pull-right opensleft' role='menu'>
-                                    <center>
-                                        <h4>Are You Sure?</h4>
-                                        <li class='divider'></li>
-                                        <li><a href='#'>YES</a></li>
-                                        <li><a href='#'>NO</a></li>
-                                    </center>
-                                </ul>
-                            </div>
+                        <td>{{$equip->equipmentName}}</td>
+                        <td>{{number_format($equip->rentDailyRate,2)}}</td>
+                        <td>{{$equip->equipStallLimit}}</td>
+                        <td class="text-right">
+                            <?php $total=0;?>
+                            @foreach($quantity as $quan)
+                                <?php
+                                    if($equip->equipmentID==$quan->equipmentID){
+                                        $total = ($quan->stockStatus ? $total+$quan->stockQty : $total-$quan->stockQty);
+                                    }
+                                ?>
+                            @endforeach
+                            {{$total}}
                         </td>
-                    </tr> -->
-                
+                        
+                        <td>
+                            <button class='btn btn-success btn-flat' id="viewModal" data-id=''><span class='fa fa-eye'></span>View</button>
+                            <button class='btn btn-info btn-flat' id="addModal" data-id='{{$equip->equipmentID}}'><span class='glyphicon glyphicon-plus'></span>Add</button>
+                             <button class='btn btn-primary btn-flat' id="updateModal" data-id=''><span class='glyphicon glyphicon-pencil'></span>Update</button>
+                        </td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
-
         </div>
     </div>
-
-
-<div class="modal fade" id="new" tabindex="-1" role="dialog">
+<div class="modal fade" id="add" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <form  action="" method="" id="">
             <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">New Equipment</h4>
+                        <h4 class="modal-title">Add Stocks</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -86,7 +81,7 @@
                                 <div class="form-group">
                                     <label for="bldgName">Name</label><span class="required">&nbsp*</span>
                                     <input type="text" class="form-control" name="newEquipment"
-                                     placeholder="Equipment Name" required /> 
+                                     placeholder="Equipment Name" required readonly id="Name" /> 
                                 </div>
                             </div>
 
@@ -94,16 +89,23 @@
                                 <div class="col-md-6">
                                      <div class="form-group">
                                         <label for="bldgName">Daily Rate</label><span class="required">&nbsp*</span>
-                                        <input type="text" name="newRate" class="form-control" onkeypress='validate(event)' >
+                                        <input type="text" name="newRate" class="form-control" onkeypress='validate(event)' readonly id="Rate">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                         <div class="form-group">
                                      <label for="bldgName">Equpment Limit Per Stall</label><span class="required">&nbsp*</span>
-                                     <input type="text" name="newLimit" class="form-control" onkeypress='validate(event)'>
+                                     <input type="text" name="newLimit" class="form-control" onkeypress='validate(event)' readonly id="Limit">
                                  </div>
                                 </div>
                                 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="bldgName">Quantity</label><span class="required">&nbsp*</span>
+                                    <input type="text" class="form-control" name="quantity"
+                                    placeholder="Enter Quantiy" required onkeypress='validate(event)' /> 
+                                </div>
                             </div>
 
                             <div class="col-md-12">
@@ -114,7 +116,7 @@
                     <div class="modal-footer">
                                 <!-- <label style="float:left">All labels with "*" are required</label> -->
                                 <div class="pull-right">
-                                    <button class="btn btn-primary btn-flat" id="newSave"><span class='fa fa-save'></span>&nbspSave</button>
+                                    <button class="btn btn-primary btn-flat" id="addSave"><span class='fa fa-save'></span>&nbspSave</button>
                                 </div>
                             </div>
                     
@@ -185,7 +187,7 @@
 @stop 
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('js/floor_js.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/equipment.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/stocks.js') }}"></script>
 
 
 @stop
