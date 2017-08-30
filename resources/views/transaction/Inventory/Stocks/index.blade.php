@@ -100,11 +100,108 @@
                                 </div>
                                 
                             </div>
+
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="bldgName">Quantity</label><span class="required">&nbsp*</span>
+                                    <label for="bldgName">Quantity added</label><span class="required">&nbsp*</span>
                                     <input type="text" class="form-control" name="quantity"
                                     placeholder="Enter Quantiy" required onkeypress='validate(event)' /> 
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <p class="small text-danger">Fields with asterisks(*) are required</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                                <!-- <label style="float:left">All labels with "*" are required</label> -->
+                                <div class="pull-right">
+                                    <button class="btn btn-primary btn-flat" id="addSave"><span class='fa fa-save'></span>&nbspSave</button>
+                                </div>
+                            </div>
+                    
+                </div>
+
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="view" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="building" action="" method="" id="">
+            <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">View Equipment Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="alert alert-danger print-error-msg" style="display:none">
+                                <ul></ul>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="bldgName">Name</label><span class="required">&nbsp*</span>
+                                    <input type="text" class="form-control" name="uEquipment" id="uName" 
+                                     placeholder="Equipment Name" required /> 
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                     <div class="form-group">
+                                        <label for="bldgName">Daily Rate</label><span class="required">&nbsp*</span>
+                                        <input type="text" name="uRate" class="form-control" onkeypress='validate(event)' id="uRate" >
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                        <div class="form-group">
+                                     <label for="bldgName">Equpment Limit Per Stall</label><span class="required">&nbsp*</span>
+                                     <input type="text" name="uLimit" class="form-control" onkeypress='validate(event)' id="uLimit">
+                                 </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                               <th>Condition</th>
+                                               <th>Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Good Condition</td>
+                                                <td></td>
+                                             
+                                            </tr>
+                                            <tr>
+                                                <td>Under Repair</td>
+                                                <td></td>
+                                              
+                                            </tr>
+                                            <tr>
+                                                <td>Broken</td>
+                                                <td></td>
+                                               
+                                            </tr>
+                                            <tr style="background-color: yellow">
+                                                <td>On hand</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr style="background-color: red;">
+                                                <td>Borrowed</td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 
@@ -116,7 +213,7 @@
                     <div class="modal-footer">
                                 <!-- <label style="float:left">All labels with "*" are required</label> -->
                                 <div class="pull-right">
-                                    <button class="btn btn-primary btn-flat" id="addSave"><span class='fa fa-save'></span>&nbspSave</button>
+                                    <button class="btn btn-primary btn-flat" id="uSave"><span class='fa fa-save'></span>&nbspSave</button>
                                 </div>
                             </div>
                     

@@ -74,3 +74,13 @@ e.preventDefault();
 	});
 
 })
+
+$(document).on('click','#viewModal',function(e){
+   $('#view').modal('show');
+   id = $(this).attr('data-id');
+   $('.print-error-msg2').hide();
+   e.preventDefault();
+   	
+   	
+
+})
