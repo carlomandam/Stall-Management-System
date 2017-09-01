@@ -42,8 +42,9 @@ class RequirementsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+
+        
         $rules = [
             'newReqName' => 'required|unique:tblRequirements,reqName|max:200',
             'newReqDesc' => 'nullable|max:200',
@@ -102,32 +103,7 @@ class RequirementsController extends Controller
      */
     public function edit($id)
     {
-        //
-        $rules = [
-            'editReqName' => 'required|unique:tblRequirements,reqName|max:200',
-            'editReqDesc' => 'nullable|max:200',
-        ];
-        $messages = [
-            'unique' => ':attribute already exists.',
-            'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.',
-        ];
-        $niceNames = [
-            'editReqName' => 'Requirement',
-            'editReqDesc' => 'Description',
-        ];
-        $validator = Validator::make($request->all(),$rules,$messages);
-        $validator->setAttributeNames($niceNames); 
-         if ($validator->passes()) {
-
-            $requirements = new Requirements;
-            $requirements->reqName = $request->editReqName;
-            $requirements->reqDesc = $request->editReqDesc;
-            $requirements->save();
-            return response()->json(['success'=>'Update new records.']);
-        }
-
-        return response()->json(['error'=>$validator->errors()->all()]);
+      
     }
 
     /**
@@ -140,36 +116,56 @@ class RequirementsController extends Controller
     public function update(Request $request, $id)
     {	
         //
-    	// $requirements = Requirements::findOrFail($id)->get();
-    	// return($requirements);
+    	
+        $requirements = Requirements::findOrFail($id);
+        if($request->editReqName==$requirements->reqName)
+        {    $rules = [
+               'editReqDesc' => 'nullable|max:200',
+               ];
+               $messages = [
+               'max' => 'The :attribute field must be no longer than :max characters.',
+               ];
+               $niceNames = [
+               'editReqDesc' => 'Description',
+               ];
+            $validator = validator::make($request->all($id),$rules,$messages);
+            $validator->setAttributeNames($niceNames); 
 
-        $rules = [
-            'editReqName' => 'required|unique:tblRequirements,reqName|max:200',
-            'editReqDesc' => 'nullable|max:200',
-        ];
-        $messages = [
-            'unique' => ':attribute already exists.',
-            'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.',
-        ];
-        $niceNames = [
-            'editReqName' => 'Requirement',
-            'editReqDesc' => 'Description',
-        ];
-        $validator = Validator::make($request->all(),$rules,$messages);
-        $validator->setAttributeNames($niceNames); 
+            if ($validator->passes()) {
+                $requirements->reqDesc = $request->editReqDesc;
+                $requirements->save();
+                return response()->json(['success'=>'Update new records.']);
+            }
+            return response()->json(['error'=>$validator->errors()->all()]);
 
-         if ($validator->passes()) {
-         	
-            $requirements = Requirements::findOrFail($id);
-            
-            $requirements->reqName = $request->editReqName;
-            $requirements->reqDesc = $request->editReqDesc;
-            $requirements->save();
-            return response()->json(['success'=>'Update new records.']);
         }
+            else{
+               $rules = [
+               'editReqName' => 'required|unique:tblRequirements,reqName|max:200',
+               'editReqDesc' => 'nullable|max:200',
+               ];
+               $messages = [
+               'unique' => ':attribute already exists.',
+               'required' => 'The :attribute field is required.',
+               'max' => 'The :attribute field must be no longer than :max characters.',
+               ];
+               $niceNames = [
+               'editReqName' => 'Requirement',
+               'editReqDesc' => 'Description',
+               ];
 
-        return response()->json(['error'=>$validator->errors()->all()]);
+               $validator = Validator::make($request->all($id),$rules,$messages);
+               $validator->setAttributeNames($niceNames); 
+               if ($validator->passes()) {
+                $requirements->reqName = $request->editReqName;
+                $requirements->reqDesc = $request->editReqDesc;
+                $requirements->save();
+                return response()->json(['success'=>'Update new records.']);
+            }
+
+            return response()->json(['error'=>$validator->errors()->all()]);
+         }
+
     }
 
     /**
@@ -181,5 +177,22 @@ class RequirementsController extends Controller
     public function destroy($id)
     {
         //
+        $req = Requirements::findOrFail($id);
+        $req->delete();
+    }
+
+    public function archive(){
+        $req = Requirements::withTrashed()
+                            ->whereNotNull('deleted_at')
+                             ->get();
+                            
+        return view('Requirements.archive',compact('req'));
+    }
+
+    public function restore($id){
+        $req = Requirements::withTrashed()
+                            ->findOrFail($id)
+                            ->restore();
+        // $req->history()->restore();
     }
 }

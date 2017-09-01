@@ -24,7 +24,7 @@
             <div class="defaultNewButton">
                 <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Requiements</button>
                 
-                <div class=" pull-right" id="archive"> <a href="{{ url('/BuildingArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
+                <div class=" pull-right" id="archive"> <a href="{{ url('/requirementsArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
             </div>
             <table id="reqList" class="table table-bordered table-striped" role="grid">
                 <thead>
@@ -48,7 +48,7 @@
                                     <center>
                                         <h4>Are You Sure?</h4>
                                         <li class='divider'></li>
-                                        <li><a href='#'>YES</a></li>
+                                        <li><a href='#' data-id="{{$req->reqID}}" id="del">YES</a></li>
                                         <li><a href='#'>NO</a></li>
                                     </center>
                                 </ul>
@@ -71,9 +71,6 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="alert alert-danger print-error-msg" style="display:none">
-                                <ul></ul>
-                            </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="bldgName">Requirement Name</label><span class="required">&nbsp*</span>
@@ -131,6 +128,11 @@
                                      <input type="textarea" name="editReqDesc" id="udesc" class="form-control">
                                  </div>
                             </div>
+                            <div>
+                                <input type="text" name="dName" id="hName" hidden>
+                                <input type="text" name="dDesc" id="hDesc" hidden >
+                                <input type="text" name="dID" id="hID" hidden >
+                            </div>
                             <div class="col-md-12">
                                 <p class="small text-danger">Fields with asterisks(*) are required</p>
                             </div>
@@ -149,10 +151,12 @@
     </div>
 </div>
 
+
+
 @stop 
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('js/floor_js.js') }}"></script>
-<script type="text/javascript" src ="js/requirements.js"></script>
+<script type="text/javascript" src ="{{ URL::asset('js/requirements.js') }}"></script>
 
 
 @stop

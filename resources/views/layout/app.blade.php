@@ -5,8 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>MySeoul | @yield('title')</title>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-   
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"> 
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/dataTables.bootstrap.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css')}}">
@@ -15,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/toastr.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/select2/select2.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datepicker/datepicker3.css')}}">
-       <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/dropdown.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/dropdown.css')}}">
 
     @yield('style')
     <style>
@@ -98,12 +97,9 @@
                                 <a href="#" role="button" aria-expanded="false">
                                   Log Out&nbsp<span class="fa fa-power-off"></span>
                                 </a>
-
-
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form>
-                                 
                             </li>
                       
                     </ul>
@@ -120,7 +116,7 @@
                 <ul class="sidebar-menu">
                     <li class="header"><span>MAIN NAVIGATION</span></li>
                    <li class="treeview">
-                        <a href="/Dashboard" class="{{Route::getFacadeRoot()->current()->uri() == 'Dashboard' ? 'active' : ''}}">
+                        <a href="/" class="{{Route::getFacadeRoot()->current()->uri() == 'Dashboard' ? 'active' : ''}}">
                             <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                         </a>
@@ -153,19 +149,6 @@
                                         <i class="fa fa-circle-o"></i> <span>Manage Requests</span>
                                         </a>
                                     </li>
-                                    <li class = "treeview">
-                                        <a href="#">
-                                        <i class="fa fa-circle-o"></i> <span>Inventory Equipment</span>
-                                        <span class="pull-right-container">
-                                          <i class="fa fa-angle-left pull-right"></i> 
-                                        </span> 
-                                        </a>
-                                        <ul class="treeview-menu">
-                                           <li id="mStocks"><a href="{{url('/stocks')}}"><i class="fa fa-industry"></i><span>List of Equipment</span></a></li>
-                                           <li id="mBorrow"><a href="{{url('/borrow')}}"><i class="fa fa-industry"></i><span>Borrowed Equipment</span></a></li>
-                                        </ul>
-
-                                    </li>
                               </ul>
                         </li>
                         <li class="treeview">
@@ -176,22 +159,31 @@
                                 </span> 
                             </a> 
                             <ul class="treeview-menu">
-                                     <li><a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a></li>
-                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
-                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
-                                   <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''}}"><a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a></li>
-                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Charges' ? 'active' : ''}}"><a href="/Charges"><i class="fa fa-file-o"></i> <span>Charges</span></a></li>
-                                    
-                                    <li id="mReq"><a href="{{url('/requirements')}}"><i class="fa fa-list"></i><span>Requirements</span></a></li>
-                                    <li id="mEquip"><a href="{{url('/equipment')}}"><i class="fa fa-industry"></i><span>Equipments</span></a></li>
+                                     <li>
+                                        <a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a>
+                                      </li>
+                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}">
+                                        <a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a>
+                                    </li>
+                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}">
+                                        <a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a>
+                                    </li>
+                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''}}">
+                                            <a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a>
+                                     </li>
+                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Charges' ? 'active' : ''}}">
+                                        <a href="/Charges"><i class="fa fa-file-o"></i> <span>Charges</span></a>
+                                      </li>
 
-                            </ul>
+                                     <li id="mReq"><a href="{{url('/requirements')}}">
+                                        <i class="fa fa-list"></i><span>Requirements</span></a>
+                                    </li>   
+                           </ul>
                         </li>
 
                          <li class = "treeview">    
                               <a href="/Queries"> 
-                              <i class="fa fa-circle"></i> <span>Queries</span>
-                             
+                              <i class="fa fa-circle"></i> <span>Queries</span>         
                               </a> 
 
                         </li>

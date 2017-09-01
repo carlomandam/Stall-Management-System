@@ -17,33 +17,6 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/Dashboard','dashboardController@index');
-Route::get('/Registration/{stallid}','ApplicationController@create');
-Route::get('/Registration/{stallid}/{rentid}','ApplicationController@view');
-Route::get('/List', 'ApplicationController@member');
-Route::get('/View', 'ApplicationController@Memview');
-Route::get('/Update', 'ApplicationController@Update');
-Route::get('/CreateContract','ContractController@create');
-Route::get('/Contract', 'ContractController@index');
-Route::get('/ViewContracts', 'ContractController@view');
-Route::get('/ShowDetails', 'ContractController@showdetails');
-Route::post('/checkEmail','ApplicationController@checkEmail');
-
-Route::post('/AddVendor','ApplicationController@newApplication');
-Route::get('/getVendor','ApplicationController@getVendor');
-Route::get('/contractTable','ApplicationController@contractTable');
-Route::post('/getVendorInfo','ApplicationController@getVendorInfo');
-Route::post('/UpdateVendor','ApplicationController@updateVendor');
-Route::get('/rentInfo','ContractController@getRentInfo');
-Route::get('/searchVendor','ApplicationController@searchVendor');
-Route::get('displaySearch','ApplicationController@displaySearch');
-Route::get('/Stalls','ApplicationController@stall');
-Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfview',
-										'as' => 'htmltopdfview']);
-
-Route::get('/getStalls','StallController@getStalls');
-Route::post('/acceptRental','ApplicationController@acceptRental');
-Route::post('/rejectRental','ApplicationController@rejectRental');
 
 /////MAINTENANCE///////
 
@@ -68,9 +41,6 @@ Route::get('/Charges', function () {
     return view('Maintenance.Maintenance_Charges');
 });
 
-Route::resource('/kioskmap', 'MappingController');
-Route::get('/kioskmap/bldg/{id}', 'MappingController@load');
-Route::get('/kioskmap/floor/{id}', 'MappingController@floor');
 //Building
 
 Route::post('/AddBuilding', 'BuildingController@addBuilding');
@@ -131,9 +101,11 @@ Route::post('/checkRate', 'Controller@checkRate');
 
 Route::resource('/requirements', 'RequirementsController');
 Route::get('/requirements/show/{id}', 'RequirementsController@show');
+Route::get('/requirementsArchive', 'RequirementsController@archive');
+Route::PUT('/requirements/restore/{id}', 'RequirementsController@restore');
 
-Route::resource('/equipment', 'EquipmentController');
-Route::get('/equipment/show/{id}', 'EquipmentController@show');
+
+
 
 Route::get('/pdfview/{rentalid}','PDFController@pdfcreate');
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
@@ -148,11 +120,8 @@ Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 
 ////////////////////MANAGE CONTRACTS////////////////////
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
-
 Route::get('/getStallHolders','ManageContractsController@getStallHolders');
 Route::get('/getRegistrationList','ManageContractsController@getRegistrationList');
-
-
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
@@ -160,7 +129,9 @@ Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/UpdateRegistration/{rentID}','ManageContractsController@updateRegistration');
 Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
+
 ///////////////////PAYMENT AND COLLECTIONS///////////////
+
 Route::get('/Payment','PaymentController@index');
 Route::get('/ViewPayment',function(){
       return view('transaction.PaymentAndCollection.viewPayment');
