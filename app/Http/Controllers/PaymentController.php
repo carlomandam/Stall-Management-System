@@ -42,9 +42,10 @@ class PaymentController extends Controller
             ->join('tblStallRate as c','c.stallRateID','a.stallRateID')
             ->join('tblStallRate_Details as d','d.stallRateID','c.stallRateID')
             ->where('a.contractStart','<=',$today->format('Y-m-d'))
-            ->where('c.frequencyDesc','!=',1)
             ->get();
-        
+           
+           
+            
     		if(count($activeContracts) > 0)
     		{
 

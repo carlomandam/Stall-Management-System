@@ -123,12 +123,11 @@
                                                 <option value="1">Monthly</option>
                                                 <option value="2">Weekly</option>
                                                 <option value="3">Daily</option>
-                                                <option value="4">Daily (Different rates per day)</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="stype">Date of Effect</label><span class="required">&nbsp*</span>
+                                        <label for="stype">Effectivity Date</label><span class="required">&nbsp*</span>
                                         <div class="input-group date datepicker">
                                             <input type="text" class="form-control" name="effect">
                                             <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div>

@@ -44,12 +44,12 @@
                                       </div>
                                         <table id="tblBills" class="table table-striped" role="grid" style="width:100%">
                                             <thead>
-                                                <th>Bill Number</th>
+                                                <th style="width:10%">Bill Number</th>
                                                 <th>Bill Date</th>
                                                 <th>Bill To</th>
                                                 <th>Billing Period</th>
                                                 <th>Amount Due</th>
-                                                <th>Actions</th>
+                                                <th style="width: 20%">Actions</th>
                                             </thead>
                                         </table>
                                     </div>
@@ -144,6 +144,9 @@
    </form>
   </div>
 
+
+ 
+
 @stop
 @section('script')
 <script src ="{{ URL::asset('js/jquery.inputmask.bundle.js')}}"></script>
@@ -186,8 +189,8 @@
                        data.billDate,
                         data.stallHolderName + " <p>(Stall "+ data.StallID+")</p>",
                         (new Date(data.billFrom)).toString().split(' ').splice(1,3).join(' ') + " - " +  (new Date(data.billTo)).toString().split(' ').splice(1,3).join(' '),
-                      total,
-                        "<button class='btn btn-flat btn-success' onclick='window.location="+'"'+"http://127.0.0.1:8000/ViewBill/&quot;+this.value+&quot;"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.billNo+"'  target ='_blank'><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
+                     "Php "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'),
+                        "<button class='btn btn-flat btn-success' onclick='window.location="+'"'+"http://127.0.0.1:8000/ViewBill/&quot;+this.value+&quot;"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.billNo+"'  target ='_blank'><span class = 'fa  fa-print'></span>&nbspPrint Bill</button>  <button class='btn btn-flat btn-primary' data-toggle ='modal' data-target = '#view'><span class = 'fa  fa-eye'></span>&nbspView Bill</button> "
                         
                     
                         

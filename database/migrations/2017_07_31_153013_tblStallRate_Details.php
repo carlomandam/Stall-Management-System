@@ -16,8 +16,9 @@ class TblStallRateDetails extends Migration
         Schema::create('tblStallRate_Details', function (Blueprint $table) {
             
             $table->integer('stallRateID')->unsigned()->index();
-            $table->integer('stallRateDesc'); // 1- if Monday 2- Tues or 1- if weekly,monthly,etc.
-            $table->double('dblRate',10,2);
+            $table->integer('stallRateDesc'); // 1- if Monday 2- Tues 
+            $table->tinyInteger('stallRateType');//if Percentage or Amount yung increase
+            $table->double('dblRate'); //10% or 200 pesos ganern
             $table->timestamps();
             $table->softDeletes();
              

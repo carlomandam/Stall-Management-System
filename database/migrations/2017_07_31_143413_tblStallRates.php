@@ -18,6 +18,7 @@ class TblStallRates extends Migration
             $table->integer('frequencyDesc');
             $table->date('stallRateEffectivity');
             $table->integer('stype_SizeID')->unsigned();
+            $table->double('dblRate',10,2); //standard rate 100 pesos per day talaga kunwari
             $table->timestamps();
             $table->softDeletes();
              

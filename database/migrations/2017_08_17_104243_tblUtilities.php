@@ -13,10 +13,10 @@ class TblUtilities extends Migration
      */
     public function up()
     {
-        Schema::create('tblUtilities_Initial', function (Blueprint $table) {
-            $table->increments('initialFeeID');
-            $table->string('initialFeeDesc',200);
-            $table->double('initialAmt');
+        Schema::create('tblUtilities', function (Blueprint $table) {
+            $table->increments('utilitiesID');
+            $table->string('utilitiesDesc',500);
+           
          
             $table->timestamps();
             $table->softDeletes();
@@ -32,6 +32,6 @@ class TblUtilities extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblUtilities_Initial');
+        Schema::dropIfExists('tblUtilities');
     }
 }
