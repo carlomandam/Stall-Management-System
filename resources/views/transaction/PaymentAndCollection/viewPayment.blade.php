@@ -215,7 +215,7 @@
                         <th>12/29/2016</span></th>
                         <th>Php 1000.00</th>
                         <th>
-                          <button type="" class="btn btn-warning">Refund</button>
+                          
                             <button type="" class="btn btn-danger">Remove</button>
                             </th>
                           </tr>

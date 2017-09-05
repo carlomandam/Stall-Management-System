@@ -163,10 +163,10 @@ Route::get('/Payment','PaymentController@index');
 Route::get('/ViewPayment',function(){
       return view('transaction.PaymentAndCollection.viewPayment');
 });
+Route::get('/getBills','PaymentController@getBills');
 Route::get('/CreateBill','PaymentController@createBill');
-Route::get('/ViewBill',function(){
-    return view('transaction.PaymentAndCollection.bill');
-}); 
+Route::get('/ViewBill/{id}','PaymentController@generateBill');
+Route::get('/getPaymentStatus','PaymentController@getPaymentStatus');
 Route::get('/CheckBillingRecords','PaymentController@checkRecords');
 ////////////////REQUESTS////////////
 Route::resource('/requestList', 'RequestController');

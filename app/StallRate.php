@@ -13,7 +13,8 @@ class StallRate extends Model
     protected $primaryKey = "stallRateID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
-    
+    protected $fillable = ['dblRate'
+    ];
     public function RateDetail(){
         return $this->hasMany('App\StallRateDetail','stallRateID');
     }

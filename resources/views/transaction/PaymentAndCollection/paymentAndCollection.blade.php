@@ -67,7 +67,7 @@
                                           <a class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new_payment" ><span class='fa fa-plus'></span>&nbspAdd Bulk Payments</a>
                                          
                                       </div>
-                                        <table id="tblPayment" class="table table-striped" role="grid" style="width:100%">
+                                        <table id="tblreg" class="table table-striped" role="grid" style="width:100%">
                                             <thead>
                                                 <th>StallHolder Name</th>
                                                 <th>Stall Code</th>
@@ -167,10 +167,10 @@
                     table.row.add([
                         
                         data.billNo,
-                        data.billDate,
+                         (new Date(data.billDate)).toString().split(' ').splice(1,3).join(' '),
                         data.stallHolderName,
-                        data.billPeriod,
-                        "<button type='Submit' class='btn btn-flat btn-success'  ><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
+                        (new Date(data.billFrom)).toString().split(' ').splice(1,3).join(' ') + " - " +  (new Date(data.billTo)).toString().split(' ').splice(1,3).join(' '),
+                        "<button class='btn btn-flat btn-success' onclick='window.location="+'"'+"{{ url('/ViewBill/"+this.value+"') }}"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.billNo+"'><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
                         
                     
                         
@@ -178,52 +178,8 @@
                 });
             });
 
-     $.get('/getPaymentStatus', function(data){
-                var table = $('#tblPayment').DataTable().clear();
-                alert(data);
-               /* $.each(data, function(i,data){
-                    table.row.add([
-                        
-                        data.billNo,
-                        data.billDate,
-                        data.stallHolderName,
-                        data.billPeriod,
-                        "<button type='Submit' class='btn btn-flat btn-success'  ><span class = 'fa  fa-print'></span>&nbspPrint Bill</button> "
-                        
-                    
-                        
-                        ]).draw();
-                });*/
-            });
-      $('#prodtbl').DataTable({
-            ajax: '/bldgTable'
-            , responsive: true
-            , "columns": [
-                {
-                    "data": "bldgName"
-                    }
-                    , {
-                    "data": "bldgCode"
-                    }
-                    , {
-                    "data": "floor"
-                    }
-                    , {
-                    "data": "bldgDesc"
-                    }
-                    , {
-                    "data": "actions"
-                    }
-            ]
-            , "columnDefs": [
-                {
-                    "searchable": false
-                    , "sortable": false
-                    , "targets": 4
-                    }
-            ]
-        });
     var timeOutId = 0;
+    
     var ajaxFn = function () {
         $.ajax({
             url: '/CheckBillingRecords',
@@ -231,7 +187,7 @@
                 if (response != 0) {
               
                 } else {
-                    timeOutId = setTimeout(ajaxFn, 2000);
+                    timeOutId = setTimeout(ajaxFn,5000);
 
                    
                 }

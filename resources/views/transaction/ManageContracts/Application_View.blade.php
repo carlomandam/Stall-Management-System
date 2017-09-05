@@ -54,7 +54,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/icheck.js')}}">
 </script> @stop @section('content')
 <div class="row">
-    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</a> </div>
+    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</a> </div>
     <!--left table-->
     <div class="col-md-12">
         <div class="box box-primary ">
@@ -78,7 +78,7 @@
                                         <input type="text" class="form-control" id="orgname" name="orgname" value="{{$stallrental->businessName}}" /> </div>
                                     <div class="col-md-6">
                                         <label for="firstName"><b>StallHolder Name</b></label><span class="required">&nbsp*</span>
-                                        <input type="text" class="form-control" id="fname" name="fname" value="{{$stallHolderDetails->stallHFName.' '.$stallHolderDetails->stallHMName[0].'. '.$stallHolderDetails->stallHLName}}" placeholder=""> </div>
+                                        <input type="text" class="form-control" id="fname" name="fname" value="{{$stallHolderDetails->stallHFName.' '.$stallHolderDetails->stallHLName}}" placeholder=""> </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="col-md-6">

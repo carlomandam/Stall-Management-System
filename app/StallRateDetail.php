@@ -13,6 +13,9 @@ class StallRateDetail extends Model
     protected $primaryKey = "stallRateID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
+    protected $fillable = [
+    	'dblRate'
+    ];
     
     public function StallRate(){
         return $this->belongsTo('App\StallRate','stallRateID');

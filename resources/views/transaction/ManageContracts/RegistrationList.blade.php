@@ -18,7 +18,7 @@
 	#floortbl td{
 		padding-bottom:5px;
 	}
-	#floortbl th, #floortbl td{
+	#floortbl th, #floortbl td{3
 		text-align: center;
 	}
 
@@ -155,7 +155,7 @@
 						data.Address,
 						data.ContactNo,
 						data.RegDate,
-						"<button type='Submit' class='btn btn-flat btn-success'data-toggle='modal' data-target='#newcontract'  ><span class = 'fa  fa-angle-double-right'></span>&nbspCreate Contract</button> <button type='Submit' onclick='window.location="+'"'+"{{ url('/UpdateRegistration/"+this.value+"') }}"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.rentID+"'><span class = 'fa fa-pencil'></span>&nbspUpdate</button> <button type='Submit' class='btn btn-flat btn-danger' data-toggle='modal' data-target='#delete' ><span class = 'fa fa-ban'></span>&nbspCancel</button>"
+						"<button type='Submit' class='btn btn-flat btn-success'data-toggle='modal' data-target='#newcontract'  ><span class = 'fa  fa-angle-double-right'></span>&nbspCreate Contract</button> <button type='Submit' onclick='window.location="+'"'+"{{ url('/UpdateRegistration/"+this.value+"') }}"+'"'+"' class='btn btn-flat btn-primary' value = '"+data.billID+"'><span class = 'fa fa-pencil'></span>&nbspUpdate</button> <button type='Submit' class='btn btn-flat btn-danger' data-toggle='modal' data-target='#delete' ><span class = 'fa fa-ban'></span>&nbspCancel</button>"
 						
 					
                         

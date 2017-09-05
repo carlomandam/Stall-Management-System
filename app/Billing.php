@@ -16,7 +16,7 @@ class Billing extends Model
     protected $fillable = [
         'billDateFrom',
         'billDateTo',
-
+        'stallRentalID'
     ];
     
    public function Payment()
