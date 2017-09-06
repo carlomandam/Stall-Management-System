@@ -12,14 +12,11 @@
 */
 
 
-Route::get('/', function () {
-    return view('dashboard.dashboard');
-});
 
 Auth::routes();
 
 /////MAINTENANCE///////
-
+Route::resource('/', 'DashboardController');
 
 Route::get('/Building', function () {
     return view('Maintenance.Maintenance_Buildings');
@@ -154,7 +151,11 @@ Route::resource('/borrow', 'BorrowController');
 Route::get('/Queries','QueriesController@index');
 
 ///////////////Utilities////////
-Route::get('/Utilities','UtilitiesController@index');
-Route::get('/testjoin','ApplicationController@testjoin');
+// Route::get('/Utilities','UtilitiesController@index');
+// Route::get('/testjoin','ApplicationController@testjoin');
+
+// /////////////////////Utilities/////////////////
+Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
+Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
 
 Route::post('/updateApplication','ApplicationController@updateApplication');

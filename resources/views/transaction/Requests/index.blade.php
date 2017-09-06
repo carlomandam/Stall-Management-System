@@ -22,7 +22,7 @@
                         </div>
                         <div>
                               <div class="box-body">
-                                   <button type="submit" class="btn btn-primary  pull-left" onclick = "window.location='{{ url('/requestList/create') }}'"><span class='glyphicon glyphicon-plus'></span>&nbspNew Request
+                                   <button type="submit" class="btn btn-primary  pull-left" id="createModal"><span class='glyphicon glyphicon-plus'></span>&nbspNew Request
                                     </button>
                                     <div class="col-xs-12">
                                           <div class="table-responsive"> 
@@ -384,6 +384,50 @@
                                                 <button class="btn btn-primary" id="save"><i class="fa fa-save"></i> Save</button>
                                                  <button class="btn btn-danger"><a href="">Cancel</a> </button>
                                             </div>
+                                        </div>
+                                
+                            </div>
+                    
+                </div>
+
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="create" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <form class="building" action="" method="" id="">
+            <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Request Type</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                              <table class="table table-striped">
+                                <thead>
+                                  <tr>
+                                    <th>Request Type</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td><a href="#"><h4>Transfer Stall</h4></a></td>
+                                  </tr>
+                                  <tr>
+                                    <td><a href="#"><h4>Cancel Contract</h4></a></td>
+                                  </tr>
+
+                                </tbody>
+                              </table>
+                           
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                                <div class="col-md-12" style="margin-top: 10px;">
+                                            
                                         </div>
                                 
                             </div>

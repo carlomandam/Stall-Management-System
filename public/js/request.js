@@ -174,3 +174,8 @@ $(document).on('click', '#viewModal', function(e){
 			});
 
 })
+
+$(document).on('click' , '#createModal', function(e){
+	e.preventDefault;
+	$('#create').modal('show');
+})

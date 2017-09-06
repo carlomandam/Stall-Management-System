@@ -33,7 +33,21 @@
                                     <div class="alert alert-danger print-error-msg" style="display:none">
                                       <ul></ul>
                                       </div>
-                                         
+                                        <div class="col-md-12" style="margin-top: 10px;">
+                                          <div class="form-group">
+                                            <div class="col-md-2">
+                                              <label>Request Type:</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select class="form-control requestType" style="width: 100%;" name="newType"> 
+                                                      <option disabled selected="selected">--Select--</option>
+                                                      <option value="1">Transfer Request</option>
+                                                      <option value="2">Cancel Contract</option>
+                                                      <option value="3">Others</option>
+                                                  </select> 
+                                            </div>
+                                          </div>
+                                        </div> 
                                         <div class="col-md-12" style="margin-top: 10px;">
                                           <div class="form-group">
                                             <div class="col-md-2">
@@ -50,21 +64,7 @@
                                             </div>
                                           </div>
                                         </div>
-                                         <div class="col-md-12" style="margin-top: 10px;">
-                                          <div class="form-group">
-                                            <div class="col-md-2">
-                                              <label>Request Type:</label>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <select class="form-control requestType" style="width: 100%;" name="newType"> 
-                                                      <option disabled selected="selected">--Select--</option>
-                                                      <option value="1">Transfer Request</option>
-                                                      <option value="2">Cancel Contract</option>
-                                                      <option value="3">Others</option>
-                                                  </select> 
-                                            </div>
-                                          </div>
-                                        </div>
+                                         
                                         <div class="col-md-12" style="margin-top: 10px;display: none;" id="typeTransfer">
                                           <div class="form-group">
                                             <div class="col-md-2">

@@ -51,8 +51,7 @@
                                 <select class="form-control collection" name="collection">
                                     <option value="1">Monthly</option>
                                     <option value="2">Weekly</option>
-                                    <option value="3">Daily</option>
-                                    <option value="4">Daily (Different rates per day)</option>
+                                    <option value="4">Daily</option>
                                 </select>
                             </div>
                         </div>

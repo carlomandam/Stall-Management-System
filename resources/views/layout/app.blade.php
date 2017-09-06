@@ -187,12 +187,30 @@
                               </a> 
 
                         </li>
-
-                         <li class = "treeview">    
-                              <a href="/Utilities"> 
+                         <li class="treeview">
+                            <a href="#"> 
                               <i class="fa fa-cogs"></i> <span>Utilities</span>
-                              </a> 
+                               <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i> 
+                                </span> 
+                            </a> 
+                            <ul class="treeview-menu">
+                                      <li id=""><a href="{{url('#')}}">
+                                        <i class="fa fa-user"></i><span>Business Information</span></a>
+                                    </li> 
+
+                                     <li id="uDays"><a href="{{url('/MarketDays')}}">
+                                        <i class="fa fa-calendar-times-o"></i><span>Market Days</span></a>
+                                    </li>   
+                                    <li id=""><a href="{{url('#')}}">
+                                        <i class="fa fa-bell"></i><span>Collection Status</span></a>
+                                    </li> 
+                                    <li id=""><a href="{{url('#')}}">
+                                        <i class="fa fa-credit-card"></i><span>Initial Fee</span></a>
+                                    </li>    
+                           </ul>
                         </li>
+                        
 
                         <li class = "treeview">    
                               <a href="#"> 

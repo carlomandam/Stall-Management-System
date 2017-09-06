@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(StallRateDetailsTableSeeder::class);
         $this->call(StallTableSeeder::class);
         $this->call(tblCollection_Status::class);
-        $this->call(tblUtilities_Initial::class);
+        $this->call(tblUtilities::class);
 
 
 
