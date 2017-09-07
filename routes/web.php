@@ -157,5 +157,7 @@ Route::get('/Queries','QueriesController@index');
 // /////////////////////Utilities/////////////////
 Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
 Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
+Route::get('/PeakRates', 'UtilitiesController@peakRatesIndex');
+Route::put('/PeakRates/{id}', 'UtilitiesController@peakRatesUpdate');
 
 Route::post('/updateApplication','ApplicationController@updateApplication');
