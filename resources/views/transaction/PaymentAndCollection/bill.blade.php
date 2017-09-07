@@ -120,13 +120,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                   
+                  <?php $total = 0;?> 
             @foreach($con->StallRate->RateDetail as $rd)    
            <?php
            $first = Carbon\Carbon::parse($billing->billDateFrom)->format('d');
            $last = Carbon\Carbon::parse($billing->billDateTo)->format('d');
            $nextDay = Carbon\Carbon::parse($billing->billDateFrom);
-           $total = 0;
+           
            ?>
                         @for($i = $first; $i<= $last; $i++)
 
@@ -141,6 +141,8 @@
                                <td>Weekly Rate</td>
                             @elseif($con->StallRate->frequencyDesc==3)
                                <td>{{$nextDay->format("l")}} Rental Rate</td>
+                            @elseif($con->StallRate->frequencyDesc==4)
+                                <td>{{$nextDay->format("l")}} Rental Rate</td>
                             @endif
                        
                        

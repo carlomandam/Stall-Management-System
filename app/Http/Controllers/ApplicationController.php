@@ -379,8 +379,7 @@ function checkEmail()
                 $fee->Billing()->attach($bill->billID);
             }
         }
-        
-        return;
+
         $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
         $rejects = StallRental::where('stallID',$rental->stallID)->where('stallRentalStatus',2)->where('stallRentalID','!=',$_POST['rental'])->get();
         
@@ -429,7 +428,7 @@ function checkEmail()
             $contract = new Contract;
             $contract->stallRentalID = $rental->stallRentalID;
             $contract->contractStart = date_format(date_create($_POST['startDate']),"Y-m-d");
-            $contract->contractEnd = date_format(date_create($_POST['endDate']),"Y-m-d");
+            $contract->contractEnd = (isset($_POST['endDate'])) ? date_format(date_create($_POST['endDate']),"Y-m-d") : null;
             $contract->stallRateID = $_POST['rateid'];
             $contract->save();
             

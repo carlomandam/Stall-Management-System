@@ -87,6 +87,7 @@ Route::post('/addCharge', 'ChargeController@addCharge');
 Route::post('/updateCharge', 'ChargeController@updateCharge');
 Route::post('/chargeInfo', 'ChargeController@getChargeInfo');
 Route::post('/deleteCharge', 'ChargeController@deleteCharge');
+Route::post('/checkChargeName', 'ChargeController@checkChargeName');
 
 Route::post('/addFee', 'Controller@addFee');
 Route::post('/updateFee', 'Controller@updateFee');
@@ -117,8 +118,14 @@ Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 
 ////////////////////MANAGE CONTRACTS////////////////////
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
+
+Route::get('/getTennants','ManageContractsController@getTennants');
 Route::get('/getStallHolders','ManageContractsController@getStallHolders');
 Route::get('/getRegistrationList','ManageContractsController@getRegistrationList');
+Route::get('/getTennant/{tennantid}','ManageContractsController@getTennant');
+Route::post('/updateTennant','ManageContractsController@updateTennant');
+Route::post('/deleteTennant','ManageContractsController@deleteTennant');
+
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');

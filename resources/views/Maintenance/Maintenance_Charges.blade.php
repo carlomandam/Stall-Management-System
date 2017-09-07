@@ -32,11 +32,15 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">New Charge</h4> </div>
                 <div class="modal-body">
+                    <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul></ul>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="penName">Charge Name*</label>
-                                <input type="text" class="form-control" name="Name" placeholder="Charge Name" /> </div>
+                                <input type="text" class="form-control" name="Name" placeholder="Charge Name" /> 
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -75,6 +79,9 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Update Charge</h4> </div>
                 <div class="modal-body">
+                    <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul></ul>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -101,7 +108,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!-- <label style="float:left">All labels with "*" are required</label> --->
+                    <!-- <label style="float:left">All labels with "*" are required</label> -->
                     <button class="btn btn-info" style="background-color:#191966">Submit</button>
                 </div>
             </div>
@@ -115,33 +122,44 @@
     $(document).ready(function () {
         $("#newform").validate({
             rules: {
-                penName: {
+                Name: {
                     required: true
+                    , remote: {
+                        url: '/checkChargeName'
+                        , type: 'post'
+                        , data: {
+                            Name: function () {
+                                return $("#newform").find("input[name=Name]").val();
+                            }
+                            , _token: function () {
+                                return $("#_token").val();
+                            }
+                        }
+                    }
                 }
-                , penAmount: {
+                , Amount: {
                     required: true
-                    , number: true
-                }
-                , days: {
-                    required: true
-                    , digits: true
                 }
             }
             , messages: {
-                penName: {
-                    required: "Please enter Penalty Name"
+                Name: {
+                    required: "Please enter Charge Name"
+                    , remote: "Charge name is already taken"
                 }
-                , penAmount: {
-                    required: "Please enter Amount"
-                    , number: "Invalid Amount"
-                }
-                , days: {
-                    required: "Please enter numbe of days"
-                    , digits: "Please enter a valid number of days"
+                , Amount: {
+                    required: "Please enter amount"
+                    , number: "Invalid amount"
                 }
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
+            , errorElement: "li"
+            , errorPlacement: function (error) {
+                error.appendTo('#new .print-error-msg ul');
+            }
+            , invalidHandler : function() {
+                $('#new .print-error-msg').css('display','block');
+            }
         });
         $("#updateform").validate({
             rules: {
@@ -172,6 +190,16 @@
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
+            , errorElement: "li"
+            , errorPlacement: function (error) {
+                error.appendTo('#update .print-error-msg ul');
+            }
+            , invalidHandler : function() {
+                $('#update .print-error-msg').css('display','block');
+            }
+            , successHandler : function() {
+                $('#update .print-error-msg').css('display','none');
+            }
         });
         $('#table').DataTable({
             ajax: '/chargeTable'

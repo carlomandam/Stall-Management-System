@@ -24,7 +24,8 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab3primary" data-toggle="tab">Contracts</a></li>
                     <li><a href="#tab1primary" data-toggle="tab">Available Stalls</a></li>
-                    <li><a href="#tab2primary" data-toggle="tab">Pending Registrations</a></li>                    
+                    <li><a href="#tab2primary" data-toggle="tab">Pending Registrations</a></li>
+                    <li><a href="#tab4primary" data-toggle="tab">Tennants</a></li>                    
                 </ul>
             </div>
             <div class="panel-body">
@@ -85,6 +86,24 @@
                         </div>
                         <!-- box box-primary -->
                     </div>
+                    <div class="tab-pane fade" id="tab4primary">
+                        <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="col-xs-12">
+                                    <div class="table-responsive">
+                                        <table id="tblTennant" class="table table-striped" role="grid" width="100%">
+                                            <thead>
+                                                <th width="50%">Tenant</th>
+                                                <th width="25%">Date Registered</th>
+                                                <th width="25%">Actions</th>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- box box-primary -->
+                    </div>
                     <!-- tab2primary -->
                 </div>
                 <!-- tab content-->
@@ -108,7 +127,7 @@
                     "data": function (data, type, dataToSet) {
                         var contracts = '';
                         for (var i = 0; i < data.active_stall_rental.length; i++) {
-                            contracts += "<tr><td>" + data.active_stall_rental[i].stallID + "</td><td><a href='/pdfview/" + data.active_stall_rental[i].stallRentalID + "'><button value='" + data.active_stall_rental[i].stallRentalID + "'>gencon</button></a><td></tr>";
+                            contracts += "<tr><td>" + data.active_stall_rental[i].stallID + "</td><td><a href='/pdfview/" + data.active_stall_rental[i].stallRentalID + "'><button class='btn-primary' value='" + data.active_stall_rental[i].stallRentalID + "'>Generate Contract</button></a><td></tr>";
                         }
                         return '<div class="accordion-group" style="width:100%"><div class="accordion-heading" style="text-align:left;width:100%"><a class="accordion-toggle" data-toggle="collapse-next" style="width:100%">' + data.stallHFName + ' ' + data.stallHLName + '<i class="fa fa-angle-left pull-right"></i></a></div><div class="accordion-body collapse" style="margin-top:10px;text-indent:10px"><div class="accordion-inner"><table clas="table"><thead><th>Stall ID</th><th></th></thead><tbody>' + contracts + '</tbody></table></div></div></div>';
                     }
@@ -221,5 +240,46 @@
                     }
             ]
         });
+
+        $('#tblTennant').DataTable({
+            ajax: '/getTennants'
+            , responsive: true
+            , "columns": [
+                {
+                    "data": function (data, type, dataToSet) {
+                        return data.stallHFName + ' ' + data.stallHMName[0] + '. ' + data.stallHLName;
+                    }
+                }
+                , {
+                    "data": "created_at"
+                }
+                , {
+                    "data": "actions"
+                }
+            ]
+            , "columnDefs": [
+                {
+                    "searchable": false
+                    , "sortable": false
+                    , "targets": 2
+                    }
+            ]
+        });
     });
+
+    function deleteTennant(id){
+        $.ajax({
+            type: "POST"
+            , url: '/deleteTennant'
+            , data: {
+                "_token" : "<?php echo csrf_token();?>"
+                , "id" : id
+            }
+            , context: this
+            , success: function (data) {
+                toastr.success('Tennant Deactivated!');
+                $('#tblTennant').DataTable().ajax.reload();
+            }
+        });
+    }
 </script> @stop

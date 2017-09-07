@@ -49,10 +49,11 @@ class PaymentController extends Controller
     		if(count($activeContracts) > 0)
     		{
 
-    			foreach($activeContracts as $active)
+    			foreach($activeContracts as $activeContracts)
     			{
     			$checkBill = Billing::where('stallRentalID','=',$active->stallRentalID)
     						->select('billDateFrom','billDateTo')
+                            ->where('deleted_at','!=',NULL)
     						->orderBy('billDateTo','desc')->first();
 
     			if(count($checkBill) == 0) //if no records on billing pero start na ng rent//
@@ -63,7 +64,7 @@ class PaymentController extends Controller
                     $start = date('Y-m-d',strtotime($active->contractStart));
                     $getContractMonday = Carbon::parse($start)->startOfWeek();
                     $nextBillFrom = Carbon::parse($getContractMonday)->addDays(6);
-                
+                    
 
                   
     				while(date('Y-m-d',strtotime($last)) >= date('Y-m-d',strtotime($nextBillFrom))) 

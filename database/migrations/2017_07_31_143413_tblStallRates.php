@@ -15,10 +15,11 @@ class TblStallRates extends Migration
     {
         Schema::create('tblStallRate', function (Blueprint $table) {
             $table->increments('stallRateID');
-            $table->integer('frequencyDesc');
             $table->date('stallRateEffectivity');
             $table->integer('stype_SizeID')->unsigned();
             $table->double('dblRate',10,2); //standard rate 100 pesos per day talaga kunwari
+            $table->double('dblPeakRate',10,2);
+            $table->integer('peakRateType')->unsigned();
             $table->timestamps();
             $table->softDeletes();
              

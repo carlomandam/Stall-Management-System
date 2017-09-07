@@ -424,8 +424,7 @@
                         return;
                     }
                     toastr.success('Successfully Registered!');
-                    $("#applyForm")[0].reset();
-                    window.location(url('/RegistrationList'));
+                    window.location = "{{url('StallHolderList')}}";
                 }
             });
         });

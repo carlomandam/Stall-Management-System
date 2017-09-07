@@ -229,9 +229,9 @@
                                             <label for="contracttype">Contract Type</label> <span class="required">&nbsp*</span>
                                             <br>
                                             <label>
-                                                <input type="radio" name="ctype" id="ctype" value="1" checked="checked"><b>Fixed</b></label>
+                                                <input type="radio" name="ctype" id="ctype" value="1" @if($stallrental->Contract->contractEnd != null){{'checked="checked"'}}@endif><b>Fixed</b></label>
                                             <label>
-                                                <input type="radio" name="ctype" id="ctype" value="0"><b>At-Will</b></label>
+                                                <input type="radio" name="ctype" id="ctype" value="0" @if($stallrental->Contract->contractEnd == null){{'checked="checked"'}}@endif><b>At-Will</b></label>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -393,7 +393,8 @@
             , format: 'mm-dd-yyyy'
         });
         $("#Start").datepicker("update", "{{date('m/d/Y',strtotime($stallrental->Contract->contractStart))}}");
-        $("#End").datepicker("update", "{{date('m/d/Y',strtotime($stallrental->Contract->contractEnd))}}");
+        
+        $("#End").datepicker("update", "{{($stallrental->Contract->contractEnd != null) ? date('m/d/Y',strtotime($stallrental->Contract->contractEnd)) : null}}");
         
         $('input').attr('readonly', true);
         

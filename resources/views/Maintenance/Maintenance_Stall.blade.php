@@ -317,7 +317,6 @@
                 $(this).find('textarea[name=desc]').val(obj.stallDesc);
                 
                 for(var i = 0;i < obj.stall_utility.length; i++){
-                    alert(obj.stall_utility[i].utilityType);
                     if(obj.stall_utility[i].utilityType == 1)
                          $(this).find('input[name=electricity]').click();
                     else if(obj.stall_utility[i].utilityType == 2)

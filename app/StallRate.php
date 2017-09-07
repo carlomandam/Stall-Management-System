@@ -15,13 +15,6 @@ class StallRate extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = ['dblRate'
     ];
-    public function RateDetail(){
-        return $this->hasMany('App\StallRateDetail','stallRateID');
-    }
-
-    public function Frequency(){
-        return $this->belongsTo('App\Frequency','frequencyID');
-    }
     
     public function typeSize(){
         return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID','stype_SizeID');

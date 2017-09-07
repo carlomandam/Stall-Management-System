@@ -52,6 +52,87 @@ class ManageContractsController extends Controller
         else
             return (json_encode($data));
     }
+
+    public function getTennant($tennantid){
+        $tennant = StallHolder::with('ContactNo')->where('stallHID',$tennantid)->first();
+        
+        if($tennant == null)
+            return redirect('/StallHolderList');
+        else
+            return view('transaction.ManageContracts.Tennant_View',compact('tennant'));
+    }
+
+    public function updateTennant(){
+        $change = 'false';
+        $tennant = StallHolder::with('ContactNo')->where('stallHID',$_POST['tennant'])->first();
+        
+        $tennant->stallHFName = $_POST['fname'];
+        $tennant->stallHMName = $_POST['mname'];
+        $tennant->stallHLName = $_POST['lname'];
+        $tennant->stallHAddress = $_POST['address'];
+        $tennant->stallHSex = $_POST['sex'];
+        $tennant->stallHBday = date_format(date_create($_POST['DOBYear'].'-'.$_POST['DOBMonth'].'-'.$_POST['DOBDay']),"Y-m-d");
+        $tennant->stallHEmail = $_POST['email'];
+            
+            foreach($_POST['numbers'] as $no){
+                $contact = ContactNo::where('contactNumber',$no)->first();
+                if($no != '' && count($contact) == 0){
+                    $contact = new ContactNo;
+                    $contact->contactNumber = $no;
+                    $contact->stallHID = $tennant->stallHID; 
+                    $contact->save();
+
+                    $change = 'true';
+                }
+            }
+
+        if($tennant->isDirty()){
+            $change = 'true';
+            $tennant->save();
+        }
+
+        return $change;
+    }
+
+    public function deleteTennant(){
+        $tennant = StallHolder::where('stallHID',$_POST['id'])->first();
+        $tennant->delete();
+    }
+
+    public function getTennants(){
+        $stalls = StallHolder::with('ContactNo')->get();
+        $data = array();
+        
+        foreach ($stalls as $stall) {
+            $stall['actions'] = "<a href='/getTennant/".$stall['stallHID']."'' class='btn btn-primary btn-flat'><span class='glyphicon glyphicon-pencil'></span>Update</a>
+            
+            <div class='btn-group'>
+                <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button>
+                <ul class='dropdown-menu pull-right opensleft' role='menu'>
+                    <center>
+                        <h4>Are You Sure?</h4>
+                        <li class='divider'></li>
+                        <li><a href='#' onclick='deleteTennant(".$stall['stallHID'].");return false;'>YES</a></li>
+                        <li><a href='#' onclick='return false'>NO</a></li>
+                    </center>
+                </ul>
+            </div>";
+            $data['data'][] = $stall;
+        }
+        
+        if(count($data) == 0){
+            echo '{
+                "sEcho": 1,
+                "iTotalRecords": "0",
+                "iTotalDisplayRecords": "0",
+            "aaData": []
+            }';
+            return;
+        }
+        
+        else
+            return (json_encode($data));
+    }
     
     public function stallListIndex()
     {

@@ -20,7 +20,7 @@
                 <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Building</button>
                 <div class=" pull-right" id="archive"> <a href="{{ url('/BuildingArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
             </div>
-            <table id="prodtbl" class="table table-bordered table-striped" role="grid">
+            <table id="prodtbl" class="table table-responsive table-bordered table-striped" role="grid">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -42,6 +42,9 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">New Building</h4> </div>
                     <div class="modal-body">
+                        <div class="alert alert-danger print-error-msg" style="display:none">
+                            <ul></ul>
+                        </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -80,11 +83,8 @@
                                         <table class="table table-bordered table-striped" role="grid" id='floortbl'>
                                             <thead>
                                                 <th style="width:40%">Floor No.</th>
-                                                <th style="width:40%">No. of stalls
+                                                <th style="width:60%">No. of stalls
                                                     <button class="btn btn-default" onclick="resetNoOfStall()" type="button">reset</button>
-                                                </th>
-                                                <th>Capacity
-                                                    <button class="btn btn-default" onclick="resetCapacity()" type="button">reset</button>
                                                 </th>
                                             </thead>
                                             <tbody>
@@ -92,9 +92,6 @@
                                                     <td>1</td>
                                                     <td>
                                                         <input type="text" name="noOfStall[]" onchange="addNoOfStall(this)">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" name="capacity[]" onchange="addCapacity(this)">
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -123,6 +120,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Update Building</h4> </div>
             <div class="modal-body">
+                <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
                 <div id="tabcontroll" class="container" style="width:100%">
                     <ul class="nav nav-pills">
                         <li class="active"> <a href="#1" data-toggle="tab">Building</a> </li>
@@ -219,10 +219,10 @@
 <script type="text/javascript">
     var obj;
     $(document).ready(function () {
-        jQuery.validator.addMethod("capacity", function (value, element) {
+        /*jQuery.validator.addMethod("capacity", function (value, element) {
             if (parseInt($(element).val()) > parseInt($(element).parent().next().find('input[type=text]').val())) return false;
             else return true;
-        }, "Number of stall can't be more than the capacity");
+        }, "Number of stall can't be more than the capacity");*/
         $("#newform").validate({
             rules: {
                 bldgName: {
@@ -242,11 +242,27 @@
                 }
                 , bldgCode: {
                     required: true
+                    , remote: {
+                        type: "POST"
+                        , url: '/checkBldgCode'
+                        , data: {
+                            bldgName: function () {
+                                return $("#bldgCode").val();
+                            }
+                            , _token: function () {
+                                return $("#_token").val();
+                            }
+                        }
+                        , dataFilter: function (response) {
+                            if (obj.bldgCode == $("#bldgCodeUp").val()) return true;
+                            else return response;
+                        }
+                    }
                 }
                 , noOfFloor: "required"
                 , "noOfStall[]": {
                     number: true
-                    , capacity: true
+                    //, capacity: true
                 }
             }
             , messages: {
@@ -256,16 +272,25 @@
                 }
                 , bldgCode: {
                     required: "Please enter Building Code"
+                    , remote: "Building Code is taken"
                 }
                 , noOfFloor: "Please enter number of floors"
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
-            , errorPlacement: function (error, element) {
-                if ($(element).attr('name') == "noOfStall[]") {
-                    error.appendTo('#errordiv');
-                }
-                else error.insertAfter(element);
+            , highlight: function(element, errorClass, validClass) {
+                $(element).css('color','red');
+                $(element).removeClass(validClass).addClass(errorClass);
+                $('#new .print-error-msg').css('display','block');
+                if($('#new .print-error-msg ul').html() == '')
+                    $('#new .print-error-msg').css('display','none');
+              }
+            , unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass(errorClass).addClass(validClass);
+              }
+            , errorElement: "li"
+            , errorPlacement: function (error) {
+                error.appendTo('#new .print-error-msg ul');
             }
         });
         $("#updateform").validate({
@@ -329,6 +354,16 @@
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
+            , errorElement: "li"
+            , errorPlacement: function (error) {
+                error.appendTo('#update .print-error-msg ul');
+            }
+            , invalidHandler : function() {
+                $('#update .print-error-msg').css('display','block');
+            }
+            , successHandler : function() {
+                $('#update .print-error-msg').css('display','none');
+            }
         });
         $('#prodtbl').DataTable({
             ajax: '/bldgTable'
@@ -523,7 +558,7 @@
                 if (noOfStalls[i] != undefined) stall = noOfStalls[i];
                 if (capacity[i] != undefined) cap = capacity[i];*/
                 
-                $(tbl + ' tbody').append('<tr class="removable" style="display:none"><td>' + i + '</td><td><input type="text" name="noOfStall[]"></td><td><input type="text" name="capacity[]" onchange="addCapacity(this)"></td></tr>')
+                $(tbl + ' tbody').append('<tr class="removable" style="display:none"><td>' + i + '</td><td><input type="text" name="noOfStall[]"></td></tr>')
                 
                 $('.removable').fadeIn();
             }
@@ -555,20 +590,20 @@
         });
     }
 
-    function addCapacity(e) {
+    /*function addCapacity(e) {
         var elem = $(e);
         $('input[name="capacity[]"').each(function () {
             if (!$(this).is(elem) && $(this).val().length == 0) {
                 $(this).val(elem.val());
             }
         });
-    }
+    }*/
 
     function resetNoOfStall() {
         $('input[name="noOfStall[]"').val('');
     }
 
-    function resetCapacity() {
+    /*function resetCapacity() {
         $('input[name="capacity[]"').val('');
-    }
+    }*/
 </script> @stop

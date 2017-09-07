@@ -48,7 +48,7 @@ class ChargeController extends Controller
         }
         
         $charge = Charges::where('chargeName',$_POST['Name'])->get();
-        if(count($building) != 0)
+        if(count($charge) != 0)
             return "false";
         else
             return "true";

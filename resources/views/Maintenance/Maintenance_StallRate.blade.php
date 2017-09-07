@@ -46,29 +46,30 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stype">Collection Type</label><span class="required">&nbsp*</span>
-                                <select class="form-control collection" name="collection">
-                                    <option value="1">Monthly</option>
-                                    <option value="2">Weekly</option>
-                                    <option value="4">Daily</option>
-                                </select>
+                            <h4>Regular Rate</h4>
+                            <div class="form-group ratediv">
+                                <div class="input-group"> <span class="input-group-addon">Php.</span>
+                                    <input type="text" class="form-control" name="rate"> 
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label for="stype">Date of Effect</label><span class="required">&nbsp*</span>
-                            <div class="input-group date datepicker">
-                                <input type="text" class="form-control" name="effect">
-                                <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div>
+                            <h4>Peak Day Additional Rate</h4>
+                            <div class="form-group ratediv">
+                                <div class="input-group"> <span class="input-group-addon">Php.</span>
+                                    <input type="text" class="form-control" name="prate"> 
+                                </div>
                             </div>
+                            <h5>Type</h5>
+                            <input type="radio" name='prtype' value="1"><label>Fixed</label>&nbsp;<input type="radio" name='prtype' value="2"><label>Percent</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <h4>Rate</h4>
-                            <div class="form-group ratediv">
-                                <div class="input-group"> <span class="input-group-addon">Php.</span>
-                                    <input type="text" class="form-control" name="rate[]"> </div>
+                            <label for="stype">Date of Effect</label><span class="required">&nbsp*</span>
+                            <div class="input-group date datepicker">
+                                <input type="text" class="form-control" name="effect">
+                                <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div>
                             </div>
                         </div>
                     </div>
@@ -324,8 +325,12 @@
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        if (data.rate_detail.length == 1) return "Php." + data.rate_detail[0].dblRate;
-                        else return "Rate is defferent per day";
+                        if(data.peakRateType == '1')
+                            return '₱' + data.dblRate + ' ( Additional  ₱' + data.dblPeakRate + ' on peak days)';
+                        else{
+                            if(data.peakRateType == '2')
+                            return '₱' + data.dblRate + ' ( Additional ' + data.dblPeakRate + '% (₱'+ Math.floor((data.dblRate * data.dblPeakRate) / 100) +') on peak days)';
+                        }
                     }
                 }
                     , {
@@ -463,42 +468,13 @@
                 }
             });
         });
-        /*$("#updateform").unbind('submit').bind('submit', function (e) {
-            e.preventDefault();
-            if (!$("#updateform").valid()) return;
-            var formData = new FormData($(this)[0]);
-            $.ajax({
-                type: "POST"
-                , url: '/updateRate'
-                , data: formData
-                , processData: false
-                , contentType: false
-                , context: this
-                , success: function (data) {
-                    toastr.success('Updated Stall Rate');
-                    $('#table').DataTable().ajax.reload();
-                    $('#update').modal('hide');
-                    getStallTypes()
-                }
-            });
-        });*/
+
         $(".modal").on('hidden.bs.modal', function () {
             $(this).find('form').validate().resetForm();
-            $(this).find('form').each(function(){
-                this.reset();
-            });
+            $(this).find('form').reset();
             $('.js-example-basic-multiple').select2("val", "");
             $('.nav a[href="#1"]').tab('show');
         })
-        $('.collection').on('change', function () {
-            if ($(this).val() == 4) {
-                $(this).parents('.row').next().find('.ratediv').html("<div class='form-group'><label>Sunday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>" + "<label>Monday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>" + "<label>Tuesday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>" + "<label>Wednesday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>" + "<label>Thursday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>" + "<label>Friday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>" + "<label>Saturday</label><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div></div>");
-            }
-            else {
-                $(this).parents('.row').next().find('.ratediv').html("<div class='form-group'><div class='input-group'><span class='input-group-addon'>Php.</span><input type='text' class='form-control' name='rate[]'></div>");
-            }
-        });
-        
         
         $('#prevRatesTbl').DataTable({
             ajax: {

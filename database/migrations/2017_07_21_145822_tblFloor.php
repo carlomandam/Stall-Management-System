@@ -17,7 +17,6 @@ class TblFloor extends Migration
             $table->increments('floorID');
             $table->integer('bldgID')->unsigned();
             $table->integer('floorLevel');
-            $table->integer('floorCapacity');
             $table->string('floorDesc',200)->nullable();
             $table->timestamps();
             $table->softDeletes();

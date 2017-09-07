@@ -35,10 +35,17 @@
         }
         
         .error-class {
-            color: red;
+            color: red !important;
             border-color: 2px solid #ebccd1;
             padding: 1px 20px 1px 20px;
         }
+
+        li.error-class{
+            color: white !important;
+            border-color: 2px solid #ebccd1;
+            padding: 1px 20px 1px 20px;
+        }
+
         .main-header{
             position: fixed;
         }

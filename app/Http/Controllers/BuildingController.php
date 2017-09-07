@@ -23,7 +23,6 @@ class BuildingController extends Controller
                 $floor = new Floor;
                 $floor->floorLevel = $i+1;
                 $floor->bldgID = $building->bldgID;
-                $floor->floorCapacity = ($_POST['capacity'][$i] != null) ? $_POST['capacity'][$i] : 0;
                 $floor->save();
                 
                 for($j = 1;$j <= $_POST['noOfStall'][$i];$j++){
@@ -169,7 +168,6 @@ class BuildingController extends Controller
             for($i = 0;$i < $_POST['noOfFloorUp'];$i++){
                 $floor = new Floor;
                 $floor->bldgID = $building->bldgID;
-                $floor->floorCapacity = $_POST['capacity'][$i];
                 $last = Floor::where('bldgID',$building->bldgID)->orderBy('floorLevel','desc')->first();
 
                 if(count($last) > 0)
