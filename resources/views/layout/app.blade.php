@@ -5,8 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>MySeoul | @yield('title')</title>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-   
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"> 
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/dataTables.bootstrap.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css')}}">
@@ -15,11 +14,16 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/toastr.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/select2/select2.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datepicker/datepicker3.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/dropdown.css')}}">
+
     @yield('style')
     <style>
-	    *{
-	    	font-family: "Trebuchet MS"
-	    }
+      *{
+        font-family: "Trebuchet MS"
+      }
+      .fa-power-off{
+        margin-right: 20px;
+      }
         .modal-header {
             background-color: dodgerblue;
             color: aliceblue;
@@ -31,10 +35,17 @@
         }
         
         .error-class {
-            color: red;
+            color: red !important;
             border-color: 2px solid #ebccd1;
             padding: 1px 20px 1px 20px;
         }
+
+        li.error-class{
+            color: white !important;
+            border-color: 2px solid #ebccd1;
+            padding: 1px 20px 1px 20px;
+        }
+
         .main-header{
             position: fixed;
         }
@@ -61,7 +72,15 @@
         {
           font-size: 18px;
         }
-
+        .system-name
+        {
+          font-size: 20px;
+          color: white;
+          margin-left: 30px;
+          position: relative;
+          top: 10px;
+       
+        }
     </style>
 </head>
 
@@ -75,9 +94,22 @@
             <nav class="navbar navbar-fixed-top">
                 <!-- Sidebar toggle button-->
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a>
-                <div class="navbar-custom-menu">
-                    <!-- For LOg OUT -->
-                </div>
+                <span class="system-name"><b>Stalls Management System</b></span>
+
+                 <!-- Right Side Of Navbar -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- Authentication Links -->
+                       
+                            <li class="dropdown">
+                                <a href="#" role="button" aria-expanded="false">
+                                  Log Out&nbsp<span class="fa fa-power-off"></span>
+                                </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
+                            </li>
+                      
+                    </ul>
             </nav>
         </header>
         <aside class="main-sidebar">
@@ -90,8 +122,8 @@
                 </div>
                 <ul class="sidebar-menu">
                     <li class="header"><span>MAIN NAVIGATION</span></li>
-                	 <li class="treeview">
-                        <a href="#">
+                   <li class="treeview">
+                        <a href="/" class="{{Route::getFacadeRoot()->current()->uri() == 'Dashboard' ? 'active' : ''}}">
                             <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                         </a>
@@ -113,32 +145,16 @@
 
                              
                                       <li class="treeview"> 
-                                        <a href="#">
+                                        <a href="/Payment">
                                         <i class="fa fa-circle-o"></i><span>Payment and Collections</span>
-                                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-left pull-right"></i> 
-                                        </span> 
                                         </a>
-
-                                         <ul class="treeview-menu">
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Billing</a></li>
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Payment</a></li>
-                                        </ul>
 
                                       </li>
                             
                                     <li class = "treeview">
-                                        <a href="#">
+                                        <a href="/requestList">
                                         <i class="fa fa-circle-o"></i> <span>Manage Requests</span>
-                                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-left pull-right"></i> 
-                                        </span> 
                                         </a>
-
-                                        <ul class="treeview-menu">
-                                            <li><a href="#"><i class="fa fa-circle-o"></i> Request List</a></li>
-
-                                        </ul>
                                     </li>
                               </ul>
                         </li>
@@ -150,36 +166,61 @@
                                 </span> 
                             </a> 
                             <ul class="treeview-menu">
-                                     <li><a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a></li>
-                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}"><a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a></li>
-                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}"><a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a></li>
-                                   <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''}}"><a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a></li>
-                                    <li id="mKiosk"><a href="/kioskmap"><i class="fa fa-map"></i><span>Kiosk Map</span></a></li>
-                                    <li class="{{Route::getFacadeRoot()->current()->uri() == 'Fee' ? 'active' : ''}}"><a href="/Fee"><i class="fa fa-file-o"></i> <span>Fees</span></a></li>
-                                              </ul>
+                                     <li>
+                                        <a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a>
+                                      </li>
+                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}">
+                                        <a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a>
+                                    </li>
+                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}">
+                                        <a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a>
+                                    </li>
+                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''}}">
+                                            <a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a>
+                                     </li>
+                                     <li class="{{Route::getFacadeRoot()->current()->uri() == 'Charges' ? 'active' : ''}}">
+                                        <a href="/Charges"><i class="fa fa-file-o"></i> <span>Charges</span></a>
+                                      </li>
+
+                                     <li id="mReq"><a href="{{url('/requirements')}}">
+                                        <i class="fa fa-list"></i><span>Requirements</span></a>
+                                    </li>   
+                           </ul>
                         </li>
 
                          <li class = "treeview">    
                               <a href="/Queries"> 
-                              <i class="fa fa-circle"></i> <span>Queries</span>
-                              <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i> 
-                              </span> 
+                              <i class="fa fa-circle"></i> <span>Queries</span>         
                               </a> 
 
                         </li>
-
-                         <li class = "treeview">    
-                              <a href="#"> 
+                         <li class="treeview">
+                            <a href="#"> 
                               <i class="fa fa-cogs"></i> <span>Utilities</span>
                                <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> 
-                              </a> 
-                              <ul class="treeview-menu">
-                                    <li class = "active"><a href="#"><i class="fa fa-building-o "></i> Vendor Collection Status</a></li>
-                              </ul>
+                            </a> 
+                            <ul class="treeview-menu">
+                                      <li id=""><a href="{{url('#')}}">
+                                        <i class="fa fa-user"></i><span>Business Information</span></a>
+                                    </li> 
+
+                                     <li id="uDays"><a href="{{url('/MarketDays')}}">
+                                        <i class="fa fa-calendar-times-o"></i><span>Market Days</span></a>
+                                    </li>
+                                    <li id=""><a href="{{url('/PeakRates')}}">
+                                        <i class="fa fa-credit-card"></i><span>Peak Days Rate</span></a>
+                                    </li>    
+                                    <li id=""><a href="{{url('#')}}">
+                                        <i class="fa fa-bell"></i><span>Collection Status</span></a>
+                                    </li> 
+                                    <li id=""><a href="{{url('#')}}">
+                                        <i class="fa fa-credit-card"></i><span>Initial Fee</span></a>
+                                    </li>    
+                           </ul>
                         </li>
+                        
 
                         <li class = "treeview">    
                               <a href="#"> 
@@ -194,6 +235,15 @@
                                          <li><a href="#"><i class="fa fa-circle-o"></i>Stall Status Report</a></li>
                               </ul>
                         </li>
+
+                     <li class="header"><span>ACCOUNT SETTINGS</span></li>
+                       <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-user"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+
                    
                 </ul>
             </section>
@@ -245,7 +295,10 @@ $('ul.treeview-menu a').filter(function() {
      return this.href == url;
 }).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
 
-
+// for sidebar menu entirely but not cover treeview
+$('ul.sidebar-menu a').filter(function() {
+  return this.href == url;
+}).parent().addClass('active');
 
     </script>
     

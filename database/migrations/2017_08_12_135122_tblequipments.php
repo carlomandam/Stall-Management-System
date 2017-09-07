@@ -16,11 +16,11 @@ class Tblequipments extends Migration
         Schema::create('tblEquipment', function (Blueprint $table) {
             $table->increments('equipmentID');
             $table->string('equipmentName',200);
-            $table->integer('rental_or_not_or_both');
-            $table->double('rental_daily_rate');
-            $table->integer('equipmentLimit_per_stall');
+            $table->double('rentDailyRate');
+            $table->integer('equipStallLimit');
             $table->softDeletes();
          });
+
     }
 
     /**

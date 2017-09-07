@@ -1,4 +1,4 @@
-@extends('layout.app') @section('title') {{ 'Building'}} @stop @section('content-header')
+@extends('layout.app') @section('title') {{ 'Queries'}} @stop @section('content-header')
 @stop @section('content')
 <style>
     .dropdown-toggle,.dropdown-menu{

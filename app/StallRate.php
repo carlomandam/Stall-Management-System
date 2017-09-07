@@ -13,16 +13,14 @@ class StallRate extends Model
     protected $primaryKey = "stallRateID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
-    
-    public function RateDetail(){
-        return $this->hasMany('App\StallRateDetail','stallRateID');
-    }
-
-    public function Frequency(){
-        return $this->belongsTo('App\Frequency','frequencyID');
-    }
+    protected $fillable = ['dblRate'
+    ];
     
     public function typeSize(){
         return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID','stype_SizeID');
+    }
+    
+    public function Contract(){
+        return $this->hasMany('App\Contract','stallRateID');
     }
 }

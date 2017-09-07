@@ -21,19 +21,11 @@ class RateController extends Controller
         foreach($_POST['stype'] as $x){
             $rate = new StallRate;
             $rate->stype_SizeID = $x;
-            $rate->frequencyDesc = $_POST['collection'];
+            $rate->dblRate = $_POST['rate'];
+            $rate->dblPeakRate = $_POST['prate'];
+            $rate->peakRateType = $_POST['prtype'];
             $rate->stallRateEffectivity = date_format(date_create($_POST['effect']),"Y-m-d");
-            if($rate->save()){
-                $i = 1;
-                foreach($_POST['rate'] as $r){
-                    $detail = new StallRateDetail;
-                    $detail->stallRateDesc = $i;
-                    $detail->stallRateID = $rate->stallRateID;
-                    $detail->dblRate = $r;
-                    $detail->save();
-                    $i++;
-                }
-            }   
+            $rate->save();  
         }
     }
     
@@ -43,7 +35,7 @@ class RateController extends Controller
         
         foreach($typesize as $tz){
             
-            $temp = StallRate::with('typeSize.StallType','typeSize.StallTypeSize','RateDetail')->where('stallRateEffectivity','<=',date('Y-m-d'))->where('stype_SizeID',$tz)->orderBy('created_at','DESC')->first();
+            $temp = StallRate::with('typeSize.StallType','typeSize.StallTypeSize')->where('stallRateEffectivity','<=',date('Y-m-d'))->where('stype_SizeID',$tz)->orderBy('created_at','DESC')->first();
             if($temp != null)
                 array_push($rates, $temp);
             else{

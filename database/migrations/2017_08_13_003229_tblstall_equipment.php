@@ -21,10 +21,15 @@ class TblstallEquipment extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallID')->references('stallID')->on('tblStall')
-              ->onDelete('cascade');
-            $table->foreign('equipmentID')->references('equipmentID')->on('tblEquipment')
-              ->onDelete('cascade');
+            $table->foreign('stallID')->references('stallID')
+                  ->on('tblStall')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+
+            $table->foreign('equipmentID')->references('equipmentID')
+                  ->on('tblEquipment')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
          });
     }
 

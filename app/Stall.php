@@ -1,10 +1,7 @@
 <?php
-
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 class Stall extends Model
 {
     use SoftDeletes;
@@ -15,17 +12,20 @@ class Stall extends Model
     protected $dates = ['deleted_at'];
     public $incrementing = false;
     
+    public function Pending(){
+        return $this->hasMany('App\StallRental','stallID','stallID')->where('stallRentalStatus','=','2');
+    }
+    
     public function StallType(){
-        return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID');
+        return $this->belongsTo('App\StallType_StallTypeSize','stype_SizeID','stype_SizeID');
     }
     
     public function Floor(){
         return $this->belongsTo('App\Floor','floorID');
     }
-
-    public function StallRental()
+    public function CurrentTennant()
     {
-        return $this->hasMany('App\StallRental','stallID');
+        return $this->hasOne('App\StallRental','stallID')->whereHas('Contract')->where('stallRentalStatus',1)->with('StallHolder','Contract');
     }
     
     public function StallUtility()

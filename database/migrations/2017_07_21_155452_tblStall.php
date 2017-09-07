@@ -24,8 +24,15 @@ class TblStall extends Migration
             $table->timestamps();
             $table->softDeletes();
             
-            $table->foreign('floorID')->references('floorID')->on('tblFloor');
-             $table->foreign('stype_SizeID')->references('stype_SizeID')->on('tblstallType_stallSize');
+            $table->foreign('floorID')->references('floorID')
+                  ->on('tblFloor')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+
+            $table->foreign('stype_SizeID')->references('stype_SizeID')
+                  ->on('tblstallType_stallSize')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
         });
     }
 

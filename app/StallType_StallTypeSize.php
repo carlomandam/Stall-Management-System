@@ -14,7 +14,11 @@ class StallType_StallTypeSize extends Model
     //protected $dates = ['deleted_at'];
     
     public function StallRate(){
-        return $this->hasMany('App\StallRate','stype_SizeID','stype_SizeID');
+
+        //return $this->hasMany('App\StallRate','stype_SizeID','stype_SizeID');
+
+        return $this->hasOne('App\StallRate','stype_SizeID','stype_SizeID')->where('stallRateEffectivity','<=',date('y-m-d'))->orderBy('stallRateEffectivity','DESC');
+
     }
     
     public function StallType(){

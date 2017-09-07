@@ -15,15 +15,17 @@ class TblPayment extends Migration
     {
         Schema::create('tblPayment_info', function (Blueprint $table) {
             $table->increments('paymentID');
-            $table->integer('billingID')->unsigned()->index();
-            $table->integer('paymentType'); //Full, Partial, Others(Specific Amount)
-            $table->double('paymentAmtPaid',10,2);
-            $table->datetime('paymentDate'); 
+            $table->integer('paymentStatus'); 
+            $table->integer('billID')->unsigned()->index();
+
+            $table->foreign('billID')
+                 ->references('billID')
+                 ->on('tblBilling_Info')
+                 ->onUpdate('cascade')
+                 ->onDelete('restrict');
+                 
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('billingID')->references('billingID')->on('tblBilling')
-              ->onDelete('cascade');
          });
     }
 

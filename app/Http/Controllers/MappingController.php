@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Building;
 use App\Floor;
-use App\StallTypeStallSize;
+use App\StallType_StallTypeSize;
 use App\StallTypeSize;
 use App\StallRate;
 use App\Frequency;
 use App\Stall;
+use App\StallType;
+use App\StallRateDetail;
 use DB;
 use Response;
 
@@ -23,15 +25,13 @@ class MappingController extends Controller
     public function index()
     {
         $buildings = Building::all();
-        // $rates = DB::table('tblstallType_stallSize as s')
-        //             ->join('tblStallType as st' , 'st.stypeID' , 's.stypeID')
-        //             ->join('tblStallType_Size as ss', 'ss.stypeSizeID', 's.stypeSizeID')
-        //             ->join('tblStallRate as r','r.stype_SizeID','s.stype_SizeID')
-        //             ->join('tblFrequency as f', 'f.frequencyID', 'r.frequencyID')
-        //             ->join('tblStallRate_Details as sd', 'sd.stallRateID', 'r.stallRateID')
-        //             ->get();
-         // return ($rates);           
-        return View('/KioskMap/index',compact('buildings'));
+        $types = StallType_StallTypeSize::with('StallType','StallTypeSize')
+                                        ->get();
+        $rates = StallRate::with('StallRateDetail')
+                            ->get();
+                                 
+         // return ($types);           
+        return View('/KioskMap/index',compact('buildings','types','rates'));
     }
 
     /**

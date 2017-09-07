@@ -7,9 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Rent extends Model
 {
     protected $table = "tblstallrental_info";
-    protected $primaryKey = "stallRentID";
+
+    protected $primaryKey = "stallRentalID";
 
     public function Contract(){
-        return $this->has('App\Contract','stallRentID');
+        return $this->has('App\Contract','stallRentalID');
+
+    protected $primaryKey = "stallRentalID";
+
+    public function Contract(){
+        return $this->has('App\Contract','stallRentalID');
+
     }
 }

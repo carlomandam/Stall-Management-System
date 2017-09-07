@@ -51,11 +51,11 @@
                         <h4>Rental Agreement</h4> </div>
                     <div style="margin-left:10%;margin-right:10%;font-weight:bold">
                         <p style="text-indent:100px">THIS AGREEMENT made this
-                            {{ $item->utilID }} day of
-                            {{ $item->utilID }} , by and between OWNER My Seoul Tiangge and VENDOR (Name)
-                            {{ $item->utilID }}, (age)
-                            {{ $item->utilID }} live in(address)
-                            {{ $item->utilID }} The OWNER and VENDOR hereby agree the rental of Stall No.{{ $item->utilID }} Commencing on this day until this agreement is subject to the following terms and conditions:
+                            {{ date('D',$data->$rental->startingDate) }} day of
+                            {{date('M',$data->$rental->startingDate) }} , by and between OWNER My Seoul Tiangge and VENDOR (Name)
+                            {{ date('D',$data->$rental->startingDate) }}, (age)
+                            {{ date('D',$data->$rental->startingDate)}} live in(address)
+                            {{ date('D',$data->$rental->startingDate)}} The OWNER and VENDOR hereby agree the rental of Stall No.{{ date('D',$data->$rental->startingDate)}} Commencing on this day until this agreement is subject to the following terms and conditions:
                         </p>
                         <br> </div>
                     <div style="margin-left:10%;margin-right:10%;">
