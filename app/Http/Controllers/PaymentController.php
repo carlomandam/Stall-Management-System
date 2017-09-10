@@ -33,113 +33,102 @@ class PaymentController extends Controller
 
     	function checkRecords()
     	{
-    		$transaction = "";
             $today = Carbon::today();
-        
-    		//FOR DAILY RATES//
              $activeContracts = DB::table('tblContractInfo as a')
-            ->join('tblStallRental_Info as b','b.stallRentalID','a.stallRentalID')
-            ->join('tblStallRate as c','c.stallRateID','a.stallRateID')
-            ->join('tblStallRate_Details as d','d.stallRateID','c.stallRateID')
-            ->where('a.contractStart','<=',$today->format('Y-m-d'))
+            ->where('a.contractStart','>=',$today->format('Y-m-d'))
+            ->select('a.collectionType','a.contractID')
             ->get();
            
-           
-            
-    		if(count($activeContracts) > 0)
-    		{
-
-    			foreach($activeContracts as $activeContracts)
-    			{
-    			$checkBill = Billing::where('stallRentalID','=',$active->stallRentalID)
-    						->select('billDateFrom','billDateTo')
-                            ->where('deleted_at','!=',NULL)
-    						->orderBy('billDateTo','desc')->first();
-
-    			if(count($checkBill) == 0) //if no records on billing pero start na ng rent//
-    			{	
-    				$getMonday = Carbon::today()->startOfWeek();
-                    $last = Carbon::parse($getMonday)->addDays(6);
-
-                    $start = date('Y-m-d',strtotime($active->contractStart));
-                    $getContractMonday = Carbon::parse($start)->startOfWeek();
-                    $nextBillFrom = Carbon::parse($getContractMonday)->addDays(6);
-                    
-
+           foreach($activeContracts as $active)
+           {
+                if($active->collectionType == 1) //daily collection
+                {
                   
-    				while(date('Y-m-d',strtotime($last)) >= date('Y-m-d',strtotime($nextBillFrom))) 
-    					{
-                            
-                            
-                                try
-                                {
-                                    DB::beginTransaction();
-
-            						$bill = Billing::create([
-            							'billDateFrom' => $start,
-            							'billDateTo' => $nextBillFrom,
-            							'stallRentalID' => $active->stallRentalID
-            						]);
-        	    				   
-                                    DB::commit();}
-
-                                    catch(\Illuminate\Database\QueryException $e){
-                                        DB::rollback();}
-
-                              $start = Carbon::parse($bill->billDateTo)->addDays(1);
-                              $nextBillFrom = Carbon::parse($bill->billDateTo)->addDays(7);
-                          
-
-    					}
-    			}
-
-    		  
-          
-
-    			if(date('Y-m-d',strtotime($today)) > date('Y-m-d',strtotime($checkBill->billDateTo)))
-                {	
-                        $lastBillDateTo = date('Y-m-d',strtotime($checkBill->billDateTo));
-
-                        $start = Carbon::parse($lastBillDateTo)->addDays(1);
-
-                        $last = Carbon::parse($lastBillDateTo)->addDays(7);
-                    
-                            
-        					while(date('Y-m-d',strtotime($today)) >= date('Y-m-d',strtotime($last))) 
-        					{  
-
-                                try{
-
-                                DB::beginTransaction();
-    	    					$newBill = Billing::create([
-                                    'billDateFrom' => $start,
-                                    'billDateTo' => $last,
-                                    'stallRentalID' => $active->stallRentalID
-                                    ]);
-                                DB::commit();
-
-                                $start = Carbon::parse($newBill->billDateTo)->addDays(1);
-                                $last = Carbon::parse($newBill->billDateTo)->addDays(7);
-
-                                 }
-                                catch(\Illuminate\Database\QueryException $e){
-        	    					DB::rollback();
-                                }
-
-        					}
-
-         				
-        		}
-        			
-
-    		}
-    		
-
+                    return $this->dailyBilling($active->contractID);
+                }
+           }	
     	}
-    		
-    	//	end of checkBillRecords
 
-    	}
+        function dailyBilling($dailyBill)
+        {
+            $getRate = DB::table('tblContractInfo as a')
+            ->rightJoin('tblstallrate as b','a.stallRateID','=','b.stallRateID')
+            ->where('a.contractID',$dailyBill)
+            ->select('b.dblRate','b.dblPeakRate','b.peakRateType') 
+            ->get();
+
+            //1 if fixed, 2 if percent in peakRateType
+            // check if nagmatch sa market days yung day today
+            // temporarily, sinet ko na 1 utilitiesID para sa marketDays at 
+            // 2 para sa PeakDays
+
+             $getPeakDays = DB::table('tblUtilities as a')
+            ->where('utilitiesID','2') 
+            ->select('utilitiesDesc')
+            ->get();
+
+            $getMarketDays = DB::table('tblUtilities as a')
+            ->where('utilitiesID','1') 
+            ->select('utilitiesDesc')
+            ->get();
+
+            $counter = 0;
+            $dayOfWeek = Carbon::today()->dayOfWeek;
+            $marketDays = []; 
+            //dayOfWeek returns integer 0 if Sunday, and so on...
+
+            // store yung marketDays as array
+            foreach($getMarketDays as $getDays)
+            {   
+                $marketDays = explode(",",$getDays->utilitiesDesc);
+            }
+
+            // check if $dayOfWeek == $marketDays[index] then 
+            // check if nasa Peakrate bago iinsert sa tblBilling 
+            // sorry, iwan muna kita :( 
+
+            // Coleen, beginTransaction gamitin mo!!!
+            /*
+            $store = [];
+
+            return Carbon::today()->dayOfWeek ." ". $marketDays[0];
+            for($x = 0; $x<count($marketDays); $x++) 
+            {
+
+                if($marketDays[$x] == 1)
+                {
+                    $store[$x] = "Mon";
+                }
+                else if($marketDays[$x] == 2)
+                {
+                    $store[$x] = "Tues";
+                }
+                else if($marketDays[$x] == 3)
+                {
+                    $store[$x] = "Wed";
+                }
+                else if($marketDays[$x] == 4)
+                {
+                    $store[$x] = "Thurs";
+                }
+                else if($marketDays[$x] == 5)
+                {
+                    $store[$x] = "Fri";
+                }
+                else if($marketDays[$x] == 6)
+                {
+                    $store[$x] = "Sat";
+                }
+                else
+                {
+                     $store[$x] = "Sun";
+                }
+
+
+            }
+            */ 
+
+        }
 
     	public function getBills()
     	{

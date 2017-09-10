@@ -19,6 +19,7 @@ class TblmonthlyReading extends Migration
             $table->integer('readingConsumption');
             $table->datetime('readingFrom');
             $table->datetime('readingTo');
+            $table->double('readingAmt',10,2);
             $table->timestamps();
             $table->softDeletes();
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblStallRentalRequirements extends Migration
+class TblBillMonthlyReading extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,22 @@ class TblStallRentalRequirements extends Migration
      */
     public function up()
     {
-        Schema::create('tblStallRental_Requirements', function (Blueprint $table) {
-            $table->integer('reqID')->unsigned();
-            $table->integer('stallRentalID')->unsigned();
-
+         Schema::create('tblBill_MonthlyReading', function (Blueprint $table) {
+            $table->integer('billID')->unsigned()->index();
+            $table->integer('readingID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('reqID')->references('reqID')
-                  ->on('tblRequirements')
+            $table->foreign('billID')->references('billID')
+                  ->on('tblBilling_Info')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
 
-            $table->foreign('stallRentalID')->references('stallRentalID')
-                  ->on('tblStallRental_Info')
+            $table->foreign('readingID')->references('readingID')
+                  ->on('tblMonthlyReading')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-        });
+         });
     }
 
     /**
@@ -39,6 +38,6 @@ class TblStallRentalRequirements extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblStallRental_Requirements');
+        Schema::dropIfExists('tblBill_MonthlyReading');
     }
 }
