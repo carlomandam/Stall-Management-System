@@ -15,6 +15,39 @@
 
 Auth::routes();
 
+Route::get('/', function () {
+    return view('dashboard.dashboard');
+});
+
+Auth::routes();
+Route::get('/Dashboard','dashboardController@index');
+Route::get('/Registration/{stallid}','ApplicationController@create');
+Route::get('/Registration/{stallid}/{rentid}','ApplicationController@view');
+Route::get('/List', 'ApplicationController@member');
+Route::get('/View', 'ApplicationController@Memview');
+Route::get('/Update', 'ApplicationController@Update');
+Route::get('/CreateContract','ContractController@create');
+Route::get('/Contract', 'ContractController@index');
+Route::get('/ViewContracts', 'ContractController@view');
+Route::get('/ShowDetails', 'ContractController@showdetails');
+Route::post('/checkEmail','ApplicationController@checkEmail');
+
+Route::post('/AddVendor','ApplicationController@newApplication');
+Route::get('/getVendor','ApplicationController@getVendor');
+Route::get('/contractTable','ApplicationController@contractTable');
+Route::post('/getVendorInfo','ApplicationController@getVendorInfo');
+Route::post('/UpdateVendor','ApplicationController@updateVendor');
+Route::get('/rentInfo','ContractController@getRentInfo');
+Route::get('/searchVendor','ApplicationController@searchVendor');
+Route::get('displaySearch','ApplicationController@displaySearch');
+Route::get('/Stalls','ApplicationController@stall');
+Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfview',
+										'as' => 'htmltopdfview']);
+
+Route::get('/getStalls','StallController@getStalls');
+Route::post('/acceptRental','ApplicationController@acceptRental');
+Route::post('/rejectRental','ApplicationController@rejectRental');
+
 /////MAINTENANCE///////
 Route::resource('/', 'DashboardController');
 
@@ -51,6 +84,8 @@ Route::post('/getCode', 'BuildingController@getBuildingCode');
 Route::post('/getFloorsUp', 'BuildingController@getFloors');
 Route::post('/getStallList', 'StallController@getStallList');
 
+//Stall Type
+
 Route::get('/stypeTable', 'StallTypeController@getStallTypes');
 Route::post('/checkSTypeName', 'StallTypeController@checkSTypeName');
 Route::post('/addStallType', 'StallTypeController@addStallType');
@@ -59,6 +94,8 @@ Route::post('/UpdateSType', 'StallTypeController@UpdateSType');
 Route::post('/deleteSType', 'StallTypeController@deleteSType');
 Route::post('/getSizes', 'StallTypeController@getSizes');
 Route::post('/deleteStypeSize', 'StallTypeController@deleteStypeSize');
+
+//Stall
 
 Route::get('/stallTable', 'StallController@getStalls');
 Route::post('/bldgOptions', 'StallController@getBuildingOption');
@@ -71,16 +108,14 @@ Route::post('/UpdateStall', 'StallController@updateStall');
 Route::post('/UpdateStalls', 'StallController@updateStalls');
 Route::post('/deleteStall', 'StallController@deleteStall');
 
+//Rate
+
 Route::post('/addStallRate', 'RateController@addStallRate');
 Route::get('/rateTable', 'RateController@getStallRates');
-Route::post('/prevRatesTable', 'RateController@getPrevStallRates');
-Route::post('/upRatesTable', 'RateController@getUpStallRates');
-Route::post('/getRateInfo', 'RateController@getRateInfo');
-Route::post('/getPrevRateInfo', 'RateController@getPrevRateInfo');
-Route::post('/getUpRateInfo', 'RateController@getUpRateInfo');
-Route::post('/updateStallRate', 'RateController@updateRate');
 Route::post('/stypeRate', 'RateController@getStallTypes');
-Route::post('/getForbidden', 'RateController@getForbidden');
+Route::post('/checkRate', 'Controller@checkRate');
+
+//Charge
 
 Route::get('/chargeTable', 'ChargeController@getCharges');
 Route::post('/addCharge', 'ChargeController@addCharge');
@@ -89,21 +124,12 @@ Route::post('/chargeInfo', 'ChargeController@getChargeInfo');
 Route::post('/deleteCharge', 'ChargeController@deleteCharge');
 Route::post('/checkChargeName', 'ChargeController@checkChargeName');
 
-Route::post('/addFee', 'Controller@addFee');
-Route::post('/updateFee', 'Controller@updateFee');
-Route::post('/deleteFee', 'Controller@deleteFee');
-Route::post('/getFeeInfo', 'Controller@getFeeInfo');
-
-Route::post('/getFees', 'Controller@getFeesOpt');
-Route::post('/checkRate', 'Controller@checkRate');
+//Requirements
 
 Route::resource('/requirements', 'RequirementsController');
 Route::get('/requirements/show/{id}', 'RequirementsController@show');
 Route::get('/requirementsArchive', 'RequirementsController@archive');
 Route::PUT('/requirements/restore/{id}', 'RequirementsController@restore');
-
-
-
 
 Route::get('/pdfview/{rentalid}','PDFController@pdfcreate');
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
@@ -117,6 +143,7 @@ Route::get('/StallArchive','ArchiveController@stallIndex');
 Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 
 ////////////////////MANAGE CONTRACTS////////////////////
+
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
 
 Route::get('/getTennants','ManageContractsController@getTennants');

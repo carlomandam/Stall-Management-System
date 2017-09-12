@@ -171,32 +171,16 @@
                                 <label>Stall Code</label>
                                 <input type="text" class="form-control" readonly name="dispStallID" id="dispStallID" value="{{$stall->stallID}}">
                                 <label>Stall Rate</label>
-                                <textarea type="text" class="form-control" readonly name="dispStallRate" id="dispStallRate"><?php
-                                    switch($stall->StallType->StallRate->frequencyDesc){
-                                        case 1 :
-                                            $freq = "Monthly";
-                                            break;
-                                        case 2 :
-                                            $freq = "Weekly";
-                                            break;
-                                        case 3 :
-                                            $freq = "Daily";
-                                            break;
-                                        case 4 :
-                                            $freq = "Daily (different per day)";
-                                            break;
-                                    }
-                                    echo "Collection Type: ".$freq."\nRate: ";
-                                    if($stall->StallType->StallRate->frequencyDesc == 4){
-                                        $i = 0;
-                                        $days = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
-                                        foreach($stall->StallType->StallRate->RateDetail as $detail){
-                                            echo "\n".$days[$i].': ₱'.$detail->dblRate."\n";
-                                            $i++;
-                                        }                                                        
-                                    }else
-                                        echo $stall->StallType->StallRate->RateDetail[0]->dblRate;
-                                ?></textarea>
+                                <input type="text" class="form-control" readonly name="rate" id="dispStallID" value="{{'₱'.$stall->StallType->StallRate->dblRate}}">
+                                <label>Peak Days Additional Rate</label>
+                                <input type="text" class="form-control" readonly name="rate" id="dispStallID" value="{{($stall->StallType->StallRate->peakRateType == 1) ? '₱'.$stall->StallType->StallRate->dblPeakRate : $stall->StallType->StallRate->dblPeakRate.'%'}}">
+                                <label>Collection Type</label>
+                                <select name="collection" class="form-control">
+                                    <option disabled selected>--Select Collection Type--</option>
+                                    <option value="1">Monthly</option>
+                                    <option value="2">weekly</option>
+                                    <option value="3">Daily</option>
+                                </select>
                             </div>
                         </div>
                         <!-- /.col-md-6 -->

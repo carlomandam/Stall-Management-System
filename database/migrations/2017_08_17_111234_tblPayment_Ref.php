@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblPayment extends Migration
+class TblPaymentRef extends Migration
 {
     /**
      * Run the migrations.
@@ -25,7 +25,7 @@ class TblPayment extends Migration
 
             $table->foreign('paymentID')
                  ->references('paymentID')
-                 ->on('tblPayment')
+                 ->on('tblPayment_Info')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
                  

@@ -253,10 +253,6 @@
                                 return $("#_token").val();
                             }
                         }
-                        , dataFilter: function (response) {
-                            if (obj.bldgCode == $("#bldgCodeUp").val()) return true;
-                            else return response;
-                        }
                     }
                 }
                 , noOfFloor: "required"

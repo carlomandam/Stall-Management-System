@@ -11,7 +11,7 @@ class ManageContractsController extends Controller
 {
     //'
     public function getAvailableStalls(){
-        $stalls = Stall::with('Floor.Building')->withCount('Pending')->has('StallType.StallRate.RateDetail')->doesntHave('CurrentTennant')->get();
+        $stalls = Stall::with('Floor.Building')->withCount('Pending')->has('StallType.StallRate')->doesntHave('CurrentTennant')->get();
         $data = array();
         foreach ($stalls as $stall) {
             $data['data'][] = $stall;
@@ -190,7 +190,7 @@ class ManageContractsController extends Controller
     public function updateRegistration($rentID)
     {
         $prod = Product::all();
-    	$stallrental = StallRental::with('Contract.StallRate.RateDetail','Product')->where('stallRentalID',$rentID)->first();
+    	$stallrental = StallRental::with('Contract.StallRate','Product')->where('stallRentalID',$rentID)->first();
         if(count($stallrental) == 0)
             return redirect('/StallHolderList');
     	$stallHID = $stallrental->stallHID;

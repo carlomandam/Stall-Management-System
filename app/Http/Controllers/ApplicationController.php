@@ -63,19 +63,8 @@ class ApplicationController extends Controller
      public function create($stallid)
      { 
         $prod = Product::all();
-        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentTennant')->where('stallID',$stallid)->first();
-            
-            /*DB::table('tblStall')
-            ->select('*')
-            ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
-            ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
-            ->leftJoin('tblstalltype_size as size', 'type.stypeSizeID', '=', 'size.stypeSizeID')
-            ->leftJoin('tblstallrate as rate', 'type.stype_SizeID', '=', 'rate.stype_SizeID')
-            ->leftJoin('tblstallrate_details as detail', 'rate.stallRateID', '=', 'detail.stallRateID')
-            ->leftJoin('tblFloor as floor','tblStall.floorID','=','floor.floorID')
-            ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
-            ->where('tblStall.stallID',$stallid)
-            ->first();*/
+        $stall = Stall::with('StallType.StallRate','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentTennant')->where('stallID',$stallid)->first();
+
         if($stall == null)
             return redirect('/StallHolderList');
         else
@@ -87,64 +76,6 @@ class ApplicationController extends Controller
     
     function addVendor()
     { 
-      /*if(isset($_POST['ven_name'])) //if search existing record
-      {
-        $vendor = Vendor::find($_POST['ven_name']);
-     
-        try{
-                $input = Input::get('stallno_name');
-                $count = count($input);
-                  foreach($input as $Input)
-                 {   $rent = new Rent;
-                    $rent->stallID = $Input;
-                    $rent->venID = $vendor->venID;
-                    $date1 = $_POST['datepicker'];
-                    $date1 = date('Y-m-d', strtotime($date1));
-                    $rent->rentStartDate = $date1;
-                    $rent->rentRegDate = date('Y-m-d');
-                    $rent->rentBusinessName = $_POST['businessName'];
-                    $rent->rentProdDesc = $_POST['prods']; 
-                    $rent->assocHolder_1 =$_POST['assoc_one'];
-                    $rent->assocHolder_2 =$_POST['assoc_two'];
-                   
-
-
-                    if( $rent->save())
-                    {
-                    
-
-                      $contract = new Contract;
-                      $contract->rentID = $rent->rentID;
-                     
-                      $contract->contractStatus = 0;
-
-                      $contract->save();
-                      if($contract->save())
-                      { $periodID = $_POST['length'];
-                        $length = (!isset($_POST['specific_no']) ? 1 : $_POST['specific_no']);
-                            
-                         
-                        $contract->contractPeriods()->attach($periodID, ['contractLength' => $length ]);
-                        
-                      }
-                      else
-                      {
-                        App::abort(500,"Error");
-                      }
-                    
-                    }
-                    else
-                    {
-                      App::abort(500,'Error');
-                    }
-               }
-           
-            }catch(Exception $e)
-            {
-              $vendor->forceDelete();
-            }
-      }
-      else{*/
         $stallHolder = new StallHolder;
 
         $stallHolder->stallHFName = $_POST['fname'];
@@ -430,6 +361,7 @@ function checkEmail()
             $contract->contractStart = date_format(date_create($_POST['startDate']),"Y-m-d");
             $contract->contractEnd = (isset($_POST['endDate'])) ? date_format(date_create($_POST['endDate']),"Y-m-d") : null;
             $contract->stallRateID = $_POST['rateid'];
+            $contract->collectionType = $_POST['collection'];
             $contract->save();
             
             foreach($_POST['products'] as $prod){

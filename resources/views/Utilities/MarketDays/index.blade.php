@@ -39,7 +39,7 @@
             <div class = "col-md-12">
               <div class="callout callout-info">
                   <h4>Info</h4>
-                   <p>Market Days determine the days the business were open.</p>
+                   <p>Market Days determine the days the business is open.</p>
                    <p>This utility will affect the stall rates maintenance in declaring the stall rates.</p>
                    <p>Paki checkan kung bukas ba ung business ng gantong araw.</p>
               </div>
@@ -105,7 +105,7 @@
         <div class = "box-footer">
         <div class = "pull-right" style="margin-right: 20px;">
           <button class = "btn btn-flat btn-info" id="edit">Edit</button>
-          <button id="save"  class = "btn btn-flat btn-primary" data-id='1' disabled>Save Changes</button>
+          <button id="save"  class = "btn btn-flat btn-primary" data-id='util_market_days' disabled>Save Changes</button>
         </div>
         </div>
         </div>
@@ -137,6 +137,7 @@ $(document).on('click','#edit', function(){
   document.getElementById('save').disabled = false;
 });
 $(document).on('click','#save',function(){
+
   id = $(this).attr('data-id');
   console.log(id);
   var days = [];  
@@ -145,6 +146,7 @@ $(document).on('click','#save',function(){
                 days[i] = $(this).val();
       });
   }
+
   marketDays = days.toString();
   
   console.log(marketDays);
@@ -158,7 +160,7 @@ $(document).on('click','#save',function(){
       success: function(data) {
         if($.isEmptyObject(data.error)){
           toastr.success('Market Days Updated');
-                location.reload();
+                //location.reload();
                 
                 }
                 else{

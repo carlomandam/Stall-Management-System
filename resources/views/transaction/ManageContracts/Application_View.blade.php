@@ -189,34 +189,6 @@
                                     <div class="col-md-12">
                                         <div clas="col-md-12">
                                             <div class="col-md-6">
-                                                <label>Stall Rate</label>
-                                                <textarea type="text" class="form-control" name="dispStallRate" id="dispStallRate" disabled><?php
-                                                    switch($stallrental->Contract->StallRate->frequencyDesc){
-                                                        case 1 :
-                                                            $freq = "Monthly";
-                                                            break;
-                                                        case 2 :
-                                                            $freq = "Weekly";
-                                                            break;
-                                                        case 3 :
-                                                            $freq = "Daily";
-                                                            break;
-                                                        case 4 :
-                                                            $freq = "Daily (different per day)";
-                                                            break;
-                                                    }
-                                                    echo "Collection Type: ".$freq."\nRate: ";
-                                                    if($stallrental->Contract->StallRate->frequencyDesc == 4){
-                                                        $i = 0;
-                                                        $days = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
-                                                        foreach($stallrental->Contract->StallRate->RateDetail as $detail){
-                                                            echo "\n".$days[$i].': '.$detail->dblRate."\n";
-                                                            $i++;
-                                                        }                                                        
-                                                    }else
-                                                        echo $stallrental->Contract->StallRate->RateDetail[0]->dblRate;
-                                                ?>
-                                                </textarea>
                                             </div>
                                             <div class="col-md-6">
                                                 <label>Location</label>

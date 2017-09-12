@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblPaymentHistory extends Migration
+class TblPaymentInfo extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class TblPaymentHistory extends Migration
      */
     public function up()
     {
-       Schema::create('tblPayment', function (Blueprint $table) {
+       Schema::create('tblPayment_Info', function (Blueprint $table) {
             $table->increments('paymentID');
             $table->double('paymentAmt',10,2);
             $table->date('paymentDate');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('paymentID')->references('paymentID')
-                  ->on('tblPayment_Info')
-                  ->onUpdate('cascade')
-                  ->onDelete('restrict');
          });
     }
 
