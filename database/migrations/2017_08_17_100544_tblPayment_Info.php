@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+
 class TblPaymentInfo extends Migration
+
 {
     /**
      * Run the migrations.
@@ -13,12 +15,15 @@ class TblPaymentInfo extends Migration
      */
     public function up()
     {
-       Schema::create('tblPayment_Info', function (Blueprint $table) {
+
+       Schema::create('tblPayment_info', function (Blueprint $table) {
+
             $table->increments('paymentID');
             $table->double('paymentAmt',10,2);
             $table->date('paymentDate');
             $table->timestamps();
             $table->softDeletes();
+
          });
     }
 
@@ -30,6 +35,6 @@ class TblPaymentInfo extends Migration
     public function down()
     {
        
-      Schema::dropIfExists('tblPayment_History');
+      Schema::dropIfExists('tblPayment_info');
     }
 }

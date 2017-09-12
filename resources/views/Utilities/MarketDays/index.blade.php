@@ -160,7 +160,7 @@ $(document).on('click','#save',function(){
       success: function(data) {
         if($.isEmptyObject(data.error)){
           toastr.success('Market Days Updated');
-                //location.reload();
+                location.reload();
                 
                 }
                 else{

@@ -209,8 +209,8 @@
                                      <li id="uDays"><a href="{{url('/MarketDays')}}">
                                         <i class="fa fa-calendar-times-o"></i><span>Market Days</span></a>
                                     </li>
-                                    <li id=""><a href="{{url('/PeakRates')}}">
-                                        <i class="fa fa-credit-card"></i><span>Peak Days Rate</span></a>
+                                    <li id=""><a href="{{url('/PeakDays')}}">
+                                        <i class="fa fa-credit-card"></i><span>Peak Days</span></a>
                                     </li>    
                                     <li id=""><a href="{{url('#')}}">
                                         <i class="fa fa-bell"></i><span>Collection Status</span></a>

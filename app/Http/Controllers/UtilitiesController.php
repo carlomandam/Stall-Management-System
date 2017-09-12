@@ -25,20 +25,32 @@ class UtilitiesController extends Controller
         $util->utilitiesID = $id;
       }
   		$util->utilitiesDesc = $request->days;
+      $peak = Utilities::find('util_peak_days');
+      if(count($peak) == 0){
+        $peak = new Utilities();
+        $peak->utilitiesID = 'util_peak_days';
+      }
+      $peak->utilitiesDesc = '';
+      $peak->save();
   		$util->save();
   		return response()->json(['success'=>'Update new records.']);
   }
-  public function peakRatesIndex(){
-    $utils  = Utilities::where('utilitiesID', 2)
-                        ->select('peakType','peakQuan')
+  public function peakDaysIndex(){
+    $utils  = Utilities::where('utilitiesID', "util_market_days")
+                        ->select('utilitiesDesc')
                         ->get();
-    return view('Utilities.PeakRates.index',compact('utils'));
+   $peaks  = Utilities::where('utilitiesID', "util_peak_days")
+                        ->select('utilitiesDesc')
+                        ->get();                     
+    return view('Utilities.PeakDays.index',compact('utils','peaks'));
   }
-  public function peakRatesUpdate(Request $request, $id){
-      $util  = Utilities::findOrFail($id);
-
-      $util->peakType = $request->peakType;
-      $util->peakQuan = $request->rate;
+  public function peakDaysUpdate(Request $request, $id){
+       $util  = Utilities::find($id);
+      if(count($util) == 0){
+        $util = new Utilities();
+        $util->utilitiesID = $id;
+      }
+      $util->utilitiesDesc = $request->days;
       $util->save();
       return response()->json(['success'=>'Update new records.']);
   }		
