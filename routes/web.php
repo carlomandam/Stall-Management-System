@@ -55,6 +55,10 @@ Route::get('/Building', function () {
     return view('Maintenance.Maintenance_Buildings');
 });
 
+Route::get('/Holiday', function () {
+    return view('Maintenance.Maintenance_Holiday');
+});
+
 Route::get('/StallType', function () {
     return view('Maintenance.Maintenance_StallType');
 });
@@ -134,6 +138,15 @@ Route::PUT('/requirements/restore/{id}', 'RequirementsController@restore');
 Route::get('/pdfview/{rentalid}','PDFController@pdfcreate');
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
 Route::get('/getVendor', 'ApplicationController@getVendor');
+
+//Holiday
+Route::get('/holidayTable', 'HolidayController@getHolidays');
+Route::post('/addHoliday', 'HolidayController@addHoliday');
+Route::post('/updateHoliday', 'HolidayController@updateHoliday');
+Route::post('/holidayInfo', 'HolidayController@getHolidayInfo');
+Route::post('/deleteHoliday', 'HolidayController@deleteHoliday');
+Route::post('/CheckHolidayName', 'HolidayController@CheckHolidayName');
+Route::post('/CheckHolidayDate', 'HolidayController@CheckHolidayDate');
 
 ///////////////////ARCHIVES IN MAINTENANCE////////////////
 

@@ -19,11 +19,7 @@ class PaymentController extends Controller
 {
     	public function index()
     	{
-    	
-
     		return view('transaction/PaymentAndCollection/finalPayment');
-
-    
     	}
 
     	public function createBill()
