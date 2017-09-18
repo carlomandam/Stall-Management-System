@@ -126,12 +126,16 @@
                                 <a href="/StallHolderList"> <i class="fa fa-circle-o"></i> <span>Manage Contracts</span> </a>
                             </li>
                             <li class="treeview">
+<<<<<<< Updated upstream
                                  <a href="#"> <i class="fa fa-circle-o"></i> <span>Payment and Collections</span> <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> </a>
                         <ul class="treeview-menu">
                             <li id="">
                                 <a href="{{url('/Billing')}}"> <i class="fa fa-circle-o"></i><span>Billing</span></a>
+=======
+                                <a href="/"> <i class="fa fa-circle-o"></i><span>Payment and Collections</span> </a>
+>>>>>>> Stashed changes
                             </li>
                             <li id="">
                                 <a href="{{url('/Payment')}}"> <i class="fa fa-circle-o"></i><span>Payment</span></a>
@@ -182,10 +186,10 @@
                                 <a href="{{url('/PeakDays')}}"> <i class="fa fa-credit-card"></i><span>Peak Days</span></a>
                             </li>
                             <li id="">
-                                <a href="{{url('#')}}"> <i class="fa fa-bell"></i><span>Collection Status</span></a>
+                                <a href="{{url('/CollectionStatus')}}"> <i class="fa fa-bell"></i><span>Collection Status</span></a>
                             </li>
                             <li id="">
-                                <a href="{{url('#')}}"> <i class="fa fa-credit-card"></i><span>Initial Fee</span></a>
+                                <a href="{{url('/InitialFee')}}"> <i class="fa fa-credit-card"></i><span>Initial Fee</span></a>
                             </li>
                         </ul>
                     </li>

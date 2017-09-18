@@ -206,6 +206,10 @@ Route::get('/Queries','QueriesController@index');
 Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
 Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
 Route::get('/PeakDays', 'UtilitiesController@peakDaysIndex');
-Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');
+Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');\
+Route::get('/InitialFee', 'UtilitiesController@initialFeeIndex');
+Route::put('/InitialFee/{id}', 'UtilitiesController@initialFeeUpdate');
+Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
+Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 
 Route::post('/updateApplication','ApplicationController@updateApplication');

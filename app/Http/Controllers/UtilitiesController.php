@@ -53,5 +53,37 @@ class UtilitiesController extends Controller
       $util->utilitiesDesc = $request->days;
       $util->save();
       return response()->json(['success'=>'Update new records.']);
-  }		
+  }
+    public function initialFeeIndex(){
+    $utils  = Utilities::where('utilitiesID', "util_initial_fee")
+                        ->select('secAmount','mainAmount')
+                        ->get();
+  
+    return view('Utilities.InitialFee.index',compact('utils'));
+  }
+  public function initialFeeUpdate(Request $request, $id){
+      $util  = Utilities::find($id);
+      if(count($util) == 0){
+        $util = new Utilities();
+        $util->utilitiesID = $id;
+      }
+
+      
+      $util->secAmount= $request->sec_amount;
+      $util->mainAmount = $request->main_amount;
+   
+      $util->save();
+      return response()->json(['success'=>'Update new records.']);
+
+  }
+  public function collectionStatusIndex(){
+    $utils  = Utilities::where('utilitiesID', "util_market_days")
+                        ->select('utilitiesDesc')
+                        ->get();
+    // return($utils->utilitiesDesc);
+    return view('Utilities.CollectionStatus.index');
+  }
+  public function collectionStatusUpdate(Request $request, $id){
+     
+  } 		
 }
