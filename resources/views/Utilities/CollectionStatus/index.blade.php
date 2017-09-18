@@ -44,7 +44,7 @@
             </div>
 
             <div class="col-md-8">
-              <table class="table table-hover">
+              <table class="table table-strippedr">
                   <thead>
                     <tr>
                       <th>Description</th>
@@ -53,28 +53,28 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="primary">
+                    <tr class="bg-primary">
                       <td>Collect</td>
-                      <td><input type="text" name="collectFrom" class="form-control" value="0.00" readonly></td>
-                      <td> <input type="text" name="collectTo" class="form-control" id="collect" disabled></td>
+                      <td><input type="text" name="collectFrom" class="form-control collectTo" value="0.00" readonly></td>
+                      <td> <input type="text" name="" class="form-control collectFrom" id="collect" disabled></td>
                     </tr>
-                    <tr class="success">
-                      <td>Reminder</td>
+                    <tr style="background-color: green;">
+                      <td style="color: white;">Reminder</td>
                       <td><input type="text" name="" class="form-control" readonly></td>
                       <td> <input type="text" name="" class="form-control" id="reminder" disabled></td>
                     </tr>
-                    <tr class="warning">
+                    <tr style="background-color: yellow;">
                       <td>Warning</td>
                       <td><input type="text" name="" class="form-control" readonly></td>
                       <td> <input type="text" name="" class="form-control" id="warning" disabled></td>
                     </tr>
-                    <tr class="">
-                      <td>Lock</td>
+                    <tr style="background-color: orange;">
+                      <td style="color: white;">Lock</td>
                       <td><input type="text" name="" class="form-control" readonly></td>
                       <td> <input type="text" name="" class="form-control" id="lock" disabled></td>
                     </tr>
-                    <tr class="danger">
-                      <td>Terminate</td>
+                    <tr style="background-color: red;">
+                      <td style="color: white;">Terminate</td>
                       <td><input type="text" name="" class="form-control" readonly></td>
                       <td> <input type="text" name="" class="form-control" id="terminate" disabled></td>
                     </tr>
@@ -99,22 +99,22 @@
 
 @stop
 @section('script')
+<script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
+
 <script type="text/javascript">
   $(document).on('click', '#edit', function(){
     document.getElementById('collect').disabled=false;
     document.getElementById('save').disabled =false;
   })
-  var collectFrom = $("input[name='collectFrom']").val();
-  var collectTo = $("input[name='collectTo']").val();
- 
- 
-  $(document).on('change','#collect', function(){
-   
-   
-  })
-  $(document).on('click','#save', function(){
-     console.log(collectTo);
-      
-  })
+
+   $(".collectTo").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
+   $(".collectFrom").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
+
 </script>
 @stop 

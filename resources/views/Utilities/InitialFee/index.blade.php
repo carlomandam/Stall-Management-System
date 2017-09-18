@@ -35,7 +35,7 @@
             </div>
           
           <div class = "box-body">
-
+            
             <div class = "col-md-12">
               <div class="callout callout-info">
                   <h4>Info</h4>
@@ -57,7 +57,7 @@
                     <tr>
                       <td>Security Deposit</td>
                       <td>
-                        <input type="text" name="sec_amount" class="form-control" id="secAmount" disabled>
+                        <input type="text" name="sec_amount" class="form-control" id="secAmount"  pattern='^\d+(?:\.\d{0,2})$' disabled>
                       </td>
                       <td>
                         One Time
@@ -95,8 +95,18 @@
 
 @stop
 @section('script')
-
+<script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
+<!-- <script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.numeric.extensions.js') }}"></script>
+<script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.extensions.js') }}"></script> -->
 <script type="text/javascript">
+    $("#secAmount").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
+  $("#mainAmount").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
    $('.datepicker').datepicker({
       autoclose: true,
       format: 'yyyy/mm/dd'
@@ -135,9 +145,14 @@
     id= $(this).attr('data-id');
     console.log(id);
     var _token = $("input[name='_token']").val();
-    var sec_amount = $("input[name='sec_amount']").val();
-    var main_amount = $("input[name='main_amount']").val();
-  
+    var tempSec_amount = $("input[name='sec_amount']").val();
+    var tempMain_amount = $("input[name='main_amount']").val();
+    secValid = tempSec_amount.replace("Php ", "");
+    sec_amount = secValid.replace(",", "");
+
+    mainValid = tempMain_amount.replace("Php ", "");
+    main_amount = mainValid.replace(",", "");
+    
     
      $.ajax({
       type: "PUT",
@@ -163,12 +178,13 @@
      }); 
 
   })
+
  @foreach($utils as $util)          
   $('#secAmount').val('{{$util->secAmount}}');
-  $('#secDate').val('{{$util->secDate}}');
-
   $('#mainAmount').val('{{$util->mainAmount}}');
  
 @endforeach
+
+
 </script>
 @stop 
