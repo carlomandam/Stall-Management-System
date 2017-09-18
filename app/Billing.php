@@ -9,14 +9,14 @@ class Billing extends Model
 {
      use SoftDeletes;
     
-    protected $table = "tblBilling_Info";
+    protected $table = "tblBilling";
     protected $primaryKey = "billID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'billDateFrom',
         'billDateTo',
-        'stallRentalID'
+        'cotractID'
     ];
     
     public function Payment()

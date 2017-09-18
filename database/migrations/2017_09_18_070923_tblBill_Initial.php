@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblFees extends Migration
+class TblBillInitial extends Migration
 {
     /**
      * Run the migrations.
@@ -14,19 +14,18 @@ class TblFees extends Migration
     public function up()
     {
         //
-        Schema::create('tblFees', function (Blueprint $table) {
-            $table->increments('feeID');
-            $table->string('feeDesc');
-            $table->double('feeAmount',10,2);
-            $table->date('feeDate');
-            $table->integer('feeStatus');
-            $table->integer('contractID')->unsigned();
+         Schema::create('tblBill_Initial', function (Blueprint $table) {
+            $table->increments('billInitialID');
+            $table->integer('billID')->unsigned();
+            $table->double('initialAmt',10,2);
+            $table->tinyInteger('initialType');
             $table->timestamps();
             $table->softDeletes();
             
-              $table->foreign('contractID')
-                 ->references('contractID')
-                 ->on('tblContractInfo')
+     
+            $table->foreign('billID')
+                 ->references('billID')
+                 ->on('tblBilling')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
         });
@@ -40,6 +39,6 @@ class TblFees extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('tblFees');
+            Schema::dropIfExists('tblBill_Initial');
     }
 }

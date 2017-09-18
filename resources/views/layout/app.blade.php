@@ -14,7 +14,8 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/toastr.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/select2/select2.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datepicker/datepicker3.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/dropdown.css')}}"> @yield('style')
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/dropdown.css')}}">
+    @yield('style')
     <style>
         * {
             font-family: "Trebuchet MS"
@@ -125,8 +126,21 @@
                                 <a href="/StallHolderList"> <i class="fa fa-circle-o"></i> <span>Manage Contracts</span> </a>
                             </li>
                             <li class="treeview">
-                                <a href="/Payment"> <i class="fa fa-circle-o"></i><span>Payment and Collections</span> </a>
+                                 <a href="#"> <i class="fa fa-circle-o"></i> <span>Payment and Collections</span> <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i> 
+                                </span> </a>
+                        <ul class="treeview-menu">
+                            <li id="">
+                                <a href="{{url('/Billing')}}"> <i class="fa fa-circle-o"></i><span>Billing</span></a>
                             </li>
+                            <li id="">
+                                <a href="{{url('/Payment')}}"> <i class="fa fa-circle-o"></i><span>Payment</span></a>
+                            </li>
+                            <li id="">
+                                <a href="{{url('/Clearance')}}"> <i class="fa fa-circle-o"></i><span>Clearance</span></a>
+                            </li>
+                            
+                        </ul>
                             <li class="treeview">
                                 <a href="/requestList"> <i class="fa fa-circle-o"></i> <span>Manage Requests</span> </a>
                             </li>

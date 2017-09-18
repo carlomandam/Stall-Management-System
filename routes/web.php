@@ -180,9 +180,10 @@ Route::get('/Payment','PaymentController@index');
 Route::get('/ViewPayment',function(){
       return view('transaction.PaymentAndCollection.viewPayment');
 });
+Route::get('/Billing','BillingController@index');
 Route::get('/getBills','PaymentController@getBills');
-Route::get('/CreateBill','PaymentController@createBill');
-Route::get('/ViewBill/{id}','PaymentController@generateBill');
+Route::get('/createBill/{id}','BillingController@createBill');
+Route::get('/ViewBill/{id}','BillingController@viewBill');
 Route::get('/getPaymentStatus','PaymentController@getPaymentStatus');
 Route::get('/CheckBillingRecords','PaymentController@checkRecords');
 ////////////////REQUESTS////////////

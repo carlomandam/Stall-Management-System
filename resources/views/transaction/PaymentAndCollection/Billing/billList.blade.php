@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('title')
-{{'Payment and Collection'}}
+{{'Bill Lists'}}
 @stop
 @section('content-header')
 
@@ -12,21 +12,16 @@
 @stop
 
 @section('content')
-<style>
-    #floortbl td {
-        padding-bottom: 5px;
-    }
 
-    #floortbl th,
-    #floortbl td {
-        text-align: center;
-    }
-</style>
+ <div class="defaultNewButton">
+               <a href="{{url('/Billing')}}"> <button class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</button></a>
+               
+</div>
 <div class="box box-primary">
     <div class="box-body">
         <div class="table-responsive">
             <div class="defaultNewButton">
-               <a href="{{url('/createBill')}}"> <button class="btn btn-primary btn-flat"><span class='fa fa-plus'></span>&nbspCreate Bill</button></a>
+               <a href="{{url('/createBill/'.$storeID)}}"> <button class="btn btn-primary btn-flat"><span class='fa fa-plus'></span>&nbspCreate Bill</button></a>
                
             </div>
             <table id="billList" class="table table-bordered table-striped" role="grid">
