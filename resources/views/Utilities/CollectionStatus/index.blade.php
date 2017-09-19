@@ -53,31 +53,37 @@
                     </tr>
                   </thead>
                   <tbody>
+                  <form>
+                      <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
+
                     <tr class="bg-primary">
                       <td>Collect</td>
-                      <td><input type="text" name="collectFrom" class="form-control collectTo" value="0.00" readonly></td>
-                      <td> <input type="text" name="" class="form-control collectFrom" id="collect" disabled></td>
+                      <td><input type="text" name="collectFrom" class="form-control collectTo" readonly></td>
+                      <td>
+                        <input type="text" name="name_collect" class="form-control collectFrom"  id="id_collect" disabled>
+                      </td>
                     </tr>
                     <tr style="background-color: green;">
                       <td style="color: white;">Reminder</td>
-                      <td><input type="text" name="" class="form-control" readonly></td>
-                      <td> <input type="text" name="" class="form-control" id="reminder" disabled></td>
+                      <td><input type="text" name="" class="form-control reminderFrom" readonly></td>
+                      <td> <input type="text" name="name_reminder" class="form-control reminderTo" id="id_reminder" disabled></td>
                     </tr>
                     <tr style="background-color: yellow;">
                       <td>Warning</td>
-                      <td><input type="text" name="" class="form-control" readonly></td>
-                      <td> <input type="text" name="" class="form-control" id="warning" disabled></td>
+                      <td><input type="text" name="" class="form-control warningFrom" readonly></td>
+                      <td> <input type="text" name="name_warning" class="form-control warningTo" id="id_warning" disabled></td>
                     </tr>
                     <tr style="background-color: orange;">
                       <td style="color: white;">Lock</td>
-                      <td><input type="text" name="" class="form-control" readonly></td>
-                      <td> <input type="text" name="" class="form-control" id="lock" disabled></td>
+                      <td><input type="text" name="" class="form-control lockFrom" readonly></td>
+                      <td> <input type="text" name="name_lock" class="form-control lockTo" id="id_lock" disabled></td>
                     </tr>
                     <tr style="background-color: red;">
                       <td style="color: white;">Terminate</td>
-                      <td><input type="text" name="" class="form-control" readonly></td>
-                      <td> <input type="text" name="" class="form-control" id="terminate" disabled></td>
+                      <td><input type="text" name="" class="form-control terminateFrom" readonly></td>
+                      <td> <input type="text" name="name_terminate" class="form-control terminateTo" id="id_terminate" disabled></td>
                     </tr>
+                </form>
                   </tbody>
               </table>
             </div>
@@ -87,7 +93,7 @@
         <div class = "box-footer">
         <div class = "pull-right" style="margin-right: 20px;">
           <button class = "btn btn-flat btn-info" id="edit">Edit</button>
-          <button id="save"  class = "btn btn-flat btn-primary" data-id='util_market_days' disabled>Save Changes</button>
+          <button id="save"  class = "btn btn-flat btn-primary" data-id='util_collection_status' disabled>Save Changes</button>
         </div>
         </div>
         </div>
@@ -100,21 +106,210 @@
 @stop
 @section('script')
 <script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
-
 <script type="text/javascript">
   $(document).on('click', '#edit', function(){
-    document.getElementById('collect').disabled=false;
+    document.getElementById('id_collect').disabled =false;
     document.getElementById('save').disabled =false;
   })
 
    $(".collectTo").inputmask('currency', {
     rightAlign: true,
-    prefix: 'Php '
+    prefix: 'Php ',
   });
    $(".collectFrom").inputmask('currency', {
     rightAlign: true,
     prefix: 'Php '
   });
+    $(".reminderTo").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
+   $(".reminderFrom").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  }); 
+    $(".warningTo").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
+   $(".warningFrom").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });  
+   $(".lockTo").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
+   $(".lockFrom").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });   
+   $(".terminateTo").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
+   $(".terminateFrom").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
+var collect;
+var reminder;
+var warning;
+var lock;
+var terminate;
+$("#id_collect").bind("change paste keyup", function() {
+tempCollect = ($(this).val()).replace("Php ", "",);
+temp2 = tempCollect.replace(",", "",);
+collect = Number(temp2);
+$('.reminderFrom').val(Math.abs(collect)+.01);
 
+if(collect>0){
+  document.getElementById('id_reminder').disabled=false;
+  document.getElementById('save').disabled =false;
+}
+else{
+  document.getElementById('id_reminder').disabled=true;
+  document.getElementById('save').disabled =true;
+}
+});
+
+$("#id_reminder").bind("change paste keyup", function() {
+tempreminder = ($(this).val()).replace("Php ", "",);
+
+temp2 = tempreminder.replace(",", "",);
+reminder = Number(temp2);
+$('.warningFrom').val(Math.abs(reminder)+.01);
+
+if(reminder>collect){
+document.getElementById('id_warning').disabled=false;
+document.getElementById('save').disabled =false;
+}
+else{
+document.getElementById('id_warning').disabled=true;
+ document.getElementById('save').disabled =true;
+}
+
+ 
+
+});
+$("#id_warning").bind("change paste keyup", function() {
+tempwarning = ($(this).val()).replace("Php ", "",);
+
+temp2 = tempwarning.replace(",", "",);
+warning = Number(temp2);
+$('.lockFrom').val(Math.abs(warning)+.01);
+
+if(warning>reminder){
+document.getElementById('id_lock').disabled=false;
+document.getElementById('save').disabled =false;
+}
+else{
+document.getElementById('id_lock').disabled=true;
+ document.getElementById('save').disabled =true;
+}
+
+
+});
+
+$("#id_lock").bind("change paste keyup", function() {
+templock = ($(this).val()).replace("Php ", "",);
+
+temp2 = templock.replace(",", "",);
+lock = Number(temp2);
+$('.terminateFrom').val(Math.abs(lock)+.01);
+
+if(lock>warning){
+document.getElementById('id_terminate').disabled=false;
+document.getElementById('save').disabled =false;
+}
+else{
+document.getElementById('id_terminate').disabled=true;
+ document.getElementById('save').disabled =true;
+}
+  
+});
+ $("#id_terminate").bind("change paste keyup", function() {
+  tempterminate = ($(this).val()).replace("Php ", "",);
+
+  temp2 = tempterminate.replace(",", "",);
+   terminate = Number(temp2);
+  // $('.terminateFrom').val(Math.abs(lock)+.01);
+
+  if(terminate>lock){
+    document.getElementById('save').disabled=false;
+    document.getElementById('save').disabled =false;
+  }
+  else{
+    document.getElementById('save').disabled=true;
+  }
+ 
+  });
+@foreach($utils as $util)
+$('#id_collect').val('{{$util->collect}}');
+$('.reminderFrom').val('{{$util->collect}}+.01');
+
+$('#id_reminder').val('{{$util->reminder}}');
+$('.warningFrom').val('{{$util->reminder}}+.01');
+
+$('#id_warning').val('{{$util->warning}}');
+$('.lockFrom').val('{{$util->warning}}+.01');
+
+$('#id_lock').val('{{$util->lock}}');
+$('.terminateFrom').val('{{$util->lock}}+.01')
+
+$('#id_terminate').val('{{$util->terminate}}');
+
+@endforeach
+
+
+$(document).on('click','#save', function(){
+id= $(this).attr('data-id');
+console.log(id);
+var _token = $("input[name='_token']").val();
+var tempCollect = $("input[name='name_collect']").val().replace("Php ", "",);
+var tempReminder = $("input[name='name_reminder']").val().replace("Php ", "",);
+var tempWarning = $("input[name='name_warning']").val().replace("Php ", "",);
+var tempLock = $("input[name='name_lock']").val().replace("Php ", "",);
+var tempTerminate= $("input[name='name_terminate']").val().replace("Php ", "",);
+
+temp1 = tempCollect.replace(",", "",);
+temp2 = tempReminder.replace(",", "",);
+temp3 = tempWarning.replace(",", "",);
+temp4 = tempLock.replace(",", "",);
+temp5 = tempTerminate.replace(",", "",);
+
+name_collect = Number(temp1);
+name_reminder = Number(temp2);
+name_warning = Number(temp3);
+name_lock = Number(temp4);
+name_terminate = Number(temp5);
+
+ $.ajax({
+  type: "PUT",
+  url: "/CollectionStatus/"+id,
+  data: { 
+    '_token' : $('input[name=_token]').val(),
+      'name_collect': name_collect,
+      'name_reminder': name_reminder,
+      'name_warning': name_warning,
+      'name_lock': name_lock,
+      'name_terminate':name_terminate
+   
+  },
+  success: function(data) {
+    if($.isEmptyObject(data.error)){
+      toastr.success('Collection Status Updated');
+            location.reload();
+            
+            }
+            else{
+              toastr.error(data.error);
+            }
+    }
+
+
+ }); 
+
+})
 </script>
 @stop 

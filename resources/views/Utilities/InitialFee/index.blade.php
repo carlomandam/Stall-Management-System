@@ -57,7 +57,7 @@
                     <tr>
                       <td>Security Deposit</td>
                       <td>
-                        <input type="text" name="sec_amount" class="form-control" id="secAmount"  pattern='^\d+(?:\.\d{0,2})$' disabled>
+                        <input type="text" name="sec_amount" class="form-control" id="secAmount"   disabled>
                       </td>
                       <td>
                         One Time

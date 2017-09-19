@@ -19,6 +19,13 @@ class TblUtilities extends Migration
             //Initial Fee
             $table->double('secAmount',10,2)->nullable();
             $table->double('mainAmount',10,2)->nullable();
+            //CollectionStatus
+            $table->double('collect',10,2)->nullable();
+            $table->double('reminder',10,2)->nullable();
+            $table->double('warning',10,2)->nullable();
+            $table->double('lock',10,2)->nullable();
+            $table->double('terminate',10,2)->nullable();
+            
             $table->timestamps();
             $table->softDeletes();
             

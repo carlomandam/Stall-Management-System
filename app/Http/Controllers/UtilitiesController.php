@@ -77,13 +77,24 @@ class UtilitiesController extends Controller
 
   }
   public function collectionStatusIndex(){
-    $utils  = Utilities::where('utilitiesID', "util_market_days")
-                        ->select('utilitiesDesc')
+    $utils  = Utilities::where('utilitiesID', "util_collection_status")
+                        ->select('collect','reminder','warning','lock','terminate')
                         ->get();
-    // return($utils->utilitiesDesc);
-    return view('Utilities.CollectionStatus.index');
+    // return($utils);
+    return view('Utilities.CollectionStatus.index',compact('utils'));
   }
   public function collectionStatusUpdate(Request $request, $id){
-     
+      $util  = Utilities::find($id);
+      if(count($util) == 0){
+        $util = new Utilities();
+        $util->utilitiesID = $id;
+      }
+      $util->collect = $request->name_collect;
+      $util->reminder = $request->name_reminder;
+      $util->warning = $request->name_warning;
+      $util->lock = $request->name_lock;
+      $util->terminate = $request->name_terminate;
+      $util->save();
+      return response()->json(['success'=>'Update new records.']);
   } 		
 }
