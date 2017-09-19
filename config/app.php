@@ -163,6 +163,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        // GeneaLabs\LaravelCaffeine\Providers\LaravelCaffeineService::class,
+        GeneaLabs\LaravelCaffeine\Providers\LaravelCaffeineService::class,
 
         /*
          * Package Service Providers...
@@ -179,6 +181,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
     ],
+
+
 
     /*
     |--------------------------------------------------------------------------
