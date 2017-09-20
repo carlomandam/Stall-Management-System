@@ -8,7 +8,6 @@
         <div class="table-responsive">
             <div class="defaultNewButton">
                 <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp New Stall Rate </button>
-                <!--<div class=" pull-right" id="archive"> <a href="{{ url('/StallRateArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>-->
             </div>
             <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
                 <thead>
@@ -31,8 +30,8 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Add Stall Rate</h4> </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12 errordiv"> </div>
+                    <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul id="error-new"></ul>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -85,14 +84,22 @@
 <script type="text/javascript">
     var obj;
     var chk;
-    var today = new Date(Date.now()).toLocaleString();
-    $('.datepicker').datepicker({
-        startDate: today
-        , todayHighlight: true
-    });
+    var today = new Date(Date.now()).toLocaleString()
     $(document).ready(function () {
+        $(".datepicker").datepicker({
+            showOtherMonths: true
+            , selectOtherMonths: true
+            , changeMonth: true
+            , changeYear: true
+            , autoclose: true
+            , startDate: "dateToday"
+            , todayHighlight: true
+            , orientation: 'bottom'
+            , format: 'mm/dd/yyyy'
+        });
         $('.js-example-basic-multiple').select2({
             width: 'resolve'
+            , closeOnSelect: false
         });
         getStallTypes();
         $('#table').DataTable({
@@ -122,7 +129,11 @@
         $("#newform").validate({
             rules: {
                 "stype[]": 'required'
-                , "rate[]": {
+                , rate: {
+                    required: true
+                    , number: true
+                }
+                , prate: {
                     required: true
                     , number: true
                 }
@@ -130,18 +141,36 @@
                 , effect: 'required'
             }
             , messages: {
-                "rate[]": {
-                    required: "*Please Enter Amount"
-                    , number: "*Invalid Amount"
+                rate: {
+                    required: "Please Enter Daily Rate"
+                    , number: "Invalid Amount"
                 }
-                , "stype[]": "*Select Stall Type"
-                , "effect": "*Select Date of effect"
+                , prate: {
+                    required: "Please Enter Peak Rate"
+                    , number: "Invalid Amount"
+                }
+                , "stype[]": "Select Stall Type"
+                , "effect": "Select Date of effect"
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
-            , errorElement: "div"
+            , highlight: function (element, errorClass, validClass) {
+                $(element).removeClass(validClass).addClass(errorClass);
+                $('#new .print-error-msg').css('display', 'block');
+            }
+            , unhighlight: function (element, errorClass, validClass) {
+                var i = 0;
+                $('#newform .print-error-msg ul').find('li').each(function(){
+                    if($(this).css('display') != 'none')
+                        i++;
+                });
+                if(i == 0)
+                    $('#newform .print-error-msg').css('display', 'none');
+                $(element).removeClass(errorClass).addClass(validClass);
+            }
+            , errorElement: "li"
             , errorPlacement: function (error) {
-                error.appendTo('.errordiv');
+                error.appendTo('#new .print-error-msg ul');
             }
         });
 
@@ -171,7 +200,7 @@
 
         $(".modal").on('hidden.bs.modal', function () {
             $(this).find('form').validate().resetForm();
-            $(this).find('form').reset();
+            $(this).find('form')[0].reset();
             $('.js-example-basic-multiple').select2("val", "");
             $('.nav a[href="#1"]').tab('show');
         })

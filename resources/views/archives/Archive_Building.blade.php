@@ -33,23 +33,42 @@
                             <th style="width: 280px;">Actions</th>
                         </tr>
                     </thead>
-                        <tr>
-                        <td>Building 3</td>
-                        <td>BLDG3</td>
-                        <td>4</td>
-                        <td></td>
-                        <td>  <button class="btn btn-primary btn-flat"><span class='fa fa-mail-reply'></span>&nbspReactivate </button></td>
-
                 </table>
             </div>
        </div>
-    
-    
  </div>
 @stop
-
-  @section('script')
-  <script type="text/javascript">
-   
-    </script>
-    @stop
+@section('script')
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#prodtbl').DataTable({
+            ajax: '/bldgArchive'
+            , responsive: true
+            , "columns": [
+                {
+                    "data": "bldgName"
+                }
+                , {
+                    "data": "bldgCode"
+                }
+                , {
+                    "data": "floor"
+                }
+                , {
+                    "data": "bldgDesc"
+                }
+                , {
+                    "data": "actions"
+                }
+            ]
+            , "columnDefs": [
+                {
+                    "searchable": false
+                    , "sortable": false
+                    , "targets": 4
+                }
+            ]
+        });
+    }
+</script>
+@stop

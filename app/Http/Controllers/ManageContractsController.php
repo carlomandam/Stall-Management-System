@@ -187,26 +187,6 @@ class ManageContractsController extends Controller
             return response()->json($data);
     }
     
-    public function updateRegistration($rentID)
-    {
-        $prod = Product::all();
-    	$stallrental = StallRental::with('Contract.StallRate','Product')->where('stallRentalID',$rentID)->first();
-        if(count($stallrental) == 0)
-            return redirect('/StallHolderList');
-    	$stallHID = $stallrental->stallHID;
-    	$stallHolderDetails = StallHolder::where('stallHID',$stallHID)->first();
-        $contacts = ContactNo::where('stallHID',$stallHolderDetails->stallHID)->get();
-    	$stallDetails = DB::table('tblStall')
-            ->select('*')
-            ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
-            ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
-            ->leftJoin('tblstalltype_size as size', 'type.stypeSizeID', '=', 'size.stypeSizeID')
-            ->leftJoin('tblFloor as floor','tblStall.floorID','=','floor.floorID')
-            ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
-            ->where('tblStall.stallID',$stallrental->stallID)
-            ->first();
-        return view('transaction/ManageContracts/Application_View',compact('stallrental','stallHolderDetails','stallDetails','contacts','prod'));
-    }
     public function regListIndex()
     {
         return view('transaction/ManageContracts/RegistrationList');

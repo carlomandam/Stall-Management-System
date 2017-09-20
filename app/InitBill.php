@@ -8,16 +8,17 @@ class InitBill extends Model
 {
     use SoftDeletes;
 
-    protected $table = "tblBill_Initialfee";
+    protected $table = "tblBill_Initial";
+    protected $primaryKey = "billInitialID";
     protected $increments = false;
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'billID',
-        'initialFeeID',
+        'initialAmount',
+        'initialType',
     ];
     
-    public function Billing()
+    public function bill()
     {
         return $this->belongsTo('App\Billing','billID');
     }

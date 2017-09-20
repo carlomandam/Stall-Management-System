@@ -22,7 +22,7 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/Registration/{stallid}','ApplicationController@create');
-Route::get('/Registration/{stallid}/{rentid}','ApplicationController@view');
+Route::get('/UpdateRegistration/{rentID}','ApplicationController@updateRegistration');
 Route::get('/List', 'ApplicationController@member');
 Route::get('/View', 'ApplicationController@Memview');
 Route::get('/Update', 'ApplicationController@Update');
@@ -143,7 +143,7 @@ Route::get('/getVendor', 'ApplicationController@getVendor');
 Route::get('/holidayTable', 'HolidayController@getHolidays');
 Route::post('/addHoliday', 'HolidayController@addHoliday');
 Route::post('/updateHoliday', 'HolidayController@updateHoliday');
-Route::post('/holidayInfo', 'HolidayController@getHolidayInfo');
+Route::post('/getHolidayInfo', 'HolidayController@getHolidayInfo');
 Route::post('/deleteHoliday', 'HolidayController@deleteHoliday');
 Route::post('/CheckHolidayName', 'HolidayController@CheckHolidayName');
 Route::post('/CheckHolidayDate', 'HolidayController@CheckHolidayDate');
@@ -155,6 +155,7 @@ Route::get('/StallTypeArchive','ArchiveController@stallTypeIndex');
 Route::get('/StallArchive','ArchiveController@stallIndex');
 Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 
+Route::get('/bldgArchive','ArchiveController@buildingTable');
 ////////////////////MANAGE CONTRACTS////////////////////
 
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
@@ -170,7 +171,6 @@ Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
-Route::get('/UpdateRegistration/{rentID}','ManageContractsController@updateRegistration');
 Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
 

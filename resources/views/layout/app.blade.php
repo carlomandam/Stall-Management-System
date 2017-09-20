@@ -126,7 +126,6 @@
                                 <a href="/StallHolderList"> <i class="fa fa-circle-o"></i> <span>Manage Contracts</span> </a>
                             </li>
                             <li class="treeview">
-
                                  <a href="#"> <i class="fa fa-circle-o"></i> <span>Payment and Collections</span> <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> </a>

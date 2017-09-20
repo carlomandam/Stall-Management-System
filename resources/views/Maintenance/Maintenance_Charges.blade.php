@@ -124,6 +124,7 @@
             rules: {
                 Name: {
                     required: true
+                    , maxlength: 200
                     , remote: {
                         url: '/checkChargeName'
                         , type: 'post'
@@ -139,6 +140,7 @@
                 }
                 , Amount: {
                     required: true
+                    , number: true
                 }
             }
             , messages: {
@@ -160,32 +162,41 @@
             , invalidHandler : function() {
                 $('#new .print-error-msg').css('display','block');
             }
+            , submitHandler: function(form){
+                var formData = new FormData(form);
+                $.ajax({
+                    type: "POST"
+                    , url: '/addCharge'
+                    , data: formData
+                    , processData: false
+                    , contentType: false
+                    , context: this
+                    , success: function (data) {
+                        toastr.success('Added New Charge');
+                        $('#table').DataTable().ajax.reload();
+                        $('#new').modal('hide');
+                    }
+                });
+            }
         });
         $("#updateform").validate({
             rules: {
-                penName: {
+                Name: {
                     required: true
+                    , maxlength: 200
                 }
-                , penAmount: {
+                , Amount: {
                     required: true
                     , number: true
                 }
-                , days: {
-                    required: true
-                    , digits: true
-                }
             }
             , messages: {
-                penName: {
+                Name: {
                     required: "Please enter Penalty Name"
                 }
-                , penAmount: {
+                , Amount: {
                     required: "Please enter Amount"
                     , number: "Invalid Amount"
-                }
-                , days: {
-                    required: "Please enter numbe of days"
-                    , digits: "Please enter a valid number of days"
                 }
             }
             , errorClass: "error-class"
@@ -199,6 +210,24 @@
             }
             , successHandler : function() {
                 $('#update .print-error-msg').css('display','none');
+            }
+            , submitHandler: function(form){
+                var formData = new FormData($(this)[0]);
+                $.ajax({
+                    type: "POST"
+                    , url: '/updateCharge'
+                    , data: formData
+                    , processData: false
+                    , contentType: false
+                    , context: this
+                    , success: function (data) {
+                        if (data) {
+                            toastr.success('Updated Charge');
+                            $('#table').DataTable().ajax.reload();
+                            $('#update').modal('hide');
+                        }
+                    }
+                });
             }
         });
         $('#table').DataTable({
@@ -226,44 +255,6 @@
                     , "targets": 3
                     }
   ]
-        });
-        $("#newform").submit(function (e) {
-            e.preventDefault();
-            if (!$("#newform").valid()) return;
-            var formData = new FormData($(this)[0]);
-            $.ajax({
-                type: "POST"
-                , url: '/addCharge'
-                , data: formData
-                , processData: false
-                , contentType: false
-                , context: this
-                , success: function (data) {
-                    toastr.success('Added New Charge');
-                    $('#table').DataTable().ajax.reload();
-                    $('#new').modal('hide');
-                }
-            });
-        });
-        $("#updateform").unbind('submit').bind('submit', function (e) {
-            e.preventDefault();
-            if (!$("#updateform").valid()) return;
-            var formData = new FormData($(this)[0]);
-            $.ajax({
-                type: "POST"
-                , url: '/updateCharge'
-                , data: formData
-                , processData: false
-                , contentType: false
-                , context: this
-                , success: function (data) {
-                    if (data) {
-                        toastr.success('Updated Charge');
-                        $('#table').DataTable().ajax.reload();
-                        $('#update').modal('hide');
-                    }
-                }
-            });
         });
         $(".modal").on('hidden.bs.modal', function () {
             $(this).find('form').validate().resetForm();

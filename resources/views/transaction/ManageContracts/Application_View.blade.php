@@ -68,6 +68,7 @@
             <form id="applyForm" method="post">
                 <input type="hidden" id="token" name="_token" value="<?php echo csrf_token(); ?>">
                 <input type="hidden" id="rental" name="rental" value="<?php echo $stallrental->stallRentalID ?>">
+                <input type="hidden" id="contract" name="contract" value="<?php echo $stallrental->Contract->contractID ?>">
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -221,7 +222,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <label for="address"><b>List of Products</b></label><span class="required">&nbsp*</span>
                                             <select class="js-example-basic-multiple js-states form-control" name="products[]" id="products" multiple="multiple">
                                                 <?php
@@ -238,6 +239,24 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
+                                            <br>
+                                            <div class="panel panel-default">
+                                            <div class="panel-heading"><b>Requirements</b></div>
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                @foreach($req as $r)
+                                                    <div class="col-md-6">
+                                                        <div class="checkbox">
+                                                          <label><input name="req[]" style="width: 15px;height: 15px" type="checkbox" value="{{$r->reqID}}" 
+                                                            @if($stallHolderDetails->Requirement->contains($r))defaultChecked="true" checked=""@endif>{{$r->reqName}}</label>
+                                                        </div>                 
+                                                    </div>
+                                                @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-12">
                                             <p class="small text-danger" style="margin-left: 20px;">Fields with asterisks(*) are required</p>
                                         </div>
                                     </div>
@@ -250,7 +269,7 @@
                                     </div>
                                     <div class="col-md-12" id="updateButtons" onclick="updateContract(2)" style="display:none">
                                         <div class="pull-right">
-                                            <button type="button" onclick="" class="btn btn-danger">Cancel</button>
+                                            <button type="button" onclick="$('#applyForm')[0].reset();" class="btn btn-danger">Cancel</button>
                                             <button type="button" onclick="submitUpdate()" class="btn btn-success">Save</button>
                                         </div>
                                     </div>
@@ -267,6 +286,9 @@
 <script type="text/javascript" src="{{ URL::asset('js/multipleAddinArea.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        
+        $("input:checkbox").click(function() { return false; });
+
         $('.js-example-basic-multiple').select2({
             width: 'resolve'
         });
@@ -326,7 +348,10 @@
         /// SUBMIT REGISTRATION//
         $("#applyForm").submit(function (e) {
             e.preventDefault();
-            //  if (!$("#applyForm").valid()) return;
+            if($('input[type=checkbox]:checked').length != $('input[type=checkbox]').length){
+                toastr.error('All requirements must be submitted');
+                return;
+            }
             var formData = new FormData($(this)[0]);
             $.ajax({
                 type: "POST"
@@ -435,6 +460,7 @@
                 });
                 $(".datepicker > .form-control").prop('disabled',false);
                 $('#contract input[name=ctype], #contract select').prop('disabled',false);
+                $("input:checkbox").unbind('click');
             });
         }
         else {
@@ -447,6 +473,7 @@
                     $(this).find('.form-control').prop('disabled',true);
                 });
                 $('#contract input[name=ctype], #contract select').prop('disabled',true);
+                $("input:checkbox").click(function() { return false; });
             });
         }
     }

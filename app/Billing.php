@@ -28,10 +28,9 @@ class Billing extends Model
     {
     return $this->belongsTo('App\StallRental','stallRentalID');
     }
-    
-    public function Billing()
-    {
-        return $this->belongsToMany('App\InitFee','tblbill_initialfee','billID','initialFeeID');
-    }
 
+    public function Initial()
+    {
+    return $this->hasMany('App\initBill','billID');
+    }
 }

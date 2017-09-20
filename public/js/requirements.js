@@ -87,8 +87,9 @@ $(document).on('click','#uSaveReq', function(e){
 				},
 				success: function(data) {
 					if($.isEmptyObject(data.error)){
-						toastr.success('REcord Updated');
-			           	location.reload();
+						toastr.success('REcord Updated', function(){
+							location.reload();
+						});			           	
 			           	
 			           	}
 			           	else{

@@ -67,7 +67,6 @@ class UtilitiesController extends Controller
         $util = new Utilities();
         $util->utilitiesID = $id;
       }
-
       
       $util->secAmount= $request->sec_amount;
       $util->mainAmount = $request->main_amount;

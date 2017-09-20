@@ -227,6 +227,7 @@
             rules: {
                 bldgName: {
                     required: true
+                    , maxlength: 200
                     , remote: {
                         url: '/checkBldgName'
                         , type: 'post'
@@ -242,6 +243,7 @@
                 }
                 , bldgCode: {
                     required: true
+                    , maxlength: 10
                     , remote: {
                         type: "POST"
                         , url: '/checkBldgCode'
@@ -264,10 +266,12 @@
             , messages: {
                 bldgName: {
                     required: "Please enter Building Name"
+                    , maxlength: "Building name can't be more than 200 characters"
                     , remote: "Building Name is taken"
                 }
                 , bldgCode: {
                     required: "Please enter Building Code"
+                    , maxlength: "Building code can't be more than 10 characters"
                     , remote: "Building Code is taken"
                 }
                 , noOfFloor: "Please enter number of floors"
@@ -288,11 +292,28 @@
             , errorPlacement: function (error) {
                 error.appendTo('#new .print-error-msg ul');
             }
+            ,submitHandler: function(form){
+                var formData = new FormData(form);
+                $.ajax({
+                    type: "POST"
+                    , url: '/AddBuilding'
+                    , data: formData
+                    , processData: false
+                    , contentType: false
+                    , context: this
+                    , success: function (data) {
+                        toastr.success('Added New Building');
+                        $('#prodtbl').DataTable().ajax.reload();
+                        $('#new').modal('hide');
+                    }
+                });
+            }
         });
         $("#updateform").validate({
             rules: {
                 bldgName: {
                     required: true
+                    , maxlength: 200
                     , remote: {
                         type: "POST"
                         , url: '/checkBldgName'
@@ -315,6 +336,7 @@
                 }
                 , bldgCode: {
                     required: true
+                    , maxlength: 10
                     , remote: {
                         type: "POST"
                         , url: '/checkBldgCode'
@@ -341,9 +363,11 @@
                 bldgName: {
                     required: "Please enter Building Name"
                     , remote: "Building Name is taken"
+                    , maxlength: "Building name can't be more than 200 characters"
                 }
                 , bldgCode: {
                     required: "Please enter Building Code"
+                    , maxlength: "Building code can't be more than 10 characters"
                     , remote: "Building Code is taken"
                 }
                 , noOfFloor: "Please enter number of floors"
@@ -359,6 +383,24 @@
             }
             , successHandler : function() {
                 $('#update .print-error-msg').css('display','none');
+            }
+            ,submitHandler: function(form){
+                var formData = new FormData(form);
+                $.ajax({
+                    type: "POST"
+                    , url: '/UpdateBuilding'
+                    , data: formData
+                    , processData: false
+                    , contentType: false
+                    , context: this
+                    , success: function (data) {
+                        if (data) {
+                            toastr.success('Updated Building Information');
+                            $('#prodtbl').DataTable().ajax.reload();
+                            $('#update').modal('hide');
+                        }
+                    }
+                });
             }
         });
         $('#prodtbl').DataTable({
@@ -388,49 +430,6 @@
                     , "targets": 4
                     }
             ]
-        });
-        $("#newform").submit(function (e) {
-            e.preventDefault();
-            if (!$("#newform").valid()) return;
-            var formData = new FormData($(this)[0]);
-            $.ajax({
-                type: "POST"
-                , url: '/AddBuilding'
-                , data: formData
-                , processData: false
-                , contentType: false
-                , context: this
-                , success: function (data) {
-                    toastr.success('Added New Building');
-                    $('#prodtbl').DataTable().ajax.reload();
-                    $('#new').modal('hide');
-                }
-            });
-        });
-        $("#updateform").unbind('submit').bind('submit', function (e) {
-            e.preventDefault();
-            if (!$("#updateform").valid()) return;
-            var hasChange = false;
-            if ($("#bldgNameUp").val() != obj.bldgName) hasChange = true;
-            if ($("#bldgCodeUp").val() != obj.bldgCode) hasChange = true;
-            if ($("#bldgDesceUp").val() != obj.bldgDesc) hasChange = true;
-            if (!hasChange) return;
-            var formData = new FormData($(this)[0]);
-            $.ajax({
-                type: "POST"
-                , url: '/UpdateBuilding'
-                , data: formData
-                , processData: false
-                , contentType: false
-                , context: this
-                , success: function (data) {
-                    if (data) {
-                        toastr.success('Updated Building Information');
-                        $('#prodtbl').DataTable().ajax.reload();
-                        $('#update').modal('hide');
-                    }
-                }
-            });
         });
         $(".modal").on('hidden.bs.modal', function () {
             $(this).find('form').validate().resetForm();

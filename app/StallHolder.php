@@ -26,4 +26,8 @@ class StallHolder extends Model
     {
         return $this->hasMany('App\ContactNo','stallHID');
     }
+
+    public function Requirement(){
+        return $this->belongsToMany('App\Requirements','tblStallHolder_Req','stallHID','reqID')->withTimestamps();
+    }
 }

@@ -35,6 +35,9 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title">New Stall Type</h4> </div>
                             <div class="modal-body">
+                                <div class="alert alert-danger print-error-msg" style="display:none">
+                                    <ul id="error-new"></ul>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -81,6 +84,9 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title">Update Stall Type</h4> </div>
                             <div class="modal-body">
+                                <div class="alert alert-danger print-error-msg" style="display:none">
+                                    <ul id="error-new"></ul>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -145,6 +151,7 @@
                     rules: {
                         stypeName: {
                             required: true
+                            , maxlength: 200
                             , remote: {
                                 url: '/checkSTypeName'
                                 , type: 'post'
@@ -167,6 +174,7 @@
                         stypeName: {
                             required: "Please enter Stall Type Name"
                             , remote: "Stall Type Name is taken"
+                            , maxlength: "Stall type name cant't be more than 200 characters"
                         }
                         , "size[]": {
                             unique: "Size must be unique"
@@ -175,11 +183,46 @@
                     }
                     , errorClass: "error-class"
                     , validClass: "valid-class"
+                    , highlight: function (element, errorClass, validClass) {
+                        $(element).removeClass(validClass).addClass(errorClass);
+                        $('#new .print-error-msg').css('display', 'block');
+                    }
+                    , unhighlight: function (element, errorClass, validClass) {
+                        var i = 0;
+                        $('#newform .print-error-msg ul').find('li').each(function(){
+                            if($(this).css('display') != 'none')
+                                i++;
+                        });
+                        if(i == 0)
+                            $('#newform .print-error-msg').css('display', 'none');
+                        $(element).removeClass(errorClass).addClass(validClass);
+                    }
+                    , errorElement: "li"
+                    , errorPlacement: function (error) {
+                        error.appendTo('#new .print-error-msg ul');
+                    }
+                    , submitHandler: function(form){
+                        var formData = new FormData(form);
+                        $.ajax({
+                            type: "POST"
+                            , url: '/addStallType'
+                            , data: formData
+                            , processData: false
+                            , contentType: false
+                            , context: this
+                            , success: function (data) {
+                                toastr.success('Added New Stall Type');
+                                $('#table').DataTable().ajax.reload();
+                                $('#new').modal('hide');
+                            }
+                        });
+                    }
                 });
                 $("#updateform").validate({
                     rules: {
                         stypeName: {
                             required: true
+                            , maxlength: 200
                             , remote: {
                                 url: '/checkSTypeName'
                                 , type: 'post'
@@ -205,10 +248,47 @@
                         stypeName: {
                             required: "Please enter Stall Type Name"
                             , remote: "Stall Type Name is taken"
+                            , maxlength: "Stall type name cant't be more than 200 characters"
                         }
                     }
                     , errorClass: "error-class"
                     , validClass: "valid-class"
+                    , highlight: function (element, errorClass, validClass) {
+                        $(element).removeClass(validClass).addClass(errorClass);
+                        $('#update .print-error-msg').css('display', 'block');
+                    }
+                    , unhighlight: function (element, errorClass, validClass) {
+                        var i = 0;
+                        $('#updateform .print-error-msg ul').find('li').each(function(){
+                            if($(this).css('display') != 'none')
+                                i++;
+                        });
+                        if(i == 0)
+                            $('#updateform .print-error-msg').css('display', 'none');
+                        $(element).removeClass(errorClass).addClass(validClass);
+                    }
+                    , errorElement: "li"
+                    , errorPlacement: function (error) {
+                        error.appendTo('#update .print-error-msg ul');
+                    }
+                    , submitHandler: function(form){
+                        var formData = new FormData(form);
+                        $.ajax({
+                            type: "POST"
+                            , url: '/UpdateSType'
+                            , data: formData
+                            , processData: false
+                            , contentType: false
+                            , context: this
+                            , success: function (data) {
+                                if(data == false)
+                                    return;
+                                toastr.success('Updated Stall Type');
+                                $('#table').DataTable().ajax.reload();
+                                $('#update').modal('hide');
+                            }
+                        });
+                    }
                 });
                 $('#table').DataTable({
                     ajax: '/stypeTable'
@@ -240,44 +320,6 @@
                             , "targets": 3
                     }
   ]
-                });
-                $("#newform").submit(function (e) {
-                    e.preventDefault();
-                    if (!$("#newform").valid()) return;
-                    var formData = new FormData($(this)[0]);
-                    $.ajax({
-                        type: "POST"
-                        , url: '/addStallType'
-                        , data: formData
-                        , processData: false
-                        , contentType: false
-                        , context: this
-                        , success: function (data) {
-                            toastr.success('Added New Stall Type');
-                            $('#table').DataTable().ajax.reload();
-                            $('#new').modal('hide');
-                        }
-                    });
-                });
-                $("#updateform").unbind('submit').bind('submit', function (e) {
-                    e.preventDefault();
-                    if (!$("#updateform").valid()) return;
-                    var formData = new FormData($(this)[0]);
-                    $.ajax({
-                        type: "POST"
-                        , url: '/UpdateSType'
-                        , data: formData
-                        , processData: false
-                        , contentType: false
-                        , context: this
-                        , success: function (data) {
-                            if(data == false)
-                                return;
-                            toastr.success('Updated Stall Type');
-                            $('#table').DataTable().ajax.reload();
-                            $('#update').modal('hide');
-                        }
-                    });
                 });
                 $(".modal").on('hidden.bs.modal', function () {
                     $(this).find('form').validate().resetForm();
