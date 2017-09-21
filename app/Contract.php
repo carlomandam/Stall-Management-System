@@ -16,4 +16,8 @@ class Contract extends Model
     public function StallRate(){
         return $this->belongsTo('App\StallRate','stallRateID');
     }
+    public function Billing(){
+        return $this->hasMany('App\Billing','billID');
+    }
+
 }

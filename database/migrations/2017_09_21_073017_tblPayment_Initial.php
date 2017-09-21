@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblBillCharges extends Migration
+class TblPaymentInitial extends Migration
 {
     /**
      * Run the migrations.
@@ -14,25 +14,24 @@ class TblBillCharges extends Migration
     public function up()
     {
         //
-        Schema::create('tblBill_Charges', function (Blueprint $table) {
-            $table->increments('billChargeID');
-            $table->integer('chargeID')->unsigned();
-            $table->integer('billID')->unsigned();
-       
+          Schema::create('tblPayment_Initial', function (Blueprint $table) {
+            $table->integer('paymentID')->unsigned();
+            $table->integer('initDetID')->unsigned();
+            
             $table->timestamps();
             $table->softDeletes();
-            
-            $table->foreign('chargeID')
-                 ->references('chargeID')
-                 ->on('tblCharges')
-                 ->onUpdate('cascade')
-                 ->onDelete('restrict');
 
-            $table->foreign('billID')
-                 ->references('billID')
-                 ->on('tblBilling')
+             $table->foreign('paymentID')
+                 ->references('paymentID')
+                 ->on('tblPayment')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
+             $table->foreign('initDetID')
+                 ->references('initDetID')
+                 ->on('tblInitial_Details')
+                 ->onUpdate('cascade')
+                 ->onDelete('restrict');
+           
         });
     }
 
@@ -44,6 +43,6 @@ class TblBillCharges extends Migration
     public function down()
     {
         //
-         Schema::dropIfExists('tblBill_Charges');
+         Schema::dropIfExists('tblPayment_Initial');
     }
 }

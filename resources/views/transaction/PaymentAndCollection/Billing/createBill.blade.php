@@ -52,13 +52,14 @@ body{
                     <label>Bill Date From:</label>
                 </div>
                 <div class="col-md-3">
-                  <input type="text" name="" class="form-control" disabled>
+                  <input type="text" name="" class="form-control" disabled value="{{$newBill}}">
                 </div>
+
                 <div class="col-md-2">
                     <label>Bill Date To:</label>
-                </div>
+            </div>
                 <div class = "col-md-3">
-                    <input type="text" class="form-control" id='datepicker' name='datepicker' />
+                    <input type="text" class="form-control" id='datepicker' name='datepicker' readonly="true" style="cursor:pointer; background-color: #FFFFFF;"/>
                 </div>
             </div>
         </div>

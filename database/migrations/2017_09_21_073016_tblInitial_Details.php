@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblBillReading extends Migration
+class TblInitialDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -14,23 +14,22 @@ class TblBillReading extends Migration
     public function up()
     {
         //
-         Schema::create('tblBill_Reading', function (Blueprint $table) {
-            $table->increments('billReadingID');
-            $table->integer('readingID')->unsigned();
-            $table->integer('billID')->unsigned();
-       
+         Schema::create('tblInitial_Details', function (Blueprint $table) {
+            $table->increments('initDetID');
+            $table->integer('initID')->unsigned();
+            $table->integer('contractID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
             
-            $table->foreign('readingID')
-                 ->references('readingID')
-                 ->on('tblMonthlyReading')
+            $table->foreign('initID')
+                 ->references('initID')
+                 ->on('tblInitialFees')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
 
-            $table->foreign('billID')
-                 ->references('billID')
-                 ->on('tblBilling')
+            $table->foreign('contractID')
+                 ->references('contractID')
+                 ->on('tblContractInfo')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
         });
@@ -44,6 +43,6 @@ class TblBillReading extends Migration
     public function down()
     {
         //
-           Schema::dropIfExists('tblBill_Reading');
+        Schema::dropIfExists('tblInitial_Details');
     }
 }

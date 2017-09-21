@@ -4,9 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-
-class TblPaymentInfo extends Migration
-
+class TblInitialFees extends Migration
 {
     /**
      * Run the migrations.
@@ -15,16 +13,17 @@ class TblPaymentInfo extends Migration
      */
     public function up()
     {
-
-       Schema::create('tblPayment_info', function (Blueprint $table) {
-
-            $table->increments('paymentID');
-            $table->double('paymentAmt',10,2);
-            $table->date('paymentDate');
+        //
+        Schema::create('tblInitialFees', function (Blueprint $table) {
+            $table->increments('initID');
+            $table->string('initDesc');
+            $table->double('initAmt',10,2);
+            $table->datetime('initEffectiveDate');
             $table->timestamps();
             $table->softDeletes();
-
-         });
+            
+           
+        });
     }
 
     /**
@@ -34,7 +33,7 @@ class TblPaymentInfo extends Migration
      */
     public function down()
     {
-       
-      Schema::dropIfExists('tblPayment_info');
+        //
+        Schema::dropIfExists('tblInitialFees');
     }
 }

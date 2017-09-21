@@ -14,23 +14,41 @@ class Billing extends Model
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'billDateFrom',
-        'billDateTo',
-        'cotractID'
+        'billStatus',
+        'contractID'
     ];
     
-    public function Payment()
+    public function BillPayment()
     {
-    return $this->hasMany('App\Payment','billID');
+    return $this->belongsToMany('App\BillPayment','tblBill_Initial','billID','billPaymentID');
     }
 
-    public function StallRental()
+    public function Contract()
     {
-    return $this->belongsTo('App\StallRental','stallRentalID');
+    return $this->belongsTo('App\Contract','contractID');
     }
+<<<<<<< Updated upstream
 
     public function Initial()
     {
     return $this->hasMany('App\initBill','billID');
+=======
+    
+    public function Charges()
+    {
+        return $this->belongsToMany('App\Charges','tblBill_Charges','billID','chargeID');
+    }
+    public function MonthlyReading()
+    {
+        return $this->belongsToMany('App\MonthlyReading','tblBill_Reading','billID','readingID');
+    }
+     public function InitialFee()
+    {
+        return $this->belongsToMany('App\InitialFee','tblBill_Initial','billID','billInitialID');
+    }
+    public function BillDates()
+    {
+        return $this->hasMany('App\BillDates','billID');
+>>>>>>> Stashed changes
     }
 }

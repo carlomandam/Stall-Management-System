@@ -16,10 +16,11 @@ class TblmonthlyReading extends Migration
         Schema::create('tblMonthlyReading', function (Blueprint $table) {
             $table->increments('readingID');
             $table->integer('stallUtilityID')->unsigned()->index();
-            $table->integer('readingConsumption');
+            $table->integer('previousReading');
+            $table->integer('currentReading');
             $table->datetime('readingFrom');
             $table->datetime('readingTo');
-            $table->double('readingAmt',10,2);
+          
             $table->timestamps();
             $table->softDeletes();
 

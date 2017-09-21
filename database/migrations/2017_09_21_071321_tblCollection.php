@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblBilling extends Migration
+class TblCollection extends Migration
 {
     /**
      * Run the migrations.
@@ -14,20 +14,18 @@ class TblBilling extends Migration
     public function up()
     {
         //
-        Schema::create('tblBilling', function (Blueprint $table) {
-            $table->increments('billID');
+         Schema::create('tblCollection', function (Blueprint $table) {
+            $table->increments('collectionID');
             $table->integer('contractID')->unsigned();
-            $table->date('billDateFrom');
-            $table->date('billDateTo');
-            $table->date('billDueDate');
+            $table->date('collectionDate');
             $table->timestamps();
             $table->softDeletes();
             
-            $table->foreign('contractID')
-                 ->references('contractID')
-                 ->on('tblContractInfo')
-                 ->onUpdate('cascade')
-                 ->onDelete('restrict');
+            $table->foreign('contractID')->references('contractID')
+                  ->on('tblContractInfo')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+           
         });
     }
 
@@ -39,6 +37,6 @@ class TblBilling extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('tblBilling');
+        Schema::dropIfExists('tblCollection');
     }
 }
