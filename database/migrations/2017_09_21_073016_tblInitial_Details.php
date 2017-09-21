@@ -17,6 +17,7 @@ class TblInitialDetails extends Migration
          Schema::create('tblInitial_Details', function (Blueprint $table) {
             $table->increments('initDetID');
             $table->integer('initID')->unsigned();
+            $table->integer('paymentID')->unsigned();
             $table->integer('contractID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
@@ -30,6 +31,11 @@ class TblInitialDetails extends Migration
             $table->foreign('contractID')
                  ->references('contractID')
                  ->on('tblContractInfo')
+                 ->onUpdate('cascade')
+                 ->onDelete('restrict');
+            $table->foreign('paymentID')
+                 ->references('paymentID')
+                 ->on('tblPayment')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
         });

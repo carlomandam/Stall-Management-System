@@ -18,6 +18,7 @@ class TblChargeDetails extends Migration
             $table->increments('chargeDetID');
             $table->integer('chargeID')->unsigned();
             $table->integer('contractID')->unsigned();
+            $table->integer('paymentID')->unsigned();
           
             $table->timestamps();
             $table->softDeletes();
@@ -31,6 +32,12 @@ class TblChargeDetails extends Migration
             $table->foreign('chargeID')
                  ->references('chargeID')
                  ->on('tblCharges')
+                 ->onUpdate('cascade')
+                 ->onDelete('restrict');
+
+            $table->foreign('paymentID')
+                 ->references('paymentID')
+                 ->on('tblPayment')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
         });

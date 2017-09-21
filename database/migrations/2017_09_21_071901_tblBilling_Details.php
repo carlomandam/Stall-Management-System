@@ -18,6 +18,7 @@ class TblBillingDetails extends Migration
             $table->increments('billDetID');
             $table->integer('billID')->unsigned();
             $table->integer('readingID')->unsigned();
+            $table->integer('paymentID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
             
@@ -30,6 +31,12 @@ class TblBillingDetails extends Migration
             $table->foreign('readingID')
                  ->references('readingID')
                  ->on('tblMonthlyReading')
+                 ->onUpdate('cascade')
+                 ->onDelete('restrict');
+
+            $table->foreign('paymentID')
+                 ->references('paymentID')
+                 ->on('tblPayment')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
         });

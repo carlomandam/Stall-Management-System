@@ -219,10 +219,14 @@
 <script type="text/javascript">
     var obj;
     $(document).ready(function () {
-        /*jQuery.validator.addMethod("capacity", function (value, element) {
-            if (parseInt($(element).val()) > parseInt($(element).parent().next().find('input[type=text]').val())) return false;
-            else return true;
-        }, "Number of stall can't be more than the capacity");*/
+        $.validator.addMethod(
+                "regex",
+                function(value, element, regexp) {
+                    var re = new RegExp(regexp);
+                    return this.optional(element) || re.test(value);
+                },
+                "Please check your input."
+        );
         $("#newform").validate({
             rules: {
                 bldgName: {
@@ -244,6 +248,7 @@
                 , bldgCode: {
                     required: true
                     , maxlength: 10
+                    , regex: /^[A-Za-z0-9]+$/
                     , remote: {
                         type: "POST"
                         , url: '/checkBldgCode'
@@ -257,10 +262,14 @@
                         }
                     }
                 }
-                , noOfFloor: "required"
+                , noOfFloor:{
+                    number: true
+                    , required: true
+                    , max: 100
+                }
                 , "noOfStall[]": {
                     number: true
-                    //, capacity: true
+                    , max: 100
                 }
             }
             , messages: {
@@ -273,8 +282,12 @@
                     required: "Please enter Building Code"
                     , maxlength: "Building code can't be more than 10 characters"
                     , remote: "Building Code is taken"
+                    , regex: "Building code can't contain special characters"
                 }
                 , noOfFloor: "Please enter number of floors"
+                , "noOfStall[]":{
+                    max: "Maximum of 100 stalls"
+                }
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
@@ -339,6 +352,7 @@
                     , maxlength: 10
                     , remote: {
                         type: "POST"
+                        , regex: /^[A-Za-z0-9]+$/
                         , url: '/checkBldgCode'
                         , data: {
                             bldgName: function () {
