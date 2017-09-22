@@ -232,7 +232,7 @@ if(name_collect>0 && name_collect < name_reminder && name_reminder < name_warnin
  }); 
 }
 else{
-  toastr.error('There is Something wrong in the status');
+  toastr.error('INPUT NOT VALID');
 }
 
 

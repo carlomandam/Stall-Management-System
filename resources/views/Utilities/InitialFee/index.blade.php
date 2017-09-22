@@ -48,25 +48,35 @@
                   <thead>
                     <tr>
                       <th>Description</th>
-                      <th>Amount</th> 
+                      <th>Amount</th>
+                      <th>Effectivity Date</th> 
                       <th>Frequency</th>
+
                     </tr>
                   </thead>
                   <tbody>
                  
                     <tr>
+                   
                       <td>Security Deposit</td>
                       <td>
-                        <input type="text" name="sec_amount" class="form-control" id="secAmount"   disabled>
+                        <input type="text" name="secAmount" class="form-control money" id="sec_amount"    disabled>
+                      </td>
+                      <td>
+                         <input type="text" name="secDate" class="form-control datepicker"  id="sec_date"  disabled>
                       </td>
                       <td>
                         One Time
                       </td>
+                      
                     </tr>
                        <tr>
                       <td>Maintenance Fee</td>
                       <td>
-                        <input type="text" name="main_amount" class="form-control" id="mainAmount" disabled>
+                        <input type="text" name="mainAmount" class="form-control money" id="main_amount" disabled>
+                      </td>
+                       <td>
+                         <input type="text" name="mainDate" class="form-control datepicker" id="main_date" disabled>
                       </td>
                    
                       <td>
@@ -85,6 +95,49 @@
           <button class = "btn btn-flat btn-info" id="edit">Edit</button>
           <button id="save"  class = "btn btn-flat btn-primary" data-id='util_initial_fee' disabled>Save Changes</button>
         </div>
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Description</th>
+                      <th>Recently Amount</th>
+                      <th>Date Changed</th>
+                      
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    @foreach($oldSecurity as $security)
+                    <td>
+                      Security  Deposit
+                    </td>
+                    <td>
+                     
+                      <input type="text" name="recSecAmount" id="rec_secAmount" class="form-control money" value="{{$security->initAmt}}" readonly>
+                      
+                    </td>
+                    <td>
+                     
+                      <input type="text" name="recSecDate" id="rec_secDate" class="form-control"  disabled>
+                      
+                    </td>
+                     @endforeach
+                  </tr>
+                 
+                  <tr>
+                    @foreach($oldMain as $main)
+                    <td>
+                      Maintenance Fee
+                    </td>
+                    <td>
+                      <input type="text" name="recMainAmount" id="rec_mainAmount" class="form-control money" readonly value="{{$main->initAmt}}">
+                    </td>
+                    <td>
+                      <input type="text" name="recMainDate" id="rec_mainDate" class="form-control" disabled="">
+                    </td>
+                    @endforeach
+                  </tr>
+              </tbody>
+          </table>
         </div>
         </div>
         </div>
@@ -99,91 +152,169 @@
 <!-- <script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.numeric.extensions.js') }}"></script>
 <script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.extensions.js') }}"></script> -->
 <script type="text/javascript">
-    $("#secAmount").inputmask('currency', {
-    rightAlign: true,
-    prefix: 'Php '
-  });
-  $("#mainAmount").inputmask('currency', {
-    rightAlign: true,
-    prefix: 'Php '
-  });
    $('.datepicker').datepicker({
       autoclose: true,
-      format: 'yyyy/mm/dd'
+      format: 'yyyy-mm-dd',
+      startDate: new Date(),
+      todayHighlight:true
+
     });
-
+  $(".money").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php '
+  });
   $(document).on('click', '#edit', function(){
-    document.getElementById('secAmount').disabled= false;
-    document.getElementById('mainAmount').disabled= false;
+    document.getElementById('sec_amount').disabled= false;
+    document.getElementById('main_amount').disabled= false;
     document.getElementById('save').disabled =false;
-  })
-  $(document).on('change', '#secFreq', function(){
-    freq = $('#secFreq').val();
-    if(freq==0){
-       document.getElementById('secAmount').disabled= true;
-      document.getElementById('secDate').disabled= true;
-    }
-    else{
-      document.getElementById('secAmount').disabled= false;
-      document.getElementById('secDate').disabled= false;
-    }
-  })
 
-    $(document).on('change', '#mainFreq', function(){
-    freq = $('#mainFreq').val();
-    if(freq==0){
-       document.getElementById('mainAmount').disabled= true;
-      document.getElementById('mainDate').disabled= true;
-    }
-    else{
-      document.getElementById('mainAmount').disabled= false;
-      document.getElementById('mainDate').disabled= false;
-    }
   })
+var secIsDisable='true';
+var mainIsDisable ='true';
+var newSecAmount;
+var newMainAmount;
 
-  $(document).on('click','#save', function(){
-    id= $(this).attr('data-id');
-    console.log(id);
-    var _token = $("input[name='_token']").val();
-    var tempSec_amount = $("input[name='sec_amount']").val();
-    var tempMain_amount = $("input[name='main_amount']").val();
-    secValid = tempSec_amount.replace("Php ", "");
-    sec_amount = secValid.replace(",", "");
+  $("#sec_amount").bind("change paste keydown keyup click", function() {
+    tempAmount = ($(this).val()).replace("Php ", "",);
+    temp2 = tempAmount.replace(",", "",);
+    newAmount = Number(temp2);
+    newSecAmount = newAmount;
+    var oldAmount;
 
-    mainValid = tempMain_amount.replace("Php ", "");
-    main_amount = mainValid.replace(",", "");
-    
-    
-     $.ajax({
-      type: "PUT",
-      url: "/InitialFee/"+id,
-      data: { 
-        '_token' : $('input[name=_token]').val(),
-        'sec_amount': sec_amount,
-        'main_amount': main_amount,
-       
-      },
-      success: function(data) {
-        if($.isEmptyObject(data.error)){
-          toastr.success('Initial Fee Updated');
-                location.reload();
-                
+    <?php foreach ($newSecurity as $security): ?>
+      <?php if ($newSecurity->first()== $security): ?>
+        oldAmount = {{$security->initAmt}};
+        oldSecAmount =oldAmount;
+      <?php endif ?>
+    <?php endforeach ?>
+    if(oldAmount!= newAmount){
+    document.getElementById('sec_date').disabled = false;
+    secIsDisable = false;
+   }
+   else if(oldAmount = newAmount) {
+    document.getElementById('sec_date').disabled = true;
+    secIsDisable = true;
+   }
+});
+
+$("#main_amount").bind("change paste keydown keyup click", function() {
+    tempAmount = ($(this).val()).replace("Php ", "",);
+    temp2 = tempAmount.replace(",", "",);
+    newAmount = Number(temp2);
+    newMainAmount = newAmount;
+    var oldAmount;
+    <?php foreach ($newMain as $main): ?>
+       <?php if ($newMain->first()== $main): ?>
+         oldAmount = {{$main->initAmt}};
+         oldMainAmount = oldAmount;
+      <?php endif ?>
+    <?php endforeach ?>
+     if(oldAmount!= newAmount){
+    document.getElementById('main_date').disabled = false;
+    mainIsDisable = false;
+
+   }
+   else {
+    document.getElementById('main_date').disabled = true;
+    mainIsDisable = true;
+   } 
+});  
+
+<?php foreach ($newSecurity as $security): ?>
+  <?php if ($newSecurity->first()== $security): ?>
+    $('#sec_amount').val('{{$security->initAmt}}');
+    $('#sec_date').val('{{ Carbon\Carbon::parse($security->initEffectiveDate)->format('m-d-Y ') }}');
+    $('#rec_secDate').val('{{ Carbon\Carbon::parse($security->created_at)->format('m-d-Y ') }}');
+  <?php endif ?>
+<?php endforeach ?>
+
+<?php foreach ($newMain as $main): ?>
+  <?php if ($newMain->first()== $main): ?>
+    $('#main_amount').val('{{$main->initAmt}}');
+    $('#main_date').val('{{ Carbon\Carbon::parse($main->initEffectiveDate)->format('m-d-Y ') }}');
+    $('#rec_mainDate').val('{{ Carbon\Carbon::parse($main->created_at)->format('m-d-Y ') }}');
+  <?php endif ?>
+<?php endforeach ?>
+
+$(document).on('click','#save', function(e){
+    e.preventDefault();
+    var error=[];
+  
+    if( (secIsDisable == false) || (mainIsDisable == false)){
+
+        if(secIsDisable == false){
+            var secDate = $("input[name='secDate']").val();
+            var secDesc = 'Security Deposit';
+             $.ajax({
+              type: "POST",
+              url: "/InitialFee",
+              data: { 
+                '_token' : $('input[name=_token]').val(),
+                'Amount': newSecAmount,
+                'Date': secDate,
+                'Desc': secDesc
+
+              },
+              success: function(data) {
+                if($.isEmptyObject(data.error)){
+                toastr.success('Security Deposit Updated');
+               
+        
                 }
                 else{
-                  toastr.error(data.error);
+                  alert(data.error);
+                  
+                  
                 }
+              }
+
+            });
+            
         }
 
+        if(mainIsDisable == false){
+          var mainDate = $("input[name='mainDate']").val();
+          var mainDesc = 'Maintenance Fee';
+          var mainAmount = Math.abs(newMainAmount);
+            
+             $.ajax({
+              type: "POST",
+              url: "/InitialFee",
+              data: { 
+                '_token' : $('input[name=_token]').val(),
+                'Amount': newMainAmount,
+                'Date': mainDate,
+                'Desc': mainDesc
 
-     }); 
+              },
+              success: function(data) {
+                if($.isEmptyObject(data.error)){
+                  toastr.success('Maintenance Fee Updated');
+                  
+                  
 
-  })
+                }
+                else{
+                  alert(data.error);
+                 
+                }
+              }
 
- @foreach($utils as $util)          
-  $('#secAmount').val('{{$util->secAmount}}');
-  $('#mainAmount').val('{{$util->mainAmount}}');
+            });
+
+        }
+       
+            location.reload();
+    }
+
  
-@endforeach
+
+
+})
+
+
+
+
 
 
 </script>

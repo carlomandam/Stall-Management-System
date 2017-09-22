@@ -126,20 +126,14 @@
                                 <a href="/StallHolderList"> <i class="fa fa-circle-o"></i> <span>Manage Contracts</span> </a>
                             </li>
                             <li class="treeview">
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
                                  <a href="#"> <i class="fa fa-circle-o"></i> <span>Payment and Collections</span> <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> </a>
                         <ul class="treeview-menu">
                             <li id="">
                                 <a href="{{url('/Billing')}}"> <i class="fa fa-circle-o"></i><span>Billing</span></a>
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
                             </li>
                             <li id="">
                                 <a href="{{url('/Payment')}}"> <i class="fa fa-circle-o"></i><span>Payment</span></a>

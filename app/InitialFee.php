@@ -9,14 +9,14 @@ class InitialFee extends Model
     //
      use SoftDeletes;
     
-    protected $table = "tblBill_Initial";
-    protected $primaryKey = "billInitialID";
+    protected $table = "tblInitialFees";
+    protected $primaryKey = "initID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'billID',
-        'initialAmt',
-        'initialType'
+        'initAmt',
+        'initDesc',
+        'initEffectiveDate',
     ];
     
     public function Billing(){

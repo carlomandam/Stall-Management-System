@@ -19,7 +19,7 @@ Route::get('/', function () {
     return view('dashboard.dashboard');
 });
 
-Auth::routes();
+// Auth::routes();
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/UpdateRegistration/{rentID}','ApplicationController@updateRegistration');
@@ -208,8 +208,11 @@ Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
 Route::get('/PeakDays', 'UtilitiesController@peakDaysIndex');
 Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');\
 Route::get('/InitialFee', 'UtilitiesController@initialFeeIndex');
-Route::put('/InitialFee/{id}', 'UtilitiesController@initialFeeUpdate');
+Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
 Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 
-Route::post('/updateApplication','ApplicationController@updateApplication');
+// Route::post('/updateApplication','ApplicationController@updateApplication');
+// Auth::routes();
+
+// Route::get('/home', 'HomeController@index')->name('home');

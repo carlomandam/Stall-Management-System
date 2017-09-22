@@ -27,12 +27,12 @@ class Billing extends Model
     {
     return $this->belongsTo('App\Contract','contractID');
     }
-<<<<<<< Updated upstream
+
 
     public function Initial()
     {
     return $this->hasMany('App\initBill','billID');
-=======
+
     
     public function Charges()
     {
@@ -49,6 +49,6 @@ class Billing extends Model
     public function BillDates()
     {
         return $this->hasMany('App\BillDates','billID');
->>>>>>> Stashed changes
+
     }
 }
