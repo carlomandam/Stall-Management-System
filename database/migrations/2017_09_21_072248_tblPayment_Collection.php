@@ -15,9 +15,11 @@ class TblPaymentCollection extends Migration
     {
         //
         Schema::create('tblPayment_Collection', function (Blueprint $table) {
+            $table->increments('paymentCollectID');
             $table->integer('paymentID')->unsigned();
-            $table->integer('collectionID')->unsigned();
-            $table->tinyInteger('collectionStatus');
+            $table->integer('collectionDetID')->unsigned();
+            $table->double('partialAmt',10,2);
+            $table->tinyInteger('isVoidOrRefund');
             //1- full 
             //2- partial
             //3- advance
@@ -29,9 +31,9 @@ class TblPaymentCollection extends Migration
                  ->on('tblPayment')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
-             $table->foreign('collectionID')
-                 ->references('collectionID')
-                 ->on('tblCollection')
+             $table->foreign('collectionDetID')
+                 ->references('collectionDetID')
+                 ->on('tblCollection_Details')
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
            

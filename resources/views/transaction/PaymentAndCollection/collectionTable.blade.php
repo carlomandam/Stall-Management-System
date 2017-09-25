@@ -1,13 +1,13 @@
 @extends('layout.app')
 
 @section('title')
-{{'Payment'}}
+{{'Collections'}}
 @stop
 @section('content-header')
 
 <ol class="breadcrumb">
   <li><i class="fa fa-dashboard"></i>Payment and Collection</li>
-  <li class="active">Payment</li>
+  <li class="active">Collections</li>
 </ol>
 @stop
 
@@ -29,24 +29,25 @@
                                                 <thead>
                                                   <tr>
                                                     <th>Stall Code</th>
-                                                    <th>Stall Holder</th>
-                                                    <th>Collection Status</th>
-                                                    <th>Balance</th>
+                                                    <th>Tenant Name</th>
                                                     <th>Action/s</th>
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                 @foreach($stalls as $stall)
-                                                  <tr>
-                                                     <td>{{$stall->stallID}}</td>
-                                                     <td>{{$stall->StallHolder->stallHFName}}&nbsp{{$stall->StallHolder->stallHMName}}&nbsp{{$stall->StallHolder->stallHLName}}</td>
-
-                                                     <td>
-                                                        
-                                                     </td>
-                                                     <td></td>
-                                                     <td><a href="/ViewPayment/{{$stall->contract->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a></td>
-                                                  </tr>
+                                                @foreach($contract as $contract)
+                                                    <tr>
+                                                      <td>
+                                                      {{$contract->StallRental->stallID}}
+                                                      </td>
+                                                      <td>
+                                                      {{$contract->StallRental->StallHolder->stallHFName}}
+                                                      {{$contract->StallRental->StallHolder->stallHMName}}
+                                                      {{$contract->StallRental->StallHolder->stallHLName}}
+                                                      </td>
+                                                      <td>
+                                                      <a href="/ViewCollections/{{$contract->contractID}}"><button class="btn btn-success">View</button></a>
+                                                      </td>
+                                                    </tr>
                                                 @endforeach
                                                 </tbody>
                                             

@@ -1,13 +1,13 @@
 @extends('layout.app')
 
 @section('title')
-{{'Payment'}}
+{{'Collections'}}
 @stop
 @section('content-header')
 
 <ol class="breadcrumb">
   <li><i class="fa fa-dashboard"></i>Payment and Collection</li>
-  <li class="active">Payment</li>
+  <li class="active">Collections</li>
 </ol>
 @stop
 
@@ -24,30 +24,22 @@
                               <div class="box-body">
                                
                                     <div class="col-xs-12">
+                                     <div class="defaultNewButton">
+                                          <a href="{{url('/CreateCollection/'.$storeID)}}"> <button class="btn btn-primary btn-flat"><span class='fa fa-plus'></span>&nbspCreate Collections</button></a>
+               
+                                     </div>
                                           <div class="table-responsive"> 
                                            <table id="stallList" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
                                                 <thead>
                                                   <tr>
-                                                    <th>Stall Code</th>
-                                                    <th>Stall Holder</th>
-                                                    <th>Collection Status</th>
-                                                    <th>Balance</th>
+                                                    <th>No</th>
+                                                    <th>Date</th>
+                                                    <th>Created At</th>
                                                     <th>Action/s</th>
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                 @foreach($stalls as $stall)
-                                                  <tr>
-                                                     <td>{{$stall->stallID}}</td>
-                                                     <td>{{$stall->StallHolder->stallHFName}}&nbsp{{$stall->StallHolder->stallHMName}}&nbsp{{$stall->StallHolder->stallHLName}}</td>
-
-                                                     <td>
-                                                        
-                                                     </td>
-                                                     <td></td>
-                                                     <td><a href="/ViewPayment/{{$stall->contract->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a></td>
-                                                  </tr>
-                                                @endforeach
+                                                
                                                 </tbody>
                                             
                                             </table>
