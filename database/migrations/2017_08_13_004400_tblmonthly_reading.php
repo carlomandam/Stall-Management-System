@@ -15,11 +15,13 @@ class TblmonthlyReading extends Migration
     {
         Schema::create('tblMonthlyReading', function (Blueprint $table) {
             $table->increments('readingID');
-            $table->integer('previousReading');
-            $table->integer('currentReading');
+            $table->integer('prevReading');
+            $table->integer('presReading');
             $table->datetime('readingFrom');
             $table->datetime('readingTo');
-            $table->double('totalAmount',8,2);
+            $table->double('totalBillAmount',8,2);
+            $table->double('multiplier',8,2);
+            $table->integer('utilType');
           
             $table->timestamps();
             $table->softDeletes();

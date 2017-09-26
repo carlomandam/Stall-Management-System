@@ -43,7 +43,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker" name="">
+                                         <input type="text" class="form-control datepicker" name="dateFrom" id="date_from">
                                       </div>
 
                                       <div class="col-md-1">
@@ -51,7 +51,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker" name="">
+                                         <input type="text" class="form-control datepicker" name="dateTo" id="date_to">
                                       </div>
                                   </div> 
 
@@ -66,14 +66,14 @@
                                           <label>Previos Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control" name="">
+                                        <input type="text" class="form-control reading" name="prevRead" id="prev_read">
                                       </div>
 
                                        <div class="col-md-2">
                                           <label>Present Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control" name="">
+                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" >
                                       </div>
                                   </div>
 
@@ -82,14 +82,14 @@
                                           <label>Total Bill Amount:</label>
                                       </div>
                                       <div class="col-md-2">
-                                          <input type="text" class="form-control" name="">
+                                          <input type="text" class="form-control money" name="totalBill" id="total_bill" >
                                       </div>
 
                                        <div class="col-md-2">
                                           <label>Kwh/Cubic Meter:</label>
                                       </div>
                                       <div class="col-md-2">
-                                          <input type="text" class="form-control" name="" disabled>
+                                          <input type="text" class="form-control money" name="multiplierAmt" id="multiplier_amt" disabled>
                                       </div>
                                   </div>
 
@@ -141,9 +141,15 @@
  $('.datepicker').datepicker({
       autoclose: true,
       format: 'yyyy-mm-dd',
-      startDate: new Date(),
-      todayHighlight:true
+      endDate: 'today'
+      // todayHighlight:true
 
     });
+ // $('.reading').inputmask({ mask: "9-9-9-9-9-9-9"});
+ $(".reading").inputmask("9999999", { numericInput: true, placeholder: "0"});
+  $(".money").inputmask('currency', {
+  rightAlign: true,
+  prefix: 'Php ',
+});
 </script>
 @stop

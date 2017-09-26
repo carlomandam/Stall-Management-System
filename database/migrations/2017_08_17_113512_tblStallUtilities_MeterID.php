@@ -17,10 +17,7 @@ class TblStallUtilitiesMeterID extends Migration
             $table->increments('stallMeterID');
             $table->integer('contractID')->unsigned()->index();
             $table->integer('readingID')->unsigned()->index();
-            $table->integer('meterFrom');
-            $table->integer('meterTo');
-            $table->double('totalAmount',8,2);
-
+            $table->double('utilityAmt',10,2);
             $table->timestamps();
             $table->softDeletes();
 

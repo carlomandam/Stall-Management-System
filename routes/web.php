@@ -193,6 +193,7 @@ Route::get('/collectionTable', 'CollectionController@getCollections');
 Route::get('/ViewPayment/{id}','PaymentController@makePayment');
 Route::get('/Billing','BillingController@index');
 Route::resource('/Utilities','UtilityController');
+Route::get('/Utilities/previous/{id}', 'UtilityController@previous');
 Route::get('/getBills','PaymentController@getBills');
 Route::get('/createBill/{id}','BillingController@createBill');
 Route::get('/ViewBill/{id}','BillingController@viewBill');

@@ -30,6 +30,9 @@ class UtilityController extends Controller
     public function create()
     {
         //
+      
+                 // return($previos);       
+
         return view('transaction/PaymentAndCollection/Utilities.create');
        
        
@@ -56,13 +59,15 @@ class UtilityController extends Controller
     public function show($id)
     {
         //
-         $stalls = DB::table('tblContractInfo')
-                        ->join('tblStallRental_Info','tblContractInfo.stallRentalID','=','tblStallRental_Info.stallRentalID')
-                        ->join('tblStall','tblStallRental_Info.stallID','=','tblStall.stallID')
-                        ->join('tblStall_Utilities','tblStall.stallID', '=','tblStall_Utilities.stallID')
-                        ->select('tblContractInfo.*','tblStall.stallID as stallID','tblStall_Utilities.utilityType as utilityType')
-                        ->where('utilityType','=', $id)
+         $stalls = DB::table('tblContractInfo as contract')
+                        ->join('tblStallRental_Info as rental','contract.stallRentalID','rental.stallRentalID')
+                        ->join('tblStall as stall','rental.stallID','stall.stallID')
+                        ->join('tblStall_Utilities as utility','stall.stallID','utility.stallID')
+                        ->leftjoin('tblSubMeter as meter','utility.stallUtilityID','meter.stallUtilityID')
+                        ->select('contract.*','stall.stallID as stallID','utility.utilityType as utilityType','meter.*')
+                        ->where('utility.utilityType','=', $id)
                         ->get();
+            
         return response()->json(['stalls'=>$stalls]);
     }
 
@@ -98,5 +103,14 @@ class UtilityController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function previous($id){
+         $previous = DB::table('tblMonthlyReading')
+                        ->orderBy('readingID','desc')
+                        ->where('utilType','=', $id)
+                        ->first();
+                        // ->get(); 
+         return response()->json(['previous'=>$previous]);                           
     }
 }
