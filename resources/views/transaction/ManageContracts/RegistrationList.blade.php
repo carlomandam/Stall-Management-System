@@ -145,7 +145,9 @@
 @section('script')
 <script>
 	$(document).ready(function(){
-		$.get('/getRegistrationList', function(data){
+		$.get('/getRegistrationList', 
+    
+    function(data){
 				var table = $('#tblreg').DataTable().clear();
 				console.log(data);
 				$.each(data, function(i,data){

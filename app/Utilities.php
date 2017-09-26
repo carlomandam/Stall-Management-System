@@ -14,4 +14,6 @@ class Utilities extends Model
     protected $fillable = [
     	'utilitiesDesc'
     ];
+
+   
 }

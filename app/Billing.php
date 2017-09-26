@@ -28,7 +28,6 @@ class Billing extends Model
     return $this->belongsTo('App\Contract','contractID');
     }
 
-
     public function Initial()
     {
     return $this->hasMany('App\initBill','billID');

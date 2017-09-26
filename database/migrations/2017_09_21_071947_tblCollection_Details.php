@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TblCollection extends Migration
+class TblCollectionDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -14,14 +14,15 @@ class TblCollection extends Migration
     public function up()
     {
         //
-         Schema::create('tblCollection', function (Blueprint $table) {
-            $table->increments('collectionID');
-            $table->integer('contractID')->unsigned();
+         Schema::create('tblCollection_Details', function (Blueprint $table) {
+            $table->increments('collectionDetID');
+            $table->integer('collectionID')->unsigned();
+            $table->date('collectDate');
             $table->timestamps();
             $table->softDeletes();
             
-            $table->foreign('contractID')->references('contractID')
-                  ->on('tblContractInfo')
+            $table->foreign('collectionID')->references('collectionID')
+                  ->on('tblCollection')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
            
@@ -36,6 +37,6 @@ class TblCollection extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('tblCollection');
+         Schema::dropIfExists('tblCollection_Details');
     }
 }

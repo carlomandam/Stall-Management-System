@@ -9,6 +9,8 @@ use App\Billing;
 use App\Payment;
 use App\StallHolder;
 use App\StallRate;
+use App\Utilities;
+use App\Collection;
 use DateTime;
 use PDF;
 use PDFF;
@@ -19,8 +21,29 @@ class PaymentController extends Controller
 {
     	public function index()
     	{
-    		return view('transaction/PaymentAndCollection/finalPayment');
+             $stalls = StallRental::with('Contract','Stall','StallHolder')->get();
+
+             $collectionStat = Utilities::find("util_collection_status");
+           
+    		 return view('transaction/PaymentAndCollection/finalPayment',compact('collectionStat','stalls'));
+            
+            
     	}
+
+        public function makePayment($id)
+        {
+            // return $id;
+             $contract = Contract::find($id);
+             $lastCollection = Collection::where('contractID',$id)
+             ->orderBy('collectionDate','desc')
+             ->pluck('collectionDate')
+             ->first();
+             
+             $lastCollection = Carbon::parse($lastCollection)->addDays(1)->format('Y-m-d');
+             $nextCollection = Carbon::parse($lastCollection)->addDays(1)->format('Y-m-d');
+            return view('transaction/PaymentAndCollection/viewPayment',compact('contract','lastCollection','nextCollection'));
+    
+        }
 
     	public function createBill()
     	{
