@@ -55,7 +55,7 @@ class BuildingController extends Controller
         else if(strlen(trim($_POST['name']," "))<5)
             return "short";
         $startTime = time();
-        $string = trim($_POST['name'];
+        $string = trim($_POST['name']);
         $codes = array('mbldig','mnbig','mildg');
         $newcode = $codes[1];
         

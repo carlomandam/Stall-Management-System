@@ -19,7 +19,7 @@ class InitialFee extends Model
         'initEffectiveDate',
     ];
     
-    public function Billing(){
-        return $this->belongsToMany('App\Billing','tblBill_Initial','billInitialID','billID');
+    public function InitFeeDetail(){
+        return $this->hasMany('App\InitFeeDetail','initID');
     }
 }

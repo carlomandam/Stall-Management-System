@@ -65,7 +65,7 @@ class StallTypeController extends Controller
     }
     
     function checkSTypeName(){
-        $stype = StallType::where('stypeName',$_POST['stypeName'])->get();
+        $stype = StallType::where('stypeName',trim($_POST['stypeName']))->get();
         if(count($stype) != 0)
             return "false";
         else
@@ -75,8 +75,8 @@ class StallTypeController extends Controller
     function addStallType(){
         $stype = new StallType;
         
-        $stype->stypeName = $_POST['stypeName'];
-        $stype->stypeDesc = $_POST['stypeDesc'];
+        $stype->stypeName = trim($_POST['stypeName']);
+        $stype->stypeDesc = trim($_POST['stypeDesc']);
         
         if($stype->save()){
             foreach($_POST['size'] as $x){
@@ -102,8 +102,8 @@ class StallTypeController extends Controller
     function UpdateSType(){
         $hasChange = false;
         $stype = StallType::find($_POST['id']);
-        $stype->stypeName = $_POST['stypeName'];
-        $stype->stypeDesc = $_POST['stypeDesc'];
+        $stype->stypeName = trim($_POST['stypeName']);
+        $stype->stypeDesc = trim($_POST['stypeDesc']);
         if($stype->isDirty()){
             $stype->save();
             $hasChange = true;
