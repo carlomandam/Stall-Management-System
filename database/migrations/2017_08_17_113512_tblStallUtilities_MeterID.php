@@ -14,16 +14,25 @@ class TblStallUtilitiesMeterID extends Migration
     public function up()
     {
         Schema::create('tblStallUtilities_MeterID', function (Blueprint $table) {
-            $table->integer('stallUtilityID')->unsigned()->index();
-            $table->string('meterID');
+            $table->increments('stallMeterID');
+            $table->integer('contractID')->unsigned()->index();
+            $table->integer('readingID')->unsigned()->index();
+            $table->integer('meterFrom');
+            $table->integer('meterTo');
+            $table->double('totalAmount',8,2);
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallUtilityID')->references('stallUtilityID')
-                  ->on('tblStall_Utilities')
+            $table->foreign('contractID')->references('contractID')
+                  ->on('tblContractInfo')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+
+             $table->foreign('readingID')->references('readingID')
+                  ->on('tblMonthlyReading')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');      
             
          });
     }

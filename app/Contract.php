@@ -19,5 +19,10 @@ class Contract extends Model
     public function Billing(){
         return $this->hasMany('App\Billing','billID');
     }
+    public function UtilityMeterID(){
+        return $this->hasMany('App\UtilityMeterID','contractID','stallMeterID');
+    }
+
+
 
 }

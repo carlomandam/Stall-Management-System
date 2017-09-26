@@ -44,5 +44,8 @@ class StallRental extends Model
     {
         return $this->hasMany('App\Billing','stallRentalID');
     }
+
+
+    
     
 }

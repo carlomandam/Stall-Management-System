@@ -304,7 +304,12 @@ $(document).on('click','#save', function(e){
 
         }
        
-            location.reload();
+            document.getElementById('save').disabled = true;
+            document.getElementById('sec_amount').disabled =true;
+            document.getElementById('sec_date').disabled = true;
+            document.getElementById('mainAmount').disabled = true;
+            document.getElementById('mainDate').disabled =true;
+
     }
 
  

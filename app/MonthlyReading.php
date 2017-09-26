@@ -26,4 +26,9 @@ class MonthlyReading extends Model
     {
     	return $this->belongsToMany('App\Billing','tblBill_Reading','readingID','billID');
     }
+
+    public function UtilityMeterID(){
+        return $this->hasMany('App\UtilityMeterID','readingID','stallMeterID');
+    }
+    
 }

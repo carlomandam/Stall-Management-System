@@ -107,7 +107,7 @@
         <aside class="main-sidebar">
             <section class="sidebar">
                 <div class="user-panel">
-                    <div class="pull-left image"> <img src="image/JohnAlfred.jpg" class="img-circle" alt="User Image"> </div>
+                    <div class="pull-left image"> <img src="{{ URL::asset('image/JohnAlfred.jpg') }}" class="img-circle" alt="User Image"> </div>
                     <div class="pull-left info">
                         <p id="userName">John Alfred C. Clave</p>
                     </div>
@@ -135,6 +135,9 @@
                             </li>
                             <li id="">
                                 <a href="{{url('/Payment')}}"> <i class="fa fa-circle-o"></i><span>Payment</span></a>
+                            </li>
+                             <li id="">
+                                <a href="{{url('/Utilities')}}"> <i class="fa fa-circle-o"></i><span>Utilities</span></a>
                             </li>
                             <li id="">
                                 <a href="{{url('/Clearance')}}"> <i class="fa fa-circle-o"></i><span>Clearance</span></a>
