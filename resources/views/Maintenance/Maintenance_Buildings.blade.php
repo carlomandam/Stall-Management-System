@@ -12,6 +12,9 @@
     #floortbl td {
         text-align: center;
     }
+    .print-error-msg ul:empty{
+
+    }
 </style>
 <div class="box box-primary">
     <div class="box-body">
@@ -42,7 +45,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">New Building</h4> </div>
                     <div class="modal-body">
-                        <div class="alert alert-danger print-error-msg" style="display:none">
+                        <div id="newEC" class="alert alert-danger print-error-msg" style="display:none">
                             <ul></ul>
                         </div>
                         <div class="row">
@@ -103,7 +106,6 @@
                     </div>
                     <p class="small text-danger">Fields with asterisks(*) are required</p>
                     <div class="modal-footer">
-                        <!-- <label style="float:left">All labels with "*" are required</label> -->
                         <div class="pull-right">
                             <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
                         </div>
@@ -120,7 +122,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Update Building</h4> </div>
             <div class="modal-body">
-                <div class="alert alert-danger print-error-msg" style="display:none">
+                <div id="upEC" class="alert alert-danger print-error-msg" style="display:none">
                     <ul></ul>
                 </div>
                 <div id="tabcontroll" class="container" style="width:100%">
@@ -162,7 +164,7 @@
                                                         <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="noOfFloorUp" disabled>
                                                         <span class="glyphicon glyphicon-minus"></span> </button>
                                                 </span>
-                                                <input type="text" name="noOfFloorUp" id="#noOfFloorUp" class="form-control input-number" value="0" min="0" max="100" oninput="showTable('#floortblup')" onchange="showTable('#floortblup')"> <span class="input-group-btn">
+                                                <input type="text" name="noOfFloorUp" id="noOfFloorUp" class="form-control input-number" value="0" min="0" max="100" oninput="showTable('#floortblup')" onchange="showTable('#floortblup')"> <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="noOfFloorUp">
                                                   <span class="glyphicon glyphicon-plus"></span> </button>
                                                 </span>
@@ -190,15 +192,8 @@
                         <div class="tab-pane" id="2">
                             <table class="table table-bordered table-striped" role="grid" id='floorUpTbl'>
                                 <thead>
-
                                 <th style="width:40%">Floor No.</th>
                                 <th style="width:40%">Current No. of stalls</th>
-                                <th>Capacity</th>
-
-                                    <th style="width:40%">Floor No.</th>
-                                    <th style="width:40%">Current No. of stalls</th>
-                                    <th>Capacity</th>
-
                                 </thead>
                                 <tbody> </tbody>
                             </table>
@@ -207,7 +202,6 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <!-- <label style="float:left">All labels with "*" are required</label> -->
                 <div class="pull-right">
                     <button class="btn btn-primary btn-flat" onclick="$($('#tabcontroll li.active').find('a').attr('href')).find('form').submit();"><span class='fa fa-save'></span>&nbsp Save</button>
                 </div>
@@ -282,7 +276,7 @@
                     required: "Please enter Building Code"
                     , maxlength: "Building code can't be more than 10 characters"
                     , remote: "Building Code is taken"
-                    , regex: "Building code can't contain special characters"
+                    , regex: "Building code can't contain special characters and spaces"
                 }
                 , noOfFloor: "Please enter number of floors"
                 , "noOfStall[]":{
@@ -291,21 +285,13 @@
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
-            , highlight: function(element, errorClass, validClass) {
-                $(element).css('color','red');
-                $(element).removeClass(validClass).addClass(errorClass);
-                $('#new .print-error-msg').css('display','block');
-                if($('#new .print-error-msg ul').html() == '')
-                    $('#new .print-error-msg').css('display','none');
-              }
-            , unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass(errorClass).addClass(validClass);
-              }
             , errorElement: "li"
             , errorPlacement: function (error) {
                 error.appendTo('#new .print-error-msg ul');
             }
+            , errorContainer: "#newEC"
             ,submitHandler: function(form){
+                $(form).find(":submit").attr('disabled',true);
                 var formData = new FormData(form);
                 $.ajax({
                     type: "POST"
@@ -318,6 +304,7 @@
                         toastr.success('Added New Building');
                         $('#prodtbl').DataTable().ajax.reload();
                         $('#new').modal('hide');
+                        $(form).find(":submit").attr('disabled',false);
                     }
                 });
             }
@@ -383,20 +370,19 @@
                     required: "Please enter Building Code"
                     , maxlength: "Building code can't be more than 10 characters"
                     , remote: "Building Code is taken"
+                    , regex: "Building code can't contain special characters and spaces"
                 }
                 , noOfFloor: "Please enter number of floors"
+                , "noOfStall[]":{
+                    max: "Maximum of 100 stalls"
+                }
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
             , errorElement: "li"
+            , errorContainer: "#upEC"
             , errorPlacement: function (error) {
                 error.appendTo('#update .print-error-msg ul');
-            }
-            , invalidHandler : function() {
-                $('#update .print-error-msg').css('display','block');
-            }
-            , successHandler : function() {
-                $('#update .print-error-msg').css('display','none');
             }
             ,submitHandler: function(form){
                 var formData = new FormData(form);
@@ -408,15 +394,19 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
-                        if (data) {
+                        if (data == "true") {
                             toastr.success('Updated Building Information');
                             $('#prodtbl').DataTable().ajax.reload();
                             $('#update').modal('hide');
+                        }else if(data == "rental"){
+                            toastr.warning('Unable to delete floor. A stall is currently rented');
                         }
+                        $(form).find(":submit").attr('disabled',false);
                     }
                 });
             }
         });
+
         $('#prodtbl').DataTable({
             ajax: '/bldgTable'
             , responsive: true
@@ -506,7 +496,7 @@
             , success: function (data) {
                 obj = JSON.parse(data);
                 for (i = 0; i < obj.length; i++) {
-                    $('#floorUpTbl tbody').append("<tr class='removable'><td>" + (i + 1) + "</td><td>" + obj[i].stall.length + "</td><td>" + obj[i].floorCapacity + "</td></tr>");
+                    $('#floorUpTbl tbody').append("<tr class='removable'><td>" + (i + 1) + "</td><td>" + obj[i].stall.length + "</td></tr>");
                 }
             }
         });
@@ -521,8 +511,12 @@
                 , "id": id
             }
             , success: function (data) {
+                if(data == "rental"){
+                    toastr.warning('Unable to delete building. A stall is currently rented');
+                }else{
                 $('#prodtbl').DataTable().ajax.reload();
                 toastr.success('Building Deleted');
+                }
             }
         });
     }

@@ -29,7 +29,7 @@ class PDFController extends Controller
 
     public function pdfcreate($rentalid)
     {
-        $rental = StallRental::with('Contract.StallRate.RateDetail','Stall.Floor.Building','StallHolder.ContactNo','Product')->where('StallRentalID',$rentalid)->first();
+        $rental = StallRental::with('Contract.StallRate','Stall.Floor.Building','StallHolder.ContactNo','Product')->where('StallRentalID',$rentalid)->first();
         $charges = Charges::all();
 
         $data = array(

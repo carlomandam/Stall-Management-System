@@ -32,7 +32,7 @@ class TblStall extends Migration
             $table->foreign('stype_SizeID')->references('stype_SizeID')
                   ->on('tblstallType_stallSize')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('set null');
         });
     }
 

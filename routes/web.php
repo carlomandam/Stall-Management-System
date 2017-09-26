@@ -87,6 +87,9 @@ Route::post('/deleteBuilding', 'BuildingController@deleteBuilding');
 Route::post('/getCode', 'BuildingController@getBuildingCode');
 Route::post('/getFloorsUp', 'BuildingController@getFloors');
 Route::post('/getStallList', 'StallController@getStallList');
+Route::post('/restoreBldg', 'BuildingController@restore');
+
+Route::get('/bldgTableTrashed', 'BuildingController@getBuildingsTrashed');
 
 //Stall Type
 
@@ -98,10 +101,14 @@ Route::post('/UpdateSType', 'StallTypeController@UpdateSType');
 Route::post('/deleteSType', 'StallTypeController@deleteSType');
 Route::post('/getSizes', 'StallTypeController@getSizes');
 Route::post('/deleteStypeSize', 'StallTypeController@deleteStypeSize');
+Route::post('/restoreSType', 'StallTypeController@restore');
+
+Route::get('/stypeTableTrashed', 'StallTypeController@getStallTypesTrashed');
 
 //Stall
 
 Route::get('/stallTable', 'StallController@getStalls');
+Route::get('/stallTableTrashed', 'StallController@getStallsTrashed');
 Route::post('/bldgOptions', 'StallController@getBuildingOption');
 Route::post('/getStallID', 'StallController@getStallID');
 Route::post('/addStall', 'StallController@addStall');
@@ -118,6 +125,7 @@ Route::post('/addStallRate', 'RateController@addStallRate');
 Route::get('/rateTable', 'RateController@getStallRates');
 Route::post('/stypeRate', 'RateController@getStallTypes');
 Route::post('/checkRate', 'Controller@checkRate');
+Route::post('/datesDisabled', 'RateController@datesDisabled');
 
 //Charge
 
@@ -141,12 +149,14 @@ Route::get('/getVendor', 'ApplicationController@getVendor');
 
 //Holiday
 Route::get('/holidayTable', 'HolidayController@getHolidays');
+Route::get('/holidayTableTrashed', 'HolidayController@getHolidaysTrashed');
 Route::post('/addHoliday', 'HolidayController@addHoliday');
 Route::post('/updateHoliday', 'HolidayController@updateHoliday');
 Route::post('/getHolidayInfo', 'HolidayController@getHolidayInfo');
 Route::post('/deleteHoliday', 'HolidayController@deleteHoliday');
 Route::post('/CheckHolidayName', 'HolidayController@CheckHolidayName');
 Route::post('/CheckHolidayDate', 'HolidayController@CheckHolidayDate');
+Route::post('/restoreHoliday', 'HolidayController@restore');
 
 ///////////////////ARCHIVES IN MAINTENANCE////////////////
 
@@ -154,8 +164,7 @@ Route::get('/BuildingArchive','ArchiveController@buildingIndex');
 Route::get('/StallTypeArchive','ArchiveController@stallTypeIndex');
 Route::get('/StallArchive','ArchiveController@stallIndex');
 Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
-
-Route::get('/bldgArchive','ArchiveController@buildingTable');
+Route::get('/HolidayArchive','ArchiveController@holidayIndex');
 ////////////////////MANAGE CONTRACTS////////////////////
 
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');

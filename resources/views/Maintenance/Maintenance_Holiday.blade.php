@@ -42,7 +42,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">New Holiday</h4> </div>
                     <div class="modal-body">
-                        <div class="alert alert-danger print-error-msg" style="display:none">
+                        <div id="newEC" class="alert alert-danger print-error-msg" style="display:none">
                             <ul id="error-new"></ul>
                         </div>
                         <div class="row">
@@ -98,7 +98,7 @@
                 <h4 class="modal-title">Update Holiday</h4> </div>
             <div class="modal-body">
                 <form method="post" id="updateform">
-                    <div class="alert alert-danger print-error-msg" style="display:none">
+                    <div id="upEC" class="alert alert-danger print-error-msg" style="display:none">
                         <ul></ul>
                     </div>
                     <input type="hidden" id="_tokenUp" name="_token" value="<?php echo csrf_token(); ?>">
@@ -196,25 +196,13 @@
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
-            , highlight: function (element, errorClass, validClass) {
-                $(element).removeClass(validClass).addClass(errorClass);
-                $('#new .print-error-msg').css('display', 'block');
-            }
-            , unhighlight: function (element, errorClass, validClass) {
-                var i = 0;
-                $('#newform .print-error-msg ul').find('li').each(function(){
-                    if($(this).css('display') != 'none')
-                        i++;
-                });
-                if(i == 0)
-                    $('#newform .print-error-msg').css('display', 'none');
-                $(element).removeClass(errorClass).addClass(validClass);
-            }
+            , errorContainer: "#newEC"
             , errorElement: "li"
             , errorPlacement: function (error) {
                 error.appendTo('#new .print-error-msg ul');
             }
             , submitHandler: function(form){
+                $(form).find(":submit").attr('disabled',true);
                 var formData = new FormData(form);
                 $.ajax({
                     type: "POST"
@@ -227,6 +215,7 @@
                         toastr.success('Added New Holiday');
                         $('#prodtbl').DataTable().ajax.reload();
                         $('#new').modal('hide');
+                        $(form).find(":submit").attr('disabled',false);
                     }
                 });
             }
@@ -281,26 +270,13 @@
             }
             , errorClass: "error-class"
             , validClass: "valid-class"
-            , highlight: function (element, errorClass, validClass) {
-                $(element).css('color', 'red','important');
-                $(element).removeClass(validClass).addClass(errorClass);
-                $('#update .print-error-msg').css('display', 'block');
-            }
-            , unhighlight: function (element, errorClass, validClass) {
-                $(element).removeClass(errorClass).addClass(validClass);
-                var i = 0;
-                $('#updateform .print-error-msg ul').find('li').each(function(){
-                    if($(this).css('display') != 'none')
-                        i++;
-                });
-                if(i == 0)
-                    $('#updateform .print-error-msg').css('display', 'none');
-            }
             , errorElement: "li"
+            , errorContainer: "#upEC"
             , errorPlacement: function (error) {
                 error.appendTo('#update .print-error-msg ul');
             }
             , submitHandler: function(form){
+                $(form).find(":submit").attr('disabled',true);
                 var formData = new FormData(form);
                 $.ajax({
                     type: "POST"
@@ -314,6 +290,7 @@
                             toastr.success('Updated Holiday Information');
                             $('#prodtbl').DataTable().ajax.reload();
                             $('#update').modal('hide');
+                            $(form).find(":submit").attr('disabled',false);
                         }
                     }
                 });
@@ -392,21 +369,21 @@
         $('.month').change(function () {
             if ($(this).val() == 4 || $(this).val() == 6 || $(this).val() == 9 || $(this).val() == 11) {
                 $(this).parent().find('select').find('option[value =31]').remove();
-                if ($(this).parent().find('select').find("option[value='30']").length == 0) {
-                    $(this).parent().find('select').append('<option value="' + 30 + '">' + 30 + '</option>');
+                if ($(this).parent().find('select[name=Day]').find("option[value='30']").length == 0) {
+                    $(this).parent().find('select[name=Day]').append('<option value="' + 30 + '">' + 30 + '</option>');
                 }
             }
             else if ($(this).val() == 2) {
-                $(this).parent().find('select').find('option[value =30]').remove();
-                $(this).parent().find('select').find('option[value =31]').remove();
+                $(this).parent().find('select[name=Day]').find('option[value =30]').remove();
+                $(this).parent().find('select[name=Day]').find('option[value =31]').remove();
             }
             else {
-                if ($(this).parent().find('select').find("option[value='30']").length == 0) {
-                    $(this).parent().find('select').append('<option value="' + 30 + '">' + 30 + '</option>');
-                    $(this).parent().find('select').append('<option value="' + 31 + '">' + 31 + '</option>');
+                if ($(this).parent().find('select[name=Day]').find("option[value='30']").length == 0) {
+                    $(this).parent().find('select[name=Day]').append('<option value="' + 30 + '">' + 30 + '</option>');
+                    $(this).parent().find('select[name=Day]').append('<option value="' + 31 + '">' + 31 + '</option>');
                 }
-                else if ($(this).next().next().find("option[value = '31']").length == 0) {
-                    $(this).parent().find('select').append('<option value="' + 31 + '">' + 31 + '</option>');
+                else if ($(this).parent().find('select[name=Day]').find("option[value = '31']").length == 0) {
+                    $(this).parent().find('select[name=Day]').append('<option value="' + 31 + '">' + 31 + '</option>');
                 }
             }
         });

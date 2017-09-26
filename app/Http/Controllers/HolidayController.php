@@ -25,9 +25,28 @@ class HolidayController extends Controller
     	}
     }
 
+    function getHolidaysTrashed(){
+    	$holidays = Holiday::onlyTrashed()->get();
+    	if(count($holidays) != 0){
+    		$data = array();
+    		foreach ($holidays as $holiday) {
+    			$data['data'][] = $holiday;
+    		}
+    		return json_encode($data);
+    	}
+    	else{
+    		return '{
+            	"sEcho": 1,
+            	"iTotalRecords": "0",
+            	"iTotalDisplayRecords": "0",
+            "aaData": []
+        	}';
+    	}
+    }
+
 	function addHoliday (){
 		$holiday = new Holiday;
-		$holiday->Name = $_POST['Name'];
+		$holiday->Name = trim($_POST['Name']);
 		$holiday->Day = $_POST['Day'];
 		$holiday->Month = $_POST['Month'];
 		$holiday->save();
@@ -86,5 +105,10 @@ class HolidayController extends Controller
 		}
 		else
 			return 'true';
+	}
+
+	function restore(){
+		$holiday = Holiday::onlyTrashed()->find($_POST['id']);
+		$holiday->restore();
 	}
 }

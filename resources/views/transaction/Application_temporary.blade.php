@@ -191,13 +191,6 @@
                                 <input type="text" class="form-control" readonly name="rate" id="dispStallID" value="{{'₱'.$stall->StallType->StallRate->dblRate}}">
                                 <label>Peak Days Additional Rate</label>
                                 <input type="text" class="form-control" readonly name="rate" id="dispStallID" value="{{($stall->StallType->StallRate->peakRateType == 1) ? '₱'.$stall->StallType->StallRate->dblPeakRate : $stall->StallType->StallRate->dblPeakRate.'%'}}">
-                                <label>Collection Type</label>
-                                <select name="collection" class="form-control">
-                                    <option disabled="" selected="">--Select Collection Type--</option>
-                                    <option value="1">Monthly</option>
-                                    <option value="2">weekly</option>
-                                    <option value="3">Daily</option>
-                                </select>
                             </div>
                         </div>
                         <!-- /.col-md-6 -->
@@ -278,7 +271,6 @@
                 , address: 'required'
                 , ctype: 'required'
                 , startDate: 'required'
-                , endDate: 'required'
                 , businessName: 'required'
                 , "products[]": 'required'
             }
@@ -292,10 +284,8 @@
                 , email: 'Email is required'
                 , "contact[]": 'Enter atleast 1 contact number'
                 , address: 'Address is required'
-                , collection: 'Select collection type'
                 , ctype: 'Select contract type'
                 , startDate: 'Start Date is required'
-                , endDate: 'End Date is required'
                 , businessName: 'Business Name is required'
                 , "products[]": 'Specify products'
             }

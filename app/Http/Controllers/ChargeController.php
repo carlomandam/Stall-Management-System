@@ -8,7 +8,7 @@ class ChargeController extends Controller
 {
     function addCharge(){
         $charge = new Charges;
-        $charge->chargeName = $_POST['Name'];
+        $charge->chargeName = trim($_POST['Name']);
         $charge->chargeAmount = $_POST['Amount'];
         $charge->chargeType = $_POST['Type'];
 
@@ -19,7 +19,7 @@ class ChargeController extends Controller
     
     function updateCharge(){
         $charge = Charges::where('chargeID',$_POST['id'])->first();
-        $charge->chargeName = $_POST['Name'];
+        $charge->chargeName = trim($_POST['Name']);
         $charge->chargeAmount = $_POST['Amount'];
         $charge->chargeType = $_POST['Type'];
 
@@ -42,12 +42,12 @@ class ChargeController extends Controller
     
     function checkChargeName(){
         if(isset($_POST['id'])){
-            $charge = Charges::where('chargeName',$_POST['Name'])->where('chargeID',$_POST['id'])->get();
+            $charge = Charges::where('chargeName',trim($_POST['Name']))->where('chargeID',$_POST['id'])->get();
             if(count($building) == 1)
                 return "true";
         }
         
-        $charge = Charges::where('chargeName',$_POST['Name'])->get();
+        $charge = Charges::where('chargeName',trim($_POST['Name']))->get();
         if(count($charge) != 0)
             return "false";
         else

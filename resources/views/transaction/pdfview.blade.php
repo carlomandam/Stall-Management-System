@@ -39,15 +39,8 @@
                     <p>3. Security Deposit</p>
                     <p style="text-indent:50px;">Vendor agrees to pay the security deposit. This security deposit is non – refundable but consumable. It will cover unpaid rent upon termination of the rent agreement.</p>
                     <p>4. Rental fees</p>
-                    <p style="text-indent:50px;">Vendor shall pay rent (@if($data['rental']->Contract->StallRate->frequencyDesc != 4)Php {{ number_format($data['rental']->Contract->StallRate->RateDetail[0]->dblRate, 2, '.', ',')}} per @if($data['rental']->Contract->StallRate->frequencyDesc == 3) {{"day"}} @elseif ($data['rental']->Contract->StallRate->frequencyDesc == 2) {{"week"}} @else {{"month"}} @endif )@else
-                        Sunday: Php.{{number_format($data['rental']->Contract->StallRate->RateDetail[0]->dblRate, 2, '.', ',')}},&nbsp;
-                        Monday: Php.{{number_format($data['rental']->Contract->StallRate->RateDetail[1]->dblRate, 2, '.', ',')}},&nbsp;
-                        Tuesday: Php.{{number_format($data['rental']->Contract->StallRate->RateDetail[2]->dblRate, 2, '.', ',')}},&nbsp;
-                        Wednesday: Php.{{number_format($data['rental']->Contract->StallRate->RateDetail[3]->dblRate, 2, '.', ',')}},&nbsp;
-                        Thursday: Php.{{number_format($data['rental']->Contract->StallRate->RateDetail[4]->dblRate, 2, '.', ',')}},&nbsp;
-                        Friday: Php.{{number_format($data['rental']->Contract->StallRate->RateDetail[5]->dblRate, 2, '.', ',')}},&nbsp;
-                        Saturday: Php.{{number_format($data['rental']->Contract->StallRate->RateDetail[6]->dblRate, 2, '.', ',')}})
-                    @endif and continuing until the termination of this Contract as provided herein.</p>
+                    <p style="text-indent:50px;">Vendor shall pay rent of Php {{ number_format($data['rental']->Contract->StallRate->dblRate, 2, '.', ',')}} daily with additional @if($data['rental']->Contract->StallRate->peakRateType == 1) Php.{{$data['rental']->Contract->StallRate->dblPeakRate}}
+                    @elseIf($data['rental']->Contract->StallRate->peakRateType == 2) {{$data['rental']->Contract->StallRate->dblPeakRate . '% (Php.'.($data['rental']->Contract->StallRate->dblRate * $data['rental']->Contract->StallRate->dblPeakRate) / 100}})@endIf on peak days</p>
                     <p>5. Termination</p>
                     <p style="text-indent:50px;">This agreement may be renewed subject to the sole discretion of the management of MySeoul, Inc. The agreement may be terminated beforehand upon mutual written agreement of both parties. It may also be terminated if the vendor violates any stipulation of this agreement; OR if the vendor violates any rule, regulation, or policy declared by the management of MySeoul, Inc. in the course of operations. </p>
                     <p>6. Clearance </p>

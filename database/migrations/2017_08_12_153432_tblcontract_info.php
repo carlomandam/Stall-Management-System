@@ -15,9 +15,8 @@ class TblcontractInfo extends Migration
             $table->increments('contractID');
             $table->integer('stallRentalID')->unsigned()->index();
             $table->date('contractStart');
-            $table->date('contractEnd');
+            $table->date('contractEnd')->nullable();
             $table->integer('stallRateID')->unsigned();
-            $table->integer('collectionType')->unsigned();//1-Monthly 2-Weekly 3-Daily
             $table->softDeletes();
             $table->timestamps();
 

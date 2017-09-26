@@ -278,8 +278,8 @@
                     }
                     , {
                     "data": function (data, type, dataToSet) {
-                        if (data.stypeName != null) {
-                            return data.stypeName + "(" + data.stypeArea + "m&sup2;)";
+                        if (data.stall_type != null) {
+                            return data.stall_type.stall_type.stypeName + "(" + data.stall_type.stall_type_size.stypeArea + "m&sup2;)";
                         }
                         else {
                             return "N/A";
@@ -288,11 +288,28 @@
                     }
                     , {
                     "data": function (data, type, dataToSet) {
-                        return "Floor " + data.floorLevel + ", " + data.bldgName;
-                    }
+                        var suffix = '';
+                        switch(data.floor.floorLevel){
+                            case 1 :
+                                suffix = 'st';
+                                break;
+                            case 2 :
+                                suffix = 'nd';
+                                break;
+                            case 1 :
+                                suffix = 'rd';
+                                break;
+                            default :
+                                suffix = 'th';
+                                break;
+                        }
+                        return data.floor.floorLevel + suffix + " Floor, " + data.floor.building.bldgName;
+                        }
                     }
                     , {
-                    "data": "actions"
+                    "data": function(data, type, dataToSet){
+                            return "<button class='btn btn-primary btn-flat' onclick='getInfo(this.value)' value = '"+data.stallID+"' ><span class='glyphicon glyphicon-pencil'></span> Update</button><div class='btn-group'><button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button><ul class='dropdown-menu pull-right opensleft' role='menu' data-container='body'><center><h4>Are You Sure?</h4><li class='divider'></li><li><a href='#' onclick='deleteStall(\""+data.stallID+"\");return false;'>YES</a></li><li><a href='#' onclick='return false'>NO</a></li></center></ul></div>";
+                        }
                     }
 			]
             , "columnDefs": [
@@ -301,6 +318,11 @@
                     , "searchable": false
                     , "sortable": false
                     , "targets": 3
+                    }
+                , {
+                        sType : "string"
+                        , targets: 0
+
                     }
   ]
         });

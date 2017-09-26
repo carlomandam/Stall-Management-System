@@ -207,15 +207,17 @@ function getVendor(){
                 }
             }
 
+            if(isset($_POST[req])){
             foreach ($_POST['req'] as $req) {
                 $holder->Requirement()->attach($req)->withTimestamps();
+            }
             }
         }
         return $holder->stallHID;
     }
     
     function acceptRental(){
-        $bill = new Billing;
+        /*$bill = new Billing;
         $bill->contractID = $_POST['contract'];
         $bill->billStatus = 1;
         if($bill->save()){
@@ -231,7 +233,7 @@ function getVendor(){
             $main->initialType = 2;
             $main->initialAmt = $init->mainAmount;
             $main->save();
-        }
+        }*/
 
         $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
         $rejects = StallRental::where('stallID',$rental->stallID)->where('stallRentalStatus',2)->where('stallRentalID','!=',$_POST['rental'])->get();
@@ -266,8 +268,10 @@ function getVendor(){
                 }
             }
 
-            foreach ($_POST['req'] as $req) {
-                $holder->Requirement()->attach($req)->withTimestamps();
+            if(isset($_POST['req'])){
+                foreach ($_POST['req'] as $req) {
+                    $holder->Requirement()->attach($req)->withTimestamps();
+                }
             }
         }
         $rental = StallRental::where('stallHID',$holder->stallHID)->where('stallID',$_POST['dispStallID'])->get();
@@ -287,7 +291,6 @@ function getVendor(){
             $contract->contractStart = date_format(date_create($_POST['startDate']),"Y-m-d");
             $contract->contractEnd = (isset($_POST['endDate'])) ? date_format(date_create($_POST['endDate']),"Y-m-d") : null;
             $contract->stallRateID = $_POST['rateid'];
-            $contract->collectionType = $_POST['collection'];
             $contract->save();
             
             foreach($_POST['products'] as $prod){

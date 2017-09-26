@@ -13,9 +13,9 @@ class BuildingController extends Controller
     function addBuilding(){
         $building = new Building;
         
-        $building->bldgName = $_POST['bldgName'];
-        $building->bldgCode = $_POST['bldgCode'];
-        $building->bldgDesc = $_POST['bldgDesc'];
+        $building->bldgName = trim($_POST['bldgName']);
+        $building->bldgCode = trim($_POST['bldgCode']);
+        $building->bldgDesc = trim($_POST['bldgDesc']);
         
         if($building->save()){
             
@@ -52,10 +52,10 @@ class BuildingController extends Controller
     function getBuildingCode(){
         if($_POST['name'] == null)
             return;
-        else if(strlen($_POST['name'])<5)
+        else if(strlen(trim($_POST['name']," "))<5)
             return "short";
         $startTime = time();
-        $string = $_POST['name'];
+        $string = trim($_POST['name'];
         $codes = array('mbldig','mnbig','mildg');
         $newcode = $codes[1];
         
@@ -117,6 +117,28 @@ class BuildingController extends Controller
         else
     		return (json_encode($data));
     }
+
+    function getBuildingsTrashed(){
+        $building = Building::onlyTrashed()->with('Floor')->get();
+        $data = array();
+        foreach ($building as $building) {
+            $data['data'][] = $building;
+        }
+        
+        if(count($data) == 0){
+            echo '{
+                "sEcho": 1,
+                "iTotalRecords": "0",
+                "iTotalDisplayRecords": "0",
+            "aaData": []
+            }';
+
+            return;
+        }
+        
+        else
+            return (json_encode($data));
+    }
     
     function checkBldgName(){
         if(isset($_POST['id'])){
@@ -148,17 +170,17 @@ class BuildingController extends Controller
     }
     
     function getBuildingInfo(){
-        $building = Building::where('bldgID',$_POST['id'])->get();
-        $building[0]['noOfFloor'] = Building::where('bldgID',$_POST['id'])->first()->Floor()->count();
+        $building = Building::withTrashed()->where('bldgID',$_POST['id'])->get();
+        $building[0]['noOfFloor'] = Building::withTrashed()->where('bldgID',$_POST['id'])->first()->Floor()->count();
         return (json_encode($building));
     }
     
     function UpdateBuilding(){
         $hasChange = false;
         $building = Building::find($_POST['id']);
-        $building->bldgName = $_POST['bldgName'];
-        $building->bldgCode = $_POST['bldgCode'];
-        $building->bldgDesc = $_POST['bldgDesc'];
+        $building->bldgName = trim($_POST['bldgName']);
+        $building->bldgCode = trim($_POST['bldgCode']);
+        $building->bldgDesc = trim($_POST['bldgDesc']);
         if($building->isDirty()){
             $building->save();
             $hasChange = true;
@@ -190,8 +212,16 @@ class BuildingController extends Controller
         else if(isset($_POST['remove'])){
             for($i = 0;$i < $_POST['remove'];$i++){
                 $floor = Floor::where('bldgID',$building->bldgID)->orderBy('floorLevel','desc')->first();
-                $stalls = Stall::where('floorID',$floor->floorID)->delete();
-                $floor->delete();
+                $stalls = Stall::where('floorID',$floor->floorID)->has('CurrentTennant')->get();
+                if(count($stalls) > 0){
+                    return "rental";
+                }
+
+                $stalls = Stall::where('floorID',$floor->floorID)->get();
+                foreach ($stalls as $stall) {
+                    $stall->forceDelete();
+                }
+                $floor->forceDelete();
                 $hasChange = true;
             }
         }
@@ -200,11 +230,22 @@ class BuildingController extends Controller
     
     function deleteBuilding(){
         $building = Building::find($_POST['id']);
+        foreach($building->Floor()->get() as $floor){
+            $stalls = Stall::where('floorID',$floor->floorID)->has('CurrentTennant')->get();
+            if(count($stalls) > 0){
+                return "rental";
+            }
+        }
         $building->delete();
     }
     
     function getFloors(){
         $floors = Floor::with('stall')->where('bldgID',$_POST['id'])->get();
         return (json_encode($floors));
+    }
+
+    function restore(){
+        $building = Building::onlyTrashed()->find($_POST['id']);
+        $building->restore();
     }
 }

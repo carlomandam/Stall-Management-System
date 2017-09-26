@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\StallType;
+use App\Stall;
 use App\StallTypeSize;
+use App\StallType_StallTypeSize;
 
 class StallTypeController extends Controller
 {
@@ -41,6 +43,26 @@ class StallTypeController extends Controller
         else
     		return (json_encode($data));
     }
+
+    function getStallTypesTrashed(){
+        $STypes = StallType::onlyTrashed()->with('STypeSize')->get();
+        $data = array();
+        foreach ($STypes as $SType) {
+            $data['data'][] = $SType;
+        }
+        if(count($data) == 0){
+            echo '{
+                "sEcho": 1,
+                "iTotalRecords": "0",
+                "iTotalDisplayRecords": "0",
+            "aaData": []
+            }';
+
+            return;
+        }
+        else
+            return (json_encode($data));
+    }
     
     function checkSTypeName(){
         $stype = StallType::where('stypeName',$_POST['stypeName'])->get();
@@ -73,7 +95,7 @@ class StallTypeController extends Controller
     }
     
     function getSTypeInfo(){
-        $stype = StallType::with('STypeSize')->where('stypeID',$_POST['id'])->get();
+        $stype = StallType::withTrashed()->with('STypeSize')->where('stypeID',$_POST['id'])->get();
         return (json_encode($stype));
     }
     
@@ -106,7 +128,24 @@ class StallTypeController extends Controller
     }
     
     function deleteSType(){
+        $stypes = StallType_StallTypeSize::where('stypeID',$_POST['id'])->get();
+        foreach ($stypes as $stype) {
+            $stalls = Stall::where('stype_SizeID',$stype->stype_SizeID)->has('CurrentTennant')->get();
+            if(count($stalls) > 0){
+                return "rental";
+            }
+        }
+
         $stype = StallType::find($_POST['id']);
+        $stypes = StallType_StallTypeSize::where('stypeID',$_POST['id'])->get();
+        foreach ($stypes as $st) {
+            $stalls = Stall::where('stype_SizeID',$st->stype_SizeID)->get();
+
+            foreach($stalls as $stall){
+                $stall->stype_SizeID = null;
+                $stall->save();
+            }
+        }
         $stype->delete();
     }
     
@@ -116,8 +155,19 @@ class StallTypeController extends Controller
     }
     
     function deleteStypeSize(){
+        $stype = StallType_StallTypeSize::where('stypeID',$_POST['type'])->where('stypeSizeID',$_POST['size'])->first();
+        $stalls = Stall::where('stype_SizeID',$stype->stype_SizeID)->has('CurrentTennant')->get();
+        if(count($stalls) > 0){
+            return "rental";
+        }
+
         $stype = StallType::find($_POST['type']);
         $stype->STypeSize()->detach($_POST['size']);
         return "success";
+    }
+
+    function restore(){
+        $stype = StallType::onlyTrashed()->find($_POST['id']);
+        $stype->restore();
     }
 }
