@@ -128,7 +128,7 @@ function newStallHolder(){
             }
         }
 
-        if(isset($_POST[req])){
+        if(isset($_POST['req'])){
             foreach ($_POST['req'] as $req) {
                 $holder->Requirement()->attach($req)->withTimestamps();
             }
@@ -154,6 +154,28 @@ function acceptRental(){
         $ifd->contractID = $rental->Contract->contractID;
     }*/
 }
+
+function searchVendor(Request $request){
+    $data = [];
+
+    if($request->has('q')){
+        $search = $request->q;
+        $data = StallHolder::with('ContactNo')->where('stallHFName','LIKE',"%$search%")
+        ->orWhere('stallHLName','LIKE',"%$search%")->get();
+            /*$data = DB::table("tblstallholder")
+                ->select("*",DB::raw("CONCAT(stallHFName,' ',stallHLName) as full_name"))
+                ->where('stallHFName','LIKE',"%$search%")
+                ->orWhere('stallHLName','LIKE',"%$search%")->join('tblContactNos','tblstallholder.stallHID','=','tblContactNos.stallHID')->groupBy('tblstallholder.stallHID')
+                ->get();*/
+            }
+
+            return response()->json($data);
+        }
+
+        function displaySearch(){
+         $vendor = Vendor::where('venID',$_GET['id'])->get();
+         return (json_encode($vendor));
+     }
 
 function rejectRental(){
     $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
@@ -212,6 +234,8 @@ function newApplication(){
                 }
             }
         }
+
+        return  "/UpdateRegistration/".$rental->stallRentalID;
     }
 }
 

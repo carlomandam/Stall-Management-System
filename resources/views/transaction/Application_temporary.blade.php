@@ -322,7 +322,7 @@
                             return;
                         }
                         toastr.success('Successfully Registered!');
-                        window.location = "{{url('StallHolderList')}}";
+                        window.location = data;
                     }
                 });
             }
