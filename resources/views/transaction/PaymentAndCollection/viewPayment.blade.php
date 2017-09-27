@@ -112,7 +112,7 @@
                             <div class="box-body">
                                <div class="row">
                               <div class="col-md-2"><label>Payment Number:</label></div>
-                              <div class="col-md-3"><input type="text" name="" class="form-control" disabled value=""></div>
+                              <div class="col-md-3"><input type="text" name="" class="form-control" disabled value="{{$payID}}"></div>
                           </div>
 
                            <div class="row" style="margin-top: 10px;">

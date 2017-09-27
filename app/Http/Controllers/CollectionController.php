@@ -34,13 +34,27 @@ class CollectionController extends Controller
     public function create($id)
     {
         //
+         $collections = DB::table('tblCollection as collect')
+         ->select(DB::raw('collect.*, ( SELECT  cd.collectDate from tblcollection_details as cd where cd.collectionID = collect.collectionID ORDER BY cd.collectDate desc LIMIT 1) as lastDate, (SELECT cd.collectDate from tblcollection_details as cd  where cd.collectionID = collect.collectionID ORDER by cd.collectDate asc LIMIT 1) as firstDate'))
+         ->where('collect.contractID',$id)
+         ->orderBy('collect.created_at')
+         ->get();
+        
+        foreach($collections as $collect)
+        {
+          $lastCollection = $collect->lastDate;
+          $collectionDetails = $collect->firstDate;
+        }
+
         $contract = Contract::find($id);
-        $lastCollection = Collection::whereRaw('collectionID = (SELECT MAX(`collectionID`)FROM tblCollection)')
+       /* $lastCollection = Collection::whereRaw('collectionID = (SELECT MAX(`collectionID`)FROM tblCollection)')
             ->where('contractID',$id)
+
             ->pluck('collectionID')
             ->first();
-        if(count($lastCollection) > 0){
-         $collectionDetails = CollectionDetails::where('collectionID',$lastCollection)
+      */
+        if(count($collections) > 0){
+        /* $collectionDetails = CollectionDetails::where('collectionID',$lastCollection)
         ->orderBy('collectDate','desc')
         ->pluck('collectDate')
         ->first();
@@ -49,6 +63,12 @@ class CollectionController extends Controller
         ->addDays(1)
         ->format('Y-m-d');
         $nextCollection = Carbon::parse($collectionDetails)
+        ->addDays(1)
+        ->format('Y-m-d');*/
+        $collectionDetails = Carbon::parse($lastCollection)
+        ->addDays(1)
+        ->format('Y-m-d');
+         $nextCollection = Carbon::parse($collectionDetails)
         ->addDays(1)
         ->format('Y-m-d');
         }
@@ -62,7 +82,8 @@ class CollectionController extends Controller
             ->format('Y-m-d');
         }
 
-        return view('transaction/PaymentAndCollection/collectionIndex',compact('contract','id','collectionDetails','nextCollection'));
+
+         return view('transaction/PaymentAndCollection/collectionIndex',compact('contract','id','collectionDetails','nextCollection'));
     }
 
     /**
@@ -234,6 +255,7 @@ class CollectionController extends Controller
     public function destroy($id)
     {
         //
+
     }
 
     public function viewCollections($id)
@@ -245,10 +267,226 @@ class CollectionController extends Controller
          ->orderBy('collect.created_at')
          ->get();
          $storeID = $id;
-
-       
-           return view ('transaction/PaymentAndCollection/collectionDetails',compact('storeID','collections'));
         
+        foreach($collections as $collection)
+        {
+          $firstID = CollectionDetails::where('collectDate',$collection->firstDate)
+         ->where('collectionID',$collection->collectionID)
+         ->pluck('collectionDetID')
+         ->first();
+         $lastID = CollectionDetails::where('collectDate',$collection->lastDate)
+         ->where('collectionID',$collection->collectionID)
+         ->pluck('collectionDetID')->first();
+
+            
+        }
+        return view ('transaction/PaymentAndCollection/collectionDetails',compact('storeID','collections','firstID','lastID'));
+        
+    }
+    function showDetails($id,$endid)
+    {
+          //
+
+        $contractID = CollectionDetails::find($id);
+
+        $contract = Contract::find($contractID->Collection->contractID);
+        
+        $collectionFirst = CollectionDetails::where('collectionDetID',$id)->first();
+        $collectionLast = CollectionDetails::where('collectionDetID',$endid)->first();
+        $first = Carbon::parse($collectionFirst->collectDate)->format('F d,Y');
+        $lastDate = Carbon::parse($collectionLast->collectDate)->format('F d,Y');
+
+
+        // $first = "2017-09-24";
+        // $last = "2017-09-27";
+        $step = '+1 day';
+        $output_format = 'Y-m-d';
+        $dates = array();
+        $current = strtotime($collectionFirst->collectDate);
+        $last = strtotime($collectionLast->collectDate);
+        $getIntegerDate =[];
+        $data = [[]];
+        while( $current <= $last ) {
+
+        $dates[] = date($output_format, $current);
+        $current = strtotime($step, $current);
+         }
+
+  
+    foreach($dates as $date)
+    {   
+        $getIntegerDate[] = Carbon::parse($date)->dayOfWeek;
+
+    }
+
+
+  
+   
+      $getPeakDays = DB::table('tblUtilities as a')
+            ->where('utilitiesID','util_peak_days') 
+            ->select('utilitiesDesc')
+            ->get();
+
+       $peakDays = []; 
+            //dayOfWeek returns integer 0 if Sunday, and so on...
+
+            // store yung marketDays as array
+            foreach($getPeakDays as $getDays)
+            {   
+
+                $peakDays = explode(",",$getDays->utilitiesDesc);
+            
+            }
+
+            for($ctr = 0; $ctr < count($peakDays); $ctr++)
+            {
+
+                if($peakDays[$ctr] == "sun")
+                {
+                  $peakDays[$ctr] = 0;
+                }
+                else if($peakDays[$ctr] == "mon")
+                {
+                  $peakDays[$ctr] = 1;
+                }
+                else if($peakDays[$ctr] == "tue")
+                {
+                  $peakDays[$ctr] = 2;
+                }
+                else if($peakDays[$ctr] == "wed")
+                {
+                  $peakDays[$ctr] = 3;
+                }
+                else if($peakDays[$ctr] == "thur")
+                {
+                  $peakDays[$ctr] = 4;
+                }
+                else if($peakDays[$ctr] == "fri")
+                {
+                  $peakDays[$ctr] = 5;
+                }
+                else if($peakDays[$ctr] == "sat")
+                {
+                  $peakDays[$ctr] = 6;
+                }
+                else
+                {
+                  $peakDays[$ctr] = 7;
+                }
+
+            }
+
+             $getMarketDays = DB::table('tblUtilities as a')
+            ->where('utilitiesID','util_market_days') 
+            ->select('utilitiesDesc')
+            ->get();
+
+            $marketDays = []; 
+            //dayOfWeek returns integer 0 if Sunday, and so on...
+
+            // store yung marketDays as array
+            foreach($getMarketDays as $getDays)
+            {   
+
+                $marketDays = explode(",",$getDays->utilitiesDesc);
+            
+            }
+
+            for($ctr = 0; $ctr < count($marketDays); $ctr++)
+            {
+
+                if($marketDays[$ctr] == "sun")
+                {
+                  $marketDays[$ctr] = 0;
+                }
+                else if($marketDays[$ctr] == "mon")
+                {
+                  $marketDays[$ctr] = 1;
+                }
+                else if($marketDays[$ctr] == "tue")
+                {
+                  $marketDays[$ctr] = 2;
+                }
+                else if($marketDays[$ctr] == "wed")
+                {
+                  $marketDays[$ctr] = 3;
+                }
+                else if($marketDays[$ctr] == "thur")
+                {
+                  $marketDays[$ctr] = 4;
+                }
+                else if($marketDays[$ctr] == "fri")
+                {
+                  $marketDays[$ctr] = 5;
+                }
+                else if($marketDays[$ctr] == "sat")
+                {
+                  $marketDays[$ctr] = 6;
+                }
+                else
+                {
+                  $marketDays[$ctr] = 7;
+                }
+
+            }
+
+  
+    $rates = StallRate::find($contract->stallRateID);
+    $regularRate = $rates->dblRate;
+    $amount = [];
+    $totalAmt = 0;
+    if($rates->peakRateType == 1){
+    $peakDaysRate = $rates->dblPeakRate + $rates->dblRate;
+    }
+    else{
+    $peakDaysRate = ($regularRate)*(($rates->dblPeakRate / 100)) + $regularRate;
+    }
+
+    $ctr = 0;
+    foreach($getIntegerDate as $Gdates)
+    { 
+
+        if(in_array($Gdates, $peakDays) && in_array($Gdates, $marketDays))
+        {
+            $amount[$ctr] = number_format($peakDaysRate);
+            $totalAmt += $amount[$ctr];
+        }
+        else if(in_array($Gdates, $marketDays)){
+          $amount[$ctr] = number_format($regularRate);
+          $totalAmt += $amount[$ctr];
+        }
+        else
+        {
+           $amount[$ctr] = 0;
+           $totalAmt += $amount[$ctr];
+        }
+        $ctr++;
+    }
+   
+    $size = count($dates);
+    $ctr = 0;
+
+    while($ctr < $size)
+    {
+        $data[$ctr]["date"] = $dates[$ctr];
+        if(!$amount[$ctr]== 0)
+        {
+          $data[$ctr]['desc'] = "Rental Fee for " . Carbon::parse($dates[$ctr])->format('l');
+          $data[$ctr]['amount'] = number_format($amount[$ctr],2);
+      }
+        else
+        {
+            $data[$ctr]['desc'] = "Not a Market Day";
+            $data[$ctr]['amount'] = "0.00";
+        }
+
+
+        $ctr++;
+
+    }
+    $totalAmt = number_format($totalAmt,2);
+          return view('transaction/PaymentAndCollection/collectionViewCollection',compact('contract','id','first','lastDate','data','totalAmt'));
+
     }
 
     function getCollections()

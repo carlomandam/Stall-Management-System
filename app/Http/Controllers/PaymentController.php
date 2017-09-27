@@ -166,11 +166,19 @@ class PaymentController extends Controller
         public function makePayment($id)
         {
             // return $id;
-             $contract = Contract::find($id);
+            $contract = Contract::find($id);
             $paymentLastID = Payment::whereRaw('paymentID = (select max(`paymentID`) from tblPayment)')->first();  
             $paymentLastID= count($paymentLastID) == 0 ? 1 : $paymentLastID->paymentID +1;
             $payID = 'PAYMENT-'.str_pad($paymentLastID, 5, '0', STR_PAD_LEFT);
-            return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID'));
+
+            $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblpayment_collection as payment on payment.collectionDetID = det.collectionDetID LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE payment.collectionDetID IS NULL and det.collectDate <= NOW() and collect.contractID = '$id' ORDER BY collect.contractID"); //returns collectionID, collectDates, contractIDs
+
+            if(count($unpaidCollections) > 0)
+            {
+                $unpaid = 1;
+            }
+            else{$unpaid = 0;}
+            return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','unpaid'));
     
         }
 

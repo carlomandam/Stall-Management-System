@@ -189,6 +189,7 @@ Route::get('/Payment','PaymentController@index');
 Route::resource('/Collection','CollectionController');
 Route::get('/CreateCollection/{id}','CollectionController@create');
 Route::get('/ViewCollections/{id}','CollectionController@viewCollections');
+Route::get('/ViewCollectionDetails/{id}/end/{endid}','CollectionController@showDetails');
 Route::get('/collectionTable', 'CollectionController@getCollections');
 Route::get('/ViewPayment/{id}','PaymentController@makePayment');
 Route::get('/Billing','BillingController@index');
