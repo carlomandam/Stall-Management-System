@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\StallRental;
 use App\Billing;
 use App\BillDates;
+use App\Contract;
 use Carbon\Carbon;
 use DB;
 
@@ -13,7 +14,9 @@ class BillingController extends Controller
 {
     //
     public function index(){
-          $stalls = StallRental::with('Contract','Stall','StallHolder')->get();
+          $stalls = Contract::with('Contract','Stall','StallHolder')
+          
+          ->get();
           // return ($stalls);
 
           // $stall

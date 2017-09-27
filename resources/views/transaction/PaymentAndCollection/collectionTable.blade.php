@@ -37,15 +37,13 @@
                                                 @foreach($contract as $contract)
                                                     <tr>
                                                       <td>
-                                                      {{$contract->StallRental->stallID}}
+                                                      {{$contract->stallCode}}
                                                       </td>
                                                       <td>
-                                                      {{$contract->StallRental->StallHolder->stallHFName}}
-                                                      {{$contract->StallRental->StallHolder->stallHMName}}
-                                                      {{$contract->StallRental->StallHolder->stallHLName}}
+                                                      {{$contract->tenantName}}
                                                       </td>
                                                       <td>
-                                                      <a href="/ViewCollections/{{$contract->contractID}}"><button class="btn btn-success">View</button></a>
+                                                      <a href="/ViewCollections/{{$contract->contractID}}"><button class="btn btn-success">View Collections</button></a>
                                                       </td>
                                                     </tr>
                                                 @endforeach

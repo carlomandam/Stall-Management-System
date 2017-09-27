@@ -11,6 +11,10 @@
 
     <div class="box box-primary">
         <div class="box-body">
+        <form>
+            <div class="alert alert-danger print-error-msg" style="display:none">
+                <ul></ul>
+            </div>
                               
 
                            <div class="row" style="margin-top: 10px;">
@@ -60,7 +64,22 @@
                                 
                                
                               </thead>
+                              <tfoot>
+                                <tr >
+                                  <th colspan = "2" style="text-align: right; ">Total:</th> 
+                                  <th></th>
+                                </tr>
+                              </tfoot>
+                             
                             </table>
+                          </div>
+                        </div>
+  </div>
+</form>
+
+                        <div class = "pull-right">
+                          <div class = "col-md-12" >
+                            <button class="btn btn-primary btn-flat" id = "save" style="width:100px; margin: 20px;"> <i class="fa fa-save"></i> Save</button>
                           </div>
                         </div>
                       </div>
@@ -83,10 +102,12 @@ $(document).on('ready',function(){
         ,startDate: "{{$nextCollection}}"
         , orientation: 'bottom'
         ,format: 'yyyy-mm-dd'
-
+     
       
        
     });
+          $('#tblcollect').dataTable({
+        });
 
         $('#dateTo').on('change',function(){
           // var table = $('#tblcollect').dataTable();
@@ -110,33 +131,76 @@ $(document).on('ready',function(){
                 { "data": "amount" }
                
             ]
+           
         });
-});  
+
+        $('#tblcollect').dataTable({
+            destroy:true,
+           "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
+                /*
+                 * Calculate the total market share for all browsers in this table (ie inc. outside
+                 * the pagination)
+                 */
+                var iTotalMarket = 0;
+                for ( var i=0 ; i<aaData.length ; i++ )
+                {
+
+                    iTotalMarket += parseFloat(aaData[i][2])*1 ;
+                }
+
+                /* Calculate the market share for browsers on this page */
+                var iPageMarket = 0;
+                for ( var i=iStart ; i<iEnd ; i++ )
+                {
+                    iPageMarket += parseFloat(aaData[ aiDisplay[i] ][2])*1;
+                }
+
+                /* Modify the footer row to match what we want */
+                var nCells = nRow.getElementsByTagName('th');
+                nCells[1].innerHTML = "Php "+" "+parseFloat(iPageMarket).toFixed(2)+" (Php "+parseFloat(iTotalMarket).toFixed(2)+" total)" ;
+            }
+        });
+        });  
          
-        })
+        });
  
 });
 
-/*$("#dateTo").datepicker({
+$(document).on('click','#save', function(e){
+    e.preventDefault();
+    var _token = $("input[name='_token']").val();
+    var contractID = "{{$contract->contractID}}";
+    var dateFrom = "{{$collectionDetails}}";
+    var dateTo = $('#dateTo').val();
+             $.ajax({
+              type: "POST",
+              url: "/Collection",
+              data: { 
+                '_token' : $('input[name=_token]').val(),
+                'contractID':contractID,
+                'dateFrom': dateFrom,
+                'dateTo': dateTo},
+                success: function(data) {
+                  if($.isEmptyObject(data.error)){
+                    toastr.success(data.success);
+                    window.location = '/ViewCollections/'+"{{$contract->contractID}}";
+                  }else{
+                    printErrorMsg(data.error);
+                  }
+                }
 
-    onSelect: function(date, instance) {
-       var dateFrom = $('#dateFrom').val();
-       var contractID = "{{$contract->contractID}}";
-        $.ajax({
-              type: "get",
-              url: "/collectionTable",
-              data: {dateFrom:dateFrom, dateTo:date, contractID : contractID },
-              success: function(data)
-              {
-                  //do something
-                  alert(data);
-              }
-         });  
-     }
-});
-*/
+              });
+             function printErrorMsg (msg) {
+              $(".print-error-msg").find("ul").html('');
+              $(".print-error-msg").css('display','block');
+              $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+              });
+            }
+          });
 
 
+    
 
        
 

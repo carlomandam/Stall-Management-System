@@ -126,7 +126,7 @@
                                 <a href="/StallHolderList"> <i class="fa fa-circle-o"></i> <span>Manage Contracts</span> </a>
                             </li>
                             <li class="treeview">
-                                 <a href="#"> <i class="fa fa-circle-o"></i> <span>Payment and Collections</span> <span class="pull-right-container">
+                                 <a href="#"> <i class="fa fa-circle-o"></i> <span>Billing and Collections</span> <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> </a>
                         <ul class="treeview-menu">
@@ -134,14 +134,15 @@
                                 <a href="{{url('/Billing')}}"> <i class="fa fa-circle-o"></i><span>Billing</span></a>
                             </li>
                             <li id="">
+                                <a href="{{url('/Collection')}}"> <i class="fa fa-circle-o"></i><span>Collections</span></a>
+                            </li>
+                            <li id="">
                                 <a href="{{url('/Payment')}}"> <i class="fa fa-circle-o"></i><span>Payment</span></a>
                             </li>
                              <li id="">
                                 <a href="{{url('/Utilities')}}"> <i class="fa fa-circle-o"></i><span>Utilities</span></a>
                             </li>
-                            <li id="">
-                                <a href="{{url('/Clearance')}}"> <i class="fa fa-circle-o"></i><span>Clearance</span></a>
-                            </li>
+                            
                             
                         </ul>
                             <li class="treeview">

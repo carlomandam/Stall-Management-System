@@ -19,7 +19,7 @@ class InitialFee extends Model
         'initEffectiveDate',
     ];
     
-    public function InitFeeDetail(){
-        return $this->hasMany('App\InitFeeDetail','initID');
+   public function Initial_Details(){
+        return $this->hasMany('App\Initial_Details','initID');
     }
 }

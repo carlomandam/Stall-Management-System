@@ -29,7 +29,7 @@
                                                 <thead>
                                                   <tr>
                                                     <th>Stall Code</th>
-                                                    <th>Stall Holder</th>
+                                                    <th>Tenant Name</th>
                                                     <th>Collection Status</th>
                                                     <th>Balance</th>
                                                     <th>Action/s</th>
@@ -38,14 +38,14 @@
                                                 <tbody>
                                                  @foreach($stalls as $stall)
                                                   <tr>
-                                                     <td>{{$stall->stallID}}</td>
-                                                     <td>{{$stall->StallHolder->stallHFName}}&nbsp{{$stall->StallHolder->stallHMName}}&nbsp{{$stall->StallHolder->stallHLName}}</td>
+                                                     <td>{{$stall->stallCode}}</td>
+                                                     <td>{{$stall->tenantName}}</td>
 
                                                      <td>
                                                         
                                                      </td>
                                                      <td></td>
-                                                     <td><a href="/ViewPayment/{{$stall->contract->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a></td>
+                                                     <td><a href="/ViewPayment/{{$stall->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a></td>
                                                   </tr>
                                                 @endforeach
                                                 </tbody>

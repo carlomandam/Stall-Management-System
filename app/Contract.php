@@ -25,4 +25,12 @@ class Contract extends Model
 
 
 
+    public function Collection(){
+        return $this->hasMany('App\Collection','contractID');
+    }
+    public function Initial_Details(){
+        return $this->hasMany('App\Initial_Details','contractID');
+    }
+
+
 }

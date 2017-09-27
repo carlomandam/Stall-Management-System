@@ -21,7 +21,10 @@ class Payment extends Model
 
     public function PaymentCollection()
     {
-   	 return $this->belongsToMany('App\Collection','tblPayment_Collection','paymentID','collectionDetID');
+   	 return $this->belongsToMany('App\Collection','tblPayment_Collection','paymentID','collectionID');
+    }
+    public function Initial_Details(){
+        return $this->hasMany('App\Initial_Details','paymentID');
     }
 
 }

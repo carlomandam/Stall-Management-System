@@ -39,7 +39,15 @@
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                
+
+                                                @foreach($collections as $key => $collection)
+                                                    <tr>
+                                                      <td>{{++ $key}}</td>
+                                                      <td>{{date('M d,Y',strtotime($collection->firstDate))}} (<i>{{date('l',strtotime($collection->firstDate))}}</i>) to {{date('M d,Y',strtotime($collection->lastDate))}} (<i>{{date('l',strtotime($collection->lastDate))}}</i>)</td>
+                                                      <td>{{$collection->created_at}}</td>
+                                                      <td><a href="/ViewBill/{{$collection->collectionID}}"><button class="btn btn-success">View Details</button></a></td>
+                                                    </tr>
+                                                @endforeach
                                                 </tbody>
                                             
                                             </table>

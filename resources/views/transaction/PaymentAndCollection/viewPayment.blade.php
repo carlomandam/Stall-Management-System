@@ -6,9 +6,10 @@
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/panel-tab.css')}}">
 <style type="text/css">
-    .col-md-12{
+    .col-md-12, .row{
         margin-top: 10px;
     }
+
 </style>
 @stop
 @section('content-header')
@@ -36,32 +37,72 @@
                     <div class="tab-pane fade in active" id="tab1primary">
                         <div class="box box-primary">
                             <div class="box-body">
-                              <div class="col-md-12">
-                                <label class="col-md-3">Payment No.</label>
-                                <div class="col-md-3"> 
-                                  <input type="text" disabled="" class="form-control">
-                                </div>
-                                <label class="col-md-3">Date Paid</label>
-                                <div class="col-md-3">
-                                    <input type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask/>
-                                </div>
+                              <div class="row">
+                                <label class="col-md-3">Payment Number</label>
+                                <div class="col-md-3"><input type="text" disabled="" class="form-control" value="{{$payID}}"></div>
+                                
                               </div>
 
-                              <div class="col-md-12">
+                              <div class="row">
                                 <label class="col-md-3">Stall Code</label>
-                                <div class="col-md-3"> 
-                                  <input type="text" disabled="" class="form-control">
+                                <div class="col-md-3"><input type="text" disabled="" class="form-control" value = "{{$contract->StallRental->stallID}}"></div>
+
+                              </div>
+
+                              <div class="row">
+                                <label class="col-md-3">Tenant Name</label>
+                                <div class="col-md-3"><input type="text" disabled="" class="form-control" value ="{{$contract->StallRental->StallHolder->stallHFName}} {{$contract->StallRental->StallHolder->stallHMName}} {{$contract->StallRental->StallHolder->stallHLName}}"></div>
+                                <label class="col-md-3">Date</label>
+                                <div class="col-md-3"><input type="text" disabled class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask value="{{\Carbon\Carbon::today()->format('F d,Y')}}" />
                                 </div>
                               </div>
 
-                              <div class="col-md-12">
-                                <label class="col-md-3">StallHolder Name</label>
-                                <div class="col-md-3"> 
-                                  <input type="text" disabled="" class="form-control">
-                                </div>
+                              <div class="row">
+                                <label class="col-md-3">Collection Status</label>
+                                <div class="col-md-3"><input type="text" disabled="" class="form-control"></div>
+                                 <label class="col-md-3">Balance</label>
+                                <div class="col-md-3"><input type="text" disabled="" class="form-control"></div>
                               </div>
+
+
 
                             </div>
+                             <div class = "box box-primary">
+                                <div class = "box box-body">
+                                  <div class="table-responsive">
+                                    <table id="tblpay" class="table table-bordered table-striped" role="grid">
+                                      <thead>
+                                          
+                                          <th>Description</th>
+                                          <th>Amount</th>
+                                        
+                                       
+                                      </thead>
+                                     <tfoot>
+                                        <tr >
+                                          <th colspan = "1" style="text-align: right; ">Total Amount:</th> 
+                                          <th></th>
+                                        </tr>
+                                      </tfoot>
+                                    </table>
+
+                                    <div class="row">
+                                      <label class="col-md-3"></label>
+                                      <div class="col-md-3"></div>
+                                      <label class="col-md-3">Amount Received:</label>
+                                      <div class="col-md-3"><input type="text" class="form-control" />
+                                      </div>
+                                    </div>
+
+                                </div>
+                                </div>
+                              </div>
+                             </div>
+                       
+                         <div class = "pull-right">
+                          <div class = "col-md-12" >
+                            <button class="btn btn-primary btn-flat" id = "save" style="width:100px; margin: 20px;"> <i class="fa fa-save"></i> Save</button>
+                          </div>
                         </div>
                         <!-- box box-primary -->
                     </div>
@@ -95,7 +136,7 @@
                                   <label>Date From:</label>
                               </div>
                               <div class="col-md-3">
-                                <input type="text" name="" class="form-control" disabled value="{{$lastCollection}}">
+                                <input type="text" name="" class="form-control" disabled value="">
                               </div>
 
                               <div class="col-md-2">
@@ -109,7 +150,7 @@
                           </div>
 
 
-                        <div class="box  box-primary">
+                        <div class="box  box-primary" style="margin-top:30px;">
                         <div class="box-body">
 
                           <div class="table-responsive">
@@ -152,7 +193,7 @@
         , changeMonth: true
         , changeYear: true
         , autoclose: true
-        , startDate: "{{$nextCollection}}"
+        , startDate: today,
         , orientation: 'bottom'
         ,format: 'yyyy-mm-dd'
     });

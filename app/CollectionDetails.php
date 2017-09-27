@@ -20,6 +20,10 @@ class CollectionDetails extends Model
 
     public function PaymentCollection()
     {
-    	return $this->belongsTo('App\Payment','tblPayment_Collection','collectionDetID','paymentID');
+    	return $this->belongsTo('App\Payment','tblPayment_Collection','collectionID','paymentID');
+    }
+
+    public function Collection(){
+        return $this->belongsTo('App\Collection','collectionID');
     }
 }
