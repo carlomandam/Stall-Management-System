@@ -78,9 +78,13 @@
                                         
                                        
                                       </thead>
+                                      <tbody>
+                                        @foreach($initFees as $i)<tr><td>{{$i->InitialFee->initDesc}}</td><td>{{$i->InitialFee->initAmt}}</td></tr>
+                                        @endforeach
+                                      </tbody>
                                      <tfoot>
                                         <tr >
-                                          <th colspan = "1" style="text-align: right; ">Total Amount:</th> 
+                                          <th colspan = "1" style="text-align: right; ">Total Amount:<?php $total = 0; foreach($initFees as $i){ $total+=$i->InitialFee->initAmt;} echo $total; ?></th> 
                                           <th></th>
                                         </tr>
                                       </tfoot>
@@ -101,7 +105,7 @@
                        
                          <div class = "pull-right">
                           <div class = "col-md-12" >
-                            <button class="btn btn-primary btn-flat" id = "save" style="width:100px; margin: 20px;"> <i class="fa fa-save"></i> Save</button>
+                            <a class="btn btn-primary btn-flat" id = "save" style="width:100px; margin: 20px;" href="/StallHolderList"> <i class="fa fa-save"></i> Save</a>
                           </div>
                         </div>
                         <!-- box box-primary -->
@@ -193,7 +197,7 @@
         , changeMonth: true
         , changeYear: true
         , autoclose: true
-        , startDate: today,
+        , startDate: 'today'
         , orientation: 'bottom'
         ,format: 'yyyy-mm-dd'
     });

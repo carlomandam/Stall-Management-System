@@ -14,6 +14,7 @@ class TblcontractInfo extends Migration
         Schema::create('tblContractInfo', function (Blueprint $table) {
             $table->increments('contractID');
             $table->integer('stallRentalID')->unsigned()->index();
+            $table->integer('prevContractID')->unsigned()->index()->nullable();
             $table->date('contractStart');
             $table->date('contractEnd')->nullable();
             $table->integer('stallRateID')->unsigned();
@@ -27,6 +28,11 @@ class TblcontractInfo extends Migration
 
             $table->foreign('stallRateID')->references('stallRateID')
                   ->on('tblStallRate')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+
+            $table->foreign('prevContractID')->references('contractID')
+                  ->on('tblContractInfo')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
          });

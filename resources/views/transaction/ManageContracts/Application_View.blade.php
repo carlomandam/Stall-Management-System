@@ -162,7 +162,7 @@
                                 </div>
                                 <div id="contract">
                                     <div class="col-md-12">
-                                        <button type='button' id='upbtn' class="btn btn-primary btn-flat pull-right"><span class='fa fa-pencil'></span>&nbspUpdate</button>
+                                        <a type='button' id='upbtn' class="btn btn-primary btn-flat pull-right" href="/getTennant/{{$stallHolderDetails->stallHID}}"><span class='fa fa-pencil'></span>&nbspUpdate</a>
                                     </div>
                                     <div class="box-header with-border">
                                         <br>
@@ -363,7 +363,7 @@
                 , success: function (data) {
                     toastr.success('Successfully Registered!');
                     $("#applyForm")[0].reset();
-                    window.location = data;
+                    window.location = "goToPayment/"+data;
                 }
             });
         });
@@ -489,7 +489,7 @@
             , context: this
             , success: function (data) {
                 toastr.success('Updated!');
-                window.location = data;
+                //window.location = data;
             }
         });
     }

@@ -20,6 +20,8 @@ Route::get('/', function () {
 });
 
 // Auth::routes();
+Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
+
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/UpdateRegistration/{rentID}','ApplicationController@updateRegistration');
@@ -37,7 +39,6 @@ Route::get('/getVendor','ApplicationController@getVendor');
 Route::get('/contractTable','ApplicationController@contractTable');
 Route::post('/getVendorInfo','ApplicationController@getVendorInfo');
 Route::post('/UpdateVendor','ApplicationController@updateVendor');
-Route::get('/rentInfo','ContractController@getRentInfo');
 Route::get('/searchVendor','ApplicationController@searchVendor');
 Route::get('displaySearch','ApplicationController@displaySearch');
 Route::get('/Stalls','ApplicationController@stall');
@@ -54,6 +55,8 @@ Route::resource('/', 'DashboardController');
 Route::get('/Building', function () {
     return view('Maintenance.Maintenance_Buildings');
 });
+
+Route::get('/ViewContract/{id}','ContractController@viewContract');
 
 Route::get('/Holiday', function () {
     return view('Maintenance.Maintenance_Holiday');

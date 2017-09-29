@@ -22,6 +22,9 @@ class Contract extends Model
     public function UtilityMeterID(){
         return $this->hasMany('App\UtilityMeterID','contractID','stallMeterID');
     }
+    public function PrevContract(){
+        return $this->belongsTo('App\Contract','prevContractID');
+    }
 
 
 

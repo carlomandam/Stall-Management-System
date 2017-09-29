@@ -25,7 +25,7 @@
                     <li class="active"><a href="#tab3primary" data-toggle="tab">Contracts</a></li>
                     <li><a href="#tab1primary" data-toggle="tab">Available Stalls</a></li>
                     <li><a href="#tab2primary" data-toggle="tab">Pending Registrations</a></li>
-                    <li><a href="#tab4primary" data-toggle="tab">Tennants</a></li>                    
+                    <li><a href="#tab4primary" data-toggle="tab">Tennants</a></li>         
                 </ul>
             </div>
             <div class="panel-body">
@@ -127,7 +127,7 @@
                     "data": function (data, type, dataToSet) {
                         var contracts = '';
                         for (var i = 0; i < data.active_stall_rental.length; i++) {
-                            contracts += "<tr><td>" + data.active_stall_rental[i].stallID + "</td><td><a href='/pdfview/" + data.active_stall_rental[i].stallRentalID + "'><button class='btn-primary pull-right' value='" + data.active_stall_rental[i].stallRentalID + "'>Generate Contract</button></a><td></tr>";
+                            contracts += "<tr><td>" + data.active_stall_rental[i].stallID + "</td><td><a href='/pdfview/" + data.active_stall_rental[i].stallRentalID + "'><button class='btn-primary pull-right' value='" + data.active_stall_rental[i].stallRentalID + "'>Generate Contract</button></a></td><td><a href='ViewContract/"+data.active_stall_rental[i].contract.contractID+"'><button class='btn btn-primary btn-flat'>View</button></a></td></tr>";
                         }
                         return '<div class="accordion-group" style="width:100%"><div class="accordion-heading" style="text-align:left;width:100%"><a class="accordion-toggle" data-toggle="collapse-next" style="width:100%">' + data.stallHFName + ' ' + data.stallHLName + '<i class="fa fa-angle-left pull-right"></i></a></div><div class="accordion-body collapse" style="margin-top:10px;text-indent:10px"><div class="accordion-inner"><table clas="table"><thead><th>Stall ID</th><th></th></thead><tbody>' + contracts + '</tbody></table></div></div></div>';
                     }

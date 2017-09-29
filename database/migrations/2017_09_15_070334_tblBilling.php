@@ -16,18 +16,11 @@ class TblBilling extends Migration
         //
         Schema::create('tblBilling', function (Blueprint $table) {
             $table->increments('billID');
-            $table->integer('contractID')->unsigned();
             $table->date('billDateFrom');
             $table->date('billDateTo');
             $table->date('billDueDate');
             $table->timestamps();
             $table->softDeletes();
-            
-            $table->foreign('contractID')
-                 ->references('contractID')
-                 ->on('tblContractInfo')
-                 ->onUpdate('cascade')
-                 ->onDelete('restrict');
         });
     }
 

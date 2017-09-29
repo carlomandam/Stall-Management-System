@@ -20,6 +20,7 @@ use App\InitFeeDetail;
 use App\InitBill;
 use App\Billing;
 use App\Utilities;
+use App\Payment;
 use App\Requirements;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -145,14 +146,29 @@ function acceptRental(){
         $reject->stallRentalStatus = 3;
         $reject->save();
     }
+
     $rental->stallRentalStatus = 1;
     $rental->save();
 
-   /* $initFees = InitialFee::all();
+    $initFees = InitialFee::all();
     foreach ($initFees as $init) {
         $ifd = new InitFeeDetail;
         $ifd->contractID = $rental->Contract->contractID;
-    }*/
+        $ifd->initID = $init->initID;
+        $ifd->save();
+    }
+
+    $contract = $rental->Contract;
+    return $contract->contractID;
+}
+
+public function goToPayment($id){
+    $contract = Contract::find($id);
+    $paymentLastID = Payment::whereRaw('paymentID = (select max(`paymentID`) from tblPayment)')->first();  
+    $paymentLastID= count($paymentLastID) == 0 ? 1 : $paymentLastID->paymentID +1;
+    $payID = 'PAYMENT-'.str_pad($paymentLastID, 5, '0', STR_PAD_LEFT);
+    $initFees = $contract->Initial_Details;
+    return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','initFees'));
 }
 
 function searchVendor(Request $request){
