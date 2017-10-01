@@ -13,15 +13,18 @@
 
 
 
-Auth::routes();
 
-Route::get('/', function () {
-    return view('dashboard.dashboard');
-});
+
 
 // Auth::routes();
-Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 
+
+
+
+Auth::routes();
+Route::group(['middleware' => 'auth'], function(){
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/UpdateRegistration/{rentID}','ApplicationController@updateRegistration');
@@ -230,6 +233,12 @@ Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 
 // Route::post('/updateApplication','ApplicationController@updateApplication');
-// Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
+
+});
+
+
+
+
+
+
