@@ -42,6 +42,10 @@
         margin: 20px;
         width: 120px;
     }
+
+    p {
+        margin-left: 14px;
+    }
 </style>
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i> Transactions </li>
@@ -50,7 +54,10 @@
 </ol>
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/square/blue.css')}}"> @stop @section('content')
 <form id="applyForm" method="post">
-    <input type="hidden" name="rateid" id="rateid" />
+    {{csrf_field()}}
+    <input type="hidden" name="rateid" id="rateid"/>
+    <input type="hidden" name="stallid" id="stallid"/>
+    <input type="hidden" name="venid" id="venid"/>
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-danger print-error-msg" style="display:none">
@@ -58,7 +65,6 @@
             </div>
         </div>
         <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp Back to StallHolder List</a> </div>
-        <!--left table-->
         <div class="col-md-6">
             <div class="box box-primary ">
                 <div class="box-header with-border">
@@ -67,13 +73,12 @@
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                 </div>
-                <!-- /.box-header -->
-                <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <select class="js-example-multiple-limit" style="width: 100%;  " id="ven_name" name="ven_name"> </select>
+                                <select class="js-example-multiple-limit" style="width: 100%;  " id="ven_name" name="ven_name">
+                                </select>
                                 <label for="org">Name of Group/Organization<i><b>&nbsp&nbsp(If Applicable)</i></b>
                                 </label>
                                 <input type="text" class="form-control" id="orgname" name="orgname" />
@@ -180,47 +185,25 @@
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Stall Code</label>
-                                <input type="text" class="form-control" readonly name="dispStallID" id="dispStallID" value="{{$stall->stallID}}">
+                                <p>{{$stall->stallID}}</p>
                                 <label>Stall Rate</label>
-                                <input type="text" class="form-control" readonly name="rate" id="dispStallID" value="{{'₱'.$stall->StallType->StallRate->dblRate}}">
+                                <p>{{'₱'.$stall->StallType->StallRate->dblRate}}</p>
                                 <label>Peak Days Additional Rate</label>
-                                <input type="text" class="form-control" readonly name="rate" id="dispStallID" value="{{($stall->StallType->StallRate->peakRateType == 1) ? '₱'.$stall->StallType->StallRate->dblPeakRate : $stall->StallType->StallRate->dblPeakRate.'%'}}">
+                                <p>{{($stall->StallType->StallRate->peakRateType == 1) ? '₱'.$stall->StallType->StallRate->dblPeakRate : $stall->StallType->StallRate->dblPeakRate.'%'}}</p>
                             </div>
                         </div>
-                        <!-- /.col-md-6 -->
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Stall Type</label>
-                                <input type="text" class="form-control" disabled="" name="dispStallType" id="dispStallType" readonly="" value=" {{$stall->StallType->StallType->stypeName }} ({{$stall->StallType->StallTypeSize->stypeArea}} m&sup2) " />
+                                <p>{{$stall->StallType->StallType->stypeName }} ({{$stall->StallType->StallTypeSize->stypeArea}}m&sup2)</p>
                                 <label>Location</label>
-                                <textarea type="text" class="form-control" disabled="" name="dispStallLocation" id="dispStallLocation" readonly="">{{(($stall->Floor->floorLevel == '1') ? $stall->Floor->floorLevel.'st' : (($stall->Floor->floorLevel == '2') ? $stall->Floor->floorLevel.'nd' : (($stall->Floor->floorLevel == '3') ? $stall->Floor->floorLevel.'rd' : $stall->Floor->floorLevel.'th'))).' Floor'}}, {{$stall->Floor->Building->bldgName}} Building</textarea>
+                                <p>{{(($stall->Floor->floorLevel == '1') ? $stall->Floor->floorLevel.'st' : (($stall->Floor->floorLevel == '2') ? $stall->Floor->floorLevel.'nd' : (($stall->Floor->floorLevel == '3') ? $stall->Floor->floorLevel.'rd' : $stall->Floor->floorLevel.'th'))).' Floor'}}, {{$stall->Floor->Building->bldgName}}</p>
                             </div>
-                        </div>
-                        <!--/.col-md-6 -->
-                        <div class="col-md-12">
-                            <label for="contracttype">Contract Type</label> <span class="required">&nbsp*</span>
-                            <label>
-                                <input type="radio" name="ctype" id="ctype" value="1" checked="checked"><b>Fixed</b></label>
-                            <label>
-                                <input type="radio" name="ctype" id="ctype" value="0"><b>At-Will</b></label>
-                        </div>
-                        <div class="col-md-6" id="changeClass">
-                            <label for="startdate">Start Date </label><span class="required">&nbsp*</span>
-                            <div class="input-group date">
-                                <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-                                <input type="text" class="form-control pull-right" id="datepicker" name="startDate"> </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="startdate">End Date </label><span class="required">&nbsp*</span>
-                            <div class="input-group date">
-                                <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-                                <input type="text" class="form-control pull-right" id="datepicker_end" name="endDate"> </div>
                         </div>
                         <div class="col-md-12">
                             <label for="bussiname">Business Name</label>
@@ -239,9 +222,11 @@
                             <input id="new-product" class='form-control' type="text" style='width:40%' />
                             <button type="button" id="btn-add-product">Add Product</button>
                         </div>
+                        <div class="col-md-12">
+                            <span class="small text-danger">Fields with asterisks(*) are required</span>
+                        </div>
                         <div class="col-md-12 ">
                             <button type="submit" class="btn btn-primary btn-flat pull-right" id="sub">Save</button>
-                            <p class="small text-danger">Fields with asterisks(*) are required</p>
                         </div>
                     </div>
                 </div>
@@ -269,9 +254,6 @@
                 , email: 'required'
                 , "contact[]": 'required'
                 , address: 'required'
-                , ctype: 'required'
-                , startDate: 'required'
-                , businessName: 'required'
                 , "products[]": 'required'
             }
             , messages: {
@@ -284,9 +266,6 @@
                 , email: 'Email is required'
                 , "contact[]": 'Enter atleast 1 contact number'
                 , address: 'Address is required'
-                , ctype: 'Select contract type'
-                , startDate: 'Start Date is required'
-                , businessName: 'Business Name is required'
                 , "products[]": 'Specify products'
             }
             , errorClass: "error-class"
@@ -327,6 +306,7 @@
                 });
             }
         });
+
         $("#ven_name").select2({
             minimumInputLength: 2
             , allowClear: true
@@ -334,7 +314,6 @@
             , ajax: {
                 url: '/searchVendor'
                 , dataType: 'json'
-                , delay: 250
                 , processResults: function (data) {
                     return {
                         results: $.map(data, function (item) {
@@ -380,14 +359,14 @@
             }
         });
         $("#ven_name").on('change', function () {});
-        //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
+
         var select = $('#DOBYear');
         var leastYr = 1900;
         var nowYr = new Date().getFullYear();
         for (var v = nowYr; v >= leastYr; v--) {
             $('#DOBYear').append('<option value ="' + v + '">' + v + '</option');
         }
-        //HIDE ASSOCIATE HOLDERS//
+
         $('#assoc_hold').hide();
         $(document).on('click', '#check_assoc', function () {
             if ($('#check_assoc').prop('checked') == true) {
@@ -397,6 +376,7 @@
                 $('#assoc_hold').fadeOut();
             }
         });
+
         $('#DOBMonth').change(function () {
             if ($(this).val() == 4 || $(this).val() == 6 || $(this).val() == 9 || $(this).val() == 11) {
                 $('#DOBDay option[value =31]').remove();
@@ -418,7 +398,7 @@
                 }
             }
         });
-        //DISPLAY AGE//
+
         $('#DOBYear,#DOBMonth,#DOBDay').on('change', function () {
             var day = $('#DOBDay').val();
             var month = $('#DOBMonth').val();
@@ -432,68 +412,27 @@
             }
             $('#age').val(age);
         });
-        //INITIALIZE DATEPICKER//
-        $("#datepicker").datepicker({
-            showOtherMonths: true
-            , selectOtherMonths: true
-            , changeMonth: true
-            , changeYear: true
-            , autoclose: true
-            , startDate: "dateToday"
-            , todayHighlight: true
-            , orientation: 'bottom'
-            , format: 'yyyy-mm-dd'
-        });
-        //INITIALIZE DATEPICKER//
-        $("#datepicker_end").datepicker({
-            showOtherMonths: true
-            , selectOtherMonths: true
-            , changeMonth: true
-            , changeYear: true
-            , autoclose: true
-            , startDate: "dateToday"
-            , todayHighlight: true
-            , orientation: 'bottom'
-            , format: 'yyyy-mm-dd'
-        });
-        //INPUTMASK INITIALIZATION//
+
         Inputmask().mask(document.querySelectorAll("input"));
         $(".email").inputmask("email");
+
         $('.js-example-basic-multiple').select2({
             width: 'resolve'
+            , closeOnSelect: false
         });
-        //CONTRACT TYPE//
-        $('input[name=ctype]').change(function () {
-            var value = $('input[name=ctype]:checked').val();
-            if (value == 0) {
-                $('#datepicker_end').prop('disabled', true);
-            }
-            else {
-                $('#datepicker_end').removeAttr('disabled', true);
-            }
-        });
+
         $("#btn-add-product").on("click", function () {
             var newProdVal = $("#new-product").val();
-            // Set the value, creating a new option if necessary
+
             if ($("#products").find("option[value='" + newProdVal + "']").length) {
                 $("#products").val(newProdVal).trigger("change");
             }
             else {
-                // Create the DOM option that is pre-selected by default
                 var newState = new Option(newProdVal, newProdVal, true, true);
-                // Append it to the select
                 $("#products").append(newState).trigger('change');
             }
         });
-        $('textarea').each(function () {
-            textAreaAdjust(this);
-        });
     });
-
-    function textAreaAdjust(o) {
-        o.style.height = '1px';
-        o.style.height = (25 + o.scrollHeight) + "px";
-    }
 </script>
 <script src="{{ URL::asset('js/jquery.inputmask.bundle.js')}}"></script>
 <script src="{{ URL::asset('js/phone-ru.js')}}"></script>

@@ -12,14 +12,14 @@ class StallHolder extends Model
         return $this->belongsToMany('App\Stall', 'tblstallrental_info', 'stallHID', 'stallID')->withPivot('stallRentalID')->orderBy('stallHLName','ASC');
     }
     
-    public function StallRental()
+    public function Contract()
     {
-        return $this->hasMany('App\StallRental','stallHID');
+        return $this->hasMany('App\Contract','stallHID');
     }
     
-    public function ActiveStallRental()
+    public function ActiveContracts()
     {
-        return $this->hasMany('App\StallRental','stallHID')->where('stallRentalStatus','1');
+        return $this->hasMany('App\Contract','stallHID')->where('status','1');
     }
     
     public function ContactNo()

@@ -199,7 +199,6 @@ user-select: none; */
                     @endif
                 </div>
             </div>
-
             <input type="submit" name="login" class="login loginmodal-submit" value="Login">
         </form>
     </div>

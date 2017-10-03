@@ -178,20 +178,15 @@ function searchVendor(Request $request){
         $search = $request->q;
         $data = StallHolder::with('ContactNo')->where('stallHFName','LIKE',"%$search%")
         ->orWhere('stallHLName','LIKE',"%$search%")->get();
-            /*$data = DB::table("tblstallholder")
-                ->select("*",DB::raw("CONCAT(stallHFName,' ',stallHLName) as full_name"))
-                ->where('stallHFName','LIKE',"%$search%")
-                ->orWhere('stallHLName','LIKE',"%$search%")->join('tblContactNos','tblstallholder.stallHID','=','tblContactNos.stallHID')->groupBy('tblstallholder.stallHID')
-                ->get();*/
-            }
+    }
 
-            return response()->json($data);
-        }
+    return response()->json($data);
+}
 
-        function displaySearch(){
-         $vendor = Vendor::where('venID',$_GET['id'])->get();
-         return (json_encode($vendor));
-     }
+function displaySearch(){
+     $vendor = Vendor::where('venID',$_GET['id'])->get();
+     return (json_encode($vendor));
+}
 
 function rejectRental(){
     $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
@@ -217,7 +212,7 @@ function newApplication(){
 
         if(isset($_POST['req'])){
             foreach ($_POST['req'] as $req) {
-                $holder->Requirement()->attach($req)->withTimestamps();
+                $holder->Requirement()->attach($req);
             }
         }
     }
@@ -289,13 +284,13 @@ function updateApplication(){
         }
 
         foreach ($rental->Product as $prod) {
-            if(!in_array($prod->prodID, $_POST['products'])){
-                $rental->Product()->detach($prod->prodID);
+            if(!in_array($prod->productID, $_POST['products'])){
+                $rental->Product()->detach($prod->productID);
             }
         }
     }else{
         foreach ($rental->Product as $prod) {
-            $rental->Product()->detach($prod->prodID);
+            $rental->Product()->detach($prod->productID);
         }
     }
 

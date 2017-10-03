@@ -18,6 +18,7 @@ class TblHoliday extends Migration
             $table->string('Name',200);
             $table->integer('Month')->unsigned();
             $table->integer('Day')->unsigned();
+            $table->text('Desc')->nullable();
             $table->timestamps();
             $table->softDeletes();
          });

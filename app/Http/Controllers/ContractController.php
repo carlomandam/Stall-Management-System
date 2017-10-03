@@ -33,7 +33,29 @@ public function viewContract($id) {
     $contract = Contract::with('StallRental.Stall','StallRental.Product','StallRate')->find($id);
     $stall = Stall::with("Floor.Building","StallType.StallTypeSize","StallType.StallType")->find($contract->StallRental->stallID);
     $prod = Product::all();
-    return view('Transaction.ManageContracts.ContractView',compact("contract","stall","prod"));
+    $rates = StallRate::withTrashed()->where('stype_SizeID',$stall->stype_SizeID)->get();
+    return view('Transaction.ManageContracts.ContractView',compact("contract","stall","prod","rates"));
+}
+
+public function ammend(){
+  $old = Contract::find($_POST['id']);
+
+  if(date_format(date_create($_POST['endDate']),"Y-m-d") == $old->contractEnd && $_POST['rate'] == $old->stallRateID)
+    return 'same';
+  
+  $new = new Contract;
+
+  $new->stallRentalID = $old->stallRentalID;
+
+  $new->contractStart = date_format(date_create($old->contractStart),"Y-m-d");
+  $new->contractEnd = (isset($_POST['endDate'])) ? date_format(date_create($_POST['endDate']),"Y-m-d") : null;
+  $new->stallRateID = $_POST['rate'];
+  $new->prevContractID = $old->contractID;
+
+  if($new->save()){
+      $old->delete();
+      return $new->contractID;
+  }
 }
 
 public function view(){

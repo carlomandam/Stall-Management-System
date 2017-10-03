@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class PivotTablestallrentalStallHAssoc extends Migration
+class ContractProduct extends Migration
 {
     /**
      * Run the migrations.
@@ -13,24 +13,22 @@ class PivotTablestallrentalStallHAssoc extends Migration
      */
     public function up()
     {
-    Schema::create('tblStallRental_StallHAssoc', function (Blueprint $table) {
-            $table->integer('stallRentalID')->unsigned()->index();
-            $table->integer('stallH_assocID')->unsigned();
+        Schema::create('tblContract_Product', function (Blueprint $table) {
+            $table->integer('contractID')->unsigned();
+            $table->integer('productID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallRentalID')->references('stallRentalID')
-                  ->on('tblStallRental_Info')
+            $table->foreign('contractID')->references('contractID')
+                  ->on('tblContractInfo')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
 
-            $table->foreign('stallH_assocID')->references('stallH_assocID')
-                  ->on('tblStallHolderAssoc')
+            $table->foreign('productID')->references('productID')
+                  ->on('tblProduct')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-         });
-
-
+        });
     }
 
     /**
@@ -40,6 +38,6 @@ class PivotTablestallrentalStallHAssoc extends Migration
      */
     public function down()
     {
-       Schema::dropIfExists('tblStallRental_StallHAssoc');
+        Schema::dropIfExists('tblStallRental_Product');
     }
 }

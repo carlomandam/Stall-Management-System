@@ -27,7 +27,6 @@ class PivotTableStallTypeStallSize extends Migration
               ->on('tblStallType_Size')
               ->onUpdate('cascade')
               ->onDelete('restrict');
-            //
         });
     }
 

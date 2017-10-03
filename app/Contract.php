@@ -1,11 +1,16 @@
 <?php
 namespace App;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Contract extends Model
 {
+    use SoftDeletes;
+    
     protected $table = "tblContractInfo";
     protected $primaryKey = "contractID";
     protected $fillable = array('stallRentalID', 'contractLengthID', 'contractStatus'); 
+    protected $softDelete = true;
     
     public function ContractLength(){
         return $this->belongsTo('App\ContractLength','contractLengthID');

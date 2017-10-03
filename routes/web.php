@@ -11,18 +11,8 @@
 |
 */
 
-
-
-
-
-
-// Auth::routes();
-
-
-
-
 Auth::routes();
-Route::group(['middleware' => 'auth'], function(){
+//Route::group(['middleware' => 'auth'], function(){
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Dashboard','dashboardController@index');
@@ -36,6 +26,7 @@ Route::get('/Contract', 'ContractController@index');
 Route::get('/ViewContracts', 'ContractController@view');
 Route::get('/ShowDetails', 'ContractController@showdetails');
 Route::post('/checkEmail','ApplicationController@checkEmail');
+Route::post('/ammendContract','ContractController@ammend');
 
 Route::post('/AddVendor','ApplicationController@newApplication');
 Route::get('/getVendor','ApplicationController@getVendor');
@@ -218,10 +209,6 @@ Route::resource('/borrow', 'BorrowController');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
 
-///////////////Utilities////////
-// Route::get('/Utilities','UtilitiesController@index');
-// Route::get('/testjoin','ApplicationController@testjoin');
-
 // /////////////////////Utilities/////////////////
 Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
 Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
@@ -232,10 +219,9 @@ Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
 Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 
-// Route::post('/updateApplication','ApplicationController@updateApplication');
+Route::post('/updateApplication','ApplicationController@updateApplication');
 
-
-});
+//});
 
 
 

@@ -54,17 +54,12 @@
 <script type="text/javascript" src="{{ URL::asset('js/icheck.js')}}">
 </script> @stop @section('content')
 <div class="row">
-    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</a> </div>
-    <!--left table-->
+    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{URL::previous()}}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</a> </div>
     <div class="col-md-12">
         <div class="box box-primary ">
             <div class="box-header with-border">
                 <h3 class="box-title">Tennant's Details</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                </div>
             </div>
-            <!-- /.box-header -->
             <form id="applyForm" method="post">
                 <input type="hidden" id="token" name="_token" value="<?php echo csrf_token(); ?>">
                 <input type="hidden" id="tennant" name="tennant" value="<?php echo $tennant->stallHID ?>">

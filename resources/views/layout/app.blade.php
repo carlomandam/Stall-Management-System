@@ -83,13 +83,17 @@
             position: relative;
             top: 10px;
         }
+
+        .select2-selection__choice{
+            color:black !important;
+        }
     </style>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini" style="height:auto;min-height:100%;">
     <div class="wrapper" style="overflow:hidden;">
         <header class="main-header">
-            <a href="index2.html" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b>{{ Auth::user()->position }}</span> </a>
+            <a href="index2.html" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b> Auth::user()->position </span> </a>
             <nav class="navbar navbar-fixed-top">
                 <!-- Sidebar toggle button-->
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a> <span class="system-name"><b>Stalls Management System</b></span>
@@ -131,8 +135,7 @@
                 <div class="user-panel">
                     <div class="pull-left image"> <img src="{{ URL::asset('image/userimage2.png') }}" class="img-circle" alt="User Image"> </div>
                     <div class="pull-left info">
-                        <p id="userName">{{ Auth::user()->name }}</p>
-
+                        <p id="userName"> Auth::user()->name </p>
                     </div>
                 </div>
                 <ul class="sidebar-menu">

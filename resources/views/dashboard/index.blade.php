@@ -1,6 +1,6 @@
 @extends('layout.app') 
 @section('title') 
-{{ 'Dashboard'}}
+{{'Dashboard'}}
 @stop 
 @section('style')
 

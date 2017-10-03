@@ -16,7 +16,7 @@ class TblRequest extends Migration
         //
          Schema::create('tblRequest', function (Blueprint $table) {
             $table->increments('requestID');
-            $table->integer('stallRentalID')->unsigned();
+            $table->integer('contractID')->unsigned();
             $table->integer('requestType');
             $table->string('requestText',300)->nullable();
             $table->integer('status');
@@ -25,8 +25,8 @@ class TblRequest extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallRentalID')->references('stallRentalID')
-                    ->on('tblStallRental_Info') 
+            $table->foreign('contractID')->references('contractID')
+                    ->on('tblContractInfo') 
                     ->onUpdate('cascade')
                     ->onDelete('restrict');
         });
