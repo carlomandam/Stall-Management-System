@@ -15,11 +15,13 @@ class MonthlyReading extends Model
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'stallUtilityID',
-        'readingConsumption',
+        'prevReading',
+        'presReading',
         'readingFrom',
         'readingTo',
-        'readingAmt'
+        'totalBillAmount',
+        'muiltplier',
+        'utilType',
     ];
 
     public function Billing()

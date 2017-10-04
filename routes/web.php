@@ -11,8 +11,19 @@
 |
 */
 
+
+
+
+
+
+
+
+
+
+
 Auth::routes();
-//Route::group(['middleware' => 'auth'], function(){
+// Route::group(['middleware' => 'auth'], function(){
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Dashboard','dashboardController@index');
@@ -192,6 +203,7 @@ Route::get('/ViewPayment/{id}','PaymentController@makePayment');
 Route::get('/Billing','BillingController@index');
 Route::resource('/Utilities','UtilityController');
 Route::get('/Utilities/previous/{id}', 'UtilityController@previous');
+Route::get('/Utilities/submeter/{id}', 'UtilityController@submeter');
 Route::get('/getBills','PaymentController@getBills');
 Route::get('/createBill/{id}','BillingController@createBill');
 Route::get('/ViewBill/{id}','BillingController@viewBill');
@@ -220,6 +232,7 @@ Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 
 Route::post('/updateApplication','ApplicationController@updateApplication');
+
 
 //});
 

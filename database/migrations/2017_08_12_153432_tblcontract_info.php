@@ -18,7 +18,7 @@ class TblcontractInfo extends Migration
             $table->string('stallID')->index();
             $table->string('orgName')->nullable();
             $table->string('businessName');
-            $table->date('contractStart');
+            $table->date('contractStart')->nullable();
             $table->date('contractEnd')->nullable();
             $table->integer('stallRateID')->unsigned();
             $table->softDeletes();

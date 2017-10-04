@@ -16,7 +16,7 @@ class TblRequirements extends Migration
         //
          Schema::create('tblRequirements', function (Blueprint $table) {
             $table->increments('reqID');
-            $table->string('reqName',200)->unique();
+            $table->string('reqName')->unique();
             $table->text('reqDesc')->nullable();
             $table->timestamps();
             $table->softDeletes();

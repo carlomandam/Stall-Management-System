@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>MySeoul Vendor Portal</title>
+    <title>Stall Management System</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -171,6 +171,7 @@ user-select: none; */
     <div class="loginmodal-container">
          <h1 >Stall Management System</h1><br>
         <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+          <input type="hidden" name="_token" value="{{ csrf_token() }}">
             {{ csrf_field() }}
 
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">

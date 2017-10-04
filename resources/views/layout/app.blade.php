@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>MySeoul | @yield('title')</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/dataTables.bootstrap.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css')}}">
@@ -113,7 +115,7 @@
                                             Logout
                                         </a>
                                          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
+                                           <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         </form>
 
                                         
@@ -122,7 +124,6 @@
                                         <a href="{{ route('register') }}">
                                             Add Account
                                         </a>
-
                                         
                                     </li>
                                 </ul>

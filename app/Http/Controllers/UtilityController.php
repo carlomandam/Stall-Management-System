@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\StallRental;
 use App\Contract;
 use App\StallUtility;
+use App\MonthlyReading;
+use App\UtilityMeterID;
+
 use DB;
 
 
@@ -48,6 +50,21 @@ class UtilityController extends Controller
     public function store(Request $request)
     {
         //
+        $monthlyReading = new MonthlyReading;
+        $monthlyReading->prevReading = $request->finalPrevious;
+        $monthlyReading->presReading = $request->finalPresent;
+        $monthlyReading->readingFrom = $request->finalDateFrom;
+        $monthlyReading->readingTo = $request->finalDateTo;
+        $monthlyReading->totalBillAmount = $request->finalBillAmount;
+        $monthlyReading->multiplier = $request->finalMulti;
+        $monthlyReading->utilType = $request->finalUtility;
+
+        // $contractMeter = new UtilityMeterID;
+        $monthlyReading->save();
+
+
+
+
     }
 
     /**
@@ -60,12 +77,12 @@ class UtilityController extends Controller
     {
         //
          $stalls = DB::table('tblContractInfo as contract')
-                        ->join('tblStallRental_Info as rental','contract.stallRentalID','rental.stallRentalID')
-                        ->join('tblStall as stall','rental.stallID','stall.stallID')
+                        ->join('tblStall as stall','contract.stallID','stall.stallID')
                         ->join('tblStall_Utilities as utility','stall.stallID','utility.stallID')
                         ->leftjoin('tblSubMeter as meter','utility.stallUtilityID','meter.stallUtilityID')
-                        ->select('contract.*','stall.stallID as stallID','utility.utilityType as utilityType','meter.*')
+                        ->select('contract.*','stall.stallID as stallID','utility.*','meter.*')
                         ->where('utility.utilityType','=', $id)
+                        ->whereNotNull('contractStart')
                         ->get();
             
         return response()->json(['stalls'=>$stalls]);
@@ -112,5 +129,13 @@ class UtilityController extends Controller
                         ->first();
                         // ->get(); 
          return response()->json(['previous'=>$previous]);                           
+    }
+       public function submeter($id){
+         $subReading = DB::table('tblSubMeter')
+                        ->where('stallUtilityID','=', $id)
+                        ->orderBy('subMeterID','desc')
+                        ->first();
+                        // ->get(); 
+         return response()->json(['subReading'=>$subReading]);                           
     }
 }

@@ -22,7 +22,7 @@ class PivotTableStallTypeStallSize extends Migration
               ->onDelete('restrict');
 
         $table->integer('stypeSizeID')->unsigned()->index();
-        $table->string('stype_SizedColor',200)->nullable();
+        $table->string('stype_SizedColor')->nullable();
         $table->foreign('stypeSizeID')->references('stypeSizeID')
               ->on('tblStallType_Size')
               ->onUpdate('cascade')

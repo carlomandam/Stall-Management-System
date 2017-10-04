@@ -39,7 +39,7 @@ class RateController extends Controller
             $rate = new StallRate;
             $rate->stype_SizeID = $x;
             $rate->dblRate = $_POST['rate'];
-            $rate->dblPeakRate = $_POST['prate'];
+            $rate->dblPeakAdditional = $_POST['prate'];
             $rate->peakRateType = $_POST['prtype'];
             $rate->stallRateEffectivity = date_format(date_create($_POST['effect']),"Y-m-d");
             $rate->save();  

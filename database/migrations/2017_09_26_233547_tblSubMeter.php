@@ -19,6 +19,8 @@ class TblSubMeter extends Migration
             $table->integer('stallUtilityID')->unsigned()->index();
             $table->integer('prevRead');
             $table->integer('presRead');
+             $table->datetime('readingFrom');
+            $table->datetime('readingTo');
             $table->timestamps();
             $table->softDeletes();
 

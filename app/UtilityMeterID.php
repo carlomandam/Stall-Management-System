@@ -17,9 +17,7 @@ class UtilityMeterID extends Model
      protected $fillable = [
     	'contractID',
     	'readingID',
-    	'meterFrom',
-    	'meterTo',
-    	'totalAmount',
+    	'utilityAmt',
     	
     ];
 

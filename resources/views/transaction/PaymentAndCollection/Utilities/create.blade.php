@@ -1,5 +1,4 @@
 @extends('layout.app')
-
 @section('title')
 {{'Payment and Collection'}}
 @stop
@@ -29,7 +28,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <select class="form-control" id="utilityType">
+                                         <select class="form-control" id="utilityType" name="utilityType">
                                             <option selected disabled>------</option>
                                             <option value="1">Electricty</option>
                                             <option value="2">Water</option>
@@ -113,7 +112,7 @@
 
                                   <div class="row" style="margin-top: 20px;">
                                       <div class="col-md-4">
-                                          <button class="btn btn-primary">Save</button>
+                                          <button class="btn btn-primary" id="save">Save</button>
                                           <a href="{{url('/Utilities')}}"><button class="btn btn-danger">Cancel</button></a>
                                       </div>
                                   </div>
@@ -129,27 +128,11 @@
 
 @stop
 @section('script')
-<script type="text/javascript" src ="{{ URL::asset('js/utility.js') }}"></script>
 <script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
+<script type="text/javascript" src ="{{ URL::asset('js/utility.js') }}"></script>
+
 <script type="text/javascript">
   
- $(".collectTo").inputmask('currency', {
-  rightAlign: true,
-  prefix: 'Php ',
-});
-
- $('.datepicker').datepicker({
-      autoclose: true,
-      format: 'yyyy-mm-dd',
-      endDate: 'today'
-      // todayHighlight:true
-
-    });
- // $('.reading').inputmask({ mask: "9-9-9-9-9-9-9"});
- $(".reading").inputmask("9999999", { numericInput: true, placeholder: "0"});
-  $(".money").inputmask('currency', {
-  rightAlign: true,
-  prefix: 'Php ',
-});
+ 
 </script>
 @stop
