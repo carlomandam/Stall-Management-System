@@ -12,6 +12,9 @@
 
 @section('content')
 <div>
+ <div class="alert alert-danger print-error-msg" style="display:none">
+        <ul></ul>
+    </div>
     <div class="box box-solid box-default">
         <div class="box-body" >
             <div class="col-md-12">
@@ -20,8 +23,10 @@
                              
                         </div>
                         <div>
-                              <div class="box-body">
-
+                             <form>
+                              <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
+                                <div class="box-body">
+                                
                                   <div class="row" style="margin-top: 10px;">
                                       <div class="col-md-2">
                                           <label>Utility Type</label>
@@ -42,7 +47,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker" name="dateFrom" id="date_from">
+                                         <input type="text" class="form-control datepicker" name="dateFrom" id="date_from" disabled>
                                       </div>
 
                                       <div class="col-md-1">
@@ -50,7 +55,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker" name="dateTo" id="date_to">
+                                         <input type="text" class="form-control datepicker" name="dateTo" id="date_to" disabled>
                                       </div>
                                   </div> 
 
@@ -62,7 +67,7 @@
 
                                    <div class="row" style="margin-top: 10px;">
                                       <div class="col-md-2">
-                                          <label>Previos Reading</label>
+                                          <label>Previous Reading</label>
                                       </div>
                                       <div class="col-md-2">
                                         <input type="text" class="form-control reading" name="prevRead" id="prev_read">
@@ -119,6 +124,7 @@
 
 
                               </div>
+                             </form>
                         </div>
                   </div>
             </div>

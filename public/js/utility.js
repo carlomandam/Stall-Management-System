@@ -15,18 +15,16 @@ $(document).on('change', '#utilityType', function(){
 		success: function(data) {
 			console.log(data);
 			$.each(data.stalls,function(key,value){
-				var classname ='reading'; 
-				if(value.presRead==null){
-					$('.stallList').append('<tr class ="stall" data-id ="'+value.contractID+'"><td>'+value.stallID+'</td><td><input type="text" data-id="'+value.stallUtilityID+'" class="form-control" id="sub_prev" name="subPrev"></td><td><input type="text" class="form-control" id="sub_pres" name="subPres" ></td><td><input type="text" class="form-control" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="'+value.stallUtilityID+'" name="stallUtility"></td> </tr>');
+				console.log(value[0].presRead);
+				if(value[0].presRead==null){
+					$('.stallList').append('<tr class ="stall" data-id ="'+value[0].contractID+'"><td>'+value[0].stallID+'</td><td><input type="text" data-id="'+value[0].stallUtilityID+'" class="form-control" id="sub_prev" name="subPrev"></td><td><input type="text" class="form-control" id="sub_pres" name="subPres" ></td><td><input type="text" class="form-control" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="'+value[0].stallUtilityID+'" name="stallUtility"></td> </tr>');
 				
-					
-
 				}
 				else{
-					$('.stallList').append('<tr class ="stall" data-id ="'+value.contractID+'"><td>'+value.stallID+'</td><td><input type="text" data-id="'+value.stallUtilityID+'" class="form-control" id="sub_prev" name="subPrev" value ="'+value.presRead+'" disabled></td><td><input type="text" class="form-control" id="sub_pres" name="subPres"></td><td><input type="text" class="form-control" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="'+value.stallUtilityID+'" name="stallUtility"></td>  </tr>');
+
+					$('.stallList').append('<tr class ="stall" data-id ="'+value[0].contractID+'"><td>'+value[0].stallID+'</td><td><input type="text" data-id="'+value[0].stallUtilityID+'" class="form-control" id="sub_prev" name="subPrev" value ="'+value[0].presRead+'" disabled></td><td><input type="text" class="form-control" id="sub_pres" name="subPres"></td><td><input type="text" class="form-control" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="'+value[0].stallUtilityID+'" name="stallUtility"></td>  </tr>');
 				
 				}
-				
 					$(document).on("change","#sub_pres", function(){
 						ind = $(this).closest('tr').index();
 						console.log(ind);
@@ -75,7 +73,9 @@ $(document).on('change', '#utilityType', function(){
 				document.getElementById('prev_read').disabled = false;
 			}
 			else{
-				$('#date_from').val(data.previous.readingTo);
+				var date = data.previous.readingTo;
+				date= date.toString().split(' ')[0];
+				$('#date_from').val(date);
 				document.getElementById('date_from').disabled = true;
 				$('#prev_read').val(data.previous.presReading );
 				document.getElementById('prev_read').disabled =true;
@@ -133,9 +133,8 @@ $(document).ready(function() {
       autoclose: true,
       format: 'yyyy-mm-dd',
       endDate: 'today'
-      // todayHighlight:true
-
     });
+
  // $('.reading').inputmask({ mask: "9-9-9-9-9-9-9"});
 
  $(".reading").inputmask("9999999", { numericInput: true, placeholder: "0"});
@@ -152,27 +151,34 @@ var _token = $("input[name='_token']").val();
 	var finalUtility = $("select[name='utilityType']").val();
 	var finalDateFrom = $("input[name='dateFrom']").val();
 	var finalDateTo = $("input[name='dateTo']").val();
-	var finalPrevious = parseInt($("input[name='prevRead']").val());
+   	var finalPrevious = parseInt($("input[name='prevRead']").val());
+   	finalPrevious = (isNaN(finalPrevious) ? 0 : finalPrevious); 
 	var finalPresent = parseInt($("input[name='presRead']").val());
+	finalPresent = (isNaN(finalPresent) ? 0 : finalPresent);
 	var finalBillAmount = amountBill;
 	var finalMulti = Math.round(multi * 100)/100;
-	var finalSubPrev = [];
-	var finalSubPres =[];
-	var finalSubAmount =[];
-	var finalStallUtility =[];
-	$("input[name='subPrev']").each(function() {
-   		 finalSubPrev.push($(this).val());
+	var subMeter = [];
+	var meterID =[];
+	$('.stallList tr').each(function() {
+   		ind = $(this).index();
+  		var sub ={
+	  		"finalUtilID" : $('input[name=stallUtility]').eq(ind).val(),
+	  		"finalSubPrev" : $('input[name=subPrev]').eq(ind).val(),
+	  		"finalSubPres": $('input[name=subPres]').eq(ind).val(),
+	  		"finalSubFrom":$("input[name='dateFrom']").val(),
+	  		"finalSubTo": $("input[name='dateTo']").val()
+  
+  		}
+  		subMeter.push(sub);
+  		var met ={
+  			 "finalSubAmount": $('input[name=totalAmt]').eq(ind).val(),
+  			 "finalContractID":$('.stall').attr("data-id").val(),
+  		}
+  		meterID.push(met);
+  		
 	});
-	$("input[name='subPres']").each(function() {
-   		 finalSubPres.push($(this).val());
-	});
-	$("input[name='totalAmt']").each(function() {
-   		 finalSubAmount.push($(this).val());
-	});
-	$("input[name='stallUtility']").each(function() {
-   		 finalStallUtility.push($(this).val());
-	});
-	console.log(finalStallUtility);
+	console.log(meterID);	
+
 	$.ajax({
 		type: "POST",
 		url: "/Utilities",
@@ -184,7 +190,8 @@ var _token = $("input[name='_token']").val();
 			'finalPrevious': finalPrevious,
 			'finalPresent': finalPresent,
 			'finalBillAmount':finalBillAmount,
-			'finalMulti':finalMulti
+			'finalMulti':finalMulti,
+			'subMeter': subMeter
 			// 'finalSubPrev': finalSubPrev,
 			// 'finalSubPres':finalSubPres,
 			// 'finalSubAmount': finalSubAmount
@@ -196,11 +203,19 @@ var _token = $("input[name='_token']").val();
 					toastr.success('Added New requirements');
 					location.reload();
 				}else{
-					toastr.error(data.error);
+					// toastr.error(data.error);
+					printErrorMsg(data.error);
 				}
 			}
 
 		});
+	function printErrorMsg (msg) {
+			$(".print-error-msg").find("ul").html('');
+			$(".print-error-msg").css('display','block');
+			$.each( msg, function( key, value ) {
+				$(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+			});
+		}
 
 
 })

@@ -14,6 +14,7 @@ class MonthlyReading extends Model
     protected $primaryKey = "readingID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
+    protected $dateFormat = 'Y-m-d';
     protected $fillable = [
         'prevReading',
         'presReading',
