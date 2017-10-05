@@ -22,4 +22,7 @@ class Charges extends Model
     public function Billing(){
         return $this->belongsToMany('App\Billing','tblBill_Charges','chargeID','billID');
     }
+    public function Charge_Details(){
+        return $this->hasMany('App\Charge_Details','chargeID');
+    }
 }

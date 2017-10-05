@@ -12,8 +12,10 @@ class Payment_Collection extends Model
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
-    	'paymentDate',
-    	'paidAmt'
+    	'paymentID',
+    	'collectionDetID',
+    	'partialAmt',
+    	'isVoidOrRefund'
     
     ];
     

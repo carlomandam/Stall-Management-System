@@ -14,16 +14,6 @@
 
 
 
-
-
-
-
-
-
-
-Auth::routes();
-// Route::group(['middleware' => 'auth'], function(){
-
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Dashboard','dashboardController@index');
@@ -197,6 +187,7 @@ Route::get('/Payment','PaymentController@index');
 Route::resource('/Collection','CollectionController');
 Route::get('/CreateCollection/{id}','CollectionController@create');
 Route::get('/ViewCollections/{id}','CollectionController@viewCollections');
+Route::get('/ViewPaymentHistory','PaymentController@viewHistory');
 Route::get('/ViewCollectionDetails/{id}/end/{endid}','CollectionController@showDetails');
 Route::get('/collectionTable', 'CollectionController@getCollections');
 Route::get('/ViewPayment/{id}','PaymentController@makePayment');
@@ -241,3 +232,7 @@ Route::post('/updateApplication','ApplicationController@updateApplication');
 
 
 
+
+// Auth::routes();
+
+// Route::get('/home', 'HomeController@index')->name('home');

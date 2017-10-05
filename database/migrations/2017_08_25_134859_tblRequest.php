@@ -18,9 +18,9 @@ class TblRequest extends Migration
             $table->increments('requestID');
             $table->integer('contractID')->unsigned();
             $table->integer('requestType');
-            $table->string('requestText',300)->nullable();
+            $table->string('requestText',191)->nullable();
             $table->integer('status');
-            $table->string('remarks',200)->nullable();
+            $table->string('remarks',191)->nullable();
             $table->dateTime('approvedDate')->nullable();     
             $table->timestamps();
             $table->softDeletes();

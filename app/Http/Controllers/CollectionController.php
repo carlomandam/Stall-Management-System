@@ -8,6 +8,8 @@ use App\Collection;
 use App\CollectionDetails;
 use Carbon\Carbon;
 use App\StallRate;
+use App\Payment;
+use App\Payment_Collection;
 use DB;
 use Validator;
 use Illuminate\Validation\Rule;
@@ -22,8 +24,8 @@ class CollectionController extends Controller
      */
     public function index()
     {
-         $contract =DB::select("Select stall.stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHMName,' ',stallH.stallHLName) as tenantName, tblcontractinfo.contractID as contractID, stall.businessName as businessName from tblstallrental_info as stall left join tblstallholder as stallH on stallH.stallHID = stall.stallHID LEFT JOIN tblcontractinfo on tblcontractinfo.stallRentalID = stall.stallRentalID where stall.stallRentalStatus = 1 and tblcontractinfo.contractStart <= NOW() and stall.deleted_at IS NULL");
-         return view ('transaction/PaymentAndCollection/collectionTable',compact('contract'));
+       /*  $contract =DB::select("Select stall.stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHMName,' ',stallH.stallHLName) as tenantName, tblcontractinfo.contractID as contractID, stall.businessName as businessName from tblstallrental_info as stall left join tblstallholder as stallH on stallH.stallHID = stall.stallHID LEFT JOIN tblcontractinfo on tblcontractinfo.stallRentalID = stall.stallRentalID where stall.stallRentalStatus = 1 and tblcontractinfo.contractStart <= NOW() and stall.deleted_at IS NULL");
+         return view ('transaction/PaymentAndCollection/collectionTable',compact('contract'));*/
     }
 
     /**
@@ -33,57 +35,7 @@ class CollectionController extends Controller
      */
     public function create($id)
     {
-        //
-         $collections = DB::table('tblCollection as collect')
-         ->select(DB::raw('collect.*, ( SELECT  cd.collectDate from tblcollection_details as cd where cd.collectionID = collect.collectionID ORDER BY cd.collectDate desc LIMIT 1) as lastDate, (SELECT cd.collectDate from tblcollection_details as cd  where cd.collectionID = collect.collectionID ORDER by cd.collectDate asc LIMIT 1) as firstDate'))
-         ->where('collect.contractID',$id)
-         ->orderBy('collect.created_at')
-         ->get();
-        
-        foreach($collections as $collect)
-        {
-          $lastCollection = $collect->lastDate;
-          $collectionDetails = $collect->firstDate;
-        }
-
-        $contract = Contract::find($id);
-       /* $lastCollection = Collection::whereRaw('collectionID = (SELECT MAX(`collectionID`)FROM tblCollection)')
-            ->where('contractID',$id)
-
-            ->pluck('collectionID')
-            ->first();
-      */
-        if(count($collections) > 0){
-        /* $collectionDetails = CollectionDetails::where('collectionID',$lastCollection)
-        ->orderBy('collectDate','desc')
-        ->pluck('collectDate')
-        ->first();
-
-        $collectionDetails = Carbon::parse($collectionDetails)
-        ->addDays(1)
-        ->format('Y-m-d');
-        $nextCollection = Carbon::parse($collectionDetails)
-        ->addDays(1)
-        ->format('Y-m-d');*/
-        $collectionDetails = Carbon::parse($lastCollection)
-        ->addDays(1)
-        ->format('Y-m-d');
-         $nextCollection = Carbon::parse($collectionDetails)
-        ->addDays(1)
-        ->format('Y-m-d');
-        }
-
-        else{
-
-            $collectionDetails = Carbon::parse($contract->contractStart)
-            ->format('Y-m-d');
-            $nextCollection = Carbon::parse($collectionDetails)
-            ->addDays(1)
-            ->format('Y-m-d');
-        }
-
-
-         return view('transaction/PaymentAndCollection/collectionIndex',compact('contract','id','collectionDetails','nextCollection'));
+       
     }
 
     /**
@@ -96,18 +48,21 @@ class CollectionController extends Controller
     {
         //
         $rules = [
-        'dateTo' => 'required',
+        'dates' => 'required',
+        'money' => 'required'
         ];
         $messages = [
         'required' => ':attribute field is required.',
         ];
         $attributeName =[
-        'dateTo' => 'Date To',
+        'dates' => 'Date To',
+        'money' => 'Amount'
+
         ];
 
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($attributeName);
-          $marketDays = []; 
+        $marketDays = []; 
             //dayOfWeek returns integer 0 if Sunday, and so on...
 
             // store yung marketDays as array
@@ -160,28 +115,7 @@ class CollectionController extends Controller
                 }
 
             }
-            $first = $request->dateFrom;
-            $last = $request->dateTo;
-            $step = '+1 day';
-            $output_format = 'Y-m-d';
-            $dates = array();
-            $current = strtotime($first);
-            $last = strtotime($last);
-          
-      
-          
-            while( $current <= $last ) {
-
-                $thisDate = date($output_format, $current);
-                $thisDate = Carbon::parse($thisDate)->dayOfWeek;
-                if(in_array($thisDate, $marketDays))
-                {
-                    $dates[] = date($output_format,$current);
-                }
-
-                $current = strtotime($step, $current);
-            }
-        if($validator->passes()){
+    if($validator->passes()){
            
             try{
              DB::beginTransaction();
@@ -189,13 +123,26 @@ class CollectionController extends Controller
                 'contractID' => $request->contractID
             ]);
 
-            
+             $dates = $request->dates;
+            $newPayment = Payment::create([
+              'paymentDate' => Carbon::today(),
+              'paidAmt' => $request->money              
+              ]);
             foreach($dates as $date)
             {   
-            CollectionDetails::create([
+            $newColDetails = CollectionDetails::create([
                 'collectionID' => $newCollection->collectionID,
                 'collectDate' => $date
             ]);
+
+            Payment_Collection::create([
+              'paymentID' => $newPayment->paymentID,
+              'collectionDetID' => $newColDetails->collectionDetID,
+              'partialAmt' => '0',
+              'isVoidOrRefund' => '0'
+            ]);
+
+
             }
             
             DB::commit();
@@ -225,7 +172,7 @@ class CollectionController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
+     *x`
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -305,7 +252,7 @@ class CollectionController extends Controller
         $current = strtotime($collectionFirst->collectDate);
         $last = strtotime($collectionLast->collectDate);
         $getIntegerDate =[];
-        $data = [[]];
+        $data = array();
         while( $current <= $last ) {
 
         $dates[] = date($output_format, $current);
@@ -501,7 +448,7 @@ class CollectionController extends Controller
         $current = strtotime($first);
         $last = strtotime($last);
         $getIntegerDate =[];
-        $data = [[]];
+      
     while( $current <= $last ) {
 
         $dates[] = date($output_format, $current);
@@ -629,12 +576,12 @@ class CollectionController extends Controller
     $amount = [];
 
     if($rates->peakRateType == 1){
-    $peakDaysRate = $rates->dblPeakRate + $rates->dblRate;
+    $peakDaysRate = $rates->dblPeakAdditional + $rates->dblRate;
     }
     else{
     $peakDaysRate = ($regularRate)*(($rates->dblPeakRate / 100)) + $regularRate;
     }
-
+  
     $ctr = 0;
     foreach($getIntegerDate as $Gdates)
     {
@@ -652,31 +599,32 @@ class CollectionController extends Controller
         }
         $ctr++;
     }
-   
+
     $size = count($dates);
     $ctr = 0;
-
+    $data2 = array();
     while($ctr < $size)
-    {
+    {   
         $data[$ctr]["date"] = $dates[$ctr];
         if(!$amount[$ctr]== 0)
-        {
+        {$data[$ctr]['cb'] = "<input type = 'checkbox' id='chk'/>";
           $data[$ctr]['desc'] = "Rental Fee for " . Carbon::parse($dates[$ctr])->format('l');
           $data[$ctr]['amount'] = number_format($amount[$ctr],2);
       }
         else
-        {
+        {   $data[$ctr]['cb'] = "<input type = 'checkbox' disabled />";
             $data[$ctr]['desc'] = "Not a Market Day";
             $data[$ctr]['amount'] = "0.00";
         }
 
 
+       
         $ctr++;
 
     }
    
-    
-     return response()->json($data);
+      
+      return response()->json($data);
     }
 
 }

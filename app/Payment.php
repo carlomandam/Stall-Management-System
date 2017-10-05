@@ -26,5 +26,8 @@ class Payment extends Model
     public function Initial_Details(){
         return $this->hasMany('App\Initial_Details','paymentID');
     }
+    public function Charge_Details(){
+        return $this->hasMany('App\Charge_Details','paymentID');
+    }
 
 }

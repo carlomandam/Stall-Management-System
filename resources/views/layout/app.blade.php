@@ -95,7 +95,8 @@
 <body class="hold-transition skin-blue sidebar-mini" style="height:auto;min-height:100%;">
     <div class="wrapper" style="overflow:hidden;">
         <header class="main-header">
-            <a href="index2.html" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b> Auth::user()->position </span> </a>
+            <a href="index2.html" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b></span> </a>
+
             <nav class="navbar navbar-fixed-top">
                 <!-- Sidebar toggle button-->
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a> <span class="system-name"><b>Stalls Management System</b></span>
@@ -109,26 +110,28 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{{ route('logout') }}"
+                                        <a href=""
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
+
                                          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
                                         </form>
 
                                         
                                     </li>
                                     <li>
-                                        <a href="{{ route('register') }}">
+                                        <a href="">
                                             Add Account
                                         </a>
                                         
                                     </li>
                                 </ul>
                     </li>
-                </ul>
+                </ul> 
             </nav>
         </header>
         <aside class="main-sidebar">
@@ -136,7 +139,11 @@
                 <div class="user-panel">
                     <div class="pull-left image"> <img src="{{ URL::asset('image/userimage2.png') }}" class="img-circle" alt="User Image"> </div>
                     <div class="pull-left info">
-                        <p id="userName"> Auth::user()->name </p>
+
+
+                        <p id="userName"></p>
+
+
                     </div>
                 </div>
                 <ul class="sidebar-menu">

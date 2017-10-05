@@ -15,7 +15,7 @@ class TblHoliday extends Migration
     {
         Schema::create('tblHoliday', function (Blueprint $table) {
             $table->increments('ID');
-            $table->string('Name',200);
+            $table->string('Name',191);
             $table->integer('Month')->unsigned();
             $table->integer('Day')->unsigned();
             $table->text('Desc')->nullable();

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 class Collection extends Model
 {
     //
@@ -26,6 +27,8 @@ class Collection extends Model
     public function CollectionDetails(){
         return $this->hasMany('App\CollectionDetails','collectionID');
     }
+
+  
 
 
    

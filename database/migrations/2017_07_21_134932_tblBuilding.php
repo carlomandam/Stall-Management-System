@@ -15,7 +15,9 @@ class TblBuilding extends Migration
     {
         Schema::create('tblBuilding', function (Blueprint $table) {
             $table->increments('bldgID');
+
             $table->string('bldgName',100)->unique();
+
             $table->string('bldgCode',10)->unique();
             $table->text('bldgDesc')->nullable();
             $table->timestamps();

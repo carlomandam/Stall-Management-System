@@ -30,7 +30,9 @@ class Contract extends Model
     public function PrevContract(){
         return $this->belongsTo('App\Contract','prevContractID');
     }
-
+    public function StallHolder(){
+         return $this->belongsTo('App\StallHolder','stallHID');
+    }
 
 
     public function Collection(){

@@ -15,7 +15,7 @@ class Tblproduct extends Migration
     {
             Schema::create('tblProduct', function (Blueprint $table) {
             $table->increments('productID');
-            $table->string('productName',200);
+            $table->string('productName',191);
             $table->softDeletes();
         });
     }
