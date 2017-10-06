@@ -113,6 +113,16 @@ class UtilityController extends Controller
                         ->first();
 
             $readingID = $monthly->readingID;
+            foreach ($request->subMeter as $meter) {
+                $sub = new SubMeter([
+                  'stallUtilityID' => $meter['finalUtilID'],
+                  'prevRead' => $meter['finalSubPrev'],
+                  'readingID' => $readingID,
+                  'presRead' => $meter['finalSubPres']
+                  
+                ]);
+                $sub->save();
+            }
             
             foreach ($request->meterID as $metID) {
                 $metID = new UtilityMeterID([
@@ -123,17 +133,7 @@ class UtilityController extends Controller
                 $metID->save();
             
             }
-            foreach ($request->subMeter as $meter) {
-                $sub = new SubMeter([
-                  'stallUtilityID' => $meter['finalUtilID'],
-                  'prevRead' => $meter['finalSubPrev'],
-                  'stallMeterID' => $readingID,
-                  'presRead' => $meter['finalSubPres']
-                  
-                ]);
-                $sub->save();
-           
-            }
+            
             return response()->json(['success'=>'Added new records.']);
         }
         else{
@@ -242,23 +242,23 @@ class UtilityController extends Controller
             $monthly = DB::table('tblMonthlyReading as month')
                             ->where('month.readingID','=', $id)
                             ->first();
-            $readingID = $monthly->readingID;
-            $date = $monthly->readingFrom;
+            // $readingID = $monthly->readingID;
+          
             // return($readingID);
             $reading = DB::table('tblMonthlyReading as month')
                             ->where('month.readingID','=',$id)
                             ->get();   
              // return ($reading);
              $subMeter = DB::table('tblStallUtilities_MeterID as meter')
-                            // ->leftjoin('tblStall_Utilities as utility','utility.stallID','contract.stallID')
-                            ->leftjoin('tblSubMeter as sub','sub.stallUtilityID','utility.stallUtilityID')
                             ->join('tblMonthlyReading as month','month.readingID','meter.readingID')
-                            ->where('meter.readingID','=', $readingID)
-                            ->where('')
-
-                            ->select('meter.utilityAmt as subAmount')
+                            ->join('tblContractInfo as contract', 'contract.contractID','meter.contractID')
+                            ->join('tblStall_Utilities as utilities','utilities.stallID','contract.stallID')
+                            ->join('tblSubMeter as sub','sub.stallUtilityID','utilities.stallUtilityID')
+                            ->where('month.readingID','=', $id)
+                            // ->leftjoin('tblSubMeter as sub','sub.readingID','month.readingID')
+                            ->select('meter.utilityAmt as subAmount','contract.stallID as stallCode','sub.prevRead as subPrevious','sub.presRead as subPresent')
                             ->get();
-            return($subMeter);                          
+            // return($subMeter);                          
             return view('transaction/PaymentAndCollection/Utilities.view',compact('reading','subMeter'));                          
     }
 }

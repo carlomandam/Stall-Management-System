@@ -114,8 +114,8 @@
                                               @foreach($subMeter as $sub)
                                                 <tr class ="stall" data-id ="">
                                                     <td>{{$sub->stallCode}}</td>
-                                                    <td><input type="text" data-id="" class="form-control reading" id="sub_prev" name="subPrev" value="{{$sub->subPrevious}}"></td>
-                                                    <td><input type="text" class="form-control reading" id="sub_pres" name="subPres" value="{{$sub->subPresent}}" ></td>
+                                                    <td><input type="text" data-id="" class="form-control reading" id="sub_prev" name="subPrev" value="{{$sub->subPrevious}}" readonly></td>
+                                                    <td><input type="text" class="form-control reading" id="sub_pres" name="subPres" value="{{$sub->subPresent}}"  readonly></td>
                                                     <td><input type="text" class="form-control money" id="total_amt" name="totalAmt" value="{{$sub->subAmount}}" disabled></td>
                                                 </tr>
                                               @endforeach
@@ -126,7 +126,7 @@
 
                                   <div class="row" style="margin-top: 20px;">
                                       <div class="col-md-4">
-                                          <button class="btn btn-primary" id="save" name="save" >Save</button>
+                                         <!--  <button class="btn btn-primary" id="save" name="save" >Save</button> -->
                                           <a href="{{url('/Utilities')}}"><button class="btn btn-danger">Cancel</button></a>
                                       </div>
                                   </div>
