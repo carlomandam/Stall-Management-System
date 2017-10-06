@@ -226,11 +226,11 @@
                                             <label>Date Range</label>
                                         </td>
                                         <td>
-                                            <input type="text" class="datepicker form-control" id='rangeFrom' name='rangeFrom' readonly="true" style="cursor:pointer; background-color: #FFFFFF;" />
+                                            <input type="text" class="datepicker form-control" id='rangeFrom' name='rangeFrom' readonly="true" style="cursor:pointer; background-color: #FFFFFF;" disabled="" />
                                         </td>
                                         <td>&nbsp;to</td>
                                         <td>
-                                            <input type="text" class="datepicker form-control" id='rangeTo' name='rangeTo' readonly="true" style="cursor:pointer; background-color: #FFFFFF;" />
+                                            <input type="text" class="datepicker form-control" id='rangeTo' name='rangeTo' readonly="true" style="cursor:pointer; background-color: #FFFFFF;" disabled="" />
                                         </td>
                                         <td>
                                             <a class="btn btn-primary btn-flat" id="generate"> <i class="fa fa-angle-double-right"></i> Go</a>
@@ -385,7 +385,7 @@
                                 "data": "paidDate"
                             }
                             , {
-                                "data": "description"
+                                  "data": "description"
                             }
                             , {
                                 "data": "paidAmt"

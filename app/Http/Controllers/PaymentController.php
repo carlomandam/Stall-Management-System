@@ -394,6 +394,8 @@ class PaymentController extends Controller{
                         $array[]= CollectionDetails::where('collectionDetID',$dates)->pluck("collectDate");
                     }
                     $collectDates[$ctr]['date'] = $array;
+
+                    
                }
                 else{ 
                     $collectDates[$ctr]['date'] =  CollectionDetails::where('collectionDetID',$collectDates[$ctr]['date'])->pluck("collectDate");
@@ -414,7 +416,14 @@ class PaymentController extends Controller{
                 $data[$recordCtr]["paymentID"] = 'PAYMENT-'.str_pad($date["paymentID"], 5, '0', STR_PAD_LEFT);
                 $data[$recordCtr]["paidDate"] = $date['paydate'];
                 $data[$recordCtr]["paidAmt"] = 'Php ' .number_format($date['amt'],2);
-                $data[$recordCtr]["description"] =  $collectDates[$ctr]["date"];
+                if(count($collectDates[$ctr]['date'])>1){
+                 $string = implode(',', $collectDates[$ctr]['date']);
+                 $string = str_replace(array( '["', '"]' ), '', $string);
+                }
+                else{ $string = $collectDates[$ctr]['date'];
+                $string = str_replace(array( '["', '"]' ), '', $string);}
+                $data[$recordCtr]["description"] = 'Rental for '. $string;
+
 
                 $recordCtr++;
                 $ctr++;
