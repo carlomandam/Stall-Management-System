@@ -30,8 +30,8 @@ public function index(){
 }
 
 public function viewContract($id) {
-    $contract = Contract::with('StallRental.Stall','StallRental.Product','StallRate')->find($id);
-    $stall = Stall::with("Floor.Building","StallType.StallTypeSize","StallType.StallType")->find($contract->StallRental->stallID);
+    $contract = Contract::with('Stall','Product','StallRate')->find($id);
+    $stall = Stall::with("Floor.Building","StallType.StallTypeSize","StallType.StallType")->find($contract->stallID);
     $prod = Product::all();
     $rates = StallRate::withTrashed()->where('stype_SizeID',$stall->stype_SizeID)->get();
     return view('Transaction.ManageContracts.ContractView',compact("contract","stall","prod","rates"));

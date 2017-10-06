@@ -24,7 +24,7 @@
 </ol>
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/square/blue.css')}}"> @stop @section('content')
 <div class="row">
-    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="/StallHolderList" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp; Back to StallHolder List</a> </div>
+    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="/StallHolderList" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp; Back to StallHolder List</a></div>
     <div class="col-md-12">
         <div class="tabcontent active" id="1">
             <div class="box box-primary">
@@ -33,9 +33,9 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h3><span style="font-size:21px;font-weight: light">Stall Holder:</span> {{$contract->StallRental->StallHolder->stallHFName.' '.$contract->StallRental->StallHolder->stallHMName[0].'. '.$contract->StallRental->StallHolder->stallHLName}} <a href="/getTennant/{{$contract->StallRental->StallHolder->stallHID}}" style="font-size: 12px">View Details</a></h3> </div>
+                            <h3><span style="font-size:21px;font-weight: light">Stall Holder:</span> {{$contract->StallHolder->stallHFName.' '.$contract->StallHolder->stallHMName[0].'. '.$contract->StallHolder->stallHLName}} <a href="/getTennant/{{$contract->StallHolder->stallHID}}" style="font-size: 12px">View Details</a></h3> </div>
                         <div class="col-md-12">
-                            <label for="bussiname" style="font-size:18px;font-weight: normal">Business Name: <span style="font-size:20px;font-weight: normal">{{$contract->StallRental->businessName}}</span> <a href="#" style="font-size: 12px"><span class='glyphicon glyphicon-pencil'></span>Rename</a></label>
+                            <label for="bussiname" style="font-size:18px;font-weight: normal">Business Name: <span style="font-size:20px;font-weight: normal">{{$contract->businessName}}</span> <a href="#" style="font-size: 12px"><span class='glyphicon glyphicon-pencil'></span>Rename</a></label>
                         </div>
                     </div>
                     <div class="row">
@@ -53,7 +53,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label>Peak Days Additional Rate</label>
-                            <p>{{($stall->StallType->StallRate->peakRateType == 1) ? '₱'.$stall->StallType->StallRate->dblPeakRate : $stall->StallType->StallRate->dblPeakRate.'% (₱'.number_format(($stall->StallType->StallRate->dblRate * ($stall->StallType->StallRate->dblPeakRate / 100)),2,'.',',').')'}} </p>
+                            <p>{{($stall->StallType->StallRate->peakRateType == 1) ? '₱'.$stall->StallType->StallRate->dblPeakRate : $stall->StallType->StallRate->dblPeakAdditional.'% (₱'.number_format(($stall->StallType->StallRate->dblRate * ($stall->StallType->StallRate->dblPeakAdditional / 100)),2,'.',',').')'}} </p>
                         </div>
                         <div class="col-md-6">
                             <label>Location</label>

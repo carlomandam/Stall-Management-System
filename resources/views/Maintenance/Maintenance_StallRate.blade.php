@@ -123,10 +123,10 @@
                 , {
                     "data": function (data, type, dataToSet) {
                         if(data.peakRateType == '1')
-                            return '₱' + parseFloat(Math.round(data.dblRate * 100)/100).toFixed(2) + ' ( Additional  ₱' + parseFloat(Math.round(data.dblPeakRate * 100)/100).toFixed(2) + ' on peak days)';
+                            return '₱' + parseFloat(Math.round(data.dblRate * 100)/100).toFixed(2) + ' ( Additional  ₱' + parseFloat(Math.round(data.dblPeakAdditional * 100)/100).toFixed(2) + ' on peak days)';
                         else{
                             if(data.peakRateType == '2')
-                            return '₱' + parseFloat(Math.round(data.dblRate * 100)/100).toFixed(2) + ' ( Additional ' + data.dblPeakRate + '% (₱'+ parseFloat(Math.round(((data.dblRate * data.dblPeakRate) / 100) * 100)/100).toFixed(2) +') on peak days)';
+                            return '₱' + parseFloat(Math.round(data.dblRate * 100)/100).toFixed(2) + ' ( Additional ' + data.dblPeakAdditional + '% (₱'+ parseFloat(Math.round(((data.dblRate * data.dblPeakAdditional) / 100) * 100)/100).toFixed(2) +') on peak days)';
                         }
                     }
                 }
@@ -215,7 +215,7 @@
     function getToday(){
         var today = new Date();
         var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0!
+        var mm = today.getMonth()+1;
 
         var yyyy = today.getFullYear();
         if(dd<10){

@@ -19,7 +19,7 @@
                     <h4>Rental Agreement</h4> </div>
                 <div style="margin-left:10%;margin-right:10%;">
                     <p style="text-indent:50px">
-                        <center> THIS AGREEMENT made this (day) <b>{{date_format(date_create($data['rental']->startingDate), 'd')}} </b>of (Month) <b>{{date_format(date_create($data['rental']->startingDate), 'F')}}</b>, (Year) <b>{{date_format(date_create($data['rental']->startingDate), 'Y')}}</b> ,
+                        <center> THIS AGREEMENT made this (day) <b>{{date_format(date_create($data['contract']->contractStart), 'd')}} </b>of (Month) <b>{{date_format(date_create($data['contract']->contractStart), 'F')}}</b>, (Year) <b>{{date_format(date_create($data['contract']->contractStart), 'Y')}}</b>,
                             <p>
                                 <center>is between:</center>
                             </p>
@@ -27,20 +27,20 @@
                                 <center><b>Benito Roger L. De Joya </b> (OWNER) of My Seoul Tiangge </center>
                             </p>and
                             <p>
-                                <center> <b>  {{ $data['rental']->StallHolder->stallHFName. " ". $data['rental']->StallHolder->stallHMName[0]. ". ". $data['rental']->StallHolder->stallHLName}} </b>(VENDOR)</center>
-                            </p> The OWNER and VENDOR hereby agree the rental of Stall No. <b> {{$data['rental']->stallID}} </b>located on (Floor) <b> {{$data['rental']->Stall->Floor->floorLevel}} </b>,(Building) <b> {{$data['rental']->Stall->Floor->Building->bldgName}}.</b> Commencing on this day until {{$data['rental']->Contract->contractEnd}}. This agreement is subject to the following terms and conditions: </center>
+                                <center> <b>  {{ $data['contract']->StallHolder->stallHFName. " ". $data['contract']->StallHolder->stallHMName[0]. ". ". $data['contract']->StallHolder->stallHLName}} </b>(VENDOR)</center>
+                            </p> The OWNER and VENDOR hereby agree the rental of Stall No. <b> {{$data['contract']->stallID}} </b>located on (Floor) <b> {{$data['contract']->Stall->Floor->floorLevel}} </b>,(Building) <b> {{$data['contract']->Stall->Floor->Building->bldgName}}.</b> Commencing on this day until {{$data['contract']->contractEnd}}. This agreement is subject to the following terms and conditions: </center>
                     </p>
                     <br> </div>
                 <div style="margin-left:10%;margin-right:10%;">
                     <p>1. Membership</p>
                     <p style="text-indent:50px;">Vendor agrees to pay the annual membership fee for the maintenance of the facilities. This membership fee is non-refundable. </p>
                     <p>2. Contract Period</p>
-                    <p style="text-indent:50px;">The contract shall be a term of starting on the (day) @if($data['rental']->startingDate != "") <b> {{date_format(date_create($data['rental']->startingDate), 'd')}} </b> of (Month) <b> {{date_format(date_create($data['rental']->startingDate), 'F')}} </b>,(Year) <b> {{date_format(date_create($data['rental']->startingDate), 'Y')}} </b>.</p> @endif
+                    <p style="text-indent:50px;">The contract shall be a term of starting on the (day) @if($data['contract']->contractStart != "") <b> {{date_format(date_create($data['contract']->contractStart), 'd')}} </b> of (Month) <b> {{date_format(date_create($data['contract']->contractStart), 'F')}} </b>,(Year) <b> {{date_format(date_create($data['contract']->contractStart), 'Y')}} </b>.</p> @endif
                     <p>3. Security Deposit</p>
                     <p style="text-indent:50px;">Vendor agrees to pay the security deposit. This security deposit is non – refundable but consumable. It will cover unpaid rent upon termination of the rent agreement.</p>
                     <p>4. Rental fees</p>
-                    <p style="text-indent:50px;">Vendor shall pay rent of Php {{ number_format($data['rental']->Contract->StallRate->dblRate, 2, '.', ',')}} daily with additional @if($data['rental']->Contract->StallRate->peakRateType == 1) Php.{{$data['rental']->Contract->StallRate->dblPeakRate}}
-                    @elseIf($data['rental']->Contract->StallRate->peakRateType == 2) {{$data['rental']->Contract->StallRate->dblPeakRate . '% (Php.'.($data['rental']->Contract->StallRate->dblRate * $data['rental']->Contract->StallRate->dblPeakRate) / 100}})@endIf on peak days</p>
+                    <p style="text-indent:50px;">Vendor shall pay rent of Php {{ number_format($data['contract']->StallRate->dblRate, 2, '.', ',')}} daily with additional @if($data['contract']->StallRate->peakRateType == 1) Php.{{$data['contract']->StallRate->dblPeakRate}}
+                    @elseIf($data['contract']->StallRate->peakRateType == 2) {{$data['contract']->StallRate->dblPeakRate . '% (Php.'.($data['contract']->StallRate->dblRate * $data['contract']->StallRate->dblPeakRate) / 100}})@endIf on peak days</p>
                     <p>5. Termination</p>
                     <p style="text-indent:50px;">This agreement may be renewed subject to the sole discretion of the management of MySeoul, Inc. The agreement may be terminated beforehand upon mutual written agreement of both parties. It may also be terminated if the vendor violates any stipulation of this agreement; OR if the vendor violates any rule, regulation, or policy declared by the management of MySeoul, Inc. in the course of operations. </p>
                     <p>6. Clearance </p>
@@ -87,7 +87,7 @@
                     <p>
                         <center>
                             <input type="text" value="Benito Roger L. De Joya" style="border:transparent;border-bottom:2px solid black;width:160px;background-color:transparent margin-right:28%;text-align: center;" disabled>
-                            <input type="text" value="{{ $data['rental']->StallHolder->stallHFName. ' '. $data['rental']->StallHolder->stallHMName[0]. '. '. $data['rental']->StallHolder->stallHLName}}" style="border:transparent;border-bottom:2px solid black;width:160px;background-color:transparent;margin-left:28%; text-align: center;" disabled> </center>
+                            <input type="text" value="{{ $data['contract']->StallHolder->stallHFName. ' '. $data['contract']->StallHolder->stallHMName[0]. '. '. $data['contract']->StallHolder->stallHLName}}" style="border:transparent;border-bottom:2px solid black;width:160px;background-color:transparent;margin-left:28%; text-align: center;" disabled> </center>
                     </p>
                     <p>
                         <center>

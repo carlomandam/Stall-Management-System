@@ -55,9 +55,8 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/square/blue.css')}}"> @stop @section('content')
 <form id="applyForm" method="post">
     {{csrf_field()}}
-    <input type="hidden" name="rateid" id="rateid"/>
-    <input type="hidden" name="stallid" id="stallid"/>
-    <input type="hidden" name="venid" id="venid"/>
+    <input type="hidden" name="rateid" id="rateid" value="{{$stall->StallType->StallRate->stallRateID}}" />
+    <input type="hidden" name="stallid" id="stallid" value="{{$stall->stallID}}" />
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-danger print-error-msg" style="display:none">
@@ -194,7 +193,7 @@
                                 <label>Stall Rate</label>
                                 <p>{{'₱'.$stall->StallType->StallRate->dblRate}}</p>
                                 <label>Peak Days Additional Rate</label>
-                                <p>{{($stall->StallType->StallRate->peakRateType == 1) ? '₱'.$stall->StallType->StallRate->dblPeakRate : $stall->StallType->StallRate->dblPeakRate.'%'}}</p>
+                                <p>{{($stall->StallType->StallRate->peakRateType == 1) ? '₱'.$stall->StallType->StallRate->dblPeakAdditional : $stall->StallType->StallRate->dblPeakAdditional.'%'}}</p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -242,7 +241,6 @@
     $(document).ready(function () {
         var stall = JSON.parse("{{json_encode($stall)}}".replace(/&quot;/g, '"'));
         console.log(stall);
-        $('#rateid').val(stall.stall_type.stall_rate.stallRateID);
         $("#applyForm").validate({
             rules: {
                 fname: 'required'
@@ -317,24 +315,6 @@
                 , processResults: function (data) {
                     return {
                         results: $.map(data, function (item) {
-                            $('#fname').val(item.stallHFName);
-                            $('#mname').val(item.stallHMName);
-                            $('#lname').val(item.stallHLName);
-                            var parts = item.stallHBday.split('-');
-                            $('#DOBMonth').val(parts[1]);
-                            $('#DOBDay').val(parts[2]);
-                            $('#DOBYear').val(parts[0]).trigger('change');
-                            $('form input[name=sex][value=' + item.stallHSex + ']').click();
-                            $('#email').val(item.stallHEmail);
-                            $('#address').val(item.stallHAddress);
-                            for (var i = $('input[name="numbers[]"]').length; i < item.contact_no.length; i++) {
-                                $('input[name="numbers[]"]').last().next().find('button').click();
-                            }
-                            var j = 0;
-                            $('input[name="numbers[]"]').each(function () {
-                                $(this).val(item.contact_no[j].contactNumber);
-                                j++;
-                            });
                             return {
                                 text: item.stallHFName + " " + item.stallHLName
                                 , id: item.stallHID
@@ -345,20 +325,45 @@
                 , cache: true
             }
         });
-        $("#ven_name").on('change', function () {
-            if ($(this).val() == null) {
-                $('#fname').val('');
-                $('#mname').val('');
-                $('#lname').val('');
-                $('#fname').val('');
-                $('#DOBMonth')[0].selectedIndex = 0;
-                $('#DOBDay')[0].selectedIndex = 0;
-                $('#DOBYear')[0].selectedIndex = 0;
-                $('#age').val('');
-                $('form input[name=sex][value=1]').click();
-            }
+
+        $("#ven_name").on('change', function(){
+            if($(this).val() != null)
+            $.ajax({
+                type: "POST"
+                , url: '/getVendorData'
+                , data: {
+                    "_token" : "{{csrf_token()}}"
+                    , "id" : $(this).val()
+                }
+                , context: this
+                , success: function (data) {
+                    var item = data;
+                    $('#fname').val(item.stallHFName);
+                    $('#mname').val(item.stallHMName);
+                    $('#lname').val(item.stallHLName);
+                    var parts = item.stallHBday.split('-');
+                    $('#DOBMonth').val(parts[1]);
+                    $('#DOBDay').val(parts[2]);
+                    $('#DOBYear').val(parts[0]).trigger('change');
+                    $('form input[name=sex][value=' + item.stallHSex + ']').click();
+                    $('#email').val(item.stallHEmail);
+                    $('#address').val(item.stallHAddress);
+                    if(item.contact_no.length != 0){
+                        for (var i = $('input[name="numbers[]"]').length; i < item.contact_no.length; i++) {
+                            $('input[name="numbers[]"]').last().next().find('button').click();
+                        }
+
+                        var j = 0;
+                        $('input[name="numbers[]"]').each(function () {
+                            $(this).val(item.contact_no[j].contactNumber);
+                            j++;
+                        });
+                    }
+                }
+            });
+            else
+                $('form input,select').val("");
         });
-        $("#ven_name").on('change', function () {});
 
         var select = $('#DOBYear');
         var leastYr = 1900;
@@ -422,14 +427,18 @@
         });
 
         $("#btn-add-product").on("click", function () {
+            var isnew = true;
             var newProdVal = $("#new-product").val();
-
-            if ($("#products").find("option[value='" + newProdVal + "']").length) {
-                $("#products").val(newProdVal).trigger("change");
-            }
-            else {
-                var newState = new Option(newProdVal, newProdVal, true, true);
-                $("#products").append(newState).trigger('change');
+            $("#products").find("option").each(function(){
+                if($(this).html() == newProdVal){
+                    $(this).prop('selected',true);
+                    $("#products").trigger('change');
+                    isnew = false;
+                }
+            });
+            if(isnew) {
+                var newProd = new Option(newProdVal, newProdVal, true, true);
+                $("#products").append(newProd).trigger('change');
             }
         });
     });

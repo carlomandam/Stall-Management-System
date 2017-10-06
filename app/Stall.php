@@ -13,7 +13,7 @@ class Stall extends Model
     public $incrementing = false;
     
     public function Pending(){
-        return $this->hasMany('App\StallRental','stallID','stallID')->where('stallRentalStatus','=','2');
+        return $this->hasMany('App\Contract','stallID','stallID')->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd');
     }
     
     public function StallType(){
@@ -23,21 +23,20 @@ class Stall extends Model
     public function Floor(){
         return $this->belongsTo('App\Floor','floorID');
     }
-    public function CurrentTennant()
-    {
-        return $this->hasOne('App\StallRental','stallID')->whereHas('Contract')->where('stallRentalStatus',1)->with('StallHolder','Contract');
+
+    public function CurrentTennant(){
+        return $this->hasOne('App\Contract','stallID')->where('contractStart','!=','NULL')->with('StallHolder');
     }
     
-    public function StallUtility()
-    {
+    public function StallUtility(){
         return $this->hasMany('App\StallUtility','stallID');
     }
     
     public function StallHolder(){
-       return $this->belongsToMany('App\StallHolder', 'tblstallrental_info', 'stallID', 'stallHID')->orderBy('stallID','ASC');
+       return $this->belongsToMany('App\StallHolder', 'tblcontractinfo', 'stallID', 'stallHID')->orderBy('stallID','ASC');
     }
     
-    public function RentalInfo(){
-        return $this->hasMany('App\Stallrental','stallID');
+    public function Contract(){
+        return $this->hasMany('App\Contract','stallID');
     }
 }

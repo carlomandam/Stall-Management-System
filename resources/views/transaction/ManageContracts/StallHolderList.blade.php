@@ -116,8 +116,8 @@
                 {
                     "data": function (data, type, dataToSet) {
                         var contracts = '';
-                        for (var i = 0; i < data.active_stall_rental.length; i++) {
-                            contracts += "<tr><td>" + data.active_stall_rental[i].stallID + "</td><td><a href='/pdfview/" + data.active_stall_rental[i].stallRentalID + "'><button class='btn-primary pull-right' value='" + data.active_stall_rental[i].stallRentalID + "'>Generate Contract</button></a></td><td><a href='ViewContract/"+data.active_stall_rental[i].contract.contractID+"'><button class='btn-success pull-right'>View</button></a></td></tr>";
+                        for (var i = 0; i < data.active_contracts.length; i++) {
+                            contracts += "<tr><td>" + data.active_contracts[i].stallID + "</td><td><a href='/pdfview/" + data.active_contracts[i].contractID + "'><button class='btn-primary pull-right' value='" + data.active_contracts[i].contractID + "'>Generate Contract</button></a></td><td><a href='ViewContract/"+data.active_contracts[i].contractID+"'><button class='btn-success pull-right'>View</button></a></td></tr>";
                         }
                         return '<div class="accordion-group" style="width:100%"><div class="accordion-heading" style="text-align:left;width:100%"><a class="accordion-toggle" data-toggle="collapse-next" style="width:100%">' + data.stallHFName + ' ' + data.stallHLName + '<i class="fa fa-angle-left pull-right"></i></a></div><div class="accordion-body collapse" style="margin-top:10px;text-indent:10px"><div class="accordion-inner"><table clas="table"><thead><th>Stall ID</th><th></th></thead><tbody>' + contracts + '</tbody></table></div></div></div>';
                     }
@@ -217,7 +217,7 @@
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/UpdateRegistration/')}}/"+ data.stallRentalID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
+                        return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/UpdateRegistration/')}}/"+ data.contractID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
                     }
                 }
             ]
@@ -236,7 +236,8 @@
             , "columns": [
                 {
                     "data": function (data, type, dataToSet) {
-                        return data.stallHFName + ' ' + data.stallHMName[0] + '. ' + data.stallHLName;
+                        var mname = (data.stallHMName != null) ? data.stallHMName[0] : '';
+                        return data.stallHFName + ' ' + mname + '. ' + data.stallHLName;
                     }
                 }
                 , {

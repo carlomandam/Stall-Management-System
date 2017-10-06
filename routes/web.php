@@ -18,7 +18,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/Registration/{stallid}','ApplicationController@create');
-Route::get('/UpdateRegistration/{rentID}','ApplicationController@updateRegistration');
+Route::get('/UpdateRegistration/{ID}','ApplicationController@updateRegistration');
 Route::get('/List', 'ApplicationController@member');
 Route::get('/View', 'ApplicationController@Memview');
 Route::get('/Update', 'ApplicationController@Update');
@@ -35,6 +35,7 @@ Route::get('/contractTable','ApplicationController@contractTable');
 Route::post('/getVendorInfo','ApplicationController@getVendorInfo');
 Route::post('/UpdateVendor','ApplicationController@updateVendor');
 Route::get('/searchVendor','ApplicationController@searchVendor');
+Route::post('/getVendorData','ApplicationController@getVendorData');
 Route::get('displaySearch','ApplicationController@displaySearch');
 Route::get('/Stalls','ApplicationController@stall');
 Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfview',

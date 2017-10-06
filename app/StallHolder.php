@@ -19,7 +19,7 @@ class StallHolder extends Model
     
     public function ActiveContracts()
     {
-        return $this->hasMany('App\Contract','stallHID')->where('status','1');
+        return $this->hasMany('App\Contract','stallHID')->whereNotNull('contractStart');
     }
     
     public function ContactNo()
@@ -28,6 +28,6 @@ class StallHolder extends Model
     }
 
     public function Requirement(){
-        return $this->belongsToMany('App\Requirements','tblStallHolder_Req','stallHID','reqID')->withTimestamps();
+        return $this->belongsToMany('App\Requirements','tblStallHolder_Req','stallHID','reqID');
     }
 }

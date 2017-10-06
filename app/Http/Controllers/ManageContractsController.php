@@ -2,11 +2,11 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
-use App\StallRental;
 use App\StallHolder;
 use App\Stall;
 use App\ContactNo;
 use App\Product;
+use App\Contract;
 class ManageContractsController extends Controller
 {
     //'
@@ -32,7 +32,7 @@ class ManageContractsController extends Controller
     }
     
     public function getStallHolders(){
-        $stalls = StallHolder::with('ActiveStallRental.Contract')->has('ActiveStallRental.Contract')->get();
+        $stalls = StallHolder::with('ActiveContracts')->has('ActiveContracts')->get();
         $data = array();
         
         foreach ($stalls as $stall) {
@@ -155,10 +155,9 @@ class ManageContractsController extends Controller
         return view('transaction/ManageContracts/updateRegistration',compact('stallrental','stallHolderDetails','stallDetails'));   
     }
     
-    function getRegistrationList()
-    {
-       
-        $stalls = StallRental::with('StallHolder.ContactNo','Contract','Stall.StallType')->where('stallRentalStatus',2)->get();
+    function getRegistrationList(){
+        $stalls = Contract::with('StallHolder.ContactNo','Stall.StallType')->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->get();
+        
         $data = array();
         
         foreach ($stalls as $stall) {

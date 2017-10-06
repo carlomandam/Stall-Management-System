@@ -122,8 +122,7 @@
                 <div class="row">
                     <form id="applyForm" method="post">
                         {{csrf_field()}}
-                        <input type="hidden" id="rental" name="rental" value="<?php echo $stallrental->stallRentalID ?>">
-                        <input type="hidden" id="contract" name="contract" value="<?php echo $stallrental->Contract->contractID ?>">
+                        <input type="hidden" id="contract" name="contract" value="<?php echo $contract->contractID ?>">
                         <div id="contract">
                             <div class="col-md-12">
                                 <div class="col-md-3">
@@ -142,44 +141,20 @@
                             <div class="col-md-12">
                                 <div class="col-md-6">
                                     <label for="org">Name of Group/Organization<i><b>&nbsp&nbsp(If Applicable)</b></i> </label>
-                                    <input type="text" class="form-control" id="orgname" name="orgname" value="{{$stallrental->orgName}}" /> </div>
+                                    <input type="text" class="form-control" id="orgname" name="orgname" value="{{$contract->orgName}}" /> </div>
                                 <div class="col-md-6">
                                     <label for="bussiname">Business Name</label>
-                                    <input type="text" class="form-control" id="businessName" name="businessName" value="{{$stallrental->businessName}}" /> </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="col-md-6">
-                                    <label for="contracttype">Contract Type</label> <span class="required">&nbsp*</span>
-                                    <br>
-                                    <label>
-                                        <input type="radio" name="ctype" id="ctype" value="1" @if($stallrental->Contract->contractEnd != null){{'checked="checked"'}}@endif><b>Fixed</b></label>
-                                    <label>
-                                        <input type="radio" name="ctype" id="ctype" value="0" @if($stallrental->Contract->contractEnd == null){{'checked="checked"'}}@endif><b>At-Will</b></label>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="col-md-6">
-                                    <label for="startdate">Starting Date </label><span class="required">&nbsp*</span>
-                                    <div class="input-group date datepicker">
-                                        <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-                                        <input name="startdate" type="text" class="form-control pull-right" id="Start"> </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="startdate">End Date </label><span class="required">&nbsp*</span>
-                                    <div class="input-group date datepicker">
-                                        <div class="input-group-addon"> <i class="fa fa-calendar"></i> </div>
-                                        <input name="enddate" type="text" class="form-control pull-right" id="End"> </div>
-                                </div>
+                                    <input type="text" class="form-control" id="businessName" name="businessName" value="{{$contract->businessName}}" /> </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="col-md-6">
                                     <label for="address"><b>List of Products</b></label><span class="required">&nbsp*</span>
                                     <select class="form-control" name="products[]" id="products" multiple="multiple">
                                         <?php
-                                                    foreach($prod as $x){
-                                                        echo "<option value='".$x['productID']."'>".$x['productName']."</option>";
-                                                    }
-                                                ?>
+                                            foreach($prod as $x){
+                                                echo "<option value='".$x['productID']."'>".$x['productName']."</option>";
+                                            }
+                                        ?>
                                     </select>
                                     <br>
                                     <br>
@@ -214,9 +189,9 @@
                                     <button type="submit" class="btn btn-success">Proceed To Payment</button>
                                 </div>
                             </div>
-                            <div class="col-md-12" id="updateButtons" onclick="updateContract(2)" style="display:none">
+                            <div class="col-md-12" id="updateButtons" style="display:none">
                                 <div class="pull-right">
-                                    <button type="button" onclick="$('#applyForm')[0].reset();" class="btn btn-danger">Cancel</button>
+                                    <button type="button" onclick="updateContract(2); $('#applyForm')[0].reset();" class="btn btn-danger">Cancel</button>
                                     <button type="button" onclick="submitUpdate()" class="btn btn-success">Save</button>
                                 </div>
                             </div>
@@ -238,7 +213,7 @@
         $('#products').select2({
             width: 'resolve'
         });
-        $product = JSON.parse("{{json_encode($stallrental->Product)}}".replace(/&quot;/g, '"'));
+        $product = JSON.parse("{{json_encode($contract->Product)}}".replace(/&quot;/g, '"'));
         for (var i = 0; i < $product.length; i++) {
             selected.push($product[i].productID);
         }
@@ -267,21 +242,6 @@
             });
         });
 
-        $(".datepicker").datepicker({
-            showOtherMonths: true
-            , selectOtherMonths: true
-            , changeMonth: true
-            , changeYear: true
-            , autoclose: true
-            , startDate: "dateToday"
-            , todayHighlight: true
-            , orientation: 'bottom'
-            , format: 'mm-dd-yyyy'
-        });
-        
-        $("#Start").datepicker("update", "{{date('m/d/Y',strtotime($stallrental->Contract->contractStart))}}");
-        $("#End").datepicker("update", "{{($stallrental->Contract->contractEnd != null) ? date('m/d/Y',strtotime($stallrental->Contract->contractEnd)) : null}}");
-        
         $('input').attr('readonly', true);
         
         $('textarea,select,input[name=sex],input[name=ctype]').prop('disabled', true);
@@ -291,13 +251,18 @@
         });
         
         $("#btn-add-product").on("click", function () {
+            var isnew = true;
             var newProdVal = $("#new-product").val();
-            if ($("#products").find("option[value='" + newProdVal + "']").length) {
-                $("#products").val(newProdVal).trigger("change");
-            }
-            else {
-                var newState = new Option(newProdVal, newProdVal, true, true);
-                $("#products").append(newState).trigger('change');
+            $("#products").find("option").each(function(){
+                if($(this).html() == newProdVal){
+                    $(this).prop('selected',true);
+                    $("#products").trigger('change');
+                    isnew = false;
+                }
+            });
+            if(isnew) {
+                var newProd = new Option(newProdVal, newProdVal, true, true);
+                $("#products").append(newProd).trigger('change');
             }
         });
     });
@@ -342,16 +307,7 @@
         else {
             $('#updateButtons, #addProd').fadeOut(function () {
                 $('#registerButtons').fadeIn();
-                $("#Start").datepicker("update", "{{date('m/d/Y',strtotime($stallrental->Contract->contractStart))}}");
-                $("#End").datepicker("update", "{{date('m/d/Y',strtotime($stallrental->Contract->contractEnd))}}");
-                $(".datepicker").each(function () {
-                    $(this).datepicker('remove');
-                    $(this).find('.form-control').prop('disabled', true);
-                });
-                $('#contract input[name=ctype], #contract select').prop('disabled', true);
-                $("input:checkbox").click(function () {
-                    return false;
-                });
+                $('#contract select').prop('disabled', true);
                 $('#products').val(selected).trigger('change');
             });
         }

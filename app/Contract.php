@@ -9,42 +9,50 @@ class Contract extends Model
     
     protected $table = "tblContractInfo";
     protected $primaryKey = "contractID";
-    protected $fillable = array('stallRentalID', 'contractLengthID', 'contractStatus'); 
+    protected $fillable = array('stallRentalID', 'contractLengthID', 'contractStatus','contractStart','contractEnd'); 
     protected $softDelete = true;
-    
-    public function ContractLength(){
-        return $this->belongsTo('App\ContractLength','contractLengthID');
+
+    public function StallHolder(){
+        return $this->belongsTo('App\StallHolder','stallHID');
     }
-    public function StallRental(){
-        return $this->belongsTo('App\StallRental','stallRentalID');
+
+    public function Stall(){
+        return $this->belongsTo('App\Stall','stallID');
     }
+
     public function StallRate(){
         return $this->belongsTo('App\StallRate','stallRateID');
     }
+
     public function Billing(){
         return $this->hasMany('App\Billing','billID');
     }
+
     public function UtilityMeterID(){
         return $this->hasMany('App\UtilityMeterID','contractID','stallMeterID');
     }
+
     public function PrevContract(){
         return $this->belongsTo('App\Contract','prevContractID');
     }
-    public function StallHolder(){
-         return $this->belongsTo('App\StallHolder','stallHID');
-    }
-
 
     public function Collection(){
         return $this->hasMany('App\Collection','contractID');
     }
+
     public function Initial_Details(){
-        return $this->hasMany('App\Initial_Details','contractID');
+        return $this->hasMany('App\InitFeeDetail','contractID');
     }
     public function StallMeter(){
         return $this->hasMany('App\StallMeter','contractID');
     }
 
 
+    public function UnpaidInitial(){
+        return $this->hasMany('App\InitFeeDetail','contractID')->whereNull('paymentID');
+    }
 
+    public function Product(){
+        return $this->belongsToMany('App\Product','tblcontract_product','contractID','productID');
+    }
 }

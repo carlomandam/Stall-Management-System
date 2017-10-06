@@ -40,9 +40,7 @@
                                                   <tr>
                                                      <td>{{$stall->stallCode}}</td>
                                                      <td>{{$stall->tenantName}}</td>
-
                                                      <td>
-                                                        
                                                      </td>
                                                      <td></td>
                                                      <td><a href="/ViewPayment/{{$stall->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a></td>

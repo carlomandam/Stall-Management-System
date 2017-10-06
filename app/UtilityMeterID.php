@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UtilityMeterID extends Model
 {
@@ -19,20 +18,13 @@ class UtilityMeterID extends Model
     	'contractID',
     	'readingID',
     	'utilityAmt',
-    	
     ];
 
-    // public function MonhtlyReading(){
-    // 	 return $this->belongsTo('App\MonhtlyReading','stallMeterID', 'readingID');
-    // }
+    public function MonhtlyReading(){
+    	 return $this->belongsTo('App\MonhtlyReading','stallMeterID', 'readingID');
+    }
 
-
-    // public function Contract(){
-    // 	return $this->belongsTo('App\Contract','stallMeterID', 'contractID');
-    // }
-
-
-
-
-   
+    public function Contract(){
+    	return $this->belongsTo('App\Contract','stallMeterID', 'contractID');
+    }   
 }

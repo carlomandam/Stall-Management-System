@@ -438,8 +438,8 @@ class CollectionController extends Controller
 
     function getCollections()
     {
-         $first = $_GET['dateFrom'];
-         $last = $_GET['dateTo'];
+        $first = $_GET['dateFrom'];
+        $last = $_GET['dateTo'];
         // $first = "2017-09-24";
         // $last = "2017-09-27";
         $step = '+1 day';
@@ -579,7 +579,7 @@ class CollectionController extends Controller
     $peakDaysRate = $rates->dblPeakAdditional + $rates->dblRate;
     }
     else{
-    $peakDaysRate = ($regularRate)*(($rates->dblPeakRate / 100)) + $regularRate;
+    $peakDaysRate = ($regularRate)*(($rates->dblPeakAdditional / 100)) + $regularRate;
     }
   
     $ctr = 0;

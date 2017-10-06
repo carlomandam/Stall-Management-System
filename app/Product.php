@@ -11,7 +11,7 @@ class Product extends Model
     protected $dates = ['deleted_at'];
     public $timestamps = false;
     
-    public function StallRental(){
-        return $this->belongsToMany('App\StallRental','tblstallrental_product','productID','stallRentalID');
+    public function Contract(){
+        return $this->belongsToMany('App\Contract','tblcontract_product','productID','contractID');
     }
 }

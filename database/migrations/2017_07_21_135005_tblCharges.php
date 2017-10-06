@@ -22,7 +22,6 @@ class TblCharges extends Migration
             $table->text('chargeDesc')->nullable();
             $table->timestamps();
             $table->softDeletes();
-           
         });
     }
 
