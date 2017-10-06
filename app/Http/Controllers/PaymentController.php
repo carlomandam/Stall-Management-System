@@ -190,11 +190,9 @@ class PaymentController extends Controller
                                     // ->get();
                                 
             $dateFrom = count($checkadvance) > 0 ? Carbon::parse($checkadvance)->addDays(1)->format('Y-m-d') : Carbon::today()->addDays(1)->format('Y-m-d');
-            if(count($unpaidCollections) > 0)
-            {
-                $unpaid = 1;
-            }
-            else{$unpaid = 0;}
+           
+
+
          
             return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','unpaid','dateFrom'));
     
@@ -324,8 +322,101 @@ class PaymentController extends Controller
         }
 
         public function viewHistory(Request $request){
-            
            
+           
+           $id = $request->contractID;
+        
+           $recordCtr = 0; 
+           $date = DB::select("select distinct paid.paidAmt as amt, payment.paymentID as paymentID, paid.paymentDate as paydate  from tblPayment_Collection as payment left JOIN tblCollection_Details as collectDet on collectDet.collectionDetID = payment.collectionDetID left join tblpayment as paid on paid.paymentID = payment.paymentID left JOIN tblcollection as collection on collection.collectionID = collectDet.collectionID where collection.contractID = '$id' order by paydate");
+            $paymentID = array();
+            $ctr =0;
+            foreach($date as $date)
+            {   $date     = get_object_vars($date);
+                $paymentID[$ctr]["paymentID"] = $date['paymentID'];
+                $ctr++;
+            }
+
+            $ctr = 0;
+            foreach($paymentID as $payID)
+            {
+            $collectDates[$ctr]["date"] = Payment_Collection::with('CollectionDetails')
+                            ->where('paymentID',$payID['paymentID'])
+                            ->pluck('collectionDetID');
+
+               $array = [];
+               if(count($collectDates[$ctr]["date"])>1){
+                    foreach($collectDates[$ctr]["date"] as $dates){
+                      $array[]= CollectionDetails::where('collectionDetID',$dates)->pluck("collectDate");
+                   
+                    }
+                    $collectDates[$ctr]['date'] = $array;
+               
+               }
+               else
+               { $collectDates[$ctr]['date'] =  CollectionDetails::where('collectionDetID',$collectDates[$ctr]['date'])->pluck("collectDate");
+               }
+            $ctr++;
+        }
+
+        $date = DB::select("select distinct paid.paidAmt as amt, payment.paymentID as paymentID, paid.paymentDate as paydate  from tblPayment_Collection as payment left JOIN tblCollection_Details as collectDet on collectDet.collectionDetID = payment.collectionDetID left join tblpayment as paid on paid.paymentID = payment.paymentID left JOIN tblcollection as collection on collection.collectionID = collectDet.collectionID where collection.contractID = '$id' order by paydate");
+        $initialFee = DB::select("select distinct payment.paymentID as paymentID,payment.paymentDate as payDate,(SELECT SUM(fees.initAmt) from tblinitialfees as fees) as totalAmt from tblpayment as payment left join tblinitial_details as details on details.paymentID = payment.paymentID LEFT JOIN tblinitialfees as fees on fees.initID =  details.initID where details.contractID = '$id' ");
+        $charge = DB::select("select payment.paymentDate as payDate, charge.chargeName as chargeName, charge.chargeAmount as chargeAmount, details.paymentID as paymentID from tblpayment as payment left join tblcharge_details as details on details.paymentID = payment.paymentID LEFT JOIN tblcharges as charge on charge.chargeID =  details.chargeID where details.contractID = '$id' ");
+        $utilities = DB::select("select payment.paymentDate as payDate,payment.paymentID as paymentID, payment.paidAmt as paidAmt from tblpayment as payment left join tblbilling_details as details on details.paymentID = payment.paymentID LEFT JOIN tblstallutilities_meterid as utilities on utilities.stallMeterID =  details.stallMeterID where utilities.contractID = '$id' ");
+        $ctr = 0;
+        if(count($date) > 0){
+            foreach($date as $date){      
+                   $date     = get_object_vars($date);
+                   $data[$recordCtr]["paymentID"] = 'PAYMENT-'.str_pad($date["paymentID"], 5, '0', STR_PAD_LEFT);
+                   $data[$recordCtr]["paidDate"] = $date['paydate'];
+                   $data[$recordCtr]["paidAmt"] = 'Php ' .number_format($date['amt'],2);
+                   $data[$recordCtr]["description"] =  $collectDates[$ctr]["date"];
+
+                   $recordCtr++;
+                   $ctr++;
+
+            }
+        }
+        if(count($initialFee) > 0){
+            foreach($initialFee as $initialFee){
+                  $initialFee     = get_object_vars($initialFee);
+                  $data[$recordCtr]["paymentID"] = 'PAYMENT-'.str_pad($initialFee["paymentID"], 5, '0', STR_PAD_LEFT);;
+                  $data[$recordCtr]["paidDate"] = $initialFee["payDate"];
+                  
+                  $data[$recordCtr]["paidAmt"] = 'Php '.number_format($initialFee['totalAmt'],2);
+                  $data[$recordCtr]["description"] = "Initial Fees";
+
+                  $recordCtr++;
+        }
+
+        }
+        if(count($charge) > 0){
+            foreach($charge as $charges){
+                  $charges     = get_object_vars($charges);
+                  $data[$recordCtr]["paymentID"] = 'PAYMENT-'.str_pad($charges["paymentID"], 5, '0', STR_PAD_LEFT);;
+                  $data[$recordCtr]["paidDate"] = $charges["payDate"];
+                  
+                  $data[$recordCtr]["paidAmt"] = 'Php '.number_format($charges['chargeAmount'],2);
+                  $data[$recordCtr]["description"] = "Payment for " .$charges['chargeName'];
+        }
+                  $recordCtr++;
+        }
+        if(count($utilities)>0){
+             foreach($utilities as $utilities){
+                  $utilities     = get_object_vars($utilities);
+                  $data[$recordCtr]["paymentID"] = 'PAYMENT-'.str_pad($utilities["paymentID"], 5, '0', STR_PAD_LEFT);
+                  $data[$recordCtr]["paidDate"] = $utilities["payDate"];
+                  
+                  $data[$recordCtr]["paidAmt"] = 'Php '.number_format($utilities['paidAmt'],2);
+                  $data[$recordCtr]["description"] = "Payment for Utilities";
+                }
+                  $recordCtr++;
+
+        }
+
+        
+        
+
+         return $data;  
         }
 
     	public function generateBill($id)

@@ -14,40 +14,15 @@ class Billing extends Model
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'billStatus',
-        'contractID'
+        'billDateFrom',
+        'billDateTo',
+        'billDueDate'
     ];
     
-    public function BillPayment()
-    {
-    return $this->belongsToMany('App\BillPayment','tblBill_Initial','billID','billPaymentID');
+    public function Billing_Details(){
+        return $this->hasMany('App\Billing_Details','billID');
     }
+   
 
-    public function Contract()
-    {
-    return $this->belongsTo('App\Contract','contractID');
-    }
 
-    public function Initial()
-    {
-    return $this->hasMany('App\initBill','billID');
-
-    
-    public function Charges()
-    {
-        return $this->belongsToMany('App\Charges','tblBill_Charges','billID','chargeID');
-    }
-    public function MonthlyReading()
-    {
-        return $this->belongsToMany('App\MonthlyReading','tblBill_Reading','billID','readingID');
-    }
-     public function InitialFee()
-    {
-        return $this->belongsToMany('App\InitialFee','tblBill_Initial','billID','billInitialID');
-    }
-    public function BillDates()
-    {
-        return $this->hasMany('App\BillDates','billID');
-
-    }
 }

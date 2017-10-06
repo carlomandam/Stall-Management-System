@@ -30,4 +30,8 @@ class Payment extends Model
         return $this->hasMany('App\Charge_Details','paymentID');
     }
 
+    public function Billing_Details(){
+        return $this->hasMany('App\Billing_Details','paymentID');
+    }
+
 }

@@ -33,5 +33,9 @@ class MonthlyReading extends Model
     public function UtilityMeterID(){
         return $this->hasMany('App\UtilityMeterID','readingID','stallMeterID');
     }
+
+    public function StallMeter(){
+             return $this->hasMany('App\StallMeter','readingID');
+    }
     
 }

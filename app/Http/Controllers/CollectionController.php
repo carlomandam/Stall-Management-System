@@ -242,7 +242,7 @@ class CollectionController extends Controller
         $collectionLast = CollectionDetails::where('collectionDetID',$endid)->first();
         $first = Carbon::parse($collectionFirst->collectDate)->format('F d,Y');
         $lastDate = Carbon::parse($collectionLast->collectDate)->format('F d,Y');
-
+        
 
         // $first = "2017-09-24";
         // $last = "2017-09-27";

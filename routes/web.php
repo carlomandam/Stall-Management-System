@@ -184,7 +184,6 @@ Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls')
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 
 Route::get('/Payment','PaymentController@index');
-Route::resource('/Collection','CollectionController');
 Route::get('/CreateCollection/{id}','CollectionController@create');
 Route::get('/ViewCollections/{id}','CollectionController@viewCollections');
 Route::get('/ViewPaymentHistory','PaymentController@viewHistory');
@@ -193,6 +192,7 @@ Route::get('/collectionTable', 'CollectionController@getCollections');
 Route::get('/ViewPayment/{id}','PaymentController@makePayment');
 Route::get('/Billing','BillingController@index');
 Route::resource('/Utilities','UtilityController');
+Route::resource('/Collection','CollectionController');
 Route::get('/Utilities/previous/{id}', 'UtilityController@previous');
 Route::get('/Utilities/submeter/{id}', 'UtilityController@submeter');
 Route::get('/getBills','PaymentController@getBills');

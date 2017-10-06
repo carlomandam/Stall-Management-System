@@ -21,6 +21,7 @@ table.dataTable thead th:first-child {
 #tblDateRange td{
   border:none;
 }
+
 </style>
 @stop
 @section('content-header')
@@ -57,29 +58,29 @@ table.dataTable thead th:first-child {
                             <div class="box-body">
                               <div class="row">
                                 <label class="col-md-3">Payment Number</label>
-                                <div class="col-md-3"><input type="text" disabled="" class="form-control" value="{{$payID}}"></div>
+                                <div class="col-md-3"><label class="form-control">{{$payID}}</label></div>
                               </div>
 
                               <div class="row">
                                 <label class="col-md-3">Stall Code</label>
-                                <div class="col-md-3"><input type="text" disabled="" class="form-control" value = "{{$contract->stallID}}"></div>
+                                <div class="col-md-3"><label class="form-control">{{$contract->stallID}}</label></div>
                               </div>
 
                              
                               <div class="row">
                                 <label class="col-md-3">Tenant Name</label>
-                                <div class="col-md-3"><input type="text" disabled="" class="form-control" value ="{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}">
+                                <div class="col-md-3"><label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
                                 </div>
                                 <label class="col-md-3">Date</label>
-                                <div class="col-md-3"><input type="text" disabled class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask value="{{\Illuminate\Support\Str::upper(\Carbon\Carbon::today()->format('F d,Y'))}}" />
+                                <div class="col-md-3"><label class="form-control">{{\Illuminate\Support\Str::upper(\Carbon\Carbon::today()->format('F d,Y'))}}</label/>
                                 </div>
                               </div>
 
                               <div class="row">
                                 <label class="col-md-3">Collection Status</label>
-                                <div class="col-md-3"><input type="text" disabled="" class="form-control"></div>
+                                <div class="col-md-3"><label class="form-control"></label></div>
                                  <label class="col-md-3">Balance</label>
-                                <div class="col-md-3"><input type="text" disabled="" class="form-control"></div>
+                                <div class="col-md-3"><label class="form-control"></label></div>
                               </div>
                             </div>
                         </div>
@@ -133,22 +134,22 @@ table.dataTable thead th:first-child {
                             <div class="box-body">
                               <div class="row">
                                 <div class="col-md-2"><label>Payment Number:</label></div>
-                                <div class="col-md-3"><input type="text" name="" class="form-control" disabled value="{{$payID}}"></div>
+                                <div class="col-md-3"><label class="form-control">{{$payID}}</label></div>
                               </div>
 
                               <div class="row" style="margin-top: 10px;">
                                   <div class="col-md-2"><label>Tenant Name:</label></div>
-                                  <div class="col-md-8"><input type="text" name="" class="form-control" disabled value="{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}">
+                                  <div class="col-md-8"><label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
                                   </div>
                               </div>
 
                               <div class="row" style="margin-top: 10px;">
                                   <div class="col-md-2"><label>Stall Code:</label></div>
-                                  <div class="col-md-3"><input type="text" name="" class="form-control" disabled value="{{$contract->stallID}}" 
-                                  ></div>
+                                  <div class="col-md-3"><label class="form-control">{{$contract->stallID}}</label>
+                                  </div>
                                   <div class="col-md-2"><label>Business Name:</label></div>
                                   <div class="col-md-3">
-                                   <input type="text" name="" class="form-control" disabled value="{{\Illuminate\Support\Str::upper($contract->businessName)}}">
+                                   <label class="form-control"> {{\Illuminate\Support\Str::upper($contract->businessName)}}</label>
                                    </div>
                               </div>
 
@@ -157,7 +158,7 @@ table.dataTable thead th:first-child {
                                     <label>Date From:</label>
                                 </div>
                                 <div class="col-md-3">
-                                  <input type="text" id ="dateFrom" name = "dateFrom" class="form-control" disabled value="{{$dateFrom}}">
+                                  <label id ="dateFrom" name = "dateFrom" class="form-control">{{$dateFrom}}</label>
                                 </div>
 
                                 <div class="col-md-2">
@@ -243,13 +244,16 @@ table.dataTable thead th:first-child {
                         <div class="box  box-primary" style="margin-top:30px;">
                           <div class="box-body">
                             <div class="table-responsive">
-                              <table id="tblhistory" class="table table-bordered table-striped display select" role="grid">
+                              <table id="tblhistory" class="table table-bordered table-striped display" role="grid">
                                 <thead>
-                                    <th>Date Paid</th>
-                                    <th>Description</th>
-                                    <th>Amount</th>
-                                    <th>Actions</th>
+                                    <th width="100px">Payment Number</th>
+                                    <th width="100px">Date Paid</th>
+                                    <th width="200px">Description</th>
+                                    <th width="100px">Amount</th>
+                                    
                                 </thead>
+                              
+
                               </table>
                             </div>
                           </div>
@@ -278,18 +282,10 @@ table.dataTable thead th:first-child {
 <script type="text/javascript">
 var sum = 0;
 var array = [];
-function getDate( element ) {
-      var date;
-      try {
-        date = $.datepicker.parseDate( dateFormat, element.value );
-      } catch( error ) {
-        date = null;
-      }
- 
-      return date;
-    }
 
    $(document).on('ready',function(){
+  
+
     $("#rangeFrom").datepicker({
         showOtherMonths: true
         , selectOtherMonths: true
@@ -344,7 +340,7 @@ function getDate( element ) {
     var dateTo = $('#rangeTo').val();
 
     $.ajax({
-                type: "POST",
+                type: "GET",
                 url: "/ViewPaymentHistory",
                 data: { 
                   '_token' : $('input[name=_token]').val(),
@@ -353,7 +349,16 @@ function getDate( element ) {
                   'dateTo' : dateTo},
                   success: function(data) {
                     if($.isEmptyObject(data.error)){
-                      toastr.success(data.success);
+                       var table = $('#tblhistory').DataTable( {
+                        "aaData": data,
+                         destroy:true,
+                        "columns": [
+                        {"data" : "paymentID"},
+                        { "data": "paidDate" },
+                        { "data": "description" },
+                        { "data": "paidAmt" }
+                     ]
+                    });
                       
                     }else{
                       printErrorMsg(data.error);
@@ -381,7 +386,43 @@ function getDate( element ) {
    $('#tblpay').dataTable({
 
         });
-   $("#tblhistory").dataTable({
+
+
+     var contractID = "{{$contract->contractID}}";
+    var dateFrom = $('#rangeFrom').val();
+    var dateTo = $('#rangeTo').val();
+
+    $.ajax({
+                type: "GET",
+                url: "/ViewPaymentHistory",
+                data: { 
+                  '_token' : $('input[name=_token]').val(),
+                  'contractID':contractID,
+                  'dateFrom': dateFrom,
+                  'dateTo' : dateTo},
+                  success: function(data) {
+                    if($.isEmptyObject(data.error)){
+                      var table = $('#tblhistory').DataTable( {
+                        "aaData": data,
+                         destroy:true,
+                        "columns": [
+                        {"data" : "paymentID"},
+                        { "data": "paidDate" },
+                        { "data": "description" },
+                        { "data": "paidAmt" }
+                     ]
+                    });
+                      
+                    }else{
+                      printErrorMsg(data.error);
+                    }
+                  }
+
+    });
+    $("#tblhistory").DataTable({
+     responsive: {
+        details: false
+    }
 
    });
    
@@ -392,7 +433,7 @@ function getDate( element ) {
 
         sum = 0;
         $("#sum").val(sum);
-          var dateFrom = $('#dateFrom').val();
+          var dateFrom = $('#dateFrom').text();
           var contractID = "{{$contract->contractID}}";
           var dateTo = $("#dateTo").val();
 
