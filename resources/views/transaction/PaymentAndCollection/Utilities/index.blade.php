@@ -28,18 +28,35 @@
                                   </a>
                                     <div class="col-xs-12">
                                           <div class="table-responsive"> 
-                                           <table id="requestList" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
+                                           <table id="monthlyList" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
                                                 <thead>
                                                   <tr>
                                                     <th>No.</th>
-                                                    <th>Utility Tyoe</th>
+                                                    <th>Utility Type</th>
                                                     <th>Date From:</th>
                                                     <th>Date To:</th>
                                                     <th>Action/s</th>
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                  
+                                                    @foreach($monthly as $key => $mon)
+                                                      <tr>
+                                                        <td>{{++ $key}}</td>
+                                                        <td>
+                                                          @if($mon->utilType==1)
+                                                            Electricity
+                                                          @elseif($mon->utilType==2)
+                                                            Water
+                                                          @endif
+                                                        </td>
+                                                        <td>{{\Carbon\Carbon::parse($mon->readingFrom)->format('Y-m-d')}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($mon->readingTo)->format('Y-m-d')}}</td>
+                                                        <td>
+                                                          <button class="btn btn-primary" data-id ="{{$mon->readingID}}" id="view">View</button>
+                                                          <!-- <button>Update</button> -->
+                                                        </td>
+                                                      </tr>
+                                                    @endforeach
                                                 </tbody>
                                             
                                             </table>

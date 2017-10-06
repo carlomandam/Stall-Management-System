@@ -27,19 +27,20 @@
                               
                             
                                 <div class="box-body">
-                                
+                                  @foreach($reading as $read)
                                   <div class="row" style="margin-top: 10px;">
                                       <div class="col-md-2">
                                           <label>Utility Type</label>
                                       </div>
 
                                       <div class="col-md-2">
-                                         <select class="form-control" id="utilityType" name="utilityType">
-                                            <option selected disabled>------</option>
-                                            <option value="1">Electricty</option>
-                                            <option value="2">Water</option>
-                                         </select>
+                                        @if($read->utilType==1)
+                                          <input type="text" class="form-control" value="Electricity" readonly>
+                                         @elseif($read->utilType==2)
+                                          <input type="text" class="form-control" value="Electricity" readonly>
+                                          @endif 
                                       </div>
+
                                   </div>
 
                                      <div class="row" style="margin-top: 10px;">
@@ -48,7 +49,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker date" name="dateFrom" id="date_from" disabled readonly>
+                                         <input type="text" class="form-control" name="dateFrom" id="date_from" value="{{\Carbon\Carbon::parse($read->readingFrom)->format('Y-m-d')}}" readonly>
                                       </div>
 
                                       <div class="col-md-1">
@@ -56,7 +57,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker date" name="dateTo" id="date_to" disabled readonly>
+                                         <input type="text" class="form-control" name="dateTo" id="date_to" value="{{\Carbon\Carbon::parse($read->readingFrom)->format('Y-m-d')}}" readonly>
                                       </div>
                                   </div> 
 
@@ -71,14 +72,14 @@
                                           <label>Previous Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control reading" name="prevRead" id="prev_read" >
+                                        <input type="text" class="form-control reading" name="prevRead" id="prev_read" value="{{$read->prevReading}}" disabled>
                                       </div>
 
                                        <div class="col-md-2">
                                           <label>Present Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" >
+                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" value="{{$read->presReading}}" disabled >
                                       </div>
                                   </div>
 
@@ -87,14 +88,14 @@
                                           <label>Total Bill Amount:</label>
                                       </div>
                                       <div class="col-md-2">
-                                          <input type="text" class="form-control money" name="totalBill" id="total_bill" disabled >
+                                          <input type="text" class="form-control money" name="totalBill" id="total_bill" value="{{$read->totalBillAmount}}" disabled >
                                       </div>
 
                                        <div class="col-md-2">
                                           <label>Rate:</label>
                                       </div>
                                       <div class="col-md-2">
-                                          <input type="text" class="form-control money" name="multiplierAmt" id="multiplier_amt" disabled>
+                                          <input type="text" class="form-control money" name="multiplierAmt" id="multiplier_amt" value="{{$read->multiplier}}" disabled>
                                       </div>
                                   </div>
 
@@ -110,7 +111,14 @@
                                               </tr>
                                           </thead>
                                           <tbody class="stallList">
-                                              
+                                              @foreach($subMeter as $sub)
+                                                <tr class ="stall" data-id ="">
+                                                    <td>{{$sub->stallCode}}</td>
+                                                    <td><input type="text" data-id="" class="form-control reading" id="sub_prev" name="subPrev" value="{{$sub->subPrevious}}"></td>
+                                                    <td><input type="text" class="form-control reading" id="sub_pres" name="subPres" value="{{$sub->subPresent}}" ></td>
+                                                    <td><input type="text" class="form-control money" id="total_amt" name="totalAmt" value="{{$sub->subAmount}}" disabled></td>
+                                                </tr>
+                                              @endforeach
                                           </tbody>
                                       </table>
                                   </div>
@@ -123,7 +131,7 @@
                                       </div>
                                   </div>
 
-
+                                  @endforeach
                               </div>
                              
                         </div>

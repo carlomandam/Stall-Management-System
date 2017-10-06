@@ -195,6 +195,8 @@ Route::resource('/Utilities','UtilityController');
 Route::resource('/Collection','CollectionController');
 Route::get('/Utilities/previous/{id}', 'UtilityController@previous');
 Route::get('/Utilities/submeter/{id}', 'UtilityController@submeter');
+Route::get('/Utilities/monthly', 'UtilityController@monthly');
+Route::get('/Utilities/view/{id}', 'UtilityController@view');
 Route::get('/getBills','PaymentController@getBills');
 Route::get('/createBill/{id}','BillingController@createBill');
 Route::get('/ViewBill/{id}','BillingController@viewBill');

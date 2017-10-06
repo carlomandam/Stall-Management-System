@@ -19,8 +19,7 @@ class TblSubMeter extends Migration
             $table->integer('stallUtilityID')->unsigned()->index();
             $table->integer('prevRead');
             $table->integer('presRead');
-             $table->datetime('readingFrom');
-            $table->datetime('readingTo');
+            $table->integer('stallMeterID')->unsigned()->index();
             $table->timestamps();
             $table->softDeletes();
 
@@ -28,6 +27,10 @@ class TblSubMeter extends Migration
                   ->on('tblStall_Utilities')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+             $table->foreign('stallMeterID')->references('stallMeterID')
+                  ->on('tblStallUtilities_MeterID')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');     
             
          });
     }
