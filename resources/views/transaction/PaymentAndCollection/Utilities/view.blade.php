@@ -37,7 +37,7 @@
                                         @if($read->utilType==1)
                                           <input type="text" class="form-control" value="Electricity" readonly>
                                          @elseif($read->utilType==2)
-                                          <input type="text" class="form-control" value="Electricity" readonly>
+                                          <input type="text" class="form-control" value="Water" readonly>
                                           @endif 
                                       </div>
 
@@ -57,7 +57,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control" name="dateTo" id="date_to" value="{{\Carbon\Carbon::parse($read->readingFrom)->format('Y-m-d')}}" readonly>
+                                         <input type="text" class="form-control" name="dateTo" id="date_to" value="{{\Carbon\Carbon::parse($read->readingTo)->format('Y-m-d')}}" readonly>
                                       </div>
                                   </div> 
 
@@ -113,10 +113,10 @@
                                           <tbody class="stallList">
                                               @foreach($subMeter as $sub)
                                                 <tr class ="stall" data-id ="">
-                                                    <td>{{$sub->stallCode}}</td>
-                                                    <td><input type="text" data-id="" class="form-control reading" id="sub_prev" name="subPrev" value="{{$sub->subPrevious}}" readonly></td>
-                                                    <td><input type="text" class="form-control reading" id="sub_pres" name="subPres" value="{{$sub->subPresent}}"  readonly></td>
-                                                    <td><input type="text" class="form-control money" id="total_amt" name="totalAmt" value="{{$sub->subAmount}}" disabled></td>
+                                                    <td>{{$sub->stall}}</td>
+                                                    <td><input type="text" data-id="" class="form-control reading" id="sub_prev" name="subPrev" value="{{$sub->prev}}" readonly></td>
+                                                    <td><input type="text" class="form-control reading" id="sub_pres" name="subPres" value="{{$sub->pres}}"  readonly></td>
+                                                    <td><input type="text" class="form-control money" id="total_amt" name="totalAmt" value="{{$sub->amount}}" disabled></td>
                                                 </tr>
                                               @endforeach
                                           </tbody>

@@ -23,24 +23,45 @@ $(document).on('change', '#utilityType', function(){
 				}
 				else{
 
-					$('.stallList').append('<tr class ="stall" data-id ="'+value[0].contractID+'"><td>'+value[0].stallID+'</td><td><input type="text" data-id="'+value[0].stallUtilityID+'" class="form-control reading2" id="sub_prev" name="subPrev" value ="'+value[0].presRead+'" disabled></td><td><input type="text" class="form-contro reading2" id="sub_pres" name="subPres"></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="'+value[0].stallUtilityID+'" name="stallUtility"></td>  </tr>');
+					$('.stallList').append('<tr class ="stall" data-id ="'+value[0].contractID+'"><td>'+value[0].stallID+'</td><td><input type="text" data-id="'+value[0].stallUtilityID+'" class="form-control reading2" id="sub_prev" name="subPrev" value ="'+value[0].presRead+'" disabled></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres"></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="'+value[0].stallUtilityID+'" name="stallUtility"></td>  </tr>');
 					
 				}
 					$(document).on("input","#sub_pres", function(){
 						ind = $(this).closest('tr').index();
 						console.log(ind);
+						document.getElementById('total_bill').disabled=true;
+						document.getElementById('pres_read').disabled=true;
 						temp1 = $('input[name*=subPrev]').eq(ind).val();
 						prev = Number(temp1);
 						console.log(prev);
+						
 						temp2 = $(this).val();
 						pres =Number(temp2);
+
 						if(pres>prev){
+							var total=0;
 							temp = (pres - prev)*multi;
-							$('input[name*=totalAmt]').eq(ind).val(temp);
+							$(' .stallList tr ').each(function(){
+								ind2 = $(this).index();
+								var amount = $('input[name=totalAmt]').eq(ind2).val().replace("Php ", "",).replace(",", "",);
+								amount = Number(amount);
+								total = total+amount; 
+								
+							})
+
+							if(total>=amountBill){
+								alert('Invalid INPUT');
+								$('input[name*=subPres]').eq(ind).val(" ");
+								$('input[name*=totalAmt]').eq(ind).val("0");
+							}
+							else{
+								$('input[name*=totalAmt]').eq(ind).val(temp);
+							}
 						}
 						else{
 							$('input[name*=totalAmt]').eq(ind).val("0");
 						}
+
 						
 					})
 
@@ -53,18 +74,32 @@ $(document).on('change', '#utilityType', function(){
 						temp2 = $(this).val();
 						prev = Number(temp2);
 						if(pres>prev){
-							temp = (pres - prev)*multi ;
-						
-							$('input[name*=totalAmt]').eq(ind).val(temp);
+							var total=0;
+							temp = (pres - prev)*multi;
+							$(' .stallList tr ').each(function(){
+								ind2 = $(this).index();
+								var amount = $('input[name=totalAmt]').eq(ind2).val().replace("Php ", "",).replace(",", "",);
+								amount = Number(amount);
+								total = total+amount; 
+								
+							})
+
+							if(total>=amountBill){
+								alert('Invalid INPUT');
+								$('input[name*=subPrev]').eq(ind).val(" ");
+								$('input[name*=totalAmt]').eq(ind).val("0");
+							}
+							else{
+								$('input[name*=totalAmt]').eq(ind).val(temp);
+							}
 						
 						}
 						else{
 							$('input[name*=totalAmt]').eq(ind).val("0");
 						}
-					
-						
 						
 					})
+					
 
 			});
 			 $(".reading2").inputmask("9999999", { numericInput: true, placeholder: "0",clearMaskOnLostFocus: false});
@@ -84,11 +119,25 @@ $(document).on('change', '#utilityType', function(){
 			}
 			else{
 				var date = data.previous.readingTo;
-				date= date.toString().split(' ')[0];
-				$('#date_from').val(date);
+				var temp = new Date(date);
+				temp.setDate(temp.getDate()+1);
+				var start = new Date(date);
+				start.setDate(start.getDate()+2)
+				var from = date.toString();
+				from = from.split(' ')[0];
+				$('#date_from').val(from);
 				document.getElementById('date_from').disabled = true;
 				$('#prev_read').val(data.previous.presReading );
 				document.getElementById('prev_read').disabled =true;
+				 $('.datepicker').datepicker({
+      				  autoclose: true,
+        			  format: 'yyyy-mm-dd',
+        			  startDate: start,
+        			  endDate: 'today',
+        			  todayHighlight: true,
+        			  setDate: '+1d',
+
+      				});
 			}
 			// $('#date_from').val(data.previous.readingTo);
 		}
@@ -99,10 +148,12 @@ $(document).on('change', '#utilityType', function(){
 // Rate function
 var multi;
 var amountBill;
+var totalSubAmount;
 jQuery(document).ready(function ($) {
     var $totalbill = $('#total_bill'),
         $reading = $('.reading'),
-        $rate = $('#multiplier_amt');
+        $rate = $('#multiplier_amt'),
+        $totalAmount = $('input[name*=totalAmt]');
     var totalReading;
     var rate;
     $reading.on('input', function (e) {
@@ -110,7 +161,7 @@ jQuery(document).ready(function ($) {
         var read1 = Number(temp1);
         var temp2 = $('.reading').eq(1).val();
         var read2 = Number(temp2);
-        if((read1>0)||(read2>0)){
+        if((read1>0)&&(read2>0)){
         	document.getElementById('date_from').disabled=true;
         	document.getElementById('date_to').disabled=true;
         }
@@ -119,7 +170,9 @@ jQuery(document).ready(function ($) {
         	document.getElementById('date_to').disabled= false;
         }
         if((read2>read1)){
+
         	totalReading = read2-read1;
+        	globalTotalReading =totalReading;
         	 console.log(totalReading);
         	 var temp3 = $('#total_bill').val().replace("Php ", "",);
         	 var temp4 = temp3.replace(",", "",);
@@ -149,15 +202,21 @@ jQuery(document).ready(function ($) {
     	else{
     		var r = temp3/totalReading;
     		multi =r;
-    		console.log(r);
     		$('#multiplier_amt').val(r);
     	}
     });
+    $totalAmount.on('change',function(e){
+		console.log('sdf');
+			
+    });
+
+
    
    
 });
 
 // inputmask
+
 $(document).ready(function() {
 	var rList = $('#monthlyList').DataTable({
     'responsive': true,
@@ -166,6 +225,15 @@ $(document).ready(function() {
     "info": true,
     "retrieve": true,
 	});
+	 $('.datepicker').datepicker({
+			autoclose: true,
+		  format: 'yyyy-mm-dd',
+		  // startDate: start,
+		  endDate: 'today',
+		  todayHighlight: true,
+		  
+
+      });
 
 });
 
@@ -234,7 +302,7 @@ e.preventDefault();
 			success: function(data) {
 				if($.isEmptyObject(data.error)){
 					toastr.success('Added New Utilities');
-					location.reload();
+					window.location.href="/Utilities";
 				}else{
 					// toastr.error(data.error);
 					printErrorMsg(data.error);

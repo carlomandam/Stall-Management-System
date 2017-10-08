@@ -101,9 +101,6 @@ $(document).on('click','#uSaveReq', function(e){
 			 });
 		}
 })
-
-
-
 $(document).on('click', '#del', function(e){
 	id = $(this).attr('data-id');
 	console.log(id);

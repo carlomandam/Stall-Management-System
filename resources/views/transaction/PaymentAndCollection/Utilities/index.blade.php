@@ -49,8 +49,8 @@
                                                             Water
                                                           @endif
                                                         </td>
-                                                        <td>{{\Carbon\Carbon::parse($mon->readingFrom)->format('Y-m-d')}}</td>
-                                                        <td>{{\Carbon\Carbon::parse($mon->readingTo)->format('Y-m-d')}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($mon->readingFrom)->format('F d, Y')}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($mon->readingTo)->format('F d, Y')}}</td>
                                                         <td>
                                                           <button class="btn btn-primary" data-id ="{{$mon->readingID}}" id="view">View</button>
                                                           <!-- <button>Update</button> -->

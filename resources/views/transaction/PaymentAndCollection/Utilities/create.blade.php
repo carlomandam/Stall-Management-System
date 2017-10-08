@@ -48,7 +48,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker date" name="dateFrom" id="date_from" disabled readonly>
+                                         <input type="text" class="form-control datepicker " name="dateFrom" id="date_from" disabled readonly>
                                       </div>
 
                                       <div class="col-md-1">
@@ -56,7 +56,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker date" name="dateTo" id="date_to" disabled readonly>
+                                         <input type="text" class="form-control datepicker" name="dateTo" id="date_to" disabled readonly>
                                       </div>
                                   </div> 
 
@@ -144,11 +144,6 @@
     rightAlign: true,
     prefix: 'Php ',
   });
-   $('.datepicker').datepicker({
-        autoclose: true,
-        format: 'yyyy-mm-dd',
-        endDate: 'today'
-      });
    $(".reading").inputmask("9999999", { numericInput: true, placeholder: "0",clearMaskOnLostFocus: false});
     $(".money").inputmask('currency', {
     rightAlign: true,
