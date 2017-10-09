@@ -115,6 +115,7 @@ $(document).on('change', '#utilityType', function(){
 			{
 				$("#date_to").datepicker("destroy");
 				$("#date_from").datepicker("destroy");
+				// $('#prev_read').prop('disabled', false);
 				$('#date_from').datepicker({
 					autoclose: true,
 					format: 'yyyy-mm-dd',
@@ -136,6 +137,18 @@ $(document).on('change', '#utilityType', function(){
 						startDate: newStart,
 						todayHighlight: true
 					});
+					$(document).on('change', '#date_to',function(){
+						to = $(this).val();
+						if(to == null){
+							$('#prev_read').prop("disabled", true);
+							$('#pres_read').prop("disabled", true);
+						}
+						else{
+							$('#prev_read').prop("disabled", false);
+							$('#pres_read').prop("disabled", false);
+						}
+
+					})
 				})
 
 				
@@ -145,7 +158,7 @@ $(document).on('change', '#utilityType', function(){
 				$("#date_to").datepicker("destroy");
 				$('#date_from').prop("disabled", true);
 				$('#prev_read').val(data.previous.presReading );
-				document.getElementById('prev_read').disabled =true;
+				$('#prev_read').prop('disabled', true);
 				var date = data.previous.readingTo;
 				var temp = new Date(date);
 				var start = new Date(date);
@@ -165,6 +178,18 @@ $(document).on('change', '#utilityType', function(){
         			  todayHighlight: true,
 
       			});
+      			$(document).on('change', '#date_to',function(){
+						to = $(this).val();
+						if(to == null){
+							$('#prev_read').prop("disabled", true);
+							$('#pres_read').prop("disabled", true);
+						}
+						else{
+							
+							$('#pres_read').prop("disabled", false);
+						}
+
+				})
 			}
 			
 		}
@@ -332,7 +357,7 @@ $(document).on("click","#save", function(e){
 			success: function(data) {
 				if($.isEmptyObject(data.error)){
 					toastr.success('Added New Utilities');
-					// window.location.href="/Utilities";
+					window.location.href="/Utilities";
 				}else{
 					// toastr.error(data.error);
 					printErrorMsg(data.error);
@@ -411,11 +436,6 @@ $(document).on("click","#update", function(e){
 	console.log(finalMulti);
 	console.log(subMeter);
 	console.log(meterID);	
-	$.ajaxSetup({
-	    headers: {
-	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	    }
-	});
 
 	$.ajax({
 		type: "PUT",

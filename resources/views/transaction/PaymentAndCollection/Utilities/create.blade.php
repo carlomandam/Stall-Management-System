@@ -71,14 +71,14 @@
                                           <label>Previous Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control reading" name="prevRead" id="prev_read" >
+                                        <input type="text" class="form-control reading" name="prevRead" id="prev_read" disabled >
                                       </div>
 
                                        <div class="col-md-2">
                                           <label>Present Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" >
+                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" disabled >
                                       </div>
                                   </div>
 
