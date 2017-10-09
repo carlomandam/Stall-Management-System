@@ -13,13 +13,13 @@ $(document).on('change', '#utilityType', function(){
 		type: "GET",
 		url: "/Utilities/"+id,
 		success: function(data) {
-			console.log(data);
+			// console.log(data);
 			$.each(data.stalls,function(key,value){
-				console.log(value[0].presRead);
+				// console.log(value[0].presRead);
 				if(value[0].presRead==null){
 					$('.stallList').append('<tr class ="stall" data-id ="'+value[0].contractID+'"><td>'+value[0].stallID+'</td><td><input type="text" data-id="'+value[0].stallUtilityID+'" class="form-control reading2" id="sub_prev" name="subPrev"></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres" ></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="'+value[0].stallUtilityID+'" name="stallUtility"></td> </tr>');	
 					// var x = $(this).index();
-					console.log(key); 
+					// console.log(key); 
 				}
 				else{
 
@@ -100,7 +100,6 @@ $(document).on('change', '#utilityType', function(){
 						
 					})
 					
-
 			});
 			 $(".reading2").inputmask("9999999", { numericInput: true, placeholder: "0",clearMaskOnLostFocus: false});
 			 $(".money2").inputmask('currency', {rightAlign: true, prefix: 'Php '});
@@ -111,35 +110,63 @@ $(document).on('change', '#utilityType', function(){
 		type: "GET",
 		url: "/Utilities/previous/"+id,
 		success: function(data) {
-			// console.log(data.previous.readingTo);
+			console.log(data.previous);
 			if(data.previous == null )
 			{
-				document.getElementById('date_from').disabled = false;
-				document.getElementById('prev_read').disabled = false;
+				$("#date_to").datepicker("destroy");
+				$("#date_from").datepicker("destroy");
+				$('#date_from').datepicker({
+					autoclose: true,
+					format: 'yyyy-mm-dd',
+					endDate: 'today',
+					todayHighlight: true
+
+
+				});
+				$(document).on('change','#date_from',function(){
+					start = $(this).val();
+					var newStart = new Date(start);
+					newStart.setDate(newStart.getDate()+1);
+					newStart = newStart.toISOString().slice(0,10);
+					console.log(newStart);
+					$('#date_to').datepicker({
+						autoclose: true,
+						format: 'yyyy-mm-dd',
+						endDate: 'today',
+						startDate: newStart,
+						todayHighlight: true
+					});
+				})
+
+				
 			}
 			else{
-				var date = data.previous.readingTo;
-				var temp = new Date(date);
-				temp.setDate(temp.getDate()+1);
-				var start = new Date(date);
-				start.setDate(start.getDate()+2)
-				var from = temp.toString();
-				// from = from.split(' ')[0];
-				$('#date_from').val(from);
-				document.getElementById('date_from').disabled = true;
+				$("#date_from").datepicker("destroy");
+				$("#date_to").datepicker("destroy");
+				$('#date_from').prop("disabled", true);
 				$('#prev_read').val(data.previous.presReading );
 				document.getElementById('prev_read').disabled =true;
-				 $('.datepicker').datepicker({
+				var date = data.previous.readingTo;
+				var temp = new Date(date);
+				var start = new Date(date);
+				temp.setDate(temp.getDate()+2);
+				console.log(temp);
+				temp =temp.toISOString().slice(0,10);
+				console.log(temp);
+				start.setDate(start.getDate()+3);
+				start = start.toISOString().slice(0,10);
+				console.log(start);
+				$('#date_from').val(temp); 	
+				$('#date_to').datepicker({
       				  autoclose: true,
         			  format: 'yyyy-mm-dd',
         			  startDate: start,
-        			  endDate: 'today',
+        			  endDate: 'tomorrow',
         			  todayHighlight: true,
-        			  setDate: '+1d',
 
-      				});
+      			});
 			}
-			// $('#date_from').val(data.previous.readingTo);
+			
 		}
 	});
 
@@ -290,7 +317,7 @@ $(document).on("click","#save", function(e){
 		type: "POST",
 		url: "/Utilities",
 		data: { 
-			'_token' : $('input[name=_token]').val(),
+			
 			'finalUtility': finalUtility,
 			'finalDateFrom': finalDateFrom,
 			'finalDateTo': finalDateTo,
@@ -305,7 +332,7 @@ $(document).on("click","#save", function(e){
 			success: function(data) {
 				if($.isEmptyObject(data.error)){
 					toastr.success('Added New Utilities');
-					window.location.href="/Utilities";
+					// window.location.href="/Utilities";
 				}else{
 					// toastr.error(data.error);
 					printErrorMsg(data.error);
@@ -474,21 +501,22 @@ $(document).on("input","#sub_pres", function(){
 						
 })
 
+// Finalize MOnthly reading
 $(document).on('click','#isFinalize',function(){
 	id = $(this).attr('data-id');
 	console.log(id);
-		// $.ajax({
-		// type: "PUT",
-		// url: "/Utilities/finalize/"+id
-		// 	success: function(data) {
-		// 		if($.isEmptyObject(data.error)){
-		// 			toastr.success('Utilities Updated');
-		// 			window.location.href="/Utilities";
-		// 		}else{
-		// 			// toastr.error(data.error);
-		// 			printErrorMsg(data.error);
-		// 		}
-		// 	}
+		$.ajax({
+		type: "PUT",
+		url: "/Utilities/finalize/"+id,
+			success: function(data) {
+				if($.isEmptyObject(data.error)){
+					toastr.success('Utilities Finalize');
+					window.location.href="/Utilities";
+				}else{
+					// toastr.error(data.error);
+					printErrorMsg(data.error);
+				}
+			}
 
-		// });
+		});
 })

@@ -21,6 +21,7 @@
             font-family: "Trebuchet MS"
         }
         
+        
         .fa-power-off {
             margin-right: 20px;
         }
@@ -255,6 +256,11 @@
         $.widget.bridge('uibutton', $.ui.button);
     </script>
     <script type="text/javascript">
+            $.ajaxSetup({
+                 headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+                 });
         /** add active class and stay opened when selected */
         var url = window.location;
         // for treeview

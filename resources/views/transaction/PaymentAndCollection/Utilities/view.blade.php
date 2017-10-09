@@ -46,7 +46,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control" name="dateFrom" id="date_from" value="{{\Carbon\Carbon::parse($read->readingFrom)->format('Y-m-d')}}" readonly>
+                                         <input type="text" class="form-control" name="dateFrom" id="date_from" value="{{\Carbon\Carbon::parse($read->readingFrom)->format('m/d/Y')}}" readonly>
                                       </div>
 
                                       <div class="col-md-1">
@@ -54,7 +54,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control" name="dateTo" id="date_to" value="{{\Carbon\Carbon::parse($read->readingTo)->format('Y-m-d')}}" readonly>
+                                         <input type="text" class="form-control" name="dateTo" id="date_to" value="{{\Carbon\Carbon::parse($read->readingTo)->format('m/d/Y')}}" readonly>
                                       </div>
                                   </div> 
 

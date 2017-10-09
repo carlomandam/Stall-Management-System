@@ -52,9 +52,13 @@
                                                         <td>{{\Carbon\Carbon::parse($mon->readingFrom)->format('F d, Y')}}</td>
                                                         <td>{{\Carbon\Carbon::parse($mon->readingTo)->format('F d, Y')}}</td>
                                                         <td>
+                                                          @if($mon->isFinalize==null)
                                                           <button class="btn btn-primary" data-id ="{{$mon->readingID}}" id="view">View</button>
                                                           <button class="btn btn-info" data-id ="{{$mon->readingID}}" id="finalize">Finalize</button>
                                                           <!-- <button>Update</button> -->
+                                                          @elseif($mon->isFinalize==1)
+                                                           <button class="btn btn-primary" data-id ="{{$mon->readingID}}" id="view">View</button>
+                                                          @endif
                                                         </td>
                                                       </tr>
                                                     @endforeach

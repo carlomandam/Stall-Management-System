@@ -383,4 +383,10 @@ class UtilityController extends Controller
                         // return ($subMeter);          
             return view('transaction/PaymentAndCollection/Utilities.view',compact('reading','subMeter'));                          
     }
+  public function finalize($id){
+
+    $monthlyReading =MonthlyReading::findorFail($id);
+    $monthlyReading->isFinalize = 1;
+    $monthlyReading->save(); 
+  }  
 }

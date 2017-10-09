@@ -48,7 +48,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker " name="dateFrom" id="date_from" disabled readonly>
+                                         <input type="text" class="form-control" name="dateFrom" id="date_from" readonly disabled>
                                       </div>
 
                                       <div class="col-md-1">
@@ -56,7 +56,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control datepicker" name="dateTo" id="date_to" disabled readonly>
+                                         <input type="text" class="form-control" name="dateTo" id="date_to" readonly disabled>
                                       </div>
                                   </div> 
 
@@ -138,16 +138,15 @@
 <script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
 <script type="text/javascript" src ="{{ URL::asset('js/utility.js') }}"></script>
 
+
 <script type="text/javascript">
-  
- $(".collectTo").inputmask('currency', {
-    rightAlign: true,
-    prefix: 'Php ',
-  });
+
    $(".reading").inputmask("9999999", { numericInput: true, placeholder: "0",clearMaskOnLostFocus: false});
     $(".money").inputmask('currency', {
     rightAlign: true,
     prefix: 'Php ',
   });
+    
+   
 </script>
 @stop
