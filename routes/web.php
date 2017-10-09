@@ -198,6 +198,7 @@ Route::get('/Utilities/previous/{id}', 'UtilityController@previous');
 Route::get('/Utilities/submeter/{id}', 'UtilityController@submeter');
 Route::get('/Utilities/monthly', 'UtilityController@monthly');
 Route::get('/Utilities/view/{id}', 'UtilityController@view');
+Route::get('/Utilities/update/{id}', 'UtilityController@edit');
 Route::get('/getBills','PaymentController@getBills');
 Route::get('/createBill/{id}','BillingController@createBill');
 Route::get('/ViewBill/{id}','BillingController@viewBill');
@@ -239,3 +240,4 @@ Route::post('/updateApplication','ApplicationController@updateApplication');
 // Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');
+?>

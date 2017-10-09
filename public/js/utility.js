@@ -29,7 +29,7 @@ $(document).on('change', '#utilityType', function(){
 					$(document).on("input","#sub_pres", function(){
 						ind = $(this).closest('tr').index();
 						console.log(ind);
-						document.getElementById('total_bill').disabled=true;
+						document.getElementById('total_bill').disabled=false;
 						document.getElementById('pres_read').disabled=true;
 						temp1 = $('input[name*=subPrev]').eq(ind).val();
 						prev = Number(temp1);
@@ -123,8 +123,8 @@ $(document).on('change', '#utilityType', function(){
 				temp.setDate(temp.getDate()+1);
 				var start = new Date(date);
 				start.setDate(start.getDate()+2)
-				var from = date.toString();
-				from = from.split(' ')[0];
+				var from = temp.toString();
+				// from = from.split(' ')[0];
 				$('#date_from').val(from);
 				document.getElementById('date_from').disabled = true;
 				$('#prev_read').val(data.previous.presReading );
@@ -155,6 +155,12 @@ jQuery(document).ready(function ($) {
         $rate = $('#multiplier_amt'),
         $totalAmount = $('input[name*=totalAmt]');
     var totalReading;
+    var tempVar1 = $('input[name*=presRead]').val();
+    var var1 = Number(tempVar1)
+    var tempVar2 =$('input[name*=prevRead]').val();
+    var var2 = Number(tempVar2);
+    totalReading = var1-var2;
+
     var rate;
     $reading.on('input', function (e) {
         var temp1 = $('.reading').eq(0).val();
@@ -195,9 +201,17 @@ jQuery(document).ready(function ($) {
     	var temp2 = temp1.replace(",", "",);
     	var temp3 = Number(temp2);
     	amountBill = temp3;
+    	$(' .stallList tr ').each(function(){
+    		ind2 = $(this).index();
+    		$('input[name=subPres]').eq(ind2).val('0');
+    		$('input[name=totalAmt]').eq(ind2).val('0');
+  
+
+    	})
     
     	if(isNaN(totalReading)){
     		$('#multiplier_amt').val('0');
+    		console.log('asdf');
     	}
     	else{
     		var r = temp3/totalReading;
@@ -205,10 +219,7 @@ jQuery(document).ready(function ($) {
     		$('#multiplier_amt').val(r);
     	}
     });
-    $totalAmount.on('change',function(e){
-		console.log('sdf');
-			
-    });
+ 
 
 
    
@@ -225,21 +236,13 @@ $(document).ready(function() {
     "info": true,
     "retrieve": true,
 	});
-	 $('.datepicker').datepicker({
-			autoclose: true,
-		  format: 'yyyy-mm-dd',
-		  // startDate: start,
-		  endDate: 'today',
-		  todayHighlight: true,
-		  
 
-      });
 
 });
 
 // SAve button
 $(document).on("click","#save", function(e){
-e.preventDefault();
+	e.preventDefault();
 	var finalUtility = $("select[name='utilityType']").val();
 	var finalDateFrom = $("input[name='dateFrom']").val();
 	var finalDateTo = $("input[name='dateTo']").val();
@@ -327,7 +330,165 @@ $(document).on('click', '#view', function(){
 	window.location.href="/Utilities/view/"+id;
 
 })
+$(document).on('click', '#finalize', function(){
+	id = $(this).attr('data-id');
+	console.log(id);
+	window.location.href="/Utilities/update/"+id;
 
-
-
+})
+$(document).on("click","#update", function(e){
+	e.preventDefault();
+	id = $(this).attr('data-id');
+	console.log(id);
+	var finalUtility = $("input[name='utilityType']").attr('data-id');
+	var finalDateFrom = $("input[name='dateFrom']").val();
+	var finalDateTo = $("input[name='dateTo']").val();
+   	var finalPrevious = parseInt($("input[name='prevRead']").val());
+   	finalPrevious = (isNaN(finalPrevious) ? 0 : finalPrevious); 
+	var finalPresent = parseInt($("input[name='presRead']").val());
+	finalPresent = (isNaN(finalPresent) ? 0 : finalPresent);
+	var finalBillAmount = (!($('input[name=totalBill]').val().replace("Php ", "",).replace(",", "",)) ? 0 : $('input[name=totalBill]').val().replace("Php ", "",).replace(",", "",));
+  	
+	var finalMulti = (!($('input[name=multiplierAmt]').val().replace("Php ", "",).replace(",", "",)) ? 0 : $('input[name=multiplierAmt]').val().replace("Php ", "",).replace(",", "",));
+  	;
+	var subMeter = [];
+	var meterID =[];
 	
+	$('.stallList tr').each(function() {
+		
+   		ind = $(this).index();
+  		var sub ={
+	  		"finalSubID" : $('input[name=subMeterID]').eq(ind).val(),
+	  		// "finalSubPrev" : parseInt($('input[name=subPrev]').eq(ind).val()),
+	  		"finalSubPrev": (isNaN(parseInt($('input[name=subPrev]').eq(ind).val())) ? 0 : parseInt($('input[name=subPrev]').eq(ind).val())),
+	  		"finalSubPres": (isNaN(parseInt($('input[name=subPres]').eq(ind).val()))) ? 0 :parseInt($('input[name=subPres]').eq(ind).val())
+  
+  		}
+  		subMeter.push(sub);
+  		var fRead = parseInt($('input[name=finalRead]').val());
+  		fRead = (isNaN(fRead) ? 0 : fRead);
+  		var met ={
+  			 "finalSubAmount": (!($('input[name=totalAmt]').eq(ind).val().replace("Php ", "",).replace(",", "",)) ? 0 : $('input[name=totalAmt]').eq(ind).val().replace("Php ", "",).replace(",", "",)),
+  			 "finalMeterID":$('input[name=meterID]').eq(ind).val()
+  		}
+
+  		meterID.push(met);
+  		
+	});
+	console.log(finalUtility);
+	console.log(finalDateFrom);
+	console.log(finalDateTo);
+	console.log(finalPrevious);
+	console.log(finalPresent);
+	console.log(finalBillAmount);
+	console.log(finalMulti);
+	console.log(subMeter);
+	console.log(meterID);	
+	$.ajaxSetup({
+	    headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    }
+	});
+
+	$.ajax({
+		type: "PUT",
+		url: "/Utilities/"+id,
+		data: { 
+			'finalUtility': finalUtility,
+			'finalDateFrom': finalDateFrom,
+			'finalDateTo': finalDateTo,
+			'finalPrevious': finalPrevious,
+			'finalPresent': finalPresent,
+			'finalBillAmount':finalBillAmount,
+			'finalMulti':finalMulti,
+			'subMeter': subMeter
+			// 'meterID': meterID
+		},
+
+			success: function(data) {
+				if($.isEmptyObject(data.error)){
+					toastr.success('Utilities Updated');
+					window.location.href="/Utilities";
+				}else{
+					// toastr.error(data.error);
+					printErrorMsg(data.error);
+				}
+			}
+
+		});
+	function printErrorMsg (msg) {
+			$(".print-error-msg").find("ul").html('');
+			$(".print-error-msg").css('display','block');
+			$.each( msg, function( key, value ) {
+				$(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+			});
+		}
+
+
+})
+
+
+$(document).on("input","#sub_pres", function(){
+						ind = $(this).closest('tr').index();
+						console.log(ind);
+						document.getElementById('total_bill').disabled=true;
+						document.getElementById('pres_read').disabled=true;
+						temp1 = $('input[name*=subPrev]').eq(ind).val();
+						prev = Number(temp1);
+						console.log(prev);
+						multi = $('input[name=multiplierAmt]').val().replace("Php ", "",).replace(",", "",);
+								
+						temp2 = $(this).val();
+						pres =Number(temp2);
+						console.log(pres);
+						if(pres>prev){
+							
+							console.log(multi);
+
+							temp = (pres - prev)*multi;
+							var total=temp;
+							console.log(temp);
+							$(' .stallList tr ').each(function(){
+								ind2 = $(this).index();
+								var amount = $('input[name=totalAmt]').eq(ind2).val().replace("Php ", "",).replace(",", "",);
+								amount = Number(amount);
+								console.log(amount);
+								total = total+amount; 
+								console.log(total);
+								
+							})
+							console.log(total);
+							if( total >=amountBill){
+								alert('Invalid INPUT');
+								$('input[name*=subPres]').eq(ind).val(" ");
+								$('input[name*=totalAmt]').eq(ind).val("0");
+							}
+							else{
+								$('input[name*=totalAmt]').eq(ind).val(temp);
+							}
+						}
+						else{
+							$('input[name*=totalAmt]').eq(ind).val("0");
+						}
+
+						
+})
+
+$(document).on('click','#isFinalize',function(){
+	id = $(this).attr('data-id');
+	console.log(id);
+		// $.ajax({
+		// type: "PUT",
+		// url: "/Utilities/finalize/"+id
+		// 	success: function(data) {
+		// 		if($.isEmptyObject(data.error)){
+		// 			toastr.success('Utilities Updated');
+		// 			window.location.href="/Utilities";
+		// 		}else{
+		// 			// toastr.error(data.error);
+		// 			printErrorMsg(data.error);
+		// 		}
+		// 	}
+
+		// });
+})

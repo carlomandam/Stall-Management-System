@@ -53,6 +53,7 @@
                                                         <td>{{\Carbon\Carbon::parse($mon->readingTo)->format('F d, Y')}}</td>
                                                         <td>
                                                           <button class="btn btn-primary" data-id ="{{$mon->readingID}}" id="view">View</button>
+                                                          <button class="btn btn-info" data-id ="{{$mon->readingID}}" id="finalize">Finalize</button>
                                                           <!-- <button>Update</button> -->
                                                         </td>
                                                       </tr>

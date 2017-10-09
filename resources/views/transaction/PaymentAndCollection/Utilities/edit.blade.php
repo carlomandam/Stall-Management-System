@@ -23,6 +23,9 @@
                              
                         </div>
                         <div>
+                             
+                              
+                            
                                 <div class="box-body">
                                   @foreach($reading as $read)
                                   <div class="row" style="margin-top: 10px;">
@@ -32,9 +35,9 @@
 
                                       <div class="col-md-2">
                                         @if($read->utilType==1)
-                                          <input type="text" class="form-control" value="Electricity" readonly>
+                                          <input type="text" class="form-control" data-id="{{$read->utilType}}" value="Electricity" name="utilityType" readonly>
                                          @elseif($read->utilType==2)
-                                          <input type="text" class="form-control" value="Water" readonly>
+                                          <input type="text" class="form-control" data-id="{{$read->utilType}}" value="Water" name="utilityType"readonly >
                                           @endif 
                                       </div>
 
@@ -76,7 +79,7 @@
                                           <label>Present Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" value="{{$read->presReading}}" disabled >
+                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" value="{{$read->presReading}}" >
                                       </div>
                                   </div>
 
@@ -85,7 +88,7 @@
                                           <label>Total Bill Amount:</label>
                                       </div>
                                       <div class="col-md-2">
-                                          <input type="text" class="form-control money" name="totalBill" id="total_bill" value="{{$read->totalBillAmount}}" disabled >
+                                          <input type="text" class="form-control money" name="totalBill" id="total_bill" value="{{$read->totalBillAmount}}"  >
                                       </div>
 
                                        <div class="col-md-2">
@@ -108,14 +111,7 @@
                                               </tr>
                                           </thead>
                                           <tbody class="stallList">
-                                              @foreach($subMeter as $sub)
-                                                <tr class ="stall" data-id ="">
-                                                    <td>{{$sub->stall}}</td>
-                                                    <td><input type="text" data-id="" class="form-control reading" id="sub_prev" name="subPrev" value="{{$sub->prev}}" readonly></td>
-                                                    <td><input type="text" class="form-control reading" id="sub_pres" name="subPres" value="{{$sub->pres}}"  readonly></td>
-                                                    <td><input type="text" class="form-control money" id="total_amt" name="totalAmt" value="{{$sub->amount}}" disabled></td>
-                                                </tr>
-                                              @endforeach
+                                           
                                           </tbody>
                                       </table>
                                   </div>
@@ -123,8 +119,9 @@
 
                                   <div class="row" style="margin-top: 20px;">
                                       <div class="col-md-4">
-                                         <!--  <button class="btn btn-primary" id="save" name="save" >Save</button> -->
-                                          <a href="{{url('/Utilities')}}"><button class="btn btn-info">Back</button></a>
+                                          <button class="btn btn-success" id="isFinalize" data-id="{{$read->readingID}}" >Finalize</button>
+                                          <button class="btn btn-primary" id="update" data-id="{{$read->readingID}}" >Update</button>
+                                          <a href="{{url('/Utilities')}}"><button class="btn btn-danger">Cancel</button></a>
                                       </div>
                                   </div>
 
@@ -159,5 +156,15 @@
     rightAlign: true,
     prefix: 'Php ',
   });
+
+
+<?php foreach ($subMeter as $sub): ?>
+
+        $('.stallList').append('<tr><td>{{$sub->stall}}</td><td><input type="text" value="{{$sub->prev}}" class="form-control reading2" id="sub_prev" name="subPrev" disabled></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres" value = "{{$sub->pres}}"  ></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" value = "{{$sub->amount}}" disabled></td><td><input type="hidden" name="subMeterID" value="{{$sub->subID}}"></td><td><input type="hidden" name="meterID" value="{{$sub->metID}}"></td></tr>');  
+
+<?php endforeach ?>  
+ $(".reading2").inputmask("9999999", { numericInput: true, placeholder: "0",clearMaskOnLostFocus: false});
+$(".money2").inputmask('currency', {rightAlign: true, prefix: 'Php '});
+
 </script>
 @stop

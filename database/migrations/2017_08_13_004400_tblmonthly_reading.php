@@ -22,6 +22,7 @@ class TblmonthlyReading extends Migration
             $table->double('totalBillAmount',8,2);
             $table->double('multiplier',8,2);
             $table->integer('utilType');
+            $table->integer('isFinalize')->nullable();
           
             $table->timestamps();
             $table->softDeletes();
