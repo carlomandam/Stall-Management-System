@@ -10,8 +10,6 @@ class ChargeController extends Controller
         $charge = new Charges;
         $charge->chargeName = trim($_POST['Name']);
         $charge->chargeAmount = $_POST['Amount'];
-        $charge->chargeType = $_POST['Type'];
-
         $charge->chargeDesc = $_POST['Desc'];
 
         $charge->save();
@@ -21,10 +19,7 @@ class ChargeController extends Controller
         $charge = Charges::where('chargeID',$_POST['id'])->first();
         $charge->chargeName = trim($_POST['Name']);
         $charge->chargeAmount = $_POST['Amount'];
-        $charge->chargeType = $_POST['Type'];
-
         $charge->chargeDesc = $_POST['Desc'];
-
         
         if($charge->isDirty()){
             $charge->save();
@@ -32,7 +27,6 @@ class ChargeController extends Controller
         }
         else
             return 'false';
-            
     }
     
     function deleteCharge(){
@@ -90,7 +84,6 @@ class ChargeController extends Controller
 
         	return;
     	}
-        
         else
     		return (json_encode($data));
     }

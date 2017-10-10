@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\StallRental;
 use App\Contract;
 use App\Billing;
 use App\Payment;
@@ -531,16 +530,13 @@ class PaymentController extends Controller{
             }
             $recordCtr++;
         }
-
-        
-        
-
         return $data;  */
     }
+    
     public function getPaymentDetails(Request $request){
 
-
     }
+
     public function getTotalAmt($transactionID){
         $total = 0;
         $id = $transactionID;
@@ -551,52 +547,46 @@ class PaymentController extends Controller{
                         LEFT JOIN tblpayment as paid on paid.transactionID = payTrans.transactionID
                         where paid.transactionID = '$id'");
         foreach($collectDates as $date){
-             $date = get_object_vars($date);
+            $date = get_object_vars($date);
             $dates[] = $date['date'];
         }
 
         if(count($dates)>0){
-        $collectionDetID = Payment_Collection::where('transactionID',$id)->pluck('collectionDetID')->first();
-        $stallRateID = CollectionDetails::find($collectionDetID);
+            $collectionDetID = Payment_Collection::where('transactionID',$id)->pluck('collectionDetID')->first();
+            $stallRateID = CollectionDetails::find($collectionDetID);
 
-
-      
-        $returnedAmt = PaymentController::getRate($dates,$stallRateID->Collection->Contract->stallRateID);
+            $returnedAmt = PaymentController::getRate($dates,$stallRateID->Collection->Contract->stallRateID);
             if(count($returnedAmt) > 0){
                 foreach($returnedAmt as $amt){
-                $total += $amt['amount'];
+                    $total += $amt['amount'];
                 }
             }
         }
 
         $chargeAmount = Charge_Details::where('transactionID',$transactionID)->get();
-       if(count($chargeAmount)>0){
-        foreach ($chargeAmount as $amt) {
-            $total += $amt->Charges->chargeAmount;
+        if(count($chargeAmount)>0){
+            foreach ($chargeAmount as $amt) {
+                $total += $amt->Charges->chargeAmount;
+            }
         }
-       }
 
-       $utilitiesAmt = Billing_Details::where('transactionID',$transactionID)->get();
-       if(count($utilitiesAmt)>0){
-        foreach ($utilitiesAmt as $amt) {
-            $total += $amt->StallMeter->utilityAmt;
+        $utilitiesAmt = Billing_Details::where('transactionID',$transactionID)->get();
+        if(count($utilitiesAmt)>0){
+            foreach ($utilitiesAmt as $amt) {
+                $total += $amt->StallMeter->utilityAmt;
+            }
         }
-       }
 
-       $initAmt = InitFeeDetail::where('transactionID',$transactionID)->get();
-       if(count($initAmt)>0){
-        foreach ($initAmt as $amt) {
-            $total += $amt->InitialFee->initAmt;
+        $initAmt = InitFeeDetail::where('transactionID',$transactionID)->get();
+        if(count($initAmt)>0){
+            foreach ($initAmt as $amt) {
+                $total += $amt->InitialFee->initAmt;
+            }
         }
-       }
-
-
 
         return $total;
-
-
-
     }
+
     public function printReceipt(){
         return view('pdf/rentReceipt');
     }
@@ -609,6 +599,5 @@ class PaymentController extends Controller{
         $pdf = PDF::loadview('transaction.PaymentAndCollection.bill',compact('billing','contract','billID'))->setPaper([0,0,612,396]);
 
         return $pdf->stream('bill.pdf');
-     //   return view('transaction.PaymentAndCollection.bill',compact('billID','billing','contract'));
     }
 }

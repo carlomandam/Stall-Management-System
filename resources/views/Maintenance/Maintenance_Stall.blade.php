@@ -7,9 +7,9 @@
     <div class="box-body">
         <div class="table-responsive">
             <div class="defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall</button>
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#updatemultiple"><span class='fa fa-pencil'></span>&nbspUpdate Multiple Stall</button>
-                <div class=" pull-right" id="archive"> <a href="{{ url('/StallArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbsp Archive</a> </div>
+                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp;New Stall</button>
+                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#updatemultiple"><span class='fa fa-pencil'></span>&nbsp;Update Multiple Stall</button>
+                <div class=" pull-right" id="archive"> <a href="{{ url('/StallArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbsp; Archive</a> </div>
             </div>
             <table id="table" class="table table-bordered table-striped" role="grid">
                 <thead>
@@ -27,7 +27,6 @@
 <div class="modal fade" tabindex="-1" id="new" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <form action="" method="post" id="newform">
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -80,7 +79,6 @@
 <div class="modal fade" tabindex="-1" id="update" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <form action="" method="post" id="updateform">
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -137,7 +135,6 @@
 <div class="modal fade" tabindex="-1" id="updatemultiple" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <form action="" method="post" id="updatemultiform">
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -387,7 +384,6 @@
                 , data: {
                     "code": building[$(this).parent().parent().prev().find(".bldgSelect")[0].selectedIndex].bldgCode
                     , "floor": this.selectedIndex + 1
-                    , "_token": "{{ csrf_token() }}"
                 }
                 , context: this
                 , success: function (data) {
@@ -410,8 +406,7 @@
             type: "POST"
             , url: '/getStallInfo'
             , data: {
-                "_token": "{{ csrf_token() }}"
-                , "id": id
+                "id": id
             }
             , success: function (data) {
                 obj = JSON.parse(data);
@@ -424,9 +419,6 @@
         $.ajax({
             type: "POST"
             , url: '/bldgOptions'
-            , data: {
-                "_token": "{{ csrf_token() }}"
-            }
             , success: function (data) {
                 building = JSON.parse(data);
                 var opt = "";
@@ -444,9 +436,6 @@
         $.ajax({
             type: "POST"
             , url: '/stypeOptions'
-            , data: {
-                "_token": "{{ csrf_token() }}"
-            }
             , success: function (data) {
                 stype = JSON.parse(data);
                 var opt = "";
@@ -471,8 +460,7 @@
             type: "POST"
             , url: '/deleteStall'
             , data: {
-                "_token": "{{ csrf_token() }}"
-                , "id": id
+                "id": id
             }
             , success: function (data) {
                 $('#table').DataTable().ajax.reload();
@@ -485,9 +473,6 @@
         $.ajax({
             type: "POST"
             , url: '/getStallList'
-            , data: {
-                "_token": "{{ csrf_token() }}"
-            }
             , success: function (data) {
                 var stalls = JSON.parse(data);
                 var opt = '';

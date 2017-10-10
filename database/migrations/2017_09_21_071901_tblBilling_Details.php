@@ -17,7 +17,7 @@ class TblBillingDetails extends Migration
         Schema::create('tblBilling_Details', function (Blueprint $table) {
             $table->increments('billDetID');
             $table->integer('billID')->unsigned();
-            $table->integer('paymentID')->unsigned()->nullable();
+            $table->integer('transactionID')->unsigned()->nullable();
             $table->integer('stallMeterID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
@@ -34,11 +34,10 @@ class TblBillingDetails extends Migration
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
 
-            $table->foreign('paymentID')
-                 ->references('paymentID')
-                 ->on('tblPayment')
-                 ->onUpdate('cascade')
-                 ->onDelete('restrict');
+            $table->foreign('transactionID')->references('transactionID')
+                ->on('TblPayment_Transaction')
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
         });
     }
 

@@ -102,8 +102,6 @@ class ApplicationController extends Controller
         $contract->stallHID = $holder->stallHID;
         $contract->orgName = $_POST['orgname'];
         $contract->businessName = $_POST['businessName'];
-        /*$contract->contractStart = date_format(date_create($_POST['startDate']),"Y-m-d");
-        $contract->contractEnd = (isset($_POST['endDate'])) ? date_format(date_create($_POST['endDate']),"Y-m-d") : null;*/
         $contract->stallRateID = $_POST['rateid'];
         $contract->save();
 
@@ -116,7 +114,8 @@ class ApplicationController extends Controller
                     if($product->save()){
                         $product->Contract()->attach($contract->contractID);
                     }
-                }
+                }else
+                    $product->Contract()->attach($contract->contractID);
             }
 
             return  "/UpdateRegistration/".$contract->contractID;
@@ -189,7 +188,7 @@ class ApplicationController extends Controller
         $holder->stallHFName = $fname;
         $holder->stallHMName = $mname;
         $holder->stallHLName = $lname;
-        $holder->stallHBday = date_format(date_create($_POST['DOBYear'].'-'.$_POST['DOBMonth'].'-'.$_POST['DOBDay']),"Y-m-d");
+        $holder->stallHBday = date("Y-m-d",strtotime($_POST['DOB']));
         $holder->stallHEmail = $_POST['email'];
         $holder->stallHSex = $_POST['sex'];
         $holder->stallHAddress = $_POST['address'];
@@ -217,13 +216,8 @@ class ApplicationController extends Controller
         if(count($initFees) > 1)
             return "init";
         $contract = Contract::find($_POST['contract']);
-        $rejects = Contract::where('stallID',$contract->stallID)->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->where('contractID','!=',$_POST['contract'])->get();
+        $rejects = Contract::where('stallID',$contract->stallID)->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->where('contractID','!=',$_POST['contract'])->delete();
 
-        foreach($rejects as $reject){
-            $reject->delete();
-        }
-
-        
         foreach ($initFees as $init) {
             $ifd = new InitFeeDetail;
             $ifd->contractID = $contract->contractID;

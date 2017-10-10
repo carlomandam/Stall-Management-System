@@ -20,7 +20,7 @@
                 <thead>
                     <tr>
                         <th style="width: 200px;">Stall Type</th>
-                        <th style="width: 120px;">Sizes</th>
+                        <th style="width: 120px;">Area</th>
                         <th style="width: 300px;">Description</th>
                         <th>Actions</th>
                     </tr>
@@ -42,19 +42,19 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="stypeName">Stall Type Name</label><span class="required">&nbsp*</span>
-                                            <input type="text" class="form-control" id="stypeName" name="stypeName" placeholder="Stall Type Name" /> </div>
+                                            <input type="text" class="form-control" id="stypeName" name="stypeName" placeholder="ex. Garment Stall" /> </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="stypeDesc">Description</label>
-                                            <textarea class="form-control" id="stypeDesc" name="stypeDesc" placeholder="Stall Type Description"></textarea>
+                                            <textarea class="form-control" id="stypeDesc" name="stypeDesc"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="stypeLength">Sizes</label>
+                                            <label for="stypeLength">Stall Type Area</label>
                                             <div class="form-group input-group removable">
-                                                <input type="text" name="size[]" class="form-control" placeholder="Area" list='sizesoptions' required>
+                                                <input type="text" name="size[]" class="form-control" placeholder="ex. 2" list='sizesoptions' required>
                                                 <datalist id="sizesoptions" class="sizes">
                                                 </datalist>
                                                 <span class="input-group-addon">
@@ -96,14 +96,14 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="stypeDescUp">Description</label>
-                                            <textarea class="form-control" id="stypeDescUp" name="stypeDesc" placeholder="Stall Type Description"></textarea>
+                                            <textarea class="form-control" id="stypeDescUp" name="stypeDesc"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group sizediv">
                                             <label for="stypeLength">Stall Type Area</label>
                                             <div class="form-group input-group removable">
-                                                <input type="text" name="newSize[]" class="form-control" placeholder="Area" list='sizesoptions'> <span class="input-group-addon">
+                                                <input type="text" name="newSize[]" class="form-control" list='sizesoptions'> <span class="input-group-addon">
                                          meter<sup>2</sup>   
                                          </span> <span class="input-group-btn"><button type="button" class="btn btn-primary btn-add">+
                                         </button></span> </div>
@@ -145,7 +145,7 @@
                         });
                     }
                     return unique;
-                }, "Sizes must be unique");
+                }, "Area must be unique");
                 
                 $("#newform").validate({
                     rules: {
@@ -178,9 +178,9 @@
                             , maxlength: "Stall type name cant't be more than 200 characters"
                         }
                         , "size[]": {
-                            unique: "Size must be unique"
-                            , number: "Invalid Size"
-                            , required: "Please enter size"
+                            unique: "Area must be unique"
+                            , number: "Invalid Area"
+                            , required: "Please enter Area"
                         }
                     }
                     , errorClass: "error-class"
@@ -243,7 +243,7 @@
                             , maxlength: "Stall type name cant't be more than 200 characters"
                         }
                         , "newSize[]":{
-                            unique: "Sizes must be unique"
+                            unique: "Area must be unique"
                             , number: "Invalid size"
                         }
                     }
@@ -362,7 +362,7 @@
 
             function deleteSize(type,size,elem){
                 if($('.existingsize').length < 2){
-                    toastr.warning('Stall type must have atleast one size');
+                    toastr.warning('Stall type must have atleast one area');
                     return;
                 }
                 $.ajax({

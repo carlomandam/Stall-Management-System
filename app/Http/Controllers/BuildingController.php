@@ -52,31 +52,23 @@ class BuildingController extends Controller
     function getBuildingCode(){
         if($_POST['name'] == null)
             return;
-        else if(strlen(trim($_POST['name']," "))<5)
-            return "short";
+
         $startTime = time();
-        $string = trim($_POST['name']);
-        $codes = array('mbldig','mnbig','mildg');
-        $newcode = $codes[1];
-        
-        do{
-            $newcode = $string[0];
-            $last = array(0);
-            for($i = 4;$i>0;$i--){
-                
-                do{
-                    $rand = rand(end($last),strlen($string)-1);
-                    if(time() - $startTime > 5)
-                        return "timeout";
-                }while($rand > strlen($string)-$i || in_array($rand,$last));
-                
-                $newcode = $newcode.$string[$rand];
-                $last[] = $rand;
+        $string = $_POST['name'];
+        $words = explode(" ",$string);
+        $newcode = "";
+
+        for($i = 0;$i<count($words);$i++){
+            $j = 0;
+            
+            while(!ctype_alnum($words[$i][$j])){
+                $j++;
             }
-            if(time() - $startTime > 30)
-                return "timeout";
+
+            $newcode .= $words[$i][$j];
         }
-        while(in_array($newcode,$codes));
+        if(time() - $startTime > 30)
+            return "timeout";
         
         return $newcode;
     }

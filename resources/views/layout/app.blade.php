@@ -21,7 +21,6 @@
             font-family: "Trebuchet MS"
         }
         
-        
         .fa-power-off {
             margin-right: 20px;
         }
@@ -96,30 +95,18 @@
         <header class="main-header">
             <a href="index2.html" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b></span> </a>
             <nav class="navbar navbar-fixed-top">
-                <!-- Sidebar toggle button-->
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a> <span class="system-name"><b>Stalls Management System</b></span>
-                <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
-                    <!-- Authentication Links -->
                     <li class="dropdown" style="margin-right: 10px;"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="caret"></span> </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li> <a href="" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-                                         <form id="logout-form" action="" method="POST" style="display: none;">
-                                           <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                                        </form>
-
-
-                                        
-                                    </li>
-                                    <li>
-                                        <a href="">
-
-                                            Add Account
-                                        </a> </li>
+                            <li> <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="" method="POST" style="display: none;">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            </form>
+                            </li>
+                            <li>
+                                <a href="">Add Account</a> 
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -152,16 +139,13 @@
                                 </span> </a>
                                 <ul class="treeview-menu">
                                     <li id="">
+                                        <a href="{{url('/Utilities')}}"> <i class="fa fa-circle-o"></i><span>Utilities</span></a>
+                                    </li>
+                                    <li id="">
                                         <a href="{{url('/Billing')}}"> <i class="fa fa-circle-o"></i><span>Billing</span></a>
                                     </li>
                                     <li id="">
-                                        <a href="{{url('/Collection')}}"> <i class="fa fa-circle-o"></i><span>Collections</span></a>
-                                    </li>
-                                    <li id="">
                                         <a href="{{url('/Payment')}}"> <i class="fa fa-circle-o"></i><span>Payment</span></a>
-                                    </li>
-                                    <li id="">
-                                        <a href="{{url('/Utilities')}}"> <i class="fa fa-circle-o"></i><span>Utilities</span></a>
                                     </li>
                                 </ul>
                                 <li class="treeview">
@@ -230,17 +214,9 @@
         </aside>
         <div class="content-wrapper">
             <section class="content-header"> @yield('content-header') </section>
-            <!-- Main content -->
             <section class="content"> @yield('content') </section>
-            <!-- /.content -->
         </div>
     </div>
-    <!-- /.content-wrapper -->
-    <!-- Control Sidebar -->
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
-    <!-- ./wrapper -->
     <script src="{{ URL::asset('assets/jQuery/jquery-2.2.3.min.js')}}"></script>
     <script src="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
@@ -254,20 +230,16 @@
     <script src="{{ URL::asset('assets/datepicker/bootstrap-datepicker.min.js')}}"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button);
-    </script>
-    <script type="text/javascript">
-            $.ajaxSetup({
-                 headers: {
+        $.ajaxSetup({
+            headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-                 });
-        /** add active class and stay opened when selected */
+            }
+        });
         var url = window.location;
         // for treeview
         $('ul.treeview-menu a').filter(function () {
             return this.href == url;
         }).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
-        // for sidebar menu entirely but not cover treeview
         $('ul.sidebar-menu a').filter(function () {
             return this.href == url;
         }).parent().addClass('active');

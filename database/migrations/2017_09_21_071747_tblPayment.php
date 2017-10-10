@@ -16,11 +16,16 @@ class TblPayment extends Migration
         //
         Schema::create('tblPayment', function (Blueprint $table) {
             $table->increments('paymentID');
+            $table->integer('transactionID')->unsigned();
             $table->date('paymentDate');
             $table->double('paidAmt',10,2);
             $table->timestamps();
             $table->softDeletes();
            
+            $table->foreign('transactionID')->references('transactionID')
+                ->on('TblPayment_Transaction')
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
         });
     }
 

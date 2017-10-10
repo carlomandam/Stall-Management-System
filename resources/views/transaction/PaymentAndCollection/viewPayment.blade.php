@@ -10,18 +10,15 @@
     table.dataTable thead th:first-child {
         cursor: pointer;
     }
-    #table2,#backButton{
-      display: none;
+    
+    #table2,
+    #backButton {
+        display: none;
     }
-
-    
-    
-</style> @stop
-@section('content-header')
+</style> @stop @section('content-header')
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i> Payment and Collections</li>
-</ol> @stop 
-@section('content')
+</ol> @stop @section('content')
 <div class="row">
     <div class="col-md-12">
         <div class="defaultNewButton">
@@ -79,7 +76,12 @@
                         <div class="box box-primary">
                             <div class="box box-body">
                                 <div class="row">
-                                <?php $total = 0;?> @if(count($contract->UnpaidInitial) > 0)
+                                    <div class="col-md-12">
+                                        <div class="pull-right" style="margin-right:5%">
+                                            <label>Amount</label>
+                                        </div>
+                                    </div>
+                                    <?php $total = 0;?> @if(count($contract->UnpaidInitial) > 0)
                                         <div class="col-md-12">
                                             <label>Initial Fee</label>
                                             <ul style="list-style:none"> @foreach($contract->UnpaidInitial as $i)
@@ -101,7 +103,7 @@
                                                 </li>
                                                 <?php $total += $u['amount']; ?> @endforeach </ul>
                                         </div> @endif </div>
-                                        <div class="row">
+                                <div class="row">
                                     <label class="col-md-3"></label>
                                     <div class="col-md-3">
                                         <label>Total Amount: ₱ {{number_format($total,2,'.',',')}}</label>
@@ -110,13 +112,6 @@
                                     <div class="col-md-3">
                                         <input type="text" class="form-control" /> </div>
                                 </div>
-                                    <div class="col-md-12">
-                                        <div class="pull-right" style="margin-right:5%">
-                                            <label>Amount</label>
-                                        </div>
-                                    </div>
-                                    
-                                
                             </div>
                         </div>
                         <div class="pull-right">
@@ -182,8 +177,7 @@
                                         <table id="tbladpay" class="table table-bordered table-striped display select" role="grid">
                                             <thead>
                                                 <th>
-                                                    <input name="select_all" value="1" type="checkbox">
-                                                </th>
+                                                    <input name="select_all" value="1" type="checkbox"> </th>
                                                 <th>Date</th>
                                                 <th>Description</th>
                                                 <th>Amount</th>
@@ -221,29 +215,29 @@
                     </div>
                     <div class="tab-pane fade" id="tab3">
                         <form>
-                          <div class = "box box-primary">
-                            <div class="box box-body">
-                              <div class="row">
-                                    <label class="col-md-3">Stall Code</label>
-                                    <div class="col-md-3">
-                                        <label class="form-control">{{$contract->stallID}}</label>
+                            <div class="box box-primary">
+                                <div class="box box-body">
+                                    <div class="row">
+                                        <label class="col-md-3">Stall Code</label>
+                                        <div class="col-md-3">
+                                            <label class="form-control">{{$contract->stallID}}</label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-3">Tenant Name</label>
-                                    <div class="col-md-3">
-                                        <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
-                                    </div>
-                                     <label class="col-md-3">Collection Status</label>
-                                    <div class="col-md-3">
-                                        <label class="form-control"></label>
+                                    <div class="row">
+                                        <label class="col-md-3">Tenant Name</label>
+                                        <div class="col-md-3">
+                                            <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
+                                        </div>
+                                        <label class="col-md-3">Collection Status</label>
+                                        <div class="col-md-3">
+                                            <label class="form-control"></label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                          </div>
                             <div class="box  box-primary" style="margin-top:30px;">
                                 <div class="box-body">
-                                    <div class="table-responsive" id = "tableHistory">
+                                    <div class="table-responsive" id="tableHistory">
                                         <table id="tblhistory" class="table table-striped table-hover dt-responsive display nowrap" cellspacing="0" role="grid">
                                             <thead>
                                                 <th>Payment Number</th>
@@ -254,13 +248,10 @@
                                             </thead>
                                         </table>
                                     </div>
-                                    <div class="defaultNewButton" id = "backButton">
-                                           
-                                               <button class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack to Payment History</button>
-                                            
-                                      </div>
-                                    <div class="table-responsive" id = "table2">
-                                        
+                                    <div class="defaultNewButton" id="backButton">
+                                        <button class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack to Payment History</button>
+                                    </div>
+                                    <div class="table-responsive" id="table2">
                                         <table id="tblhistory" class="table table-striped table-hover dt-responsive display nowrap" cellspacing="0" role="grid">
                                             <thead>
                                                 <th>Payment Number</th>
@@ -286,7 +277,6 @@
     var sum = 0;
     var array = [];
     $(document).on('ready', function () {
-        
         $(".datepicker").datepicker({
             showOtherMonths: true
             , selectOtherMonths: true
@@ -297,10 +287,8 @@
             , orientation: 'bottom'
             , format: 'yyyy-mm-dd'
         });
-        
         $('#tbladpay').dataTable({});
         $('#tblpay').dataTable({});
-      
         var contractID = "{{$contract->contractID}}";
         $.ajax({
             type: "GET"
@@ -309,36 +297,33 @@
                 '_token': $('input[name=_token]').val()
                 , 'contractID': contractID
             }
-        }).done(function(data){
-          if ($.isEmptyObject(data.error)) {
-                    var table = $('#tblhistory').DataTable({
-                        "aaData": data
-                        
-                        ,responsive :true
-                        , "columns": [
-                            {
-                                "data": "paymentID"
+        }).done(function (data) {
+            if ($.isEmptyObject(data.error)) {
+                var table = $('#tblhistory').DataTable({
+                    "aaData": data
+                    , responsive: true
+                    , "columns": [
+                        {
+                            "data": "paymentID"
                             }
                             , {
-                                "data": "paymentDate"
+                            "data": "paymentDate"
                             }
                             , {
-                                "data": "totalAmt"
+                            "data": "totalAmt"
                             }
                             , {
-                                "data": "balance"
+                            "data": "balance"
                             }, {
-                                "defaultContent" : "<button onclick = 'getDetails();return false;'>try</button>"
+                            "defaultContent": "<button onclick = 'getDetails();return false;'>try</button>"
                             }
                      ]
-                    });
-                }
-                else {
-                    printErrorMsg(data.error);
-                }
-          
+                });
+            }
+            else {
+                printErrorMsg(data.error);
+            }
         });
-        
         var rows_selected = [];
         $("#dateTo").on('change', function () {
             sum = 0;
@@ -457,20 +442,19 @@
             });
         }
     });
+
     function getDetails(id) {
-      alert('lah');
+        alert('lah');
         $('#table2').fadeIn();
         $('#backButton').fadeIn();
-        
-      /*  $.ajax({
-            type: "POST"
-            , url: '/getPaymentDetails'
-            , data: {
-                "_token": "{{ csrf_token() }}"
-                , "id": id
-            }
-            
-        });*/
-}
-</script> 
-@stop
+        /*  $.ajax({
+              type: "POST"
+              , url: '/getPaymentDetails'
+              , data: {
+                  "_token": "{{ csrf_token() }}"
+                  , "id": id
+              }
+              
+          });*/
+    }
+</script> @stop

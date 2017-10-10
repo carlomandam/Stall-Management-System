@@ -47,13 +47,14 @@
         margin-left: 14px;
     }
     
-    .text{
+    .text {
         border: 0px solid #000000;
         border-bottom-width: 1px;
         background-color: transparent !important;
     }
     
-    input, span{
+    input,
+    span:not(.selection, .select2-selection) {
         background-color: transparent !important;
     }
 </style>
@@ -71,9 +72,13 @@
     <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp;Back</a> </div>
     <div class="col-md-12">
         <div class="box box-primary ">
-            <div class="box-header with-border">
-                <h3 class="box-title">Stall Holder Details &nbsp;<a href="/getTennant/{{$stallHolderDetails->stallHID}}" style="font-size:11px"><span class='fa fa-pencil'></span>Update</a></h3>
+            <div class="col-md-12">
+                <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul id="error-new"></ul>
+                </div>
             </div>
+            <div class="box-header with-border">
+                <h3 class="box-title">Stall Holder Details &nbsp;<a href="/getTennant/{{$stallHolderDetails->stallHID}}" style="font-size:11px"><span class='fa fa-pencil'></span>Update</a></h3> </div>
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -121,7 +126,11 @@
             <div class="box-body">
                 <div class="row">
                     <form id="applyForm" method="post">
-                        {{csrf_field()}}
+                        <div class="col-md-12">
+                            <div id="newEC" class="alert alert-danger print-error-msg" style="display:none">
+                                <ul id="error-new"></ul>
+                            </div>
+                        </div>
                         <input type="hidden" id="contract" name="contract" value="<?php echo $contract->contractID ?>">
                         <div id="contract">
                             <div class="col-md-12">
@@ -148,7 +157,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="col-md-6">
-                                    <label for="address"><b>List of Products</b></label><span class="required">&nbsp*</span>
+                                    <label for="address"><b>Products</b></label><span class="required">&nbsp*</span>
                                     <select class="form-control" name="products[]" id="products" multiple="multiple">
                                         <?php
                                             foreach($prod as $x){
@@ -156,13 +165,7 @@
                                             }
                                         ?>
                                     </select>
-                                    <br>
-                                    <br>
-                                    <div id="addProd" style="display:none">
-                                        <input id="new-product" class='form-control' type="text" style='width:40%' />
-                                        <button type="button" id="btn-add-product">Add Product</button>
-                                    </div>
-                                </div>
+                                </div> @if(count($req) > 0)
                                 <div class="col-md-6">
                                     <br>
                                     <div class="panel panel-default">
@@ -177,22 +180,22 @@
                                                 </div> @endforeach </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> @endif
                                 <div class="col-md-12">
                                     <p class="small text-danger" style="margin-left: 20px;">Fields with asterisks(*) are required</p>
                                 </div>
                             </div>
                             <div class="col-md-12" id="registerButtons">
                                 <div class="pull-right">
-                                    <button type='button' id='upbtn' onclick="updateContract(1)" class="btn btn-primary"><span class='fa fa-pencil'></span>&nbspUpdate</button>
+                                    <button type='button' id='upbtn' onclick="updateContract(1)" class="btn btn-primary"><span class='fa fa-pencil'></span>&nbsp;Update</button>
                                     <button type="button" onclick="reject();" class="btn btn-danger">Cancel</button>
-                                    <button type="submit" class="btn btn-success">Proceed To Payment</button>
+                                    <button type="button" class="btn btn-success" onclick="accept()">Proceed To Payment</button>
                                 </div>
                             </div>
                             <div class="col-md-12" id="updateButtons" style="display:none">
                                 <div class="pull-right">
                                     <button type="button" onclick="updateContract(2); $('#applyForm')[0].reset();" class="btn btn-danger">Cancel</button>
-                                    <button type="button" onclick="submitUpdate()" class="btn btn-success">Save</button>
+                                    <button type="submit" class="btn btn-success">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -201,8 +204,7 @@
             </div>
         </div>
     </div>
-</div>
-@stop @section('script')
+</div> @stop @section('script')
 <script type="text/javascript" src="{{ URL::asset('js/multipleAddinArea.js') }}"></script>
 <script type="text/javascript">
     var selected = Array();
@@ -217,52 +219,70 @@
         for (var i = 0; i < $product.length; i++) {
             selected.push($product[i].productID);
         }
-        
         $('#products').val(selected).trigger('change');
-        
-        $("#applyForm").submit(function (e) {
-            e.preventDefault();
-            if ($('input[type=checkbox]:checked').length != $('input[type=checkbox]').length) {
-                toastr.error('All requirements must be submitted');
-                return;
-            }
-            var formData = new FormData($(this)[0]);
-            $.ajax({
-                type: "POST"
-                , url: '/acceptRental'
-                , data: formData
-                , processData: false
-                , contentType: false
-                , context: this
-                , success: function (data) {
-                    toastr.success('Successfully Registered!');
-                    $("#applyForm")[0].reset();
-                    window.location = "goToPayment/" + data;
-                }
-            });
-        });
-
         $('input').attr('readonly', true);
-        
         $('textarea,select,input[name=sex],input[name=ctype]').prop('disabled', true);
         $(".datepicker").each(function () {
             $(this).datepicker('remove');
             $(this).prop('disabled', true);
         });
-        
-        $("#btn-add-product").on("click", function () {
-            var isnew = true;
-            var newProdVal = $("#new-product").val();
-            $("#products").find("option").each(function(){
-                if($(this).html() == newProdVal){
-                    $(this).prop('selected',true);
-                    $("#products").trigger('change');
-                    isnew = false;
+        $(".select2").on('keyup', 'li.select2-search input.select2-search__field', function (e) {
+            if (e.keyCode == 13 && $("li.select2-results__option").not('.select2-results__message').length == 0 && $(this).val() != '') {
+                e.preventDefault();
+                var isnew = true;
+                var newProdVal = $(this).val();
+                $("#products").find("option").each(function () {
+                    if ($(this).html() == newProdVal) {
+                        $(this).prop('selected', true);
+                        $("#products").trigger('change');
+                        isnew = false;
+                    }
+                });
+                if (isnew) {
+                    var newProd = new Option(newProdVal, newProdVal, true, true);
+                    $("#products").append(newProd).trigger('change');
                 }
-            });
-            if(isnew) {
-                var newProd = new Option(newProdVal, newProdVal, true, true);
-                $("#products").append(newProd).trigger('change');
+                $(this).val('');
+            }
+        });
+        $("#applyForm").validate({
+            rules: {
+                businessName: "required"
+                , "products[]": 'required'
+            }
+            , messages: {
+                businessName: 'Business Name is required'
+                , "products[]": 'Specify products'
+            }
+            , errorClass: "error-class"
+            , validClass: "valid-class"
+            , highlight: function (element, errorClass, validClass) {
+                $(element).removeClass(validClass).addClass(errorClass);
+                $('#applyForm .print-error-msg').css('display', 'block');
+            }
+            , errorClass: "error-class"
+            , validClass: "valid-class"
+            , errorElement: "li"
+            , errorPlacement: function (error) {
+                error.appendTo('.print-error-msg ul');
+            }
+            , errorContainer: "#newEC"
+            , submitHandler: function (form) {
+                var formData = new FormData($('#applyForm')[0]);
+                $.ajax({
+                    type: "POST"
+                    , url: '/updateApplication'
+                    , data: formData
+                    , processData: false
+                    , contentType: false
+                    , context: this
+                    , success: function (data) {
+                        toastr.success('Updated!');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
+                });
             }
         });
     });
@@ -272,8 +292,7 @@
             type: "POST"
             , url: '/rejectRental'
             , data: {
-                "_token": "{{ csrf_token() }}"
-                , "rental": $('#rental').val()
+                "rental": $('#rental').val()
             }
             , success: function (data) {
                 toastr.warning('Rental Declined');
@@ -313,20 +332,28 @@
         }
     }
 
-    function submitUpdate() {
+    function accept() {
+        if ($('input[type=checkbox]:checked').length != $('input[type=checkbox]').length) {
+            toastr.error('All requirements must be submitted');
+            return;
+        }
         var formData = new FormData($('#applyForm')[0]);
         $.ajax({
             type: "POST"
-            , url: '/updateApplication'
+            , url: '/acceptRental'
             , data: formData
             , processData: false
             , contentType: false
             , context: this
             , success: function (data) {
-                toastr.success('Updated!');
-                setTimeout(function () {
-                    location.reload();
-                }, 1000);
+                if (data == "init") {
+                    toastr.error('Initial Fees not set');
+                }
+                else {
+                    toastr.success('Successfully Registered!');
+                    $("#applyForm")[0].reset();
+                    window.location = "goToPayment/" + data;
+                }
             }
         });
     }

@@ -77,7 +77,7 @@ class HolidayController extends Controller
 
 	function CheckHolidayName (){
 		$holiday = Holiday::where('Name',$_POST['Name'])->first();
-		if($holiday != null){
+		if(count($holiday) > 0){
 			if(isset($_POST['ID'])){
 				if ($holiday->ID == $_POST['ID'])
 					return 'true';

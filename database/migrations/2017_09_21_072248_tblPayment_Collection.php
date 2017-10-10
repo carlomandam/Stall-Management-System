@@ -16,7 +16,7 @@ class TblPaymentCollection extends Migration
         //
         Schema::create('tblPayment_Collection', function (Blueprint $table) {
             $table->increments('paymentCollectID');
-            $table->integer('paymentID')->unsigned();
+            $table->integer('transactionID')->unsigned();
             $table->integer('collectionDetID')->unsigned();
             $table->double('partialAmt',10,2);
             $table->tinyInteger('isVoidOrRefund');
@@ -26,16 +26,15 @@ class TblPaymentCollection extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-             $table->foreign('paymentID')
-                 ->references('paymentID')
-                 ->on('tblPayment')
-                 ->onUpdate('cascade')
-                 ->onDelete('restrict');
-             $table->foreign('collectionDetID')
-                 ->references('collectionDetID')
-                 ->on('tblCollection_Details')
-                 ->onUpdate('cascade')
-                 ->onDelete('restrict');
+            $table->foreign('transactionID')->references('transactionID')
+                ->on('TblPayment_Transaction')
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
+            $table->foreign('collectionDetID')
+                ->references('collectionDetID')
+                ->on('tblCollection_Details')
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
            
         });
     }

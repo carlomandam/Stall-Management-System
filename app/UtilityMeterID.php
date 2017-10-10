@@ -5,8 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UtilityMeterID extends Model
-{
+class UtilityMeterID extends Model{
     //
     use SoftDeletes;
     
@@ -15,7 +14,7 @@ class UtilityMeterID extends Model
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
 
-     protected $fillable = [
+    protected $fillable = [
     	'contractID',
     	'readingID',
     	'utilityAmt',

@@ -20,8 +20,8 @@
     <div class="box-body">
         <div class="table-responsive">
             <div class="defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Building</button>
-                <div class=" pull-right" id="archive"> <a href="{{ url('/BuildingArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
+                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp;New Building</button>
+                <div class=" pull-right" id="archive"> <a href="{{ url('/BuildingArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbsp;Archive</a> </div>
             </div>
             <table id="prodtbl" class="table table-responsive table-bordered table-striped" role="grid">
                 <thead>
@@ -39,7 +39,6 @@
     <div class="modal fade" id="new" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md" role="document">
             <form class="building" action="" method="post" id="newform">
-                <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -51,20 +50,20 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="bldgName">Building Name</label><span class="required">&nbsp*</span>
-                                    <input type="text" class="form-control" id="bldgName" name="bldgName" placeholder="Building Name" /> </div>
+                                    <label for="bldgName">Building Name</label><span class="required">&nbsp;*</span>
+                                    <input type="text" class="form-control" id="bldgName" name="bldgName" placeholder="ex. Main Building" /> </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="bldgCode">Building Code</label><span class="required">&nbsp*</span>
-                                    <input type="text" class="form-control" id="bldgCode" name="bldgCode" placeholder="Building Code" /> </div>
+                                    <input type="text" class="form-control" id="bldgCode" name="bldgCode" placeholder="ex. MB" /> </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="bldgDesc">Description</label>
-                                    <textarea class="form-control" id="bldgDesc" name="bldgDesc" placeholder="Building Description"></textarea>
+                                    <textarea class="form-control" id="bldgDesc" name="bldgDesc"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -107,7 +106,7 @@
                     <p class="small text-danger">Fields with asterisks(*) are required</p>
                     <div class="modal-footer">
                         <div class="pull-right">
-                            <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+                            <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbsp;Save</button>
                         </div>
                     </div>
                 </div>
@@ -133,31 +132,30 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="1">
                             <form class="building" action="" method="post" id="updateform">
-                                <input type="hidden" id="_tokenUp" name="_token" value="<?php echo csrf_token(); ?>">
                                 <input type="hidden" name="id" id="idUp">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="bldgNameUp">Building Name</label><span class="required">&nbsp*</span>
-                                            <input type="text" class="form-control" id="bldgNameUp" name="bldgName" placeholder="Building Name" /> </div>
+                                            <label for="bldgNameUp">Building Name</label><span class="required">&nbsp;*</span>
+                                            <input type="text" class="form-control" id="bldgNameUp" name="bldgName"/> </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="bldgCodeUp">Building Code</label><span class="required">&nbsp*</span>
-                                            <input type="text" class="form-control" id="bldgCodeUp" name="bldgCode" placeholder="Building Code" /> </div>
+                                            <label for="bldgCodeUp">Building Code</label><span class="required">&nbsp;*</span>
+                                            <input type="text" class="form-control" id="bldgCodeUp" name="bldgCode"/> </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="bldgDescUp">Current No Of Floor</label>
+                                            <input type="text" class="form-control" id="curfloor" style="text-align:center" readonly> </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="bldgDescUp">Description</label>
-                                            <textarea class="form-control" id="bldgDescUp" name="bldgDesc" placeholder="Building Description"></textarea>
+                                            <textarea class="form-control" id="bldgDescUp" name="bldgDesc"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="bldgDescUp">Current No Of Floor</label>
-                                            <input type="text" id="curfloor" style="text-align:center" readonly> </div>
-                                    </div>
-                                    <div class="col-md-6">
+                                    <!--<div class="col-md-6">
                                         <div class="form-group">
                                             <label for="bldgDesc">Add Floor(/s)</label>
                                             <div class="input-group"> <span class="input-group-btn">
@@ -184,7 +182,7 @@
                                         <div class="form-group">
                                             <label for="bldgDesc">Remove Floor(/s)</label>
                                             <input id="removefloor" type="text" class="form-control input-number" name="remove" placeholder="Enter number of floors"> </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <p class="small text-danger">Fields with asterisks(*) are required</p>
                             </form>
@@ -203,7 +201,7 @@
             </div>
             <div class="modal-footer">
                 <div class="pull-right">
-                    <button class="btn btn-primary btn-flat" onclick="$($('#tabcontroll li.active').find('a').attr('href')).find('form').submit();"><span class='fa fa-save'></span>&nbsp Save</button>
+                    <button class="btn btn-primary btn-flat" onclick="$($('#tabcontroll li.active').find('a').attr('href')).find('form').submit();"><span class='fa fa-save'></span>&nbsp; Save</button>
                 </div>
             </div>
         </div>
@@ -233,9 +231,6 @@
                             bldgName: function () {
                                 return $("#newform").find("input[name=bldgName]").val();
                             }
-                            , _token: function () {
-                                return $("#_token").val();
-                            }
                         }
                     }
                 }
@@ -250,9 +245,6 @@
                             bldgName: function () {
                                 return $("#bldgCode").val();
                             }
-                            , _token: function () {
-                                return $("#_token").val();
-                            }
                         }
                     }
                 }
@@ -262,7 +254,7 @@
                     , max: 100
                 }
                 , "noOfStall[]": {
-                    number: true
+                    digits: true
                     , max: 100
                 }
             }
@@ -281,6 +273,7 @@
                 , noOfFloor: "Please enter number of floors"
                 , "noOfStall[]":{
                     max: "Maximum of 100 stalls"
+                    ,digits: "Invalid number of stall"
                 }
             }
             , errorClass: "error-class"
@@ -324,9 +317,6 @@
                             , id: function () {
                                 return $("#idUp").val();
                             }
-                            , _token: function () {
-                                return $("#_token").val();
-                            }
                         }
                         , dataFilter: function (response) {
                             if (obj.bldgName == $("#bldgNameUp").val()) return true;
@@ -347,9 +337,6 @@
                             }
                             , id: function () {
                                 return $("#idUp").val();
-                            }
-                            , _token: function () {
-                                return $("#_token").val();
                             }
                         }
                         , dataFilter: function (response) {
@@ -394,12 +381,10 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
-                        if (data == "true") {
+                        if (data) {
                             toastr.success('Updated Building Information');
                             $('#prodtbl').DataTable().ajax.reload();
                             $('#update').modal('hide');
-                        }else if(data == "rental"){
-                            toastr.warning('Unable to delete floor. A stall is currently rented');
                         }
                         $(form).find(":submit").attr('disabled',false);
                     }
@@ -435,6 +420,7 @@
                     }
             ]
         });
+        
         $(".modal").on('hidden.bs.modal', function () {
             $(this).find('form').validate().resetForm();
             $(this).find('form')[0].reset();
@@ -447,8 +433,7 @@
                 type: "POST"
                 , url: '/getCode'
                 , data: {
-                    "_token": "{{ csrf_token() }}"
-                    , "name": $("#newform").find("input[name=bldgName]").val().replace(/\s/g, '').toUpperCase()
+                    "name": $("#newform").find("input[name=bldgName]").val().toUpperCase()
                 }
                 , success: function (data) {
                     $('#bldgCode').val(data);
@@ -473,8 +458,7 @@
             type: "POST"
             , url: '/getBuildingInfo'
             , data: {
-                "_token": "{{ csrf_token() }}"
-                , "id": id
+                "id": id
             }
             , success: function (data) {
                 obj = JSON.parse(data)[0];
@@ -490,8 +474,7 @@
             type: "POST"
             , url: '/getFloorsUp'
             , data: {
-                "_token": "{{ csrf_token() }}"
-                , "id": id
+                "id": id
             }
             , success: function (data) {
                 obj = JSON.parse(data);
@@ -507,8 +490,7 @@
             type: "POST"
             , url: '/deleteBuilding'
             , data: {
-                "_token": "{{ csrf_token() }}"
-                , "id": id
+                "id": id
             }
             , success: function (data) {
                 if(data == "rental"){

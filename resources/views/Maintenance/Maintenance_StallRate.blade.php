@@ -25,7 +25,6 @@
 <div class="modal fade" id="new" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <form action="" method="post" id="newform">
-            <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -48,19 +47,20 @@
                             <h4>Regular Rate<span class="required">&nbsp*</span></h4>
                             <div class="form-group ratediv">
                                 <div class="input-group"> <span class="input-group-addon">Php.</span>
-                                    <input type="text" class="form-control" name="rate"> 
-                                </div>
+                                    <input type="text" class="form-control" name="rate"> </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <h4>Peak Day Additional Rate<span class="required">&nbsp*</span></h4>
                             <div class="form-group ratediv">
                                 <div class="input-group"> <span class="input-group-addon">Php.</span>
-                                    <input type="text" class="form-control" name="prate"> 
-                                </div>
+                                    <input type="text" class="form-control" name="prate"> </div>
                             </div>
                             <h5>Type</h5>
-                            <input type="radio" name='prtype' value="1" checked><label>Fixed</label>&nbsp;<input type="radio" name='prtype' value="2"><label>Percent</label>
+                            <input type="radio" name='prtype' value="1" checked>
+                            <label>Fixed</label>&nbsp;
+                            <input type="radio" name='prtype' value="2">
+                            <label>Percent</label>
                         </div>
                     </div>
                     <div class="row">
@@ -80,30 +80,28 @@
             </div>
         </form>
     </div>
-</div>
-</div> @stop @section('script')
+</div> 
+@stop @section('script')
 <script type="text/javascript">
     var obj;
     var chk;
-    var today = new Date(Date.now()).toLocaleString()            
-            
+    var today = new Date(Date.now()).toLocaleString()
     $(document).ready(function () {
         $(".datepicker").datepicker({
-                    showOtherMonths: true
-                    , selectOtherMonths: true
-                    , changeMonth: true
-                    , changeYear: true
-                    , autoclose: true
-                    , startDate: "dateToday"
-                    , todayHighlight: true
-                    , orientation: 'bottom'
-                    , format: 'mm/dd/yyyy'
-                });
+            showOtherMonths: true
+            , selectOtherMonths: true
+            , changeMonth: true
+            , changeYear: true
+            , autoclose: true
+            , startDate: "dateToday"
+            , todayHighlight: true
+            , orientation: 'bottom'
+            , format: 'mm/dd/yyyy'
+        });
         $('.js-example-basic-multiple').select2({
             width: 'resolve'
             , closeOnSelect: false
         });
-
         getStallTypes();
         $('#table').DataTable({
             ajax: '/rateTable'
@@ -118,15 +116,13 @@
                     }
                 }
                 , {
-                    "data":"stallRateEffectivity"
+                    "data": "stallRateEffectivity"
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        if(data.peakRateType == '1')
-                            return '₱' + parseFloat(Math.round(data.dblRate * 100)/100).toFixed(2) + ' ( Additional  ₱' + parseFloat(Math.round(data.dblPeakAdditional * 100)/100).toFixed(2) + ' on peak days)';
-                        else{
-                            if(data.peakRateType == '2')
-                            return '₱' + parseFloat(Math.round(data.dblRate * 100)/100).toFixed(2) + ' ( Additional ' + data.dblPeakAdditional + '% (₱'+ parseFloat(Math.round(((data.dblRate * data.dblPeakAdditional) / 100) * 100)/100).toFixed(2) +') on peak days)';
+                        if (data.peakRateType == '1') return '₱' + parseFloat(Math.round(data.dblRate * 100) / 100).toFixed(2) + ' ( Additional  ₱' + parseFloat(Math.round(data.dblPeakAdditional * 100) / 100).toFixed(2) + ' on peak days)';
+                        else {
+                            if (data.peakRateType == '2') return '₱' + parseFloat(Math.round(data.dblRate * 100) / 100).toFixed(2) + ' ( Additional ' + data.dblPeakAdditional + '% (₱' + parseFloat(Math.round(((data.dblRate * data.dblPeakAdditional) / 100) * 100) / 100).toFixed(2) + ') on peak days)';
                         }
                     }
                 }
@@ -167,7 +163,7 @@
             , errorPlacement: function (error) {
                 error.appendTo('#new .print-error-msg ul');
             }
-            ,submitHandler: function(form){
+            , submitHandler: function (form) {
                 var formData = new FormData(form);
                 $.ajax({
                     type: "POST"
@@ -189,59 +185,51 @@
                 });
             }
         });
-
         $(".modal").on('hidden.bs.modal', function () {
             $(this).find('form').validate().resetForm();
             $(this).find('form')[0].reset();
             $('.js-example-basic-multiple').select2("val", "");
             $('.nav a[href="#1"]').tab('show');
         })
-
-        $('#stype').on('change',function(){
+        $('#stype').on('change', function () {
             $.ajax({
                 type: "POST"
-                , data:{
-                    "_token" :"{{csrf_token()}}"
-                    , "stype[]": $(this).val()
+                , data: {
+                    "stype[]": $(this).val()
                 }
                 , url: '/datesDisabled'
                 , success: function (data) {
-                    $(".datepicker").datepicker("setDatesDisabled",JSON.parse(data));
+                    $(".datepicker").datepicker("setDatesDisabled", JSON.parse(data));
                 }
             });
         });
     });
-    
-    function getToday(){
+
+    function getToday() {
         var today = new Date();
         var dd = today.getDate();
-        var mm = today.getMonth()+1;
-
+        var mm = today.getMonth() + 1;
         var yyyy = today.getFullYear();
-        if(dd<10){
-            dd='0'+dd;
-        } 
-        if(mm<10){
-            mm='0'+mm;
+        if (dd < 10) {
+            dd = '0' + dd;
         }
-        
-        return dd+'/'+mm+'/'+yyyy;
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        return dd + '/' + mm + '/' + yyyy;
     }
 
     function getStallTypes() {
         $.ajax({
             type: "POST"
             , url: '/stypeRate'
-            , data: {
-                "_token": "{{ csrf_token() }}"
-            }
             , success: function (data) {
                 stype = JSON.parse(data);
                 var opt = "";
                 for (var i = 0; i < stype.length; i++) {
                     opt += "<optgroup label='" + stype[i].stypeName + "'>";
                     for (var j = 0; j < stype[i].typesize.length; j++) {
-                            opt += '<option value="' + stype[i].typesize[j].stype_SizeID + '">' + stype[i].stypeName + "(" + stype[i].typesize[j].stall_type_size.stypeArea + 'm&sup2; )</option>';
+                        opt += '<option value="' + stype[i].typesize[j].stype_SizeID + '">' + stype[i].stypeName + "(" + stype[i].typesize[j].stall_type_size.stypeArea + 'm&sup2; )</option>';
                     }
                     opt += "</optgroup>";
                 }
@@ -249,8 +237,7 @@
                     $(this).html(opt);
                 });
                 $("optgroup").each(function () {
-                    if($(this).html() == '')
-                        $(this).remove();
+                    if ($(this).html() == '') $(this).remove();
                 });
             }
         });

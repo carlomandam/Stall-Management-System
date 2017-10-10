@@ -20,8 +20,8 @@
     <div class="box-body">
         <div class="table-responsive">
             <div class="defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Holiday</button>
-                <div class=" pull-right" id="archive"> <a href="{{ url('/HolidayArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
+                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp;New Holiday</button>
+                <div class=" pull-right" id="archive"> <a href="{{ url('/HolidayArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbsp;Archive</a> </div>
             </div>
             <table id="prodtbl" class="table table-responsive table-bordered table-striped" role="grid">
                 <thead>
@@ -101,18 +101,17 @@
                     <div id="upEC" class="alert alert-danger print-error-msg" style="display:none">
                         <ul></ul>
                     </div>
-                    <input type="hidden" id="_tokenUp" name="_token" value="<?php echo csrf_token(); ?>">
                     <input type="hidden" name="id" id="idUp">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="NameUp">Holiday Name</label><span class="required">&nbsp*</span>
+                                <label for="NameUp">Holiday Name</label><span class="required">&nbsp;*</span>
                                 <input type="text" class="form-control" id="NameUp" name="Name" placeholder="Holiday Name" /> </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="stype">Month</label><span class="required">&nbsp*</span>
+                            <label for="stype">Month</label><span class="required">&nbsp;*</span>
                             <select name="Month" id="MonthUp" class="month">
                                 <option value="1">January</option>
                                 <option value="2">February</option>
@@ -141,7 +140,7 @@
             <div class="modal-footer">
                 <!-- <label style="float:left">All labels with "*" are required</label> -->
                 <div class="pull-right">
-                    <button class="btn btn-primary btn-flat" onclick="$('#updateform').submit();"><span class='fa fa-save'></span>&nbsp Save</button>
+                    <button class="btn btn-primary btn-flat" onclick="$('#updateform').submit();"><span class='fa fa-save'></span>&nbsp; Save</button>
                 </div>
             </div>
         </div>
@@ -164,7 +163,6 @@
                             Name: function () {
                                 return $("#newform").find("input[name=Name]").val();
                             }
-                            , _token: "{{csrf_token()}}"
                         }
                     }
                 }
@@ -174,8 +172,7 @@
                         type: "POST"
                         , url: '/CheckHolidayDate'
                         , data: {
-                            _token: "{{csrf_token()}}"
-                            , Day: function () {
+                            Day: function () {
                                 return $("#Day").val();
                             }
                             , Month: function () {
@@ -234,7 +231,6 @@
                             , ID: function () {
                                 return $("#idUp").val();
                             }
-                            , _token: "{{csrf_token()}}"
                         }
                     }
                 }
@@ -244,8 +240,7 @@
                         type: "POST"
                         , url: '/CheckHolidayDate'
                         , data: {
-                            _token: "{{csrf_token()}}"
-                            , Day: function () {
+                            Day: function () {
                                 return $("#DayUp").val();
                             }
                             , Month: function () {
@@ -394,8 +389,7 @@
             type: "POST"
             , url: '/getHolidayInfo'
             , data: {
-                "_token": "{{ csrf_token() }}"
-                , "id": id
+                "id": id
             }
             , success: function (data) {
                 var obj = JSON.parse(data);
@@ -414,8 +408,7 @@
             type: "POST"
             , url: '/deleteHoliday'
             , data: {
-                "_token": "{{ csrf_token() }}"
-                , "id": id
+                "id": id
             }
             , success: function (data) {
                 $('#prodtbl').DataTable().ajax.reload();
