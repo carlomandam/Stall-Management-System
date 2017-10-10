@@ -26,8 +26,8 @@ class Charge_Details extends Model
     public function Contract(){
     	return $this->belongsTo('App\Contract','contractID');
     }
-     public function Payment(){
-        return $this->belongsTo('App\Payment','paymentID');
+     public function Transaction(){
+        return $this->belongsTo('App\Transaction','transactionID');
     }
 
 }

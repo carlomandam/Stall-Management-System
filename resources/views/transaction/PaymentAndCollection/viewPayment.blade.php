@@ -10,18 +10,18 @@
     table.dataTable thead th:first-child {
         cursor: pointer;
     }
-    
-    #tblDateRange {
-        border-collapse: collapse;
+    #table2,#backButton{
+      display: none;
     }
+
     
-    #tblDateRange td {
-        border: none;
-    }
-</style> @stop @section('content-header')
+    
+</style> @stop
+@section('content-header')
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i> Payment and Collections</li>
-</ol> @stop @section('content')
+</ol> @stop 
+@section('content')
 <div class="row">
     <div class="col-md-12">
         <div class="defaultNewButton">
@@ -79,12 +79,7 @@
                         <div class="box box-primary">
                             <div class="box box-body">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="pull-right" style="margin-right:5%">
-                                            <label>Amount</label>
-                                        </div>
-                                    </div>
-                                    <?php $total = 0;?> @if(count($contract->UnpaidInitial) > 0)
+                                <?php $total = 0;?> @if(count($contract->UnpaidInitial) > 0)
                                         <div class="col-md-12">
                                             <label>Initial Fee</label>
                                             <ul style="list-style:none"> @foreach($contract->UnpaidInitial as $i)
@@ -93,7 +88,7 @@
                                                     <div class="pull-right" style="margin-right:5%">₱ {{number_format($i->InitialFee->initAmt,2,'.',',')}}</div>
                                                 </li>
                                                 <?php $total += $i->InitialFee->initAmt;?> @endforeach </ul>
-                                        </div> @endif @if(count($unpaidCollections) > 0)
+                                        </div> @endif @if(count($unpaidCollections) > 0 && isset($unpaidCollections))
                                         <div class="col-md-12">
                                             <label>Unpaid Collection</label>
                                             <ul style="list-style:none"> @foreach($unpaidCollections as $u)
@@ -106,7 +101,7 @@
                                                 </li>
                                                 <?php $total += $u['amount']; ?> @endforeach </ul>
                                         </div> @endif </div>
-                                <div class="row">
+                                        <div class="row">
                                     <label class="col-md-3"></label>
                                     <div class="col-md-3">
                                         <label>Total Amount: ₱ {{number_format($total,2,'.',',')}}</label>
@@ -115,6 +110,13 @@
                                     <div class="col-md-3">
                                         <input type="text" class="form-control" /> </div>
                                 </div>
+                                    <div class="col-md-12">
+                                        <div class="pull-right" style="margin-right:5%">
+                                            <label>Amount</label>
+                                        </div>
+                                    </div>
+                                    
+                                
                             </div>
                         </div>
                         <div class="pull-right">
@@ -219,39 +221,53 @@
                     </div>
                     <div class="tab-pane fade" id="tab3">
                         <form>
-                            <div class="table-responsive">
-                                <table class="table table-condensed" style="margin-top: 20px;" id="tblDateRange">
-                                    <tr>
-                                        <td>
-                                            <label>Date Range</label>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="datepicker form-control" id='rangeFrom' name='rangeFrom' readonly="true" style="cursor:pointer; background-color: #FFFFFF;" disabled="" />
-                                        </td>
-                                        <td>&nbsp;to</td>
-                                        <td>
-                                            <input type="text" class="datepicker form-control" id='rangeTo' name='rangeTo' readonly="true" style="cursor:pointer; background-color: #FFFFFF;" disabled="" />
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-primary btn-flat" id="generate"> <i class="fa fa-angle-double-right"></i> Go</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label id="summary" style="margin-left: 4px;">Summary For</label>
+                          <div class = "box box-primary">
+                            <div class="box box-body">
+                              <div class="row">
+                                    <label class="col-md-3">Stall Code</label>
+                                    <div class="col-md-3">
+                                        <label class="form-control">{{$contract->stallID}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-3">Tenant Name</label>
+                                    <div class="col-md-3">
+                                        <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
+                                    </div>
+                                     <label class="col-md-3">Collection Status</label>
+                                    <div class="col-md-3">
+                                        <label class="form-control"></label>
+                                    </div>
                                 </div>
                             </div>
+                          </div>
                             <div class="box  box-primary" style="margin-top:30px;">
                                 <div class="box-body">
-                                    <div class="table-responsive">
-                                        <table id="tblhistory" class="table table-bordered table-striped display" role="grid">
+                                    <div class="table-responsive" id = "tableHistory">
+                                        <table id="tblhistory" class="table table-striped table-hover dt-responsive display nowrap" cellspacing="0" role="grid">
                                             <thead>
-                                                <th width="100px">Payment Number</th>
-                                                <th width="100px">Date Paid</th>
-                                                <th width="200px">Description</th>
-                                                <th width="100px">Amount</th>
+                                                <th>Payment Number</th>
+                                                <th>Date Paid</th>
+                                                <th>Amount Paid</th>
+                                                <th>Balance</th>
+                                                <th>Action/s</th>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div class="defaultNewButton" id = "backButton">
+                                           
+                                               <button class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack to Payment History</button>
+                                            
+                                      </div>
+                                    <div class="table-responsive" id = "table2">
+                                        
+                                        <table id="tblhistory" class="table table-striped table-hover dt-responsive display nowrap" cellspacing="0" role="grid">
+                                            <thead>
+                                                <th>Payment Number</th>
+                                                <th>Date Paid</th>
+                                                <th>Amount Paid</th>
+                                                <th>Balance</th>
+                                                <th>Action/s</th>
                                             </thead>
                                         </table>
                                     </div>
@@ -270,28 +286,7 @@
     var sum = 0;
     var array = [];
     $(document).on('ready', function () {
-        $("#rangeFrom").datepicker({
-            showOtherMonths: true
-            , selectOtherMonths: true
-            , changeMonth: true
-            , changeYear: true
-            , autoclose: true
-            , startDate: '{{$contract->contractStart}}'
-            , orientation: 'bottom'
-            , format: 'yyyy-mm-dd'
-        }).on('changeDate', function (selected) {
-            var minDate = new Date(selected.date.valueOf());
-            $('#rangeTo').datepicker('setStartDate', minDate);
-        });
-        $("#rangeTo").datepicker({
-            showOtherMonths: true
-            , selectOtherMonths: true
-            , changeMonth: true
-            , changeYear: true
-            , autoclose: true
-            , orientation: 'bottom'
-            , format: 'yyyy-mm-dd'
-        });
+        
         $(".datepicker").datepicker({
             showOtherMonths: true
             , selectOtherMonths: true
@@ -302,93 +297,38 @@
             , orientation: 'bottom'
             , format: 'yyyy-mm-dd'
         });
-        $('#generate').on('click', function (e) {
-            if ($('#rangeFrom').val().length === 0 || $('#rangeTo').val().length === 0) {
-                toastr.error('Fill missing fields');
-            }
-            else {
-                $('#summary').html("Summary for " + $('#rangeFrom').val() + " to " + $('#rangeTo').val());
-                e.preventDefault();
-                var _token = $("input[name='_token']").val();
-                var contractID = "{{$contract->contractID}}";
-                var dateFrom = $('#rangeFrom').val();
-                var dateTo = $('#rangeTo').val();
-                $.ajax({
-                    type: "GET"
-                    , url: "/ViewPaymentHistory"
-                    , data: {
-                        '_token': $('input[name=_token]').val()
-                        , 'contractID': contractID
-                        , 'dateFrom': dateFrom
-                        , 'dateTo': dateTo
-                    }
-                    , success: function (data) {
-                        if ($.isEmptyObject(data.error)) {
-                            var table = $('#tblhistory').DataTable({
-                                "aaData": data
-                                , destroy: true
-                                , "columns": [
-                                    {
-                                        "data": "paymentID"
-                                    }
-                                    , {
-                                        "data": "paidDate"
-                                    }
-                                    , {
-                                        "data": "description"
-                                    }
-                                    , {
-                                        "data": "paidAmt"
-                                    }
-                     ]
-                            });
-                        }
-                        else {
-                            printErrorMsg(data.error);
-                        }
-                    }
-                });
-
-                function printErrorMsg(msg) {
-                    $(".print-error-msg").find("ul").html('');
-                    $(".print-error-msg").css('display', 'block');
-                    $.each(msg, function (key, value) {
-                        $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
-                    });
-                }
-            }
-        });
+        
         $('#tbladpay').dataTable({});
         $('#tblpay').dataTable({});
+      
         var contractID = "{{$contract->contractID}}";
-        var dateFrom = $('#rangeFrom').val();
-        var dateTo = $('#rangeTo').val();
         $.ajax({
             type: "GET"
             , url: "/ViewPaymentHistory"
             , data: {
                 '_token': $('input[name=_token]').val()
                 , 'contractID': contractID
-                , 'dateFrom': dateFrom
-                , 'dateTo': dateTo
             }
-            , success: function (data) {
-                if ($.isEmptyObject(data.error)) {
+        }).done(function(data){
+          if ($.isEmptyObject(data.error)) {
                     var table = $('#tblhistory').DataTable({
                         "aaData": data
-                        , destroy: true
+                        
+                        ,responsive :true
                         , "columns": [
                             {
                                 "data": "paymentID"
                             }
                             , {
-                                "data": "paidDate"
+                                "data": "paymentDate"
                             }
                             , {
-                                  "data": "description"
+                                "data": "totalAmt"
                             }
                             , {
-                                "data": "paidAmt"
+                                "data": "balance"
+                            }, {
+                                "defaultContent" : "<button onclick = 'getDetails();return false;'>try</button>"
                             }
                      ]
                     });
@@ -396,13 +336,9 @@
                 else {
                     printErrorMsg(data.error);
                 }
-            }
+          
         });
-        $("#tblhistory").DataTable({
-            responsive: {
-                details: false
-            }
-        });
+        
         var rows_selected = [];
         $("#dateTo").on('change', function () {
             sum = 0;
@@ -412,7 +348,7 @@
             var dateTo = $("#dateTo").val();
             var rows_selected = [];
             $.ajax({
-                type: "get"
+                type: "post"
                 , url: "/collectionTable"
                 , cache: false
                 , data: {
@@ -521,4 +457,20 @@
             });
         }
     });
-</script> @stop
+    function getDetails(id) {
+      alert('lah');
+        $('#table2').fadeIn();
+        $('#backButton').fadeIn();
+        
+      /*  $.ajax({
+            type: "POST"
+            , url: '/getPaymentDetails'
+            , data: {
+                "_token": "{{ csrf_token() }}"
+                , "id": id
+            }
+            
+        });*/
+}
+</script> 
+@stop

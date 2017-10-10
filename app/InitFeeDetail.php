@@ -22,7 +22,7 @@ class InitFeeDetail extends Model
         return $this->belongsTo('App\InitialFee','initID');
     }
 
-    public function Payment(){
-        return $this->belongsTo('App\InitialFee','paymentID');
+    public function Transaction(){
+        return $this->belongsTo('App\Transaction','transactionID');
     }
 }

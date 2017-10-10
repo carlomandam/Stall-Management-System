@@ -20,7 +20,7 @@ class CollectionDetails extends Model
 
     public function PaymentCollection()
     {
-    	return $this->belongsTo('App\Payment','tblPayment_Collection','collectionID','paymentID');
+    	return $this->belongsTo('App\Transaction','tblPayment_Collection','collectionID','transactionID');
     }
 
     public function Collection(){

@@ -49,7 +49,7 @@ class Contract extends Model
 
 
     public function UnpaidInitial(){
-        return $this->hasMany('App\InitFeeDetail','contractID')->whereNull('paymentID');
+        return $this->hasMany('App\InitFeeDetail','contractID')->whereNull('transactionID');
     }
 
     public function Product(){

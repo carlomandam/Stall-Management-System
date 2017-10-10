@@ -19,19 +19,10 @@ class Payment extends Model
     
     ];
 
-    public function PaymentCollection()
+    public function Transaction()
     {
-   	 return $this->belongsToMany('App\Collection','tblPayment_Collection','paymentID','collectionID');
+   	 return $this->hasMany('App\Transaction','paymentID');
     }
-    public function Initial_Details(){
-        return $this->hasMany('App\Initial_Details','paymentID');
-    }
-    public function Charge_Details(){
-        return $this->hasMany('App\Charge_Details','paymentID');
-    }
-
-    public function Billing_Details(){
-        return $this->hasMany('App\Billing_Details','paymentID');
-    }
+   
 
 }

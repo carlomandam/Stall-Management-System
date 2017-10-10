@@ -16,12 +16,13 @@ class Billing_Details extends Model
     protected $fillable = [
     	'billID',
     	'paymentID',
+        'transactionID',
     	'stallMeterID'
     
     ];
 
-    public function Payment(){
-    	return $this->belongsTo('App\Payment','paymentID');
+    public function Transaction(){
+    	return $this->belongsTo('App\Transaction','transactionID');
     }
     public function StallMeter(){
     	return $this->belongsTo('App\StallMeter','stallMeterID');
