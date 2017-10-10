@@ -149,7 +149,7 @@
                                     </li>
                                 </ul>
                                 <li class="treeview">
-                                    <a href="/requestList"> <i class="fa fa-circle-o"></i> <span>Manage Requests</span> </a>
+                                    <a href="/Requests"> <i class="fa fa-circle-o"></i> <span>Manage Requests</span> </a>
                                 </li>
                         </ul>
                         </li>

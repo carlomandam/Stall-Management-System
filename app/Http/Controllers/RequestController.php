@@ -8,6 +8,7 @@ use App\StallHolder;
 use App\Stall;
 use App\RequestT;
 use App\RequestInfo;
+use Carbon\Carbon;
 use DB;
 use Response;
 use Validator;
@@ -23,11 +24,9 @@ class RequestController extends Controller
     public function index()
     {
         //
-        $reqs = RequestT::with('Rental.StallHolder')
-                        ->whereNull('deleted_at')
-                        ->get();
-        // return ($reqs);
-        return view('transaction/Requests.index',compact('reqs'));
+        
+        
+        return view('transaction/Requests.index');
     }
 
     /**
@@ -38,12 +37,18 @@ class RequestController extends Controller
     public function create()
     {
         //
-        $stalls = StallHolder::with('ActiveStallRental.Contract')->has('ActiveStallRental.Contract')->get();
-         $avails = Stall::with('Floor.Building')->withCount('Pending')->has('StallType.StallRate.RateDetail')->doesntHave('CurrentTennant')->get();
-         
-        // return ($avails);
-        
-        return view('transaction/Requests.create',compact('stalls','avails'));
+           $today= Carbon::now();
+         $tenants = DB::table('tblStallHolder as tenants')
+                    ->rightjoin('tblContractInfo as contract','tenants.stallHID','contract.stallHID')
+                    ->where('contract.contractStart','<=', $today)
+                    ->whereNull('contract.deleted_at')
+                    ->whereNull('contract.contractReason')
+                    ->orderBy('contract.contractID', 'asc')
+                    ->groupBy('contract.stallHID')
+                    ->select('tenants.stallHFName as firstName','tenants.stallHMName as middleName','tenants.stallHLName as lastName','tenants.stallHID as id')
+                    ->get();
+        // return($tenants);
+        return view('transaction/Requests.create',compact('tenants'));
     }
 
     /**
@@ -55,129 +60,11 @@ class RequestController extends Controller
     public function store(Request $request)
     {
         //
-        if($request->newType==1){
-             $rules = [
-             'newRentalID'=> 'required',
-             'newType'=> 'required',
-             'newDesc'=> 'nullable|max:300',
-             'newStatus'=> 'required',
-             'newRemarks'=> 'nullable',
-             'newApprovedDate' =>'nullable',
-             'newRentTo'=> 'required',
-             ];
-             $messages = [
-             'unique' => ':attribute already exists.',
-             'required' => 'The :attribute field is required.',
-             'max' => 'The :attribute field must be no longer than :max characters.',
-             ];
-             $niceNames = [
-             'newRentalID'=> 'Stall',
-             'newType'=> 'Request Type',
-             'newRentTo' => 'Transfer Stall Code',
-             ];
-             $validator = Validator::make($request->all(),$rules,$messages);
-             $validator->setAttributeNames($niceNames); 
-             if ($validator->passes()) {
+       
+      
 
-                $req = new RequestT;
-                $req->stallRentalID = $request->newRentalID;
-                $req->requestType =$request->newType;
-                $req->requestText= $request->newDesc;
-                $req->status = $request->newStatus;
-                $req->remarks = $request->newRemarks;
-                $req->approvedDate = $request->newApprovedDate; 
-               
-                if( $req->save()){
-                     $reqInfo = new RequestInfo;
-                     $reqInfo->requestID = $req->requestID;
-                     $reqInfo->stallRequested = $request->newRentTo;
-                     $reqInfo->save();
-                return response()->json(['success'=>'Added new records.']);
-                }
-               
-                }
-            else{
-               return response()->json(['error'=>$validator->errors()->all()]);
-           }
-        }
 
-        else if($request->newType==2){
-             $rules = [
-             'newRentalID'=> 'required',
-             'newType'=> 'required',
-             'newDesc'=> 'nullable|max:300',
-             'newStatus'=> 'required',
-             'newRemarks'=> 'nullable',
-             'newApprovedDate' =>'nullable',
-             ];
-             $messages = [
-             'unique' => ':attribute already exists.',
-             'required' => 'The :attribute field is required.',
-             'max' => 'The :attribute field must be no longer than :max characters.',
-             ];
-             $niceNames = [
-             'newRentalID'=> 'Stall',
-             'newType'=> 'Request Type',
-             'newRentTo' => 'Transfer Stall Code',
-             ];
-             $validator = Validator::make($request->all(),$rules,$messages);
-             $validator->setAttributeNames($niceNames); 
-             if ($validator->passes()) {
-
-                $req = new RequestT;
-                $req->stallRentalID = $request->newRentalID;
-                $req->requestType =$request->newType;
-                $req->requestText= $request->newDesc;
-                $req->status = $request->newStatus;
-                $req->remarks = $request->newRemarks;
-                $req->approvedDate = $request->newApprovedDate; 
-               $req->save();
-               return response()->json(['success'=>'Added new records.']);
-               
-                }
-                else{
-                    return response()->json(['error'=>$validator->errors()->all()]);
-                }
-        }
-
-        else if($request->newType==3){
-             $rules = [
-             'newRentalID'=> 'required',
-             'newType'=> 'required',
-             'newDesc'=> 'nullable|max:300',
-             'newStatus'=> 'required',
-             'newRemarks'=> 'nullable',
-             'newApprovedDate' =>'nullable',
-             ];
-             $messages = [
-             'unique' => ':attribute already exists.',
-             'required' => 'The :attribute field is required.',
-             'max' => 'The :attribute field must be no longer than :max characters.',
-             ];
-             $niceNames = [
-             'newRentalID'=> 'Stall',
-             'newType'=> 'Request Type',
-             'newRentTo' => 'Transfer Stall Code',
-             ];
-             $validator = Validator::make($request->all(),$rules,$messages);
-             $validator->setAttributeNames($niceNames); 
-             if ($validator->passes()) {
-
-                $req = new RequestT;
-                $req->stallRentalID = $request->newRentalID;
-                $req->requestType =$request->newType;
-                $req->requestText= $request->newDesc;
-                $req->status = $request->newStatus;
-                $req->remarks = $request->newRemarks;
-                $req->approvedDate = $request->newApprovedDate; 
-               $req->save();
-               return response()->json(['success'=>'Added new records.']);
-               
-                }
-                else{
-                    return response()->json(['error'=>$validator->errors()->all()]);
-                }
-        }
+       
     }
 
     /**
@@ -189,11 +76,7 @@ class RequestController extends Controller
     public function show($id)
     {
         //
-        $req = RequestT::with('Rental.StallHolder')
-                        ->with('RequestInfo')
-                        ->whereNull('deleted_at')
-                        ->findorFail($id);
-        return response()->json(['req'=>$req]);
+   
     }
 
     /**
@@ -220,17 +103,6 @@ class RequestController extends Controller
 
 
 
-        $rID = $request->rentalID;
-        $req = RequestT::findorFail($id);
-        $con = StallRental::findorFail($rID);       
-        if($request->updateStatus==1){
-            $con->stallRentalStatus = 0;
-            $req->status = $request->updateStatus;
-            $req->remarks = $request->newRemarks;
-            $req->approvedDate = $request->approved;
-            $req->save();
-        }
-
 
         
     }
@@ -241,22 +113,87 @@ class RequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
-    public function getStall($id){
-        $active = StallHolder::with('ActiveStallRental.Contract')
-                             ->has('ActiveStallRental.Contract')
-                             ->findorFail($id);
-        
-        // return($active);
-        return response()->json(['active'=>$active]);
-    }
-    public function getAvail(){
-         
-        return($avail);
-        
+   
+    public function current($id){
+
+            $current = DB::table('tblContractInfo as contract')
+                             ->where('contract.stallHID','=',$id)
+                             ->whereNull('contract.deleted_at')
+                             ->whereNull('contract.contractReason')
+                             ->orderBy('contract.contractID', 'asc')
+                            ->get();
+            return response()->json(['current'=>$current]);
     }
 
+    public function desire($id){
+
+            $desire = Stall::with('StallType.StallRate','StallType.StallType','StallType.StallTypeSize','Floor.Building')
+                            ->doesntHave('CurrentTennant')
+                            ->get();
+            return response()->json(['desire'=>$desire]);
+    
+    }
+     public function SaveTransferStall(Request $request){
+
+         $rules = [
+            'requestType' => 'required',
+            'tenant'=> 'required',
+            'reason'=> 'nullable',
+            'status'=> 'required',
+            'stallFrom.*'=> 'required',
+            'stallTo.*'=> 'nullable',
+         
+        ];
+        $messages = [
+            
+            'required' => 'The :attribute field is required.',
+          
+
+        ];
+        $niceNames = [
+            'requestType' => 'Request Type',
+            'tenant' => 'Stall Holder',
+            'finalDateTo' => 'Date To',
+   
+        ];
+         $today = Carbon::now();
+        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator->setAttributeNames($niceNames);
+             if($validator->passes()) {
+
+            $req = new RequestT;
+            $req->requestType = $request->requestType;
+            $req->stallHID = $request->tenant;
+            $req->requestText = $request->reason;
+            $req->status = $request->status;
+            $req->submitDate = $today;
+
+            $req->save();
+            
+            $reqs = DB::table('tblRequest')
+                        ->orderBy('requestID','desc')
+                        ->select('requestID')
+                        ->first();
+
+            $reqID = $reqs->requestID;
+
+            foreach ($request->stallRequested as $stallReq) {
+                $reqInfo = new RequestInfo([
+                  'requestID' => $reqID,
+                  'contractID' => $stallReq['stallFrom'],
+                  'stallRequested' => $stallReq['stallTo']
+               
+                ]);
+                $reqInfo->save();
+            }
+            
+         
+            
+            return response()->json(['success'=>'Added new records.']);
+        }
+          else{
+            return response()->json(['error'=>$validator->errors()->all()]);
+        }
+
+    }
 }

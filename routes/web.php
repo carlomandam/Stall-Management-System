@@ -206,9 +206,11 @@ Route::get('/ViewBill/{id}','BillingController@viewBill');
 Route::get('/getPaymentStatus','PaymentController@getPaymentStatus');
 Route::get('/CheckBillingRecords','PaymentController@checkRecords');
 ////////////////REQUESTS////////////
-Route::resource('/requestList', 'RequestController');
-Route::get('/requestList/show/{id}', 'RequestController@show');
-Route::get('requestList/getStall/{id}','RequestController@getStall');
+Route::resource('/Requests', 'RequestController');
+Route::get("/Request/Current/{id}", 'RequestController@current');
+Route::get("/Request/Desire/{id}", 'RequestController@desire');
+Route::put("/Request/SaveTransferStall", 'RequestController@SaveTransferStall');
+
 
 Route::resource('/stocks', 'StocksController');
 Route::get('/stocks/show/{id}', 'StocksController@show');

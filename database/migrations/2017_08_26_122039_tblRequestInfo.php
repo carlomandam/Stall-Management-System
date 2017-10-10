@@ -15,8 +15,10 @@ class TblRequestInfo extends Migration
     {
         //
           Schema::create('tblRequestInfo', function (Blueprint $table) {
+            $table->increments('reqInfoID');
             $table->integer('requestID')->unsigned();
-            $table->string('stallRequested',20);
+            $table->string('stallRequested',20)->nullable();
+            $table->integer('contractID')->unsigned();
             $table->softDeletes();
 
 
@@ -24,6 +26,10 @@ class TblRequestInfo extends Migration
                    ->on('tblRequest') 
                    ->onUpdate('cascade')
                    ->onDelete('restrict');
+             $table->foreign('contractID')->references('contractID')
+                    ->on('tblContractInfo') 
+                    ->onUpdate('cascade')
+                    ->onDelete('restrict');      
 
         });
     }

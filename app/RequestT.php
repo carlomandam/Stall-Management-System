@@ -16,7 +16,6 @@ class RequestT extends Model
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
-    	'stallRentalID',
     	'requestType',
     	'requestText',
     	'status',

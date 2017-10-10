@@ -11,11 +11,13 @@ class RequestInfo extends Model
      use SoftDeletes;
     
     protected $table = "tblRequestInfo";
-    protected $primaryKey = "requestID";
+    protected $primaryKey = "reqInfoID";
     protected $softDelete = true;
     public $timestamps = false;
     protected $fillable = [
+        'requestID',
     	'stallRequested',
+        'contractID',
     	
     
     ];
