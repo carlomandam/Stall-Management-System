@@ -9,6 +9,7 @@ use App\CollectionDetails;
 use Carbon\Carbon;
 use App\StallRate;
 use App\Payment;
+use App\Transaction;
 use App\Payment_Collection;
 use DB;
 use Validator;
@@ -48,29 +49,104 @@ class CollectionController extends Controller
     {
         //
         $rules = [
-        'dates' => 'required',
-        'money' => 'required'
+        'dateFrom' => 'required',
+        'dateTo' => 'required',
+        'money' => 'required',
+        'amtPaid' => 'required',
+        'contractID' => 'required'
         ];
         $messages = [
         'required' => ':attribute field is required.',
         ];
         $attributeName =[
-        'dates' => 'Date To',
-        'money' => 'Amount'
+        'dateFrom' => 'Date From',
+        'dateTo' => 'Date To',
+        'money' => 'Total Amount',
+        'amtPaid' => 'Amount Received',
+        'contractID' => 'Contract ID'
 
         ];
 
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($attributeName);
-        $marketDays = []; 
+        $first = $request->dateFrom;
+        $last = $request->dateTo;
+        
+        $step = '+1 day';
+        $output_format = 'Y-m-d';
+        $dates = array();
+        $current = strtotime($first);
+        $last = strtotime($last);
+        $getIntegerDate =[];
+        $marketDates = array();
+    while( $current <= $last ) {
+
+        $dates[] = date($output_format, $current);
+        $current = strtotime($step, $current);
+    }
+     $getPeakDays = DB::table('tblUtilities as a')
+            ->where('utilitiesID','util_peak_days') 
+            ->select('utilitiesDesc')
+            ->get();
+
+       $peakDays = []; 
             //dayOfWeek returns integer 0 if Sunday, and so on...
 
             // store yung marketDays as array
+            foreach($getPeakDays as $getDays)
+            {   
+
+                $peakDays = explode(",",$getDays->utilitiesDesc);
+            
+            }
+
+            for($ctr = 0; $ctr < count($peakDays); $ctr++)
+            {
+
+                if($peakDays[$ctr] == "sun")
+                {
+                  $peakDays[$ctr] = 0;
+                }
+                else if($peakDays[$ctr] == "mon")
+                {
+                  $peakDays[$ctr] = 1;
+                }
+                else if($peakDays[$ctr] == "tue")
+                {
+                  $peakDays[$ctr] = 2;
+                }
+                else if($peakDays[$ctr] == "wed")
+                {
+                  $peakDays[$ctr] = 3;
+                }
+                else if($peakDays[$ctr] == "thur")
+                {
+                  $peakDays[$ctr] = 4;
+                }
+                else if($peakDays[$ctr] == "fri")
+                {
+                  $peakDays[$ctr] = 5;
+                }
+                else if($peakDays[$ctr] == "sat")
+                {
+                  $peakDays[$ctr] = 6;
+                }
+                else
+                {
+                  $peakDays[$ctr] = 7;
+                }
+
+            }
+
              $getMarketDays = DB::table('tblUtilities as a')
             ->where('utilitiesID','util_market_days') 
             ->select('utilitiesDesc')
             ->get();
 
+            $marketDays = []; 
+            //dayOfWeek returns integer 0 if Sunday, and so on...
+
+            // store yung marketDays as array
             foreach($getMarketDays as $getDays)
             {   
 
@@ -115,6 +191,18 @@ class CollectionController extends Controller
                 }
 
             }
+    
+    foreach($dates as $date)
+    {   
+       if(in_array(Carbon::parse($date)->dayOfWeek,$peakDays) || in_array(Carbon::parse($date)->dayOfWeek, $marketDays))
+       {
+        $marketDates[] = Carbon::parse($date)->format('Y-m-d');
+       }
+
+    }
+
+  
+    
     if($validator->passes()){
            
             try{
@@ -122,12 +210,11 @@ class CollectionController extends Controller
             $newCollection = Collection::create([
                 'contractID' => $request->contractID
             ]);
-
-             $dates = $request->dates;
-            $newPayment = Payment::create([
-              'paymentDate' => Carbon::today(),
-              'paidAmt' => $request->money              
+            $newTransaction = Transaction::create([
+                'transactionDate' => Carbon::today()->format('Y-m-d')
               ]);
+
+            $dates = $marketDates;
             foreach($dates as $date)
             {   
             $newColDetails = CollectionDetails::create([
@@ -136,7 +223,7 @@ class CollectionController extends Controller
             ]);
 
             Payment_Collection::create([
-              'paymentID' => $newPayment->paymentID,
+              'transactionID' => $newTransaction->transactionID,
               'collectionDetID' => $newColDetails->collectionDetID,
               'partialAmt' => '0',
               'isVoidOrRefund' => '0'
@@ -144,6 +231,11 @@ class CollectionController extends Controller
 
 
             }
+            Payment::create([
+              'paymentDate' => Carbon::today()->format('Y-m-d'),
+              'paidAmt' => $request->money,
+              'transactionID' => $newTransaction->transactionID
+              ]);
             
             DB::commit();
             return response()->json(['success'=>'Successfully Saved']);

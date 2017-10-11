@@ -205,6 +205,8 @@ Route::get('/createBill/{id}','BillingController@createBill');
 Route::get('/ViewBill/{id}','BillingController@viewBill');
 Route::get('/getPaymentStatus','PaymentController@getPaymentStatus');
 Route::get('/CheckBillingRecords','PaymentController@checkRecords');
+Route::get('/ViewPaymentDetails','PaymentController@getPaymentDetails');
+Route::post('/printReceipt/{id}','PaymentController@printReceipt');
 ////////////////REQUESTS////////////
 Route::resource('/Requests', 'RequestController');
 Route::get("/Request/Current/{id}", 'RequestController@current');

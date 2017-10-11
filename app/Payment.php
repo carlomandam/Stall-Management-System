@@ -15,7 +15,8 @@ class Payment extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = [
     	'paymentDate',
-    	'paidAmt'
+    	'paidAmt',
+        'transactionID'
     
     ];
 

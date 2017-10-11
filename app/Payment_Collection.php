@@ -8,11 +8,11 @@ class Payment_Collection extends Model
 {
 	use Softdeletes;
     protected $table = "tblPayment_Collection";
-    protected $primaryKey = "paymentID";
+    protected $primaryKey = "paymentCollectID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
-    	'paymentID',
+    	'transactionID',
     	'collectionDetID',
     	'partialAmt',
     	'isVoidOrRefund'

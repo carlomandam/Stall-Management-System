@@ -176,15 +176,15 @@
                                     <div class="table-responsive">
                                         <table id="tbladpay" class="table table-bordered table-striped display select" role="grid">
                                             <thead>
-                                                <th>
-                                                    <input name="select_all" value="1" type="checkbox"> </th>
+
+                                              
                                                 <th>Date</th>
                                                 <th>Description</th>
                                                 <th>Amount</th>
                                             </thead>
                                             <tfoot>
                                                 <tr>
-                                                    <th colspan="3" style="text-align: right; ">Total Amount:</th>
+                                                    <th colspan="2" style="text-align: right; ">Total Amount:</th>
                                                     <th></th>
                                                 </tr>
                                             </tfoot>
@@ -202,7 +202,7 @@
                                         <div class="col-md-3"></div>
                                         <label class="col-md-3">Amount Received:</label>
                                         <div class="col-md-3">
-                                            <input type="text" id="amtPaid" name="amtPaid" class="form-control" /> </div>
+                                            <input type="text" id="amtPaid" name="amtPaid" class="form-control money" /> </div>
                                     </div>
                                 </div>
                             </div>
@@ -214,14 +214,20 @@
                         </form>
                     </div>
                     <div class="tab-pane fade" id="tab3">
-                        <form>
-                            <div class="box box-primary">
-                                <div class="box box-body">
-                                    <div class="row">
-                                        <label class="col-md-3">Stall Code</label>
-                                        <div class="col-md-3">
-                                            <label class="form-control">{{$contract->stallID}}</label>
-                                        </div>
+
+                          <div class = "box box-primary">
+                            <div class="box box-body">
+                              <div class="row">
+                                    <label class="col-md-3">Stall Code</label>
+                                    <div class="col-md-3">
+                                        <label class="form-control">{{$contract->stallID}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-3">Tenant Name</label>
+                                    <div class="col-md-3">
+                                        <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
+
                                     </div>
                                     <div class="row">
                                         <label class="col-md-3">Tenant Name</label>
@@ -248,23 +254,39 @@
                                             </thead>
                                         </table>
                                     </div>
-                                    <div class="defaultNewButton" id="backButton">
-                                        <button class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack to Payment History</button>
-                                    </div>
-                                    <div class="table-responsive" id="table2">
-                                        <table id="tblhistory" class="table table-striped table-hover dt-responsive display nowrap" cellspacing="0" role="grid">
+
+                                    <div class="defaultNewButton" id = "backButton">
+                                           
+                                               <button class="btn btn-primary btn-flat" id = "backPH"><span class='fa fa-arrow-left'></span>&nbspBack to Payment History</button>
+                                            
+                                      </div>
+                                    <div class="table-responsive" id = "table2">
+                                        
+                                        <table id="tblviewDetails" class="table table-striped table-hover dt-responsive display nowrap" cellspacing="0" role="grid">
+
                                             <thead>
-                                                <th>Payment Number</th>
-                                                <th>Date Paid</th>
-                                                <th>Amount Paid</th>
-                                                <th>Balance</th>
-                                                <th>Action/s</th>
+                                                <th>Description</th>
+                                                <th>Amount</th>
+                                                
                                             </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th colspan="1" style="text-align: right; ">Total Amount:</th>
+                                                    <th></th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="1" style="text-align: right; ">Total Amount Paid:</th>
+                                                    <th></th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="1" style="text-align: right; ">Balance:</th>
+                                                    <th></th>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -273,7 +295,9 @@
     <!-- col-md-12-->
 </div>
 <!-- row-->@stop @section('script')
+<script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
 <script type="text/javascript">
+    var totalAmt = 0;
     var sum = 0;
     var array = [];
     $(document).on('ready', function () {
@@ -298,34 +322,39 @@
                 , 'contractID': contractID
             }
         }).done(function (data) {
-            if ($.isEmptyObject(data.error)) {
+
                 var table = $('#tblhistory').DataTable({
                     "aaData": data
-                    , responsive: true
+                    , destroy: true
                     , "columns": [
                         {
                             "data": "paymentID"
-                            }
-                            , {
+                        }
+                        , {
                             "data": "paymentDate"
-                            }
-                            , {
+                        }
+                        , {
                             "data": "totalAmt"
-                            }
-                            , {
+                        }
+                        , {
                             "data": "balance"
-                            }, {
-                            "defaultContent": "<button onclick = 'getDetails();return false;'>try</button>"
-                            }
-                     ]
-                });
-            }
-            else {
-                printErrorMsg(data.error);
-            }
+                        }
+                        ,{
+                          
+                          "data": "actions"
+                        }
+               ]
         });
+
+    });
+
+          
+ 
+        
+
         var rows_selected = [];
         $("#dateTo").on('change', function () {
+            
             sum = 0;
             $("#sum").val(sum);
             var dateFrom = $('#dateFrom').text();
@@ -333,7 +362,7 @@
             var dateTo = $("#dateTo").val();
             var rows_selected = [];
             $.ajax({
-                type: "post"
+                type: "get"
                 , url: "/collectionTable"
                 , cache: false
                 , data: {
@@ -346,10 +375,7 @@
                     "aaData": data
                     , destroy: true
                     , "columns": [
-                        {
-                            "data": "cb"
-                        }
-                        , {
+                         {
                             "data": "date"
                         }
                         , {
@@ -369,59 +395,54 @@
                          */
                         var iTotalMarket = 0;
                         for (var i = 0; i < aaData.length; i++) {
-                            iTotalMarket += parseFloat(aaData[i][3]) * 1;
+                            iTotalMarket += parseFloat(aaData[i][2]) * 1;
                         }
                         /* Calculate the market share for browsers on this page */
                         var iPageMarket = 0;
                         for (var i = iStart; i < iEnd; i++) {
-                            iPageMarket += parseFloat(aaData[aiDisplay[i]][3]) * 1;
+                            iPageMarket += parseFloat(aaData[aiDisplay[i]][2]) * 1;
                         }
                         /* Modify the footer row to match what we want */
                         var nCells = nRow.getElementsByTagName('th');
                         nCells[1].innerHTML = "Php " + " " + parseFloat(iPageMarket).toFixed(2) + " (Php " + parseFloat(iTotalMarket).toFixed(2) + " total)";
+
+                        $('#sum').val("Php " + " " + parseFloat(iTotalMarket).toFixed(2));
+                        totalAmt = parseFloat(iTotalMarket).toFixed(2);
                     }
                 });
             });
         });
     });
-    // Handle click on table cells with checkboxes
-    $('#tbladpay').on('click', 'tbody td, thead th:first-child', function (e) {
-        $(this).parent().find('input[type="checkbox"]').trigger('click');
-    });
-    $('#tbladpay').on('click', 'input[type="checkbox"]', function () {
-        // var price = parseInt(($(this).find('td').last().html()));
-        var row = $(this).closest('tr');
-        var price = parseInt((row.find('td').last().html()));
-        var data = row.find('td:eq(1)').text();
-        if ($(this).prop('checked') == false) {
-            sum -= price;
-            var i = array.indexOf(data);
-            if (i != -1) {
-                array.splice(i, 1);
-            }
-        }
-        else {
-            sum += price;
-            if (array.indexOf(data) == -1) {
-                array.push(data);
-            }
-        }
-        $('#sum').val("Php " + " " + parseFloat(sum).toFixed(2));
-    });
+    
     $(document).on('click', '#adsave', function (e) {
         e.preventDefault();
+
         var _token = $("input[name='_token']").val();
-        var contractID = "{{$contract->contractID}}";
-        var dates = array;
-        var money = $('#amtPaid').val();
-        $.ajax({
+        var dateFrom = $('#dateFrom').text();
+            var contractID = "{{$contract->contractID}}";
+            var dateTo = $("#dateTo").val();
+        var amtPaid = $('#amtPaid').val();
+         var temp3 = $('#amtPaid').val().replace("Php ", "",);
+           var temp4 = temp3.replace(",", "",);
+         var temp5 = Number(temp4);
+       if(totalAmt > temp5){
+        toastr.error('Input sufficient Amount');
+       }
+       else if(dateTo.length == 0)
+       {
+        toastr.error("Choose Date");
+       }
+       else{
+       $.ajax({
             type: "POST"
             , url: "/Collection"
             , data: {
                 '_token': $('input[name=_token]').val()
                 , 'contractID': contractID
-                , 'dates': dates
-                , 'money': money
+                ,'dateFrom': dateFrom
+                , 'dateTo': dateTo
+                , 'money': totalAmt
+                ,'amtPaid': temp5
             }
             , success: function (data) {
                 if ($.isEmptyObject(data.error)) {
@@ -441,20 +462,77 @@
                 $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
             });
         }
+      }
     });
 
-    function getDetails(id) {
-        alert('lah');
+    function getDetails($id) {
+      
         $('#table2').fadeIn();
         $('#backButton').fadeIn();
-        /*  $.ajax({
-              type: "POST"
-              , url: '/getPaymentDetails'
-              , data: {
-                  "_token": "{{ csrf_token() }}"
-                  , "id": id
-              }
-              
-          });*/
-    }
-</script> @stop
+        $('#tableHistory').hide();
+
+        $.ajax({
+            type: "GET"
+            , url: "/ViewPaymentDetails"
+            , data: {
+                '_token': $('input[name=_token]').val()
+                , 'paymentID': $id
+            }
+        }).done(function (data) {
+          
+                var table = $('#tblviewDetails').DataTable({
+                    "aaData": data
+                    , destroy: true
+                    , "columns": [
+                        {
+                            "data": "description"
+                        }
+                        , {
+                            "data": "amount"
+                        }
+               ]
+        });
+                 $('#tblviewDetails').dataTable({
+                    destroy: true
+                    , "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
+                        /*
+                         * Calculate the total market share for all browsers in this table (ie inc. outside
+                         * the pagination)
+                         */
+                        var iTotalMarket = 0;
+                        for (var i = 0; i < aaData.length; i++) {
+                            iTotalMarket += parseFloat(aaData[i][1].replace(/,/g, '')) * 1;
+                        }
+                        /* Calculate the market share for browsers on this page */
+                        var iPageMarket = 0;
+                        for (var i = iStart; i < iEnd; i++) {
+                            iPageMarket += parseFloat(aaData[aiDisplay[i]][1].replace(/,/g, '')) * 1;
+                        }
+                        /* Modify the footer row to match what we want */
+                        var nCells = nRow.getElementsByTagName('th');
+                        nCells[1].innerHTML = "Php " + " " + parseFloat(iPageMarket).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                       
+
+                    }
+                });
+        });
+       
+
+    
+       return false;
+   }
+
+   $('#backPH').on('click',function(){
+    location.reload();
+   });
+
+   $(".money").inputmask('currency', {
+    rightAlign: true,
+    prefix: 'Php ',
+  });
+
+
+   
+</script> 
+@stop
