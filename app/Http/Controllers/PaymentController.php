@@ -398,7 +398,7 @@ class PaymentController extends Controller{
 
        foreach($tenantPaymentIDs as $tenantPaymentIDs){
          $array[]= $tenantPaymentIDs->paymentID;
-         $arrayDates[] =  $tenantPaymentIDs->paidDate;   
+         $arrayDates[] =  Carbon::parse($tenantPaymentIDs->paidDate)->format('F d,Y');   
          $arrayAmt[] = $tenantPaymentIDs->paidAmt;
          $arrayTransactionID[] = $tenantPaymentIDs->transacID;
         }
@@ -422,7 +422,7 @@ class PaymentController extends Controller{
              $data[$ctr]["paymentDate"] =$arrayDates[$ctr];
              $data[$ctr]["totalAmt"] ='Php ' .number_format($arrayAmt[$ctr],2);
              $data[$ctr]["balance"] = 'Php ' .number_format(($arrayTotalAmt[$ctr] - $arrayAmt[$ctr]),2);
-             $data[$ctr]['actions'] = "<button  value = '".$array[$ctr]."' onclick = 'return getDetails(this.value);' class='btn btn-primary'><span class = 'fa fa-eye'></span></button> ";
+             $data[$ctr]['actions'] = "<button  value = '".$array[$ctr]."' onclick = 'return getDetails(this.value);' class='btn btn-primary'><span class = 'fa fa-eye'></span></button>  <button  value = '".$array[$ctr]."' onclick = '' class='btn btn-success'><span class = 'fa fa-print'></span></button>";
             $ctr++;
           
 
@@ -462,7 +462,7 @@ class PaymentController extends Controller{
             $amt = PaymentController::getRate($dates,$stallRateID);
             foreach($amt as $amt){
                
-                $data[$recordCtr]['description'] = "Rental Fee for " .Carbon::parse($amt['date'])->format("l")."( ". $amt['date']." )";
+                $data[$recordCtr]['description'] = "Rental Fee for " .Carbon::parse($amt['date'])->format("l")."( ". Carbon::parse($amt['date'])->format('F d,Y')." )";
                 $data[$recordCtr]['amount'] = number_format($amt['amount'],2);
                 $recordCtr++;
             }

@@ -229,11 +229,7 @@
                                         <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
 
                                     </div>
-                                    <div class="row">
-                                        <label class="col-md-3">Tenant Name</label>
-                                        <div class="col-md-3">
-                                            <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
-                                        </div>
+                                   
                                         <label class="col-md-3">Collection Status</label>
                                         <div class="col-md-3">
                                             <label class="form-control"></label>
