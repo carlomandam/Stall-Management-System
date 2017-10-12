@@ -15,7 +15,7 @@
 
 // Auth::routes();
 
-
+// Route::get('/','HomeController@index');
 Route::get('/login','LoginController@login');
 Route::post('/login/Validate','LoginController@validateUser');
 Route::get('/login/goTo','LoginController@goTo');

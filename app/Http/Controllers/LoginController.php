@@ -12,7 +12,7 @@ class LoginController extends Controller
     //
     public function login(){
 
-    	return view('login.login');
+    	return view('/login/login');
     }
     
     public function validateUser(Request $request){
@@ -47,5 +47,9 @@ class LoginController extends Controller
     public function logout(){
          Auth::logout();
         return redirect('/login');
-    }   
+    } 
+    // protected function redirectTo()
+    // {
+    // return '/';
+    // }  
 }
