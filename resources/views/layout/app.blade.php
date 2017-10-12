@@ -97,10 +97,11 @@
             <nav class="navbar navbar-fixed-top">
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a> <span class="system-name"><b>Stalls Management System</b></span>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown" style="margin-right: 10px;"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="caret"></span> </a>
+                    <li class="dropdown" style="margin-right: 10px;"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <span>{{ Auth::user()->name }}</span><span class="caret"></span> </a>
                         <ul class="dropdown-menu" role="menu">
                             <li> <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                            <form id="logout-form" action="" method="POST" style="display: none;">
+                            <form id="logout-form" action="/logout" method="POST" style="display: none;">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </form>
                             </li>
@@ -117,7 +118,8 @@
                 <div class="user-panel">
                     <div class="pull-left image"> <img src="{{ URL::asset('image/userimage2.png') }}" class="img-circle" alt="User Image"> </div>
                     <div class="pull-left info">
-                        <p id="userName"></p>
+                        <p id="userName">{{ Auth::user()->name }}</p>
+                        <p id="position" style="font-size: 11px;font-weight: normal;">{{ Auth::user()->position }}</p>
                     </div>
                 </div>
                 <ul class="sidebar-menu">

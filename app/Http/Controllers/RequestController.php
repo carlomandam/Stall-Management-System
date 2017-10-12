@@ -25,8 +25,11 @@ class RequestController extends Controller
     {
         //
         
+        $reqs = DB::table('tblRequest as request')
+                    ->join('tblStallHolder as holder','holder.stallHID','request.stallHID')
+                    ->get();
         
-        return view('transaction/Requests.index');
+        return view('transaction/Requests.index',compact('reqs'));
     }
 
     /**
@@ -37,7 +40,7 @@ class RequestController extends Controller
     public function create()
     {
         //
-           $today= Carbon::now();
+         $today= Carbon::now();
          $tenants = DB::table('tblStallHolder as tenants')
                     ->rightjoin('tblContractInfo as contract','tenants.stallHID','contract.stallHID')
                     ->where('contract.contractStart','<=', $today)
@@ -195,5 +198,75 @@ class RequestController extends Controller
             return response()->json(['error'=>$validator->errors()->all()]);
         }
 
+    }
+     public function SaveLeaveStall(Request $request){
+
+         $rules = [
+            'requestType' => 'required',
+            'tenant'=> 'required',
+            'reason'=> 'nullable',
+            'status'=> 'required',
+            // 'stallFrom.*'=> 'required'
+         
+        ];
+        $messages = [
+            
+            'required' => 'The :attribute field is required.',
+          
+
+        ];
+        $niceNames = [
+            'requestType' => 'Request Type',
+            'tenant' => 'Stall Holder',
+            'finalDateTo' => 'Date To',
+   
+        ];
+         $today = Carbon::now();
+        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator->setAttributeNames($niceNames);
+             if($validator->passes()) {
+
+            $req = new RequestT;
+            $req->requestType = $request->requestType;
+            $req->stallHID = $request->tenant;
+            $req->requestText = $request->reason;
+            $req->status = $request->status;
+            $req->submitDate = $today;
+
+            $req->save();
+            
+            $reqs = DB::table('tblRequest')
+                        ->orderBy('requestID','desc')
+                        ->select('requestID')
+                        ->first();
+
+            $reqID = $reqs->requestID;
+
+            foreach ($request->stallRequested as $stallReq) {
+                $reqInfo = new RequestInfo;
+                $reqInfo->requestID = $reqID;
+                $reqInfo->contractID = $stallReq;
+                $reqInfo->save();
+            }
+            
+         
+            
+            return response()->json(['success'=>'Added new records.']);
+        }
+          else{
+            return response()->json(['error'=>$validator->errors()->all()]);
+        }
+
+    }
+    public function View($id){
+
+        $req = DB::table('tblRequest as request')
+                ->join('tblStallHolder as holder','request.stallHID','holder.stallHID')
+                ->where('request.requestID','=', $id)
+                // ->groupBy('request.requestID')
+                ->select('request.requestType as Type','holder.stallHFName as First','holder.stallHMName as Middle','holder.stallHLName as Last','request.status as status','request.requestText as reason','request.requestID as ID')
+                ->get();
+        
+               
     }
 }

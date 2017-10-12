@@ -1,228 +1,69 @@
-<!doctype html>
-<html lang="{{ config('app.locale') }}">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+@extends('layouts.app')
 
-    <title>Stall Management System</title>
+@section('content')
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Login</div>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/font-awesome/css/font-awesome.min.css')}}">
+                <div class="panel-body">
+                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                        {{ csrf_field() }}
 
-    <!-- Styles -->
-    <style>
-    html, body {
-        background-color: #fff;
-        color: #636b6f;
-        font-family: 'Raleway', sans-serif;
-        font-weight: 100;
-        height: 100vh;
-        margin: 0;
-    }
+                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
-    .full-height {
-        height: 100vh;
-    }
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
 
-    .flex-center {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-    }
+                                @if ($errors->has('email'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
 
-    .position-ref {
-        position: relative;
-    }
+                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                            <label for="password" class="col-md-4 control-label">Password</label>
 
-    .top-right {
-        position: absolute;
-        right: 10px;
-        top: 18px;
-    }
+                            <div class="col-md-6">
+                                <input id="password" type="password" class="form-control" name="password" required>
 
-    .content {
-        text-align: center;
-    }
+                                @if ($errors->has('password'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
 
-    .title {
-        font-size: 84px;
-    }
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
 
-    .links > a {
-        color: #636b6f;
-        padding: 0 25px;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: .1rem;
-        text-decoration: none;
-        text-transform: uppercase;
-    }
+                        <div class="form-group">
+                            <div class="col-md-8 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Login
+                                </button>
 
-    .m-b-md {
-        margin-bottom: 30px;
-    }
-
-    @import url(http://fonts.googleapis.com/css?family=Roboto);
-
-    /****** LOGIN MODAL ******/
-    .loginmodal-container {
-      padding: 30px;
-      max-width: 350px;
-      width: 100% !important;
-      background-color: #F7F7F7;
-      margin: 0 auto;
-      border-radius: 2px;
-      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
-      font-family: roboto;
-  }
-
-  .loginmodal-container h1 {
-      text-align: center;
-      font-size: 1.8em;
-      font-family: roboto;
-  }
-
-  .loginmodal-container input[type=submit] {
-      width: 100%;
-      display: block;
-      margin-bottom: 10px;
-      position: relative;
-  }
-
-  .loginmodal-container input[type=text], input[type=password] {
-      height: 44px;
-      font-size: 16px;
-      width: 100%;
-      margin-bottom: 10px;
-      -webkit-appearance: none;
-      background: #fff;
-      border: 1px solid #d9d9d9;
-      border-top: 1px solid #c0c0c0;
-      /* border-radius: 2px; */
-      padding: 0 8px;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-  }
-
-  .loginmodal-container input[type=text]:hover, input[type=password]:hover {
-      border: 1px solid #b9b9b9;
-      border-top: 1px solid #a0a0a0;
-      -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-      -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-  }
-
-  .loginmodal {
-      text-align: center;
-      font-size: 14px;
-      font-family: 'Arial', sans-serif;
-      font-weight: 700;
-      height: 36px;
-      padding: 0 8px;
-      /* border-radius: 3px; */
-/* -webkit-user-select: none;
-user-select: none; */
-}
-
-.loginmodal-submit {
-  /* border: 1px solid #3079ed; */
-  border: 0px;
-  color: #fff;
-  text-shadow: 0 1px rgba(0,0,0,0.1); 
-  background-color: #4d90fe;
-  padding: 17px 0px;
-  font-family: roboto;
-  font-size: 14px;
-  /* background-image: -webkit-gradient(linear, 0 0, 0 100%,   from(#4d90fe), to(#4787ed)); */
-}
-
-.loginmodal-submit:hover {
-  /* border: 1px solid #2f5bb7; */
-  border: 0px;
-  text-shadow: 0 1px rgba(0,0,0,0.3);
-  background-color: #357ae8;
-  /* background-image: -webkit-gradient(linear, 0 0, 0 100%,   from(#4d90fe), to(#357ae8)); */
-}
-
-.loginmodal-container a {
-  text-decoration: none;
-  color: #666;
-  font-weight: 400;
-  text-align: center;
-  display: inline-block;
-  opacity: 0.6;
-  transition: opacity ease 0.5s;
-} 
-
-.login-help{
-  font-size: 12px;
-}
-</style>
-</head>
-<body>
-
-  <div class="log" style="margin-top: 100px;">
-    <div class="loginmodal-container">
-         <h1 >Stall Management System</h1><br>
-        <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-          <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            {{ csrf_field() }}
-
-            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                <label for="email" >Username</label>
-
-                <div class="col-md-12">
-                    <input id="username" type="text" class="form-control" name="username" value="{{ old('username') }}" required autofocus>
-
-                    @if ($errors->has('username'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('username') }}</strong>
-                    </span>
-                    @endif
-                </div>
-            </div>            
-            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                <label for="password" control-label">Password</label>
-
-                <div class="col-md-12">
-                    <input id="password" type="password" class="form-control" name="password" required>
-
-                    @if ($errors->has('password'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('password') }}</strong>
-                    </span>
-                    @endif
+                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    Forgot Your Password?
+                                </a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <input type="submit" name="login" class="login loginmodal-submit" value="Login">
-        </form>
+        </div>
     </div>
 </div>
-
-
-
-<script src="{{ URL::asset('assets/jQuery/jquery-2.2.3.min.js')}}"></script>
-<script src="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
- <script src="{{ asset('js/app.js') }}"></script>
-<script type="text/javascript">
-    // $(document).on('click','#btnLog', function(e){
-    //     e.preventDefault();
-    //     $('.log').show();
-    //     $('.flex-center').hide();
-
-    // })
-    //   $(document).on('click','#back', function(e){
-    //     e.preventDefault();
-    //     $('.log').hide();
-    //     $('.flex-center').show();
-
-    // })
-</script>    
-</body>
-</html>
+@endsection
