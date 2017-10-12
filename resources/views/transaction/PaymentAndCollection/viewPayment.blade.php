@@ -395,9 +395,7 @@
                         , {
                         "data": "totalAmt"
                         }
-                        , {
-                        "data": "balance"
-                        }
+                        
                         , {
                         "data": "actions"
                         }
@@ -489,7 +487,6 @@
                     , 'dateFrom': dateFrom
                     , 'dateTo': dateTo
                     , 'money': totalAmt
-                    , 'amtPaid': temp5
                 }
                 , success: function (data) {
                     if ($.isEmptyObject(data.error)) {

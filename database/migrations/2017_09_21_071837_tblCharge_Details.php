@@ -18,7 +18,8 @@ class TblChargeDetails extends Migration
             $table->increments('chargeDetID');
             $table->integer('chargeID')->unsigned()->nullable();
             $table->integer('contractID')->unsigned();
-            $table->double('chargeAmt',10,2);
+            $table->double('chargeAmt',10,2)->nullable();
+            $table->string('chargeDesc')->nullable();
           
             $table->timestamps();
             $table->softDeletes();

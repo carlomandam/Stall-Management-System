@@ -52,7 +52,6 @@ class CollectionController extends Controller
         'dateFrom' => 'required',
         'dateTo' => 'required',
         'money' => 'required',
-        'amtPaid' => 'required',
         'contractID' => 'required'
         ];
         $messages = [
@@ -62,7 +61,6 @@ class CollectionController extends Controller
         'dateFrom' => 'Date From',
         'dateTo' => 'Date To',
         'money' => 'Total Amount',
-        'amtPaid' => 'Amount Received',
         'contractID' => 'Contract ID'
 
         ];

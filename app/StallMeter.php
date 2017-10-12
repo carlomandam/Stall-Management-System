@@ -26,8 +26,9 @@ class StallMeter extends Model
     	return $this->belongsTo('App\Contract','contractID');
     }
 
-    public function Billing_Details(){
-        return $this->hasMany('App\Billing_Details','stallMeterID');
+    public function Billing_Utilities(){
+        return $this->belongsToMany('App\Billing_Details','tblBilling_Utilities','stallMeterID',
+            'billDetID');
     }
 
 

@@ -16,7 +16,9 @@ use App\Charge_Details;
 use App\Billing_Details;
 use App\InitFeeDetail;
 use App\Charges;
+use App\Billing_Charges;
 use App\Transaction;
+use App\StallMeter;
 use DateTime;
 use PDF;
 use PDFF;
@@ -248,7 +250,7 @@ class PaymentController extends Controller{
         }
 
 
-        if($lastCollect == null && !in_array($lastCollect, $marketDays)){
+        if($lastCollect == null){
             try{
                 DB::beginTransaction();
                 $newCollection = Collection::create([
@@ -465,13 +467,17 @@ class PaymentController extends Controller{
             FROM tblpayment as payment 
             LEFT JOIN tblpayment_transaction as transactionDet on transactionDet.transactionID = payment.transactionID
             LEFT JOIN tblinitial_details as details on details.transactionID = transactionDet.transactionID
-            LEFT JOIN tblinitialfees as fees on fees.initID =  details.initID 
             LEFT JOIN tblpayment_collection as payCollect on payCollect.transactionID = transactionDet.transactionID
-            LEFT JOIN tblcollection_details as collectDet on collectDet.collectionDetID = payCollect.collectionDetID
-            LEFT JOIN tblcollection as collection on collection.collectionID = collectDet.collectionID 
+            LEFT JOIN tblcollection_details as collection on collection.collectionDetID = payCollect.collectionDetID
+            LEFT JOIN tblcollection as collect on collect.collectionID = collection.collectionID
             LEFT JOIN tblbilling_details as billdetails on billdetails.transactionID = transactionDet.transactionID
-            LEFT JOIN tblstallutilities_meterid as utilities on utilities.stallMeterID =  billdetails.stallMeterID
-            WHERE details.contractID = '$id' or collection.contractID = '$id' or utilities.contractID = '$id'");
+            LEFT JOIN tblinitial_details as initdetails on initdetails.transactionID = transactionDet.transactionID
+            LEFT JOIN tblbilling_charges as billcharge on billcharge.billDetID = billdetails.billDetID
+            LEFT JOIN tblcharge_details as chargedet on chargedet.chargeDetID = billcharge.chargeDetID
+            LEFT JOIN tblbilling_utilities as billutil on billutil.billDetID = billdetails.billDetID
+            LEFT JOIN tblstallutilities_meterid as util on util.stallMeterID = billutil.stallMeterID
+            WHERE details.contractID = '$id' or collect.contractID = '$id' or initdetails.contractID = '$id' or chargedet.contractID = '$id' 
+            or util.contractID = '$id'");
 
         foreach($tenantPaymentIDs as $tenantPaymentIDs){
             $array[]= $tenantPaymentIDs->paymentID;
@@ -539,7 +545,63 @@ class PaymentController extends Controller{
                 }
             }
 
-            $chargeAmount = Charge_Details::where('transactionID',$transactionID->transactionID)->get();
+          $billDetID =   Billing_Details::where('transactionID',$transactionID->transactionID)->get();
+
+            if(count($billDetID) > 0)
+            {
+                foreach ($billDetID as  $value) {
+
+                                
+                                           
+                       if(count($value) > 0){
+                            foreach($value->Billing_Utilities as $util)
+                            {
+                                 $utilamt = StallMeter::select('utilityAmt')->where('stallMeterID',$util->stallMeterID)->get();
+                                    if(count($utilamt) > 0){
+                                        foreach($utilamt as $utilamt){
+                                            $data[$recordCtr]["description"] = "Utility Fee";
+                                            $data[$recordCtr]["amount"] = number_format($utilamt->utilityAmt,2);
+                                            $recordCtr++;
+                                        }
+                                    }
+
+                               
+                                
+                                
+                                
+                            }
+                            $charge = Billing_Charges::where('billDetID',$value->billDetID)->get();
+                            foreach($charge as $charge){
+                               
+                                $chargeamt = Charge_Details::where('chargeDetID',$charge->chargeDetID)
+                                            ->whereNotNull('chargeID')->get();
+                                $modifyCharge = Charge_Details::where('chargeDetID',$charge->chargeDetID)
+                                            ->whereNotNull('chargeAmt')->get();
+                                            
+                                          
+                               if(count($chargeamt) > 0){
+                                    foreach($chargeamt as $charge){
+                                       $data[$recordCtr]['description'] = $charge->Charges->chargeName;
+                                       $data[$recordCtr]['amount'] = number_format($charge->Charges->chargeAmount,2);
+                                       $recordCtr++;
+                                    }
+                                }
+                                if(count($modifyCharge) > 0){
+                                    foreach($modifyCharge as $charge){
+                                       $data[$recordCtr]['description'] = $charge->chargeDesc;
+                                       $data[$recordCtr]['amount'] = number_format($charge->chargeAmt,2);
+                                       $recordCtr++;
+                                    }
+                                }
+                            }
+
+                        }
+                        
+                 
+                }   
+            } 
+
+         /*   $chargeAmount = Charge_Details::where('transactionID',$transactionID->transactionID)->get();
             if(count($chargeAmount)>0){
                 foreach ($chargeAmount as $amt) {
                     $data[$recordCtr]['description'] = $amt->Charges->chargeName;
@@ -556,7 +618,7 @@ class PaymentController extends Controller{
                     $recordCtr++;
                 }
             }
-
+       */
             $initAmt = InitFeeDetail::where('transactionID',$transactionID->transactionID)->get();
             if(count($initAmt)>0){
                 foreach ($initAmt as $amt) {
@@ -566,7 +628,7 @@ class PaymentController extends Controller{
                 }
             }
         }
-       return $data;
+        return $data;
 
     }
 
@@ -599,7 +661,7 @@ class PaymentController extends Controller{
             }
         }
 
-        $chargeAmount = Charge_Details::where('transactionID',$transactionID)->get();
+        /*$chargeAmount = Charge_Details::where('transactionID',$transactionID)->get();
         if(count($chargeAmount)>0){
             foreach ($chargeAmount as $amt) {
                 $total += $amt->Charges->chargeAmount;
@@ -611,7 +673,7 @@ class PaymentController extends Controller{
             foreach ($utilitiesAmt as $amt) {
                 $total += $amt->StallMeter->utilityAmt;
             }
-        }
+        }*/
 
         $initAmt = InitFeeDetail::where('transactionID',$transactionID)->get();
         if(count($initAmt)>0){

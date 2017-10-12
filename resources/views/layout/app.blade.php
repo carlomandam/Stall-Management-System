@@ -2,6 +2,7 @@
 <html>
 
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>MySeoul | @yield('title')</title>
@@ -76,12 +77,20 @@
             font-size: 18px;
         }
         
-        .system-name {
+        .system-name{
             font-size: 20px;
             color: white;
             margin-left: 30px;
             position: relative;
             top: 10px;
+        }
+        .system-time {
+            font-size: 14px;
+            color: white;
+            position: relative;
+            bottom: 12px;
+           
+
         }
         
         .select2-selection__choice {
@@ -96,8 +105,12 @@
             <a href="index2.html" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b></span> </a>
             <nav class="navbar navbar-fixed-top">
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a> <span class="system-name"><b>Stalls Management System</b></span>
+             
                 <ul class="nav navbar-nav navbar-right">
+
+                    
                     <li class="dropdown" style="margin-right: 10px;"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        
                         <span>{{ Auth::user()->name }}</span><span class="caret"></span> </a>
                         <ul class="dropdown-menu" role="menu">
                             <li> <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
@@ -111,6 +124,9 @@
                         </ul>
                     </li>
                 </ul>
+                  
+                         <p id = "time"><small class = "system-time pull-right" ></small></p>
+                 
             </nav>
         </header>
         <aside class="main-sidebar">
@@ -231,6 +247,7 @@
     <script src="{{ URL::asset('js/select2.js')}}"></script>
     <script src="{{ URL::asset('assets/datepicker/bootstrap-datepicker.min.js')}}"></script>
     <script>
+        setInterval(myTimer, 1000);
         $.widget.bridge('uibutton', $.ui.button);
         $.ajaxSetup({
             headers: {
@@ -245,6 +262,23 @@
         $('ul.sidebar-menu a').filter(function () {
             return this.href == url;
         }).parent().addClass('active');
+
+        function myTimer() {
+            var d = new Date();
+
+            var days = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+            var months = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+            var date = ((d.getDate()<10) ? "0" : "")+ d.getDate();
+            function fourdigits(number) {
+                return (number < 1000) ? number + 1900 : number;
+            }
+            today =  days[d.getDay()] + ", " +
+            months[d.getMonth()] + " " +
+            date + ", " +
+            (fourdigits(d.getYear())) ;
+            $('#time small').text(today +" "+d.toLocaleTimeString());
+           
+            } 
     </script> @yield('script') </body>
 
 </html>

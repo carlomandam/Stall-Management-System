@@ -16,7 +16,9 @@ class Charge_Details extends Model
     protected $fillable = [
     	'chargeID',
 	    'contractID',
-        'chargeAmt'
+        'chargeAmt',
+        'chargeDesc'
+
     
     ];
 
@@ -25,6 +27,9 @@ class Charge_Details extends Model
     }
     public function Contract(){
     	return $this->belongsTo('App\Contract','contractID');
+    }
+    public function Billing_Charges(){
+        return $this->belongsToMany('App\Billing_Details','tblBilling_Charges','chargeDetID','billDetID');
     }
     
 
