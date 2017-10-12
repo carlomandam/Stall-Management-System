@@ -213,7 +213,7 @@ class ApplicationController extends Controller
 
     function acceptRental(){
         $initFees = InitialFee::all();
-        if(count($initFees) > 1)
+        if(count($initFees) == 0)
             return "init";
         $contract = Contract::find($_POST['contract']);
         $rejects = Contract::where('stallID',$contract->stallID)->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->where('contractID','!=',$_POST['contract'])->delete();
@@ -234,8 +234,8 @@ class ApplicationController extends Controller
         $paymentLastID= count($paymentLastID) == 0 ? 1 : $paymentLastID->paymentID +1;
         $payID = 'PAYMENT-'.str_pad($paymentLastID, 5, '0', STR_PAD_LEFT);
         $initFees = $contract->Initial_Details;
-
-        return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','initFees'));
+        
+        return redirect("/ViewPayment/".$id);
     }
 
     function searchVendor(Request $request){

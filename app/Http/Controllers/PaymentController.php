@@ -108,87 +108,48 @@ class PaymentController extends Controller{
 
     public function index(){
         $totalUnpaid =[[]];
-
+        $recordCtr = 0;
+        $contractIDs = [];
+        $dates = [];
         $stalls =DB::select("Select stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHLName) as tenantName, contractID as contractID from tblcontractInfo left join tblstallholder as stallH on stallH.stallHID = tblcontractInfo.stallHID where tblcontractInfo.deleted_at IS NULL && tblcontractInfo.contractEnd >= ".date("Y-m-d"));
-
-        $getPeakDays = DB::table('tblUtilities as a')
-        ->where('utilitiesID','util_peak_days') 
-        ->select('utilitiesDesc')
-        ->get();
-
-        $peakDays = [];
-        foreach($getPeakDays as $getDays){
-            $peakDays = explode(",",$getDays->utilitiesDesc);
-        }
-
-        for($ctr = 0; $ctr < count($peakDays); $ctr++){
-            if($peakDays[$ctr] == "sun"){
-                  $peakDays[$ctr] = 0;
-              }
-              else if($peakDays[$ctr] == "mon"){
-                  $peakDays[$ctr] = 1;
-              }
-              else if($peakDays[$ctr] == "tue"){
-                  $peakDays[$ctr] = 2;
-              }
-              else if($peakDays[$ctr] == "wed"){
-                  $peakDays[$ctr] = 3;
-              }
-              else if($peakDays[$ctr] == "thur"){
-                  $peakDays[$ctr] = 4;
-              }
-              else if($peakDays[$ctr] == "fri"){
-                  $peakDays[$ctr] = 5;
-              }
-              else if($peakDays[$ctr] == "sat"){
-                  $peakDays[$ctr] = 6;
-              }
-              else{
-                  $peakDays[$ctr] = 7;
-              }
-        }
-
-        $unpaidCollections = DB::select('Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblpayment_collection as payment on payment.collectionDetID = det.collectionDetID LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE payment.collectionDetID IS NULL and det.collectDate <= NOW() ORDER BY collect.contractID');
-
-        $lastValue = null;
-        $totalAmt = 0;
-        $ctr = 0;
-        $count = count($unpaidCollections);
-        $lastCtr = 1;
-
+        $totalUnpaidAmt = 0;
+        $totalUnpaidAmts = [];
+       foreach($stalls as $stall)
+       {
+       
+        $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$stall->contractID' ORDER BY collect.contractID");
         foreach($unpaidCollections as $unpaid){
-            $stallRateID = Contract::find($unpaid->contractID)->pluck('stallRateID')->first();
-            $stallRateID = StallRate::find($stallRateID);
+                $dates[] = $unpaid->collectDate;
+            }
+            $stallRateID = Contract::select('stallRateID')->where('contractID',$stall->contractID)->first();
+           
+            if(count($dates)>0){
 
-            $regularRate = $stallRateID->dblRate;
-            if($stallRateID->peakRateType == 1){
-                $peakDaysRate = $stallRateID->dblPeakRate + $stallRateID->dblRate;
+                 $totalAmt = PaymentController::getHistRate($dates,$stallRateID->stallRateID);
+
+                 $totalUnpaid[$recordCtr]['contractID'] = $stall->contractID;
+                 foreach($totalAmt as $total){
+                 $totalUnpaidAmt += $total['amount'];
+                 
+                 }
+                 $totalUnpaid[$recordCtr]['amount'] = $totalUnpaidAmt;
+                
+                 
+
             }
             else{
-                $peakDaysRate = ($regularRate)*(($stallRateID->dblPeakRate / 100)) + $regularRate;
-            }
+                $totalUnpaid[$recordCtr]['contractID'] = $stall->contractID;
+                $totalUnpaidAmt += 0;
+                $totalUnpaid[$recordCtr]['amount'] = $totalUnpaidAmt;
+                
+            } $recordCtr++;
+           
 
-            if(in_array(Carbon::parse($unpaid->collectDate)->dayOfWeek, $peakDays)){
-                $totalAmt += $peakDaysRate;
-            }
-            else{
-                $totalAmt += $regularRate;
-            }
+       }
 
-            if($lastValue != $unpaid->contractID){
-                $totalUnpaid[$ctr]["contractID"] = $lastValue;
-                $totalUnpaid[$ctr]["totalUnpaid"] = $totalAmt;
-                $totalAmt = 0;
-                $ctr++;
-            }
-            
-            $lastCtr++;
-            $lastValue = $unpaid->contractID;
-            
             $collectionStat = Utilities::find("util_collection_status");
-        }
-          
-        return view('transaction/PaymentAndCollection/finalPayment',compact('collectionStat','stalls'));
+         
+             return view('transaction/PaymentAndCollection/finalPayment',compact('collectionStat','stalls','totalUnpaid'));
     }
 
     public function getRate($dates,$rateID){
@@ -353,7 +314,7 @@ class PaymentController extends Controller{
         $paymentLastID = Payment::whereRaw('paymentID = (select max(`paymentID`) from tblPayment)')->first();  
         $paymentLastID= count($paymentLastID) == 0 ? 1 : $paymentLastID->paymentID +1;
         $payID = 'PAYMENT-'.str_pad($paymentLastID, 5, '0', STR_PAD_LEFT);
-
+        $dateFrom = date('Y-m-d +1 days');
         if($contract->contractStart != null && $contract->contractEnd != null){
             $lastCollect = $this::checkPrevCollection($id);
             $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionDetID as detID, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$id' ORDER BY det.collectDate ASC");
@@ -373,6 +334,7 @@ class PaymentController extends Controller{
 
             $dateFrom = count($checkadvance) > 0 ? Carbon::parse($checkadvance)->addDays(1)->format('Y-m-d') : Carbon::today()->addDays(1)->format('Y-m-d');
         }
+
 
         return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','unpaid','dateFrom','unpaidCollections','lastCollect','dates'));
     }

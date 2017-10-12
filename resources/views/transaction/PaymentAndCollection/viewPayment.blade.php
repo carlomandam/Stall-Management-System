@@ -98,7 +98,8 @@
                                                         <div class="pull-right" style="margin-right:5%;width:10%">₱ {{number_format($i->InitialFee->initAmt,2,'.',',')}}</div>
                                                     </li>
                                                     <?php $total += $i->InitialFee->initAmt;?> @endforeach </ul>
-                                            </div> @endif @if(count($unpaidCollections) > 0 && isset($unpaidCollections))
+                                            </div> @endif 
+                                            @if(isset($unpaidCollections))
                                             <div class="col-md-12">
                                                 <label>Unpaid Collection</label>
                                                 <ul style="list-style:none"> @foreach($unpaidCollections as $u)
@@ -111,6 +112,7 @@
                                                     </li>
                                                     <?php $total += $u['amount']; ?> @endforeach </ul>
                                             </div>
+                                            @endif
                                             <div class="col-md-12">
                                                 <div class="pull-right col-md-4" style="margin-right:4%">
                                                     <hr style="border-color:black">
@@ -122,13 +124,13 @@
                                                     <input type="text" class="form-control" name="amtReceived" id="amtReceived" style="width:50%;display:inline"/></h5>
                                                     </div>
                                                 </div>
-                                            </div>@endif </div>
+                                            </div> </div>
                                 </div>
                             </div>
                             <div class="pull-right">
                                 <div class="defaultBtnSet col-md-12">
                                     <button type="button" class="btn btn-danger btn-flat" id="voidbtn"> Void Items</button>
-                                    <buttom type="submit" class="btn btn-primary btn-flat" id="paymentbtn"> <i class="fa fa-save"></i> Save</buttom>
+                                    <button type="submit" class="btn btn-primary btn-flat" id="paymentbtn"> <i class="fa fa-save"></i> Save</button>
                                 </div>
                                 <div class="voidBtnSet col-md-12" style="display:none">
                                     <button type="button" class="btn btn-danger btn-flat" id="cancelVoid">Cancel</button>
@@ -178,7 +180,10 @@
                                             <label>Date From:</label>
                                         </div>
                                         <div class="col-md-3">
-                                            <label id="dateFrom" name="dateFrom" class="form-control">{{$dateFrom}}</label>
+                                            <label id="dateFrom" name="dateFrom" class="form-control">
+                                            @if(isset($dateFrom))
+                                            {{$dateFrom}}</label>
+                                            @endif
                                         </div>
                                         <div class="col-md-2">
                                             <label>Date To:</label>
@@ -304,7 +309,7 @@
             $("input[name=unpaid\\[\\]]:checked").each(function(){
                 $val.push($(this).val());
             });
-            if($val.length == 0)
+            if($val.length == 0 && $("input[name=unpaid\\[\\]]").length != 0)
                 return false;
             else
                 return true;
@@ -331,12 +336,13 @@
             , errorContainer: "#newEC"
         });
         $("#paymentbtn").on("click", function () {
-            /*if (parseInt($("#amtReceived").val()) == 0 || $("#amtReceived").val() == '') {
-                toastr.warning("Amount received can't be 0.00");
+           /* if (('#amtReceived').val().length == 0) {
+                toastr.error("Input amount received");
             }
-            else {*/
-                $("#paymentForm").submit();
-            //}
+            else {
+                
+            }*/
+            $("#paymentForm").submit();
         });
         
         $("#voidbtn").on("click", function () {

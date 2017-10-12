@@ -16,9 +16,9 @@ class TblChargeDetails extends Migration
         //
         Schema::create('tblCharge_Details', function (Blueprint $table) {
             $table->increments('chargeDetID');
-            $table->integer('chargeID')->unsigned();
+            $table->integer('chargeID')->unsigned()->nullable();
             $table->integer('contractID')->unsigned();
-            $table->integer('transactionID')->unsigned()->nullable();
+            $table->double('chargeAmt',10,2);
           
             $table->timestamps();
             $table->softDeletes();
@@ -35,10 +35,7 @@ class TblChargeDetails extends Migration
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
 
-            $table->foreign('transactionID')->references('transactionID')
-                ->on('TblPayment_Transaction')
-                ->onUpdate('cascade')
-                ->onDelete('restrict');
+           
         });
     }
 

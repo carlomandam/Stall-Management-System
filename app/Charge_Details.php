@@ -15,8 +15,8 @@ class Charge_Details extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = [
     	'chargeID',
-    	'contractID',
-    	'paymentID'
+	    'contractID',
+        'chargeAmt'
     
     ];
 
@@ -26,8 +26,6 @@ class Charge_Details extends Model
     public function Contract(){
     	return $this->belongsTo('App\Contract','contractID');
     }
-     public function Transaction(){
-        return $this->belongsTo('App\Transaction','transactionID');
-    }
+    
 
 }

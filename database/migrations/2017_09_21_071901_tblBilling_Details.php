@@ -18,7 +18,6 @@ class TblBillingDetails extends Migration
             $table->increments('billDetID');
             $table->integer('billID')->unsigned();
             $table->integer('transactionID')->unsigned()->nullable();
-            $table->integer('stallMeterID')->unsigned();
             $table->timestamps();
             $table->softDeletes();
             
@@ -28,11 +27,7 @@ class TblBillingDetails extends Migration
                  ->onUpdate('cascade')
                  ->onDelete('restrict');
 
-            $table->foreign('stallMeterID')
-                 ->references('stallMeterID')
-                 ->on('tblstallutilities_meterid')
-                 ->onUpdate('cascade')
-                 ->onDelete('restrict');
+     
 
             $table->foreign('transactionID')->references('transactionID')
                 ->on('TblPayment_Transaction')

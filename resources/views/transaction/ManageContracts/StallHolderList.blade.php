@@ -211,8 +211,11 @@
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        var date = new Date(data.created_at);
-                        return date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear();
+                         var mydate = new Date(data.created_at);
+                         var month = ["January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"][mydate.getMonth()];
+                         var str = month +" "+mydate.getDate() +","+ mydate.getFullYear();
+                         return str;
                     }
                 }
                 , {

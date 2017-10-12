@@ -17,7 +17,7 @@ class TblInitialDetails extends Migration
          Schema::create('tblInitial_Details', function (Blueprint $table) {
             $table->increments('initDetID');
             $table->integer('initID')->unsigned();
-            $table->integer('transactionID')->unsigned();
+            $table->integer('transactionID')->unsigned()->nullable();
             $table->integer('contractID')->unsigned();
             $table->timestamps();
             $table->softDeletes();

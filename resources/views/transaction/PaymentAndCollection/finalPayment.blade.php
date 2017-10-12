@@ -36,16 +36,21 @@
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                 @foreach($stalls as $stall)
+                                                
+                                                 @foreach($stalls as $key => $stall)
+                                                  
                                                   <tr>
                                                      <td>{{$stall->stallCode}}</td>
                                                      <td>{{$stall->tenantName}}</td>
+
                                                      <td>
                                                      </td>
-                                                     <td></td>
+                                                     <td>Php {{number_format($totalUnpaid[$key++]['amount'],2)}}</td>
                                                      <td><a href="/ViewPayment/{{$stall->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a></td>
                                                   </tr>
-                                                @endforeach
+
+                                                 @endforeach
+
                                                 </tbody>
                                             
                                             </table>
