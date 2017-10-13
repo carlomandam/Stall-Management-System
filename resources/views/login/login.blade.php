@@ -11,7 +11,7 @@
     <div class="col-md-4">
       <section class="login-form">
        <div class="login">
-          <<form class="form-horizontal" method="POST" action="/login/Validate">
+          <form class="form-horizontal" method="POST" action="/login/Validate">
                         {{ csrf_field() }}
           <div>
             <img src="{{ URL::asset('image/LOGO.png') }}" width="150px" height="150px">

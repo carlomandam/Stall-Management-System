@@ -6,12 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\User;
+use Closure;
 
 class LoginController extends Controller
 {
     //
+    public function __construct()
+    {
+    $this->middleware('guest');
+    }
+
     public function login(){
 
+       
     	return view('/login/login');
     }
     
@@ -39,7 +46,7 @@ class LoginController extends Controller
         return redirect('/Dashboard');
         }
         if(Auth::user()->position == 'Employee'){
-            return redirect('/Request');
+            return redirect('/Dashboard');
         }
      
 	}
@@ -48,8 +55,5 @@ class LoginController extends Controller
          Auth::logout();
         return redirect('/login');
     } 
-    // protected function redirectTo()
-    // {
-    // return '/';
-    // }  
+   
 }
