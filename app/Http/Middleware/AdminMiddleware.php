@@ -20,8 +20,8 @@ class AdminMiddleware
         if(Auth::guard($guard)->check() && Auth::user()->position == 'Admin'){
             return $next($request);
         }
-        else
-            return redirect('/login');
+        
+            return redirect()->back();
     }
     
 }

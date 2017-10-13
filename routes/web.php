@@ -46,7 +46,7 @@ Route::get('/getStalls','StallController@getStalls');
 Route::post('/acceptRental','ApplicationController@acceptRental');
 Route::post('/rejectRental','ApplicationController@rejectRental');
 /////MAINTENANCE///////
-Route::resource('/', 'DashboardController');
+
 Route::get('/Building', function () {
     return view('Maintenance.Maintenance_Buildings');
 });
