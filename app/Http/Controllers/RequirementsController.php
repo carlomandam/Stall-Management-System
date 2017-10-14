@@ -63,8 +63,8 @@ class RequirementsController extends Controller
          if ($validator->passes()) {
 
             $requirements = new Requirements;
-            $requirements->reqName = $request->newReqName;
-            $requirements->reqDesc = $request->newReqDesc;
+            $requirements->reqName = trim($request->newReqName);
+            $requirements->reqDesc = trim($request->newReqDesc);
             $requirements->save();
             // $request->session()->flash('status', 'Task was successful!');
             // return Response::make(json_encode($errors), 200);

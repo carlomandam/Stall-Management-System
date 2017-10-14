@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use PDF;
-use App\StallRental;
+use App\Contract;
 use App\Charges;
 class PDFController extends Controller
 {
@@ -29,11 +29,11 @@ class PDFController extends Controller
 
     public function pdfcreate($rentalid)
     {
-        $rental = StallRental::with('Contract.StallRate.RateDetail','Stall.Floor.Building','StallHolder.ContactNo','Product')->where('StallRentalID',$rentalid)->first();
+        $contract = Contract::with('StallRate','Stall.Floor.Building','StallHolder.ContactNo','Product')->where('contractID',$rentalid)->first();
         $charges = Charges::all();
 
         $data = array(
-            'rental' => $rental,
+            'contract' => $contract,
             'charges' => $charges,
         );
         view()->share('data',$data);

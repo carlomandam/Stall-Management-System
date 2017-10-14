@@ -5,6 +5,12 @@
         width: 250px;
         text-align: center;
     }
+    .label{
+        font-size: 12px;
+    }
+    #contracts,#tenants{
+        display:none;
+    }
 </style>
 
 
@@ -12,11 +18,11 @@
     <div class="box-header with-border">
         <label class = "box-header-label"> 
         <div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose Query
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose Queries
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
-                <li><a href="">List of Current Contracts</a></li>
-                <li><a href="">List of Expiring Contracts</a></li>
+                <li><a href="" onclick="event.preventDefault(); loadExpiring();">List of Expiring Contracts</a></li>
+                <li><a href="" onclick="event.preventDefault(); loadTenants();">List of Deliquent Tenants</a></li>
               </ul>
         </div>
         </label>
@@ -26,18 +32,32 @@
         <div class="box-body">
 
             <div class="col-xs-12">
-                        <div class="table-responsive">
-                            <table id="tblstall" class="table table-striped" role="grid">
+                    <div class="table-responsive" id = "contracts">
+                        <table id="tblcontract" class="table table-striped" role="grid">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Stall ID</th>
-                                        <th style="width: 100px;">Stall Holder Name</th>
+                                        <th>Stall Code</th>
+                                        <th>Tenant Name</th>
+                                        <th>Contract Start Date</th>
                                         <th>Contract Expiry Date</th>
                                     </tr>
                                 </thead>
-                            </table>
-                        </div>      
+                        </table>
+                    </div>      
+            </div>
+
+             <div class="col-xs-12">
+                    <div class="table-responsive" id = "tenants">
+                        <table id="tbltenants" class="table table-striped" role="grid">
+                                <thead>
+                                    <tr>
+                                        <th>Tenant Name</th>
+                                        <th>Stall Code/s</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                        </table>
+                    </div>      
             </div>
         </div>
     </div>
@@ -51,23 +71,51 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-      \
-      $.get('/ActiveContracts', function(data){
-                var table = $('#tblstall').DataTable().clear();
+    
+      $('#tblcontract').DataTable();
+      $('#tbltenants').DataTable();
+
+    
+
+    });
+
+    function loadExpiring(){
+        $('#tenants').hide();
+        $('#contracts').fadeIn();
+          $.get('/ExpiringContracts', function(data){
+                var table = $('#tblcontract').DataTable().clear();
                 console.log(data);
                 $.each(data, function(i,data){
                     table.row.add([
                         data.stallID,
-                        data.stypeName + "("+ data.stypeArea +"m<sup>2</sup>)",
-                        "Floor "+data.floorID + "," + data.bldgName,
-                        (data.stallStatus == '1' ? "<label class = 'label label-success'>Available</label>" : (data.stallStatus == '2' ? 'Occupied' : 'Under Maintenance')),
-                        (data.stallRemarks == null ? 'No Remarks Available' : data.stallRemarks),
-                        "<button type='Submit' onclick='window.location="+'"'+"{{ url('/Registration/"+this.value+"') }}"+'"'+"' class='btn btn-flat btn-success' value = '"+data.stallID+"'><span class = 'fa fa-angle-double-right'></span>&nbspRegister</button> <button type='Submit' class='btn btn-flat btn-primary'data-toggle='modal' data-target='#view'><span class = 'fa fa-eye'></span>&nbspView</button> <button type='Submit' class='btn btn-flat btn-primary' data-toggle='modal' data-target='#update'><span class = 'fa fa-pencil'></span>&nbspUpdate</button>"
+                        data.tenantName,
+                        data.contractStart,
+                        data.contractEnd + " &nbsp &nbsp &nbsp <label> <span class = 'label label-warning'>will expire in "+ data.days +" days</span></label>"
+                        
                         
                         ]).draw();
                 });
             });
+    }
 
-    });
+      function loadTenants(){
+
+        $('#contracts').hide();
+        $('#tenants').fadeIn();
+          $.get('/ExpiringContracts', function(data){
+                var table = $('#tblcontract').DataTable().clear();
+                console.log(data);
+                $.each(data, function(i,data){
+                    table.row.add([
+                        data.stallID,
+                        data.tenantName,
+                        data.contractStart,
+                        data.contractEnd + " &nbsp &nbsp &nbsp <label> <span class = 'label label-warning'>will expire in "+ data.days +" days</span></label>"
+                        
+                        
+                        ]).draw();
+                });
+            });
+    }
     
 </script> @stop 

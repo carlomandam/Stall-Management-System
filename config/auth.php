@@ -45,6 +45,7 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
     ],
 
     /*
@@ -70,10 +71,6 @@ return [
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
@@ -97,6 +94,7 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
+     
     ],
 
 ];

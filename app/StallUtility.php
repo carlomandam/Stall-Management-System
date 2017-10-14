@@ -12,7 +12,10 @@ class StallUtility extends Model
     protected $table = "tblstall_utilities";
     protected $primaryKey = "stallUtilityID";
 
+
     public function Stall(){
         return $this->belongsTo('App\Stall','stallID');
     }
+
+    
 }

@@ -19,7 +19,10 @@ class Charges extends Model
     	'chargeType'
     ];
     
-    /*public function Bill(){
-        return $this->belongsToMany('App\Bill','bldgID');
-    }*/
+    public function Billing(){
+        return $this->belongsToMany('App\Billing','tblBill_Charges','chargeID','billID');
+    }
+    public function Charge_Details(){
+        return $this->hasMany('App\Charge_Details','chargeID');
+    }
 }

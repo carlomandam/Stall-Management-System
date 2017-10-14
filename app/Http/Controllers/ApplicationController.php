@@ -4,20 +4,18 @@ namespace App\Http\Controllers;
 use App;
 use DB;
 use App\StallHolder;
-use App\ContactNo;
 use App\Stall;
-use App\StalLRental;
 use App\StallRate;
 use App\StallType;
-use App\Rent;
-use App\ContactNos;
-use App\ContractPeriod;
+use App\ContactNo;
 use App\Contract;
 use App\Product;
-use App\ContractInfo;
-use App\InitFee;
-use App\InitBill;
+use App\InitialFee;
+use App\InitFeeDetail;
 use App\Billing;
+use App\Utilities;
+use App\Payment;
+use App\Requirements;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -25,324 +23,164 @@ use Illuminate\Routing\Redirector;
 
 class ApplicationController extends Controller
 {
-   
+    public function member(){
+        return view ('transaction.Member');
+    }
 
+    public function stall(){
+        return view ('transaction.Stalls');
+    }
 
-    public function view($stallid,$rentalid){
+    public function Memview(){
+        return view ('transaction.View');
+    }
+
+    public function Update(){
+        return view ('transaction.Update');
+    }
+
+    public function create($stallid){ 
         $prod = Product::all();
-        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentTennant')->where('stallID',$stallid)->first();
-        
-        
-        $rental =StallRental::with('StallHolder.ContactNo','Contract','Stall.StallType')->where('stallRentalID',$rentalid)->first();
-        
+        $req = Requirements::all();
+        $stall = Stall::with('StallType.StallRate','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentTennant')->where('stallID',$stallid)->first();
+
         if($stall == null)
             return redirect('/StallHolderList');
         else
-            return view('transaction.Application_temporary',compact('stall','rental','prod'));
-    }
-    
-    public function member()
-    {
-      return view ('transaction.Member');
+            return view('transaction.Application_temporary',compact('stall','prod','req'));
     }
 
-      public function stall()
-    {
-
-      return view ('transaction.Stalls');
-    }
-     public function Memview()
-     {
-      return view ('transaction.View');
-     }
-     public function Update()
-     {
-      return view ('transaction.Update');
-     }
-
-     public function create($stallid)
-     { 
+    public function updateRegistration($ID){
         $prod = Product::all();
-        $stall = Stall::with('StallType.StallRate.RateDetail','StallType.StallType','StallType.StallTypeSize','Floor.Building')->doesntHave('CurrentTennant')->where('stallID',$stallid)->first();
-            
-            /*DB::table('tblStall')
-            ->select('*')
-            ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
-            ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
-            ->leftJoin('tblstalltype_size as size', 'type.stypeSizeID', '=', 'size.stypeSizeID')
-            ->leftJoin('tblstallrate as rate', 'type.stype_SizeID', '=', 'rate.stype_SizeID')
-            ->leftJoin('tblstallrate_details as detail', 'rate.stallRateID', '=', 'detail.stallRateID')
-            ->leftJoin('tblFloor as floor','tblStall.floorID','=','floor.floorID')
-            ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
-            ->where('tblStall.stallID',$stallid)
-            ->first();*/
-        if($stall == null)
+        $contract = Contract::find($ID);
+        if(count($contract) == 0)
             return redirect('/StallHolderList');
-        else
-            return view('transaction.Application_temporary',compact('stall','prod')
-                     /*,compact('nextId','stall','buildingNames','buildingCount','contract_period')*/);
+
+        $stallHID = $contract->stallHID;
+        $stallHolderDetails = StallHolder::with('Requirement')->where('stallHID',$stallHID)->first();
+        $contacts = ContactNo::where('stallHID',$stallHolderDetails->stallHID)->get();
+        $req = Requirements::all();
+        $stallDetails = DB::table('tblStall')
+        ->select('*')
+        ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
+        ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
+        ->leftJoin('tblstalltype_size as size', 'type.stypeSizeID', '=', 'size.stypeSizeID')
+        ->leftJoin('tblFloor as floor','tblStall.floorID','=','floor.floorID')
+        ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
+        ->where('tblStall.stallID',$contract->stallID)
+        ->first();
+        return view('transaction/ManageContracts/Application_View',compact('contract','stallHolderDetails','stallDetails','contacts','prod','req'));
     }
- 
 
-    
-    function addVendor()
-    { 
-      /*if(isset($_POST['ven_name'])) //if search existing record
-      {
-        $vendor = Vendor::find($_POST['ven_name']);
-     
-        try{
-                $input = Input::get('stallno_name');
-                $count = count($input);
-                  foreach($input as $Input)
-                 {   $rent = new Rent;
-                    $rent->stallID = $Input;
-                    $rent->venID = $vendor->venID;
-                    $date1 = $_POST['datepicker'];
-                    $date1 = date('Y-m-d', strtotime($date1));
-                    $rent->rentStartDate = $date1;
-                    $rent->rentRegDate = date('Y-m-d');
-                    $rent->rentBusinessName = $_POST['businessName'];
-                    $rent->rentProdDesc = $_POST['prods']; 
-                    $rent->assocHolder_1 =$_POST['assoc_one'];
-                    $rent->assocHolder_2 =$_POST['assoc_two'];
-                   
+    function newApplication(){
+        if(!isset($_POST['ven_name'])){
+            $holder = StallHolder::where('stallHID',$this->newStallHolder())->first();
+        }else{
+            $holder = StallHolder::where('stallHID',$_POST['ven_name'])->first();
 
-
-                    if( $rent->save())
-                    {
-                    
-
-                      $contract = new Contract;
-                      $contract->rentID = $rent->rentID;
-                     
-                      $contract->contractStatus = 0;
-
-                      $contract->save();
-                      if($contract->save())
-                      { $periodID = $_POST['length'];
-                        $length = (!isset($_POST['specific_no']) ? 1 : $_POST['specific_no']);
-                            
-                         
-                        $contract->contractPeriods()->attach($periodID, ['contractLength' => $length ]);
-                        
-                      }
-                      else
-                      {
-                        App::abort(500,"Error");
-                      }
-                    
-                    }
-                    else
-                    {
-                      App::abort(500,'Error');
-                    }
-               }
-           
-            }catch(Exception $e)
-            {
-              $vendor->forceDelete();
+            foreach($_POST['numbers'] as $no){
+                $contact = ContactNo::where('contactNumber',$no)->first();
+                if($no != '' && count($contact) == 0){
+                    $contact = new ContactNo;
+                    $contact->contactNumber = $no;
+                    $contact->stallHID = $holder->stallHID; 
+                    $contact->save();
+                }
             }
-      }
-      else{*/
-        $stallHolder = new StallHolder;
 
-        $stallHolder->stallHFName = $_POST['fname'];
-        $stallHolder->stallHMName = $_POST['mname'];
-        $stallHolder->stallHLName =  $_POST['lname'];
-        $stallHolder->stallHSex =  $_POST['sex'];
-        $stallHolder->stallHAddress =  $_POST['address'];
-        $stallHolder->stallHBday =  $_POST['DOBYear']."-". $_POST['DOBMonth']."-". $_POST['DOBDay'];
-        $stallHolder->stallHEmail =  $_POST['email'];
-
-        $savedStallHolder = $stallHolder->save();
-
-        if($savedStallHolder){
-            try{
-               
-                    $rent = new StallRental;
-                    if(isset($_POST['dispStallID']))
-                    {
-                      $stallid = $_POST['dispStallID'];
-                    
-                    }
-                    else{
-                    $stallid = $_POST['dispStallID'];
-                    $rent->stallID = $stallid;
-                    $rent->stallHID = $stallHolder->stallHID;
-                    $rent->orgName = $_POST['orgname'];
-                    $date1 = $_POST['datepicker'];
-                    $date1 = date('Y-m-d', strtotime($date1));
-                    $rent->startingDate = $date1;
-                    $rent->businessName = $_POST['businessName'];
-                    $rent->stallRentalStatus = 0;
-                    }
-                    if( $rent->save())
-                    {
-                      
-                    foreach($_POST['numbers'] as $no)
-                    {
-                      $contact = new ContactNos;
-                      $contact->stallRentalID = $rent->stallRentalID;
-                      $contact->ContactNos()->attach($no);
-                      
-                    }
-
-                     
-
-                    if(isset($_POST['assoc_one']))
-                    {
-                      $stallholder = new StallHolder;
-                      $stallholder->stallH_assocName = $_POST['assoc_one'];
-                      $stallholder->save();
-
-                      $stallholder->stallRentalID = $rent->stallRentalID;
-                      $associd = $stallholder->stallH_assocID;
-                      $stallholder->StallHolder()->attach($associd);
-                    }
-                    if(isset($_POST['assoc_two']))
-                    {
-                      $stallholder = new StallHolder;
-                      $stallholder->stallH_assocName = $_POST['assoc_two'];
-                      $stallholder->save();
-
-                      $stallholder->stallRentalID = $rent->stallRentalID;
-                      $associd = $stallholder->stallH_assocID;
-                      $stallholder->StallHolder()->attach($associd);
-                    }
-
-                    }
-                    else
-                    {
-                      App::abort(500,'Error');
-                    }
-               
-           
-            }catch(Exception $e)
-            {
-              $vendor->forceDelete();
+            if(isset($_POST['req'])){
+                foreach ($_POST['req'] as $req) {
+                    $holder->Requirement()->attach($req);
+                }
             }
         }
-     
-     // }
-  
+        $contract = Contract::where('stallHID',$holder->stallHID)->where('stallID',$_POST['stallid'])->get();
+        if(count($contract) != 0)
+            return 'exist';
+        $contract = new Contract;
+        $contract->stallID = $_POST['stallid'];
+        $contract->stallHID = $holder->stallHID;
+        $contract->orgName = $_POST['orgname'];
+        $contract->businessName = $_POST['businessName'];
+        $contract->stallRateID = $_POST['rateid'];
+        $contract->save();
 
-    }
-function checkEmail()
-{
-    $vendor =  Vendor::where('venEmail',$_POST['email'])->get();
-    if(count($vendor) != 0)
-    
-        return "false";
-    
-    else
-    
-        return "true";
-}
- function getVendor(){
+        if($contract->save()){
+            foreach($_POST['products'] as $prod){
+                $product = Product::where('productID',$prod)->where('productName',"!=",$prod)->first();
+                if(count($product) == 0){
+                    $product = new Product;
+                    $product->productName = $prod;
+                    if($product->save()){
+                        $product->Contract()->attach($contract->contractID);
+                    }
+                }else
+                    $product->Contract()->attach($contract->contractID);
+            }
 
-      $vendor = Vendor::all();
-         //select venID, CONCAT name, actions//
-      $data = array();
-      foreach ($vendor as $ven) {
-            $ven['actions'] = "
-                    <button class='btn btn-primary'  data-toggle=
-                  'modal' data-target='#update' onclick='getInfo(this.value)' value = '".$ven['venID']."' >Update</button>
-                    <button class='btn btn-danger' data-toggle=
-                  'modal' data-target='#delete'>Delete</button>
-            ";
-        $data['data'][] = $ven;
-      }
-        
-      if(count($data) == 0){
-          echo '{
-              "sEcho": 1,
-              "iTotalRecords": "0",
-              "iTotalDisplayRecords": "0",
-            "aaData": []
-          }';
-
-          return;
-      }
-        
-        else
-        return (json_encode($data));
-    }
-    function getVendorInfo()
-    {
-        $vendor = Vendor::where('venID',$_POST['id'])->get();
-        return (json_encode($vendor));
-    }
-
-    function contractTable()
-    {
-      $rent = Rent::with('Vendor')->get();
-
-    }
-
-    function updateVendor()
-    {
-        $hasChange = false;
-        $vendor =  Vendor::find($_POST['id']);
-        $vendor->venOrgName = $_POST['orgname'];
-        $vendor->venFName = $_POST['fname'];
-        $vendor->venMName = $_POST['mname'];
-        $vendor->venLName =  $_POST['lname'];
-        $vendor->venSex =  $_POST['sex'];
-        $vendor->venAddress =  $_POST['address'];
-        $vendor->venBday =  $_POST['DOBYear']."-". $_POST['DOBMonth']."-". $_POST['DOBDay'];
-        $vendor->venContact = $_POST['mob'];
-        $vendor->venEmail =  $_POST['email'];;
-
-           if($vendor->isDirty()){
-            $vendor->save();
-            $hasChange = true;
+            return  "/UpdateRegistration/".$contract->contractID;
         }
-             echo $hasChange;
     }
 
-    function searchVendor(Request $request){
-    $data = [];
-
-        if($request->has('q')){
-            $search = $request->q;
-            $data = StallHolder::with('ContactNo')->where('stallHFName','LIKE',"%$search%")
-                ->orWhere('stallHLName','LIKE',"%$search%")->get();
-            /*$data = DB::table("tblstallholder")
-                ->select("*",DB::raw("CONCAT(stallHFName,' ',stallHLName) as full_name"))
-                ->where('stallHFName','LIKE',"%$search%")
-                ->orWhere('stallHLName','LIKE',"%$search%")->join('tblContactNos','tblstallholder.stallHID','=','tblContactNos.stallHID')->groupBy('tblstallholder.stallHID')
-                ->get();*/
+    function updateApplication(){
+        $contract = Contract::find($_POST['contract']);
+        $holder = $contract->StallHolder;
+        $contract->businessName = $_POST['businessName'];
+        $contract->orgName = $_POST['orgname'];
+        if($contract->isDirty()){
+            $contract->save();
         }
 
-        return response()->json($data);
-  }
+        if(isset($_POST['products'])){
+            for($i = 0;$i < count($_POST['products']);$i++){
+                if(!$contract->Product->contains($_POST['products'][$i])){
+                    $product = Product::where('productID',$_POST['products'][$i])->orWhere('productName',"==",$_POST['products'][$i])->first();
+                    if(count($product) == 0){
+                        $product = new Product;
+                        $product->productName =  $_POST['products'][$i];
+                        if($product->save()){
+                            $product->Contract()->attach($contract->contractID);
+                        }
+                    }
+                    else
+                        $product->Contract()->attach($contract->contractID);
+                }
+            }
 
-    function displaySearch()
-    {
-       $vendor = Vendor::where('venID',$_GET['id'])->get();
-        return (json_encode($vendor));
-    }
-
-
-     public function pdfview(Request $request)
-    {
-        $items = DB::table("tblvendor")->get();
-        view()->share('items',$items);
-
-        if($request->has('download')){
-            $pdf = PDF::loadView('pdfview');
-            return $pdf->download('pdfview.pdf');
+            foreach ($contract->Product as $prod) {
+                if(!in_array($prod->productID, $_POST['products'])){
+                    $contract->Product()->detach($prod->productID);
+                }
+            }
+        }else{
+            foreach ($contract->Product as $prod) {
+                $contract->Product()->detach($prod->productID);
+            }
         }
 
-        return view('pdfview');
+        if(isset($_POST['req'])){
+            foreach ($_POST['req'] as $req) {
+                if(!$holder->Requirement->contains($req))
+                    $holder->Requirement()->attach($req);
+            }
+
+            foreach ($holder->Requirement as $id) {
+                if(!in_array($id->reqID, $_POST['req'])){
+                    $holder->Requirement()->detach($id->reqID);
+                }
+            }
+        }else{
+            foreach ($holder->Requirement as $id) {
+                $holder->Requirement()->detach($id->reqID);
+            }
+        }
     }
-    
+
     function newStallHolder(){
         $fname = trim(preg_replace('/\s\s+/',' ', str_replace("\n", " ", $_POST['fname'])));
         $mname = trim(preg_replace('/\s\s+/',' ', str_replace("\n", " ", $_POST['mname'])));
         $lname = trim(preg_replace('/\s\s+/',' ', str_replace("\n", " ", $_POST['lname'])));
-        
+
         $check = StallHolder::where('stallHFName',$fname)->where('stallHMName',$mname)->where('stallHLName',$lname)->first();
         if(count($check) != 0)
             return $check->stallHID;
@@ -350,7 +188,7 @@ function checkEmail()
         $holder->stallHFName = $fname;
         $holder->stallHMName = $mname;
         $holder->stallHLName = $lname;
-        $holder->stallHBday = date_format(date_create($_POST['DOBYear'].'-'.$_POST['DOBMonth'].'-'.$_POST['DOBDay']),"Y-m-d");
+        $holder->stallHBday = date("Y-m-d",strtotime($_POST['DOB']));
         $holder->stallHEmail = $_POST['email'];
         $holder->stallHSex = $_POST['sex'];
         $holder->stallHAddress = $_POST['address'];
@@ -363,126 +201,68 @@ function checkEmail()
                     $contact->save();
                 }
             }
+
+            if(isset($_POST['req'])){
+                foreach ($_POST['req'] as $req) {
+                    $holder->Requirement()->attach($req)->withTimestamps();
+                }
+            }
         }
         return $holder->stallHID;
     }
-    
+
     function acceptRental(){
-        $bill = new Billing;
-        $bill->billDateFrom = $date = date('Y-m-d');
-        $bill->billDateTo = $date = date('Y-m-d');
-        $bill->billDueDate = $date = date('Y-m-d');
-        $bill->stallRentalID = $_POST['rental'];
-        if($bill->save()){
-            $initialFees = InitFee::all();
-            foreach($initialFees as $fee){
-                $fee->Billing()->attach($bill->billID);
-            }
+        $initFees = InitialFee::all();
+        if(count($initFees) == 0)
+            return "init";
+        $contract = Contract::find($_POST['contract']);
+        $rejects = Contract::where('stallID',$contract->stallID)->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->where('contractID','!=',$_POST['contract'])->delete();
+
+        foreach ($initFees as $init) {
+            $ifd = new InitFeeDetail;
+            $ifd->contractID = $contract->contractID;
+            $ifd->initID = $init->initID;
+            $ifd->save();
         }
 
-        $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
-        $rejects = StallRental::where('stallID',$rental->stallID)->where('stallRentalStatus',2)->where('stallRentalID','!=',$_POST['rental'])->get();
-        
-        foreach($rejects as $reject){
-            $reject->stallRentalStatus = 3;
-            $reject->save();
-        }
-        $rental->stallRentalStatus = 1;
-        $rental->save();
+        return $contract->contractID;
     }
-    
+
+    function goToPayment($id){
+        $contract = Contract::find($id);
+        $paymentLastID = Payment::whereRaw('paymentID = (select max(`paymentID`) from tblPayment)')->first();  
+        $paymentLastID= count($paymentLastID) == 0 ? 1 : $paymentLastID->paymentID +1;
+        $payID = 'PAYMENT-'.str_pad($paymentLastID, 5, '0', STR_PAD_LEFT);
+        $initFees = $contract->Initial_Details;
+        
+        return redirect("/ViewPayment/".$id);
+    }
+
+    function searchVendor(Request $request){
+        $data = [];
+
+        if($request->has('q')){
+            $search = $request->q;
+            $data = StallHolder::with('ContactNo')->where('stallHFName','LIKE',"%$search%")
+            ->orWhere('stallHLName','LIKE',"%$search%")->get();
+        }
+
+        return response()->json($data);
+    }
+
+    function getVendorData(Request $request){
+        $data = [];
+
+        if($request->has('id')){
+            $data = StallHolder::with('ContactNo')->find($request->id);
+        }
+
+        return response()->json($data);
+    }
+
     function rejectRental(){
         $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
         $rental->stallRentalStatus = 3;
         $rental->save();
     }
-    
-    function newApplication(){
-        if(!isset($_POST['ven_name'])){
-            $holder = StallHolder::where('stallHID',$this->newStallHolder())->first();
-        }else{
-            $holder = StallHolder::where('stallHID',$_POST['ven_name'])->first();
-            
-            foreach($_POST['numbers'] as $no){
-                $contact = ContactNo::where('contactNumber',$no)->first();
-                if($no != '' && count($contact) == 0){
-                    $contact = new ContactNo;
-                    $contact->contactNumber = $no;
-                    $contact->stallHID = $holder->stallHID; 
-                    $contact->save();
-                }
-            }
-        }
-        $rental = StallRental::where('stallHID',$holder->stallHID)->where('stallID',$_POST['dispStallID'])->get();
-        if(count($rental) != 0)
-            return 'exist';
-        $rental = new StallRental;
-        $rental->stallID = $_POST['dispStallID'];
-        $rental->stallHID = $holder->stallHID;
-        $rental->orgName = $_POST['orgname'];
-        $rental->businessName = $_POST['businessName'];
-        $rental->startingDate = date_format(date_create($_POST['startDate']),"Y-m-d");
-        $rental->stallRentalStatus = 2;
-        
-        if($rental->save()){
-            $contract = new Contract;
-            $contract->stallRentalID = $rental->stallRentalID;
-            $contract->contractStart = date_format(date_create($_POST['startDate']),"Y-m-d");
-            $contract->contractEnd = (isset($_POST['endDate'])) ? date_format(date_create($_POST['endDate']),"Y-m-d") : null;
-            $contract->stallRateID = $_POST['rateid'];
-            $contract->save();
-            
-            foreach($_POST['products'] as $prod){
-                $product = Product::where('productID',$prod)->where('productName',"!=",$prod)->first();
-                if(count($product) == 0){
-                    $product = new Product;
-                    $product->productName = $prod;
-                    if($product->save()){
-                        $product->StallRental()->attach($rental->stallRentalID);
-                    }
-                }
-            }
-        }
-    }
-    
-    function updateApplication(){
-        $rental = StallRental::with('Product')->where('stallRentalID',$_POST['rental'])->first();
-        $contract = Contract::where('stallRentalID',$_POST['rental'])->first();
-        
-        $rental->businessName = $_POST['businessName'];
-        $rental->orgName = $_POST['orgname'];
-        $rental->startingDate = date_format(date_create($_POST['startdate']),"Y-m-d");
-        if($rental->isDirty()){
-            $rental->save();
-        }
-        
-        $contract->contractStart = date_format(date_create($_POST['startdate']),"Y-m-d");
-        $contract->contractEnd = date_format(date_create($_POST['enddate']),"Y-m-d");
-        if($contract->isDirty()){
-            $contract->save();
-        }
-        
-        $existing = array();
-        foreach($rental->Product as $prod){
-            if(in_array($prod->productID,$_POST['products']))
-                array_push($existing,$prod->productID);
-            else
-                $rental->Product()->detach($prod->productID);
-        }
-        
-        for($i = 0;$i < count($_POST['products']);$i++){
-            if(!in_array($_POST['products'][$i],$existing)){
-                $product = Product::where('productID',$_POST['products'][$i])->where('productName',"!=",$prod)->first();
-                if(count($product) == 0){
-                    $product = new Product;
-                    $product->productName =  $_POST['products'][$i];
-                    if($product->save()){
-                        $product->StallRental()->attach($rental->stallRentalID);
-                    }
-                }
-                else
-                    $product->StallRental()->attach($rental->stallRentalID);
-            }
-        }
-    }
-  }
+}

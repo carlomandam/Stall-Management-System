@@ -7,14 +7,14 @@
     <div class="box-body">
         <div class="table-responsive">
             <div class="defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNewCharge</button>
-                <div class=" pull-right" id="archive"> <a href="{{ url('/StallTypeArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
+                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp;New Charge</button>
+                <div class=" pull-right" id="archive"> <a href="{{ url('/StallTypeArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbsp;Archive</a> </div>
             </div>
             <table id="table" class="table table-bordered table-striped" role="grid">
                 <thead>
                     <tr>
                         <th>Charge Name</th>
-                        <th>Amount/Rate</th>
+                        <th>Amount</th>
                         <th>Description</th>
                         <th>Actions</th>
                     </tr>
@@ -26,7 +26,6 @@
 <div class="modal fade" id="new" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <form action="" method="post" id="newform">
-            <input type="hidden" id="_token" name="_token" value="<?php echo csrf_token(); ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -38,25 +37,20 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="penName">Charge Name*</label>
-                                <input type="text" class="form-control" name="Name" placeholder="Charge Name" /> 
-                            </div>
+                                <label for="penName">Charge Name&nbsp;<span class="required">*</span></label>
+                                <input type="text" class="form-control" name="Name" placeholder="ex. Environmental Fee" /> </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stypeWidth">Amount*</label>
-                                <div class="input-group">
+                            <label for="stypeWidth">Amount&nbsp;<span class="required">*</span></label>
+                            <div class="form-group ratediv">
+                                <div class="input-group"> <span class="input-group-addon">Php.</span>
                                     <input type="text" class="form-control" name="Amount" /> </div>
-                                <input type="radio" name="Type" value="1" />&nbsp;
-                                <label>Amount</label> &nbsp;&nbsp;
-                                <input type="radio" name="Type" value="2" />&nbsp;
-                                <label>Percent</label>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="days">Description</label>
-                                <textarea class="form-control" name="Desc" placeholder="Fee Description"></textarea>
+                                <textarea class="form-control" name="Desc"></textarea>
                             </div>
                         </div>
                     </div>
@@ -72,7 +66,6 @@
 <div class="modal fade" id="update" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <form action="" method="post" id="updateform">
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             <input type="hidden" name="id">
             <div class="modal-content">
                 <div class="modal-header">
@@ -85,37 +78,31 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="penName">Charge Name*</label>
-                                <input type="text" class="form-control" name="Name" placeholder="Charge Name" /> </div>
+                                <label for="penName">Charge Name&nbsp;<span class="required">*</span></label>
+                                <input type="text" class="form-control" name="Name" /> </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stypeWidth">Amount*</label>
-                                <div class="input-group">
+                            <label for="stypeWidth">Amount&nbsp;<span class="required">*</span></label>
+                            <div class="form-group ratediv">
+                                <div class="input-group"> <span class="input-group-addon">Php.</span>
                                     <input type="text" class="form-control" name="Amount" /> </div>
-                                <input type="radio" name="Type" value="1" />&nbsp;
-                                <label>Amount</label> &nbsp;&nbsp;
-                                <input type="radio" name="Type" value="2" />&nbsp;
-                                <label>Percent</label>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="days">Description</label>
-                                <textarea class="form-control" name="Desc" placeholder="Fee Description"></textarea>
+                                <textarea class="form-control" name="Desc"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!-- <label style="float:left">All labels with "*" are required</label> -->
                     <button class="btn btn-info" style="background-color:#191966">Submit</button>
                 </div>
             </div>
         </form>
     </div>
-</div>
-@stop @section('script')
+</div> @stop @section('script')
 <script type="text/javascript">
     var obj;
     var chk;
@@ -124,6 +111,7 @@
             rules: {
                 Name: {
                     required: true
+                    , maxlength: 200
                     , remote: {
                         url: '/checkChargeName'
                         , type: 'post'
@@ -131,14 +119,12 @@
                             Name: function () {
                                 return $("#newform").find("input[name=Name]").val();
                             }
-                            , _token: function () {
-                                return $("#_token").val();
-                            }
                         }
                     }
                 }
                 , Amount: {
                     required: true
+                    , number: true
                 }
             }
             , messages: {
@@ -157,35 +143,44 @@
             , errorPlacement: function (error) {
                 error.appendTo('#new .print-error-msg ul');
             }
-            , invalidHandler : function() {
-                $('#new .print-error-msg').css('display','block');
+            , invalidHandler: function () {
+                $('#new .print-error-msg').css('display', 'block');
+            }
+            , submitHandler: function (form) {
+                var formData = new FormData(form);
+                $.ajax({
+                    type: "POST"
+                    , url: '/addCharge'
+                    , data: formData
+                    , processData: false
+                    , contentType: false
+                    , context: this
+                    , success: function (data) {
+                        toastr.success('Added New Charge');
+                        $('#table').DataTable().ajax.reload();
+                        $('#new').modal('hide');
+                    }
+                });
             }
         });
         $("#updateform").validate({
             rules: {
-                penName: {
+                Name: {
                     required: true
+                    , maxlength: 200
                 }
-                , penAmount: {
+                , Amount: {
                     required: true
                     , number: true
                 }
-                , days: {
-                    required: true
-                    , digits: true
-                }
             }
             , messages: {
-                penName: {
-                    required: "Please enter Penalty Name"
+                Name: {
+                    required: "Please enter Charge Name"
                 }
-                , penAmount: {
+                , Amount: {
                     required: "Please enter Amount"
                     , number: "Invalid Amount"
-                }
-                , days: {
-                    required: "Please enter numbe of days"
-                    , digits: "Please enter a valid number of days"
                 }
             }
             , errorClass: "error-class"
@@ -194,11 +189,29 @@
             , errorPlacement: function (error) {
                 error.appendTo('#update .print-error-msg ul');
             }
-            , invalidHandler : function() {
-                $('#update .print-error-msg').css('display','block');
+            , invalidHandler: function () {
+                $('#update .print-error-msg').css('display', 'block');
             }
-            , successHandler : function() {
-                $('#update .print-error-msg').css('display','none');
+            , successHandler: function () {
+                $('#update .print-error-msg').css('display', 'none');
+            }
+            , submitHandler: function (form) {
+                var formData = new FormData($(this)[0]);
+                $.ajax({
+                    type: "POST"
+                    , url: '/updateCharge'
+                    , data: formData
+                    , processData: false
+                    , contentType: false
+                    , context: this
+                    , success: function (data) {
+                        if (data) {
+                            toastr.success('Updated Charge');
+                            $('#table').DataTable().ajax.reload();
+                            $('#update').modal('hide');
+                        }
+                    }
+                });
             }
         });
         $('#table').DataTable({
@@ -227,44 +240,6 @@
                     }
   ]
         });
-        $("#newform").submit(function (e) {
-            e.preventDefault();
-            if (!$("#newform").valid()) return;
-            var formData = new FormData($(this)[0]);
-            $.ajax({
-                type: "POST"
-                , url: '/addCharge'
-                , data: formData
-                , processData: false
-                , contentType: false
-                , context: this
-                , success: function (data) {
-                    toastr.success('Added New Charge');
-                    $('#table').DataTable().ajax.reload();
-                    $('#new').modal('hide');
-                }
-            });
-        });
-        $("#updateform").unbind('submit').bind('submit', function (e) {
-            e.preventDefault();
-            if (!$("#updateform").valid()) return;
-            var formData = new FormData($(this)[0]);
-            $.ajax({
-                type: "POST"
-                , url: '/updateCharge'
-                , data: formData
-                , processData: false
-                , contentType: false
-                , context: this
-                , success: function (data) {
-                    if (data) {
-                        toastr.success('Updated Charge');
-                        $('#table').DataTable().ajax.reload();
-                        $('#update').modal('hide');
-                    }
-                }
-            });
-        });
         $(".modal").on('hidden.bs.modal', function () {
             $(this).find('form').validate().resetForm();
             $(this).find('form')[0].reset();
@@ -276,16 +251,14 @@
             type: "POST"
             , url: '/chargeInfo'
             , data: {
-                "_token": "{{ csrf_token() }}"
-                , "id": id
+                "id": id
             }
             , success: function (data) {
                 obj = JSON.parse(data);
                 $('#update').find('input[name=id]').val(obj.chargeID);
                 $('#update').find('input[name=Name]').val(obj.chargeName);
                 $('#update').find('input[name=Amount]').val(obj.chargeAmount);
-                $('#update').find('input[name=Type][value=' + obj.chargeType + ']').attr('checked', true);
-                //$('#update').find('textarea[name=desc]').val(obj.penDesc);
+                $('#update').find('textarea[name=Desc]').val(obj.chargeDesc);
                 $('#update').modal('show');
             }
         });
@@ -306,3 +279,14 @@
         });
     }
 </script> @stop
+<style>
+    .input-group-addon {
+        background-color: gray !important;
+        color: white;
+    }
+    
+    .errordiv {
+        color: #D8000C;
+        background-color: #FFBABA;
+    }
+</style>

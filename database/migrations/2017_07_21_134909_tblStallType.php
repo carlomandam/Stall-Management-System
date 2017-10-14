@@ -15,12 +15,10 @@ class TblStallType extends Migration
     {
         Schema::create('tblStallType', function (Blueprint $table) {
             $table->increments('stypeID');
-            $table->string('stypeName',200);
-            $table->string('stypeDesc',200)->nullable();
+            $table->string('stypeName');
+            $table->text('stypeDesc')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-
         });
     }
 

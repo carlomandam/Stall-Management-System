@@ -25,4 +25,16 @@ class Floor extends Model
     public function Stall(){
         return $this->hasMany('App\Stall','floorID');
     }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function($floor) { // before delete() method call this
+             $floor->Stall()->withTrashed()->delete();
+        });
+
+        static::restoring(function($floor) {
+             $floor->Stall()->restore();
+        });
+    }
 }

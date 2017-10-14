@@ -15,17 +15,19 @@ class TblmonthlyReading extends Migration
     {
         Schema::create('tblMonthlyReading', function (Blueprint $table) {
             $table->increments('readingID');
-            $table->integer('stallUtilityID')->unsigned()->index();
-            $table->integer('readingConsumption');
+            $table->integer('prevReading');
+            $table->integer('presReading');
             $table->datetime('readingFrom');
             $table->datetime('readingTo');
+            $table->double('totalBillAmount',8,2);
+            $table->double('multiplier',8,2);
+            $table->integer('utilType');
+            $table->integer('isFinalize')->nullable();
+          
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('stallUtilityID')->references('stallUtilityID')
-                  ->on('tblStall_Utilities')
-                  ->onUpdate('cascade')
-                  ->onDelete('restrict');
+        
          });
             
     }

@@ -2,16 +2,16 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
-use App\StallRental;
 use App\StallHolder;
 use App\Stall;
 use App\ContactNo;
 use App\Product;
+use App\Contract;
 class ManageContractsController extends Controller
 {
     //'
     public function getAvailableStalls(){
-        $stalls = Stall::with('Floor.Building')->withCount('Pending')->has('StallType.StallRate.RateDetail')->doesntHave('CurrentTennant')->get();
+        $stalls = Stall::with('Floor.Building')->withCount('Pending')->has('StallType.StallRate')->doesntHave('CurrentTennant')->get();
         $data = array();
         foreach ($stalls as $stall) {
             $data['data'][] = $stall;
@@ -32,7 +32,7 @@ class ManageContractsController extends Controller
     }
     
     public function getStallHolders(){
-        $stalls = StallHolder::with('ActiveStallRental.Contract')->has('ActiveStallRental.Contract')->get();
+        $stalls = StallHolder::with('ActiveContracts')->has('ActiveContracts')->get();
         $data = array();
         
         foreach ($stalls as $stall) {
@@ -155,10 +155,9 @@ class ManageContractsController extends Controller
         return view('transaction/ManageContracts/updateRegistration',compact('stallrental','stallHolderDetails','stallDetails'));   
     }
     
-    function getRegistrationList()
-    {
-       
-        $stalls = StallRental::with('StallHolder.ContactNo','Contract','Stall.StallType')->where('stallRentalStatus',2)->get();
+    function getRegistrationList(){
+        $stalls = Contract::with('StallHolder.ContactNo','Stall.StallType')->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->get();
+        
         $data = array();
         
         foreach ($stalls as $stall) {
@@ -187,26 +186,6 @@ class ManageContractsController extends Controller
             return response()->json($data);
     }
     
-    public function updateRegistration($rentID)
-    {
-        $prod = Product::all();
-    	$stallrental = StallRental::with('Contract.StallRate.RateDetail','Product')->where('stallRentalID',$rentID)->first();
-        if(count($stallrental) == 0)
-            return redirect('/StallHolderList');
-    	$stallHID = $stallrental->stallHID;
-    	$stallHolderDetails = StallHolder::where('stallHID',$stallHID)->first();
-        $contacts = ContactNo::where('stallHID',$stallHolderDetails->stallHID)->get();
-    	$stallDetails = DB::table('tblStall')
-            ->select('*')
-            ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
-            ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
-            ->leftJoin('tblstalltype_size as size', 'type.stypeSizeID', '=', 'size.stypeSizeID')
-            ->leftJoin('tblFloor as floor','tblStall.floorID','=','floor.floorID')
-            ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
-            ->where('tblStall.stallID',$stallrental->stallID)
-            ->first();
-        return view('transaction/ManageContracts/Application_View',compact('stallrental','stallHolderDetails','stallDetails','contacts','prod'));
-    }
     public function regListIndex()
     {
         return view('transaction/ManageContracts/RegistrationList');

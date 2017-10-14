@@ -20,7 +20,7 @@
                 <thead>
                     <tr>
                         <th style="width: 200px;">Stall Type</th>
-                        <th style="width: 120px;">Sizes</th>
+                        <th style="width: 120px;">Area</th>
                         <th style="width: 300px;">Description</th>
                         <th>Actions</th>
                     </tr>
@@ -35,23 +35,26 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title">New Stall Type</h4> </div>
                             <div class="modal-body">
+                                <div id="newEC" class="alert alert-danger print-error-msg" style="display:none">
+                                    <ul id="error-new"></ul>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="stypeName">Stall Type Name</label><span class="required">&nbsp*</span>
-                                            <input type="text" class="form-control" id="stypeName" name="stypeName" placeholder="Stall Type Name" /> </div>
+                                            <input type="text" class="form-control" id="stypeName" name="stypeName" placeholder="ex. Garment Stall" /> </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="stypeDesc">Description</label>
-                                            <textarea class="form-control" id="stypeDesc" name="stypeDesc" placeholder="Stall Type Description"></textarea>
+                                            <textarea class="form-control" id="stypeDesc" name="stypeDesc"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="stypeLength">Sizes</label>
+                                            <label for="stypeLength">Stall Type Area</label>
                                             <div class="form-group input-group removable">
-                                                <input type="text" name="size[]" class="form-control" placeholder="Area" list='sizesoptions' required>
+                                                <input type="text" name="size[]" class="form-control" placeholder="ex. 2" list='sizesoptions' required>
                                                 <datalist id="sizesoptions" class="sizes">
                                                 </datalist>
                                                 <span class="input-group-addon">
@@ -81,6 +84,9 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title">Update Stall Type</h4> </div>
                             <div class="modal-body">
+                                <div id="upEC" class="alert alert-danger print-error-msg" style="display:none">
+                                    <ul id="error-new"></ul>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -90,14 +96,14 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="stypeDescUp">Description</label>
-                                            <textarea class="form-control" id="stypeDescUp" name="stypeDesc" placeholder="Stall Type Description"></textarea>
+                                            <textarea class="form-control" id="stypeDescUp" name="stypeDesc"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group sizediv">
                                             <label for="stypeLength">Stall Type Area</label>
                                             <div class="form-group input-group removable">
-                                                <input type="text" name="newSize[]" class="form-control" placeholder="Area" list='sizesoptions'> <span class="input-group-addon">
+                                                <input type="text" name="newSize[]" class="form-control" list='sizesoptions'> <span class="input-group-addon">
                                          meter<sup>2</sup>   
                                          </span> <span class="input-group-btn"><button type="button" class="btn btn-primary btn-add">+
                                         </button></span> </div>
@@ -139,12 +145,13 @@
                         });
                     }
                     return unique;
-                }, "Sizes must be unique");
+                }, "Area must be unique");
                 
                 $("#newform").validate({
                     rules: {
                         stypeName: {
                             required: true
+                            , maxlength: 200
                             , remote: {
                                 url: '/checkSTypeName'
                                 , type: 'post'
@@ -161,25 +168,52 @@
                         , "size[]": {
                             unique: true
                             , number: true
+                            , required: true
                         }
                     }
                     , messages: {
                         stypeName: {
                             required: "Please enter Stall Type Name"
                             , remote: "Stall Type Name is taken"
+                            , maxlength: "Stall type name cant't be more than 200 characters"
                         }
                         , "size[]": {
-                            unique: "Size must be unique"
-                            , number: "Invalid Size"
+                            unique: "Area must be unique"
+                            , number: "Invalid Area"
+                            , required: "Please enter Area"
                         }
                     }
                     , errorClass: "error-class"
                     , validClass: "valid-class"
+                    , errorElement: "li"
+                    , errorContainer: "#newEC"
+                    , errorPlacement: function (error) {
+                        error.appendTo('#new .print-error-msg ul');
+                    }
+                    , submitHandler: function(form){
+                        $(form).find(":submit").attr('disabled',true);
+                        var formData = new FormData(form);
+                        $.ajax({
+                            type: "POST"
+                            , url: '/addStallType'
+                            , data: formData
+                            , processData: false
+                            , contentType: false
+                            , context: this
+                            , success: function (data) {
+                                toastr.success('Added New Stall Type');
+                                $('#table').DataTable().ajax.reload();
+                                $('#new').modal('hide');
+                                $(form).find(":submit").attr('disabled',false);
+                            }
+                        });
+                    }
                 });
                 $("#updateform").validate({
                     rules: {
                         stypeName: {
                             required: true
+                            , maxlength: 200
                             , remote: {
                                 url: '/checkSTypeName'
                                 , type: 'post'
@@ -199,16 +233,47 @@
                         }
                         , "newSize[]":{
                             unique: true
+                            , number: true
                         }
                     }
                     , messages: {
                         stypeName: {
                             required: "Please enter Stall Type Name"
                             , remote: "Stall Type Name is taken"
+                            , maxlength: "Stall type name cant't be more than 200 characters"
+                        }
+                        , "newSize[]":{
+                            unique: "Area must be unique"
+                            , number: "Invalid size"
                         }
                     }
                     , errorClass: "error-class"
                     , validClass: "valid-class"
+                    , errorElement: "li"
+                    , errorContainer: "#upEC"
+                    , errorPlacement: function (error) {
+                        error.appendTo('#update .print-error-msg ul');
+                    }
+                    , submitHandler: function(form){
+                        $(form).find(":submit").attr('disabled',true);
+                        var formData = new FormData(form);
+                        $.ajax({
+                            type: "POST"
+                            , url: '/UpdateSType'
+                            , data: formData
+                            , processData: false
+                            , contentType: false
+                            , context: this
+                            , success: function (data) {
+                                $(form).find(":submit").attr('disabled',false);
+                                if(data == false)
+                                    return;
+                                toastr.success('Updated Stall Type');
+                                $('#table').DataTable().ajax.reload();
+                                $('#update').modal('hide');
+                            }
+                        });
+                    }
                 });
                 $('#table').DataTable({
                     ajax: '/stypeTable'
@@ -239,45 +304,8 @@
                             , "sortable": false
                             , "targets": 3
                     }
+                    
   ]
-                });
-                $("#newform").submit(function (e) {
-                    e.preventDefault();
-                    if (!$("#newform").valid()) return;
-                    var formData = new FormData($(this)[0]);
-                    $.ajax({
-                        type: "POST"
-                        , url: '/addStallType'
-                        , data: formData
-                        , processData: false
-                        , contentType: false
-                        , context: this
-                        , success: function (data) {
-                            toastr.success('Added New Stall Type');
-                            $('#table').DataTable().ajax.reload();
-                            $('#new').modal('hide');
-                        }
-                    });
-                });
-                $("#updateform").unbind('submit').bind('submit', function (e) {
-                    e.preventDefault();
-                    if (!$("#updateform").valid()) return;
-                    var formData = new FormData($(this)[0]);
-                    $.ajax({
-                        type: "POST"
-                        , url: '/UpdateSType'
-                        , data: formData
-                        , processData: false
-                        , contentType: false
-                        , context: this
-                        , success: function (data) {
-                            if(data == false)
-                                return;
-                            toastr.success('Updated Stall Type');
-                            $('#table').DataTable().ajax.reload();
-                            $('#update').modal('hide');
-                        }
-                    });
                 });
                 $(".modal").on('hidden.bs.modal', function () {
                     $(this).find('form').validate().resetForm();
@@ -325,7 +353,6 @@
                         var sizes = '';
                         for(var i = 0;i < obj.s_type_size.length;i++){
                             sizes += '<div class="form-group input-group removable existingsize"><input type="text" name="size[]" class="form-control" placeholder="Area" list="sizesoptions" value="'+obj.s_type_size[i].stypeArea+'" disabled> <span class="input-group-addon">meter<sup>2</sup></span> <span class="input-group-btn"><button type="button" class="btn btn-danger removesize dropdown-toggle" data-toggle="dropdown">-</button>'+ "<ul class='dropdown-menu pull-right opensleft' role='menu' data-container='body'><center><h4>Are You Sure?</h4><li class='divider'></li><li><a href='#' onclick='deleteSize("+obj.s_type_size[i].pivot.stypeID+","+obj.s_type_size[i].pivot.stypeSizeID+",this);return false;'>YES</a></li><li><a href='#' onclick='return false'>NO</a></li></center></ul>"+'</span></div>';
-                            $('#sizesoptions').find('option[value='+obj.s_type_size[i].stypeArea+']').attr('disabled',true);
                         }
                         $('.sizediv .form-group').before(sizes);
                         $('#update').modal('show');
@@ -335,7 +362,7 @@
 
             function deleteSize(type,size,elem){
                 if($('.existingsize').length < 2){
-                    toastr.warning('Stall type must have atleast one size');
+                    toastr.warning('Stall type must have atleast one area');
                     return;
                 }
                 $.ajax({
@@ -350,6 +377,8 @@
                         if(data == "success"){
                             $(elem).closest('div').remove();
                             $('#table').DataTable().ajax.reload();
+                        }else if(data == "rental"){
+                            toastr.warning('Unable to delete stall type size. A stall is currently rented');
                         }
                     }
                 });
@@ -364,8 +393,12 @@
                         , "id": id
                     }
                     , success: function (data) {
+                        if(data == ""){
                         $('#table').DataTable().ajax.reload();
                         toastr.success('Stall Type Deleted');
+                        }else if(data == "rental"){
+                            toastr.warning('Unable to delete stall type. A stall is currently rented');
+                        }
                     }
                 });
             }

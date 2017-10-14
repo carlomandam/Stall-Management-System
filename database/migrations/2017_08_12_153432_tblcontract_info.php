@@ -13,21 +13,35 @@ class TblcontractInfo extends Migration
     {
         Schema::create('tblContractInfo', function (Blueprint $table) {
             $table->increments('contractID');
-            $table->integer('stallRentalID')->unsigned()->index();
-            $table->date('contractStart');
-            $table->date('contractEnd');
+            $table->integer('prevContractID')->unsigned()->index()->nullable();
+            $table->integer('stallHID')->unsigned()->index();
+            $table->string('stallID')->index();
+            $table->string('orgName')->nullable();
+            $table->string('businessName');
+            $table->date('contractStart')->nullable();
+            $table->date('contractEnd')->nullable();
+            $table->string('contractReason')->nullable();
             $table->integer('stallRateID')->unsigned();
-            $table->integer('collectionType')->unsigned();//1-Monthly 2-Weekly 3-Daily
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('stallRentalID')->references('stallRentalID')
-                  ->on('tblStallRental_Info')
+            $table->foreign('stallRateID')->references('stallRateID')
+                  ->on('tblStallRate')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
 
-            $table->foreign('stallRateID')->references('stallRateID')
-                  ->on('tblStallRate')
+            $table->foreign('prevContractID')->references('contractID')
+                  ->on('tblContractInfo')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+
+            $table->foreign('stallHID')->references('stallHID')
+                  ->on('tblStallHolder')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+
+            $table->foreign('stallID')->references('stallID')
+                  ->on('tblStall')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
          });

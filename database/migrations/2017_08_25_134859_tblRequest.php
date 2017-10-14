@@ -16,19 +16,20 @@ class TblRequest extends Migration
         //
          Schema::create('tblRequest', function (Blueprint $table) {
             $table->increments('requestID');
-            $table->integer('stallRentalID')->unsigned();
+            $table->integer('stallHID')->unsigned();
             $table->integer('requestType');
-            $table->string('requestText',300)->nullable();
+            $table->string('requestText',191)->nullable();
             $table->integer('status');
-            $table->string('remarks',200)->nullable();
-            $table->dateTime('approvedDate')->nullable();     
+            $table->string('remarks',191)->nullable();
+            $table->dateTime('approvedDate')->nullable();
+             $table->dateTime('submitDate');     
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('stallRentalID')->references('stallRentalID')
-                    ->on('tblStallRental_Info') 
+             $table->foreign('stallHID')->references('stallHID')
+                    ->on('tblStallHolder') 
                     ->onUpdate('cascade')
-                    ->onDelete('restrict');
+                    ->onDelete('restrict');  
+           
         });
     }
 

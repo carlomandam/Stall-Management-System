@@ -17,5 +17,8 @@ class Requirements extends Model
     	'reqName',
     	'reqDesc',
     ];
-    
+
+    public function StallHolder(){
+        return $this->belongsToMany('App\StallHolder','tblStallHolder_Req','reqID','stallHID')->withTimestamps();
+    }
 }

@@ -21,8 +21,14 @@ class ArchiveController extends Controller
     {
     	return view('archives.Archive_Stall');
     }
-      function stallRateIndex()
+    
+    function stallRateIndex()
     {
     	return view('archives.Archive_StallRate');
+    }
+
+    function holidayIndex()
+    {
+        return view('archives.Archive_Holiday');
     }
 }

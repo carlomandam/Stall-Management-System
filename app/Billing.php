@@ -9,29 +9,40 @@ class Billing extends Model
 {
      use SoftDeletes;
     
-    protected $table = "tblBilling_Info";
+    protected $table = "tblBilling";
     protected $primaryKey = "billID";
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'billDateFrom',
         'billDateTo',
-        'stallRentalID'
+        'billDueDate'
     ];
     
-    public function Payment()
+    public function Billing_Details(){
+        return $this->hasMany('App\Billing_Details','billID');
+    }
+   
+    public function Contract()
     {
-    return $this->hasMany('App\Payment','billID');
+    return $this->belongsTo('App\Contract','contractID');
     }
 
-    public function StallRental()
+    public function Initial()
     {
-    return $this->belongsTo('App\StallRental','stallRentalID');
-    }
+    return $this->hasMany('App\initBill','billID');
+
     
-    public function Billing()
+    public function Charges()
     {
-        return $this->belongsToMany('App\InitFee','tblbill_initialfee','billID','initialFeeID');
+        return $this->belongsToMany('App\Charges','tblBill_Charges','billID','chargeID');
     }
-
+    public function MonthlyReading()
+    {
+        return $this->belongsToMany('App\MonthlyReading','tblBill_Reading','billID','readingID');
+    }
+     public function InitialFee()
+    {
+        return $this->belongsToMany('App\InitialFee','tblBill_Initial','billID','billInitialID');
+    }
 }

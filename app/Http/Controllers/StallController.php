@@ -11,71 +11,44 @@ use App\Building;
 use App\StallUtility;
 class StallController extends Controller
 {
-    /*public function getStalls(){
-				$stall = Stall::with('Floor.Building','StallType')->get();
-				//whereIn 
-				$data = array();
-
-				foreach($stall as $Stall)
-				{
-					$Stall["actions"] =   "<button class='btn btn-primary'  data-toggle=
-                  'modal' data-target='#update' onclick='getInfo(this.value)' value = '".$Stall['stallID']."' >Update</button>"
-                    ;
-                    $Stall['utilities'] = 
-            	   $data['data'][] = $Stall;
-				} if(count($data) == 0){
-          echo '{
-              "sEcho": 1,
-              "iTotalRecords": "0",
-              "iTotalDisplayRecords": "0",
-            "aaData": []
-          }';
-
-          return;
-    }
-    else
-        return (json_encode($data));
-    }*/
-    
     function getStalls(){
-    	$stalls = DB::table('tblStall')
-            ->select('*')
-            ->leftJoin('tblstalltype_stallsize as type','tblStall.stype_sizeID','=','type.stype_sizeID')
-            ->leftJoin('tblstalltype as stype','type.stypeID','=','stype.stypeID')
-            ->leftJoin('tblstalltype_size as size', 'type.stypeSizeID', '=', 'size.stypeSizeID')
-            ->leftJoin('tblFloor as floor','tblStall.floorID','=','floor.floorID')
-            ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
-            ->get();
-    	$data = array();
-    	foreach ($stalls as $stall) {
-            $stall->actions = "<button class='btn btn-primary btn-flat' onclick='getInfo(this.value)' value = '".$stall->stallID."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
-            
-            <div class='btn-group'>
-                <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
-                <ul class='dropdown-menu pull-right opensleft' role='menu' data-container='body'>
-                    <center>
-                        <h4>Are You Sure?</h4>
-                        <li class='divider'></li>
-                        <li><a href='#' onclick='deleteStall(\"".$stall->stallID."\");return false;'>YES</a></li>
-                        <li><a href='#' onclick='return false'>NO</a></li>
-                    </center>
-                </ul>
-            </div>
-            ";
-    		$data['data'][] = $stall;
-    	}
-    	if(count($data) == 0){
-       		echo '{
-            	"sEcho": 1,
-            	"iTotalRecords": "0",
-            	"iTotalDisplayRecords": "0",
+        $stalls = Stall::with('Floor.Building','StallType.StallType','StallType.StallTypeSize')->get();
+        $data = array();
+        foreach ($stalls as $stall) {
+            $data['data'][] = $stall;
+        }
+        if(count($data) == 0){
+            echo '{
+                "sEcho": 1,
+                "iTotalRecords": "0",
+                "iTotalDisplayRecords": "0",
             "aaData": []
-        	}';
+            }';
 
-        	return;
-    	}
+            return;
+        }
         else
-    		return (json_encode($data));
+            return (json_encode($data));
+    }
+
+    function getStallsTrashed(){
+        $stalls = Stall::onlyTrashed()->with('Floor.Building','StallType.StallType','StallType.StallTypeSize')->get();
+        $data = array();
+        foreach ($stalls as $stall) {
+            $data['data'][] = $stall;
+        }
+        if(count($data) == 0){
+            echo '{
+                "sEcho": 1,
+                "iTotalRecords": "0",
+                "iTotalDisplayRecords": "0",
+            "aaData": []
+            }';
+
+            return;
+        }
+        else
+            return (json_encode($data));
     }
     
     function getBuildingOption(){
@@ -102,7 +75,7 @@ class StallController extends Controller
     }
     
     function getStallInfo(){
-        $stall = Stall::with('StallType','Floor.Building','StallUtility')->where('stallID',$_POST['id'])->get();
+        $stall = Stall::withTrashed()->with('StallType','Floor.Building','StallUtility')->where('stallID',$_POST['id'])->get();
         return (json_encode($stall[0]));
     }
     
@@ -111,6 +84,7 @@ class StallController extends Controller
         $stall->stallID = $_POST['stallID'];
         $stall->stype_SizeID = $_POST['type'];
         $stall->floorID = $_POST['floor'];
+        $stall->stallDesc = $_POST['desc'];
         $stall->stallStatus = 1;
         if($stall->save() && isset($_POST['util'])){
             for($i = 0; $i < count($_POST['util']);$i++){

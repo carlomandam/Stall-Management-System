@@ -81,8 +81,6 @@
                 <div class="title m-b-md">
                     MySeoul Stalls Management System
                 </div>
-
-                
             </div>
         </div>
     </body>

@@ -54,17 +54,12 @@
 <script type="text/javascript" src="{{ URL::asset('js/icheck.js')}}">
 </script> @stop @section('content')
 <div class="row">
-    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</a> </div>
-    <!--left table-->
+    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{URL::previous()}}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</a> </div>
     <div class="col-md-12">
         <div class="box box-primary ">
             <div class="box-header with-border">
                 <h3 class="box-title">Tennant's Details</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                </div>
             </div>
-            <!-- /.box-header -->
             <form id="applyForm" method="post">
                 <input type="hidden" id="token" name="_token" value="<?php echo csrf_token(); ?>">
                 <input type="hidden" id="tennant" name="tennant" value="<?php echo $tennant->stallHID ?>">
@@ -189,18 +184,18 @@
         </div>
     </div>
 </div>
-<!-- /.row -->@stop @section('script')
+@stop @section('script')
 <script type="text/javascript" src="{{ URL::asset('js/multipleAddinArea.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
+        
         var select = $('#DOBYear');
         var leastYr = 1900;
         var nowYr = new Date().getFullYear();
         for (var v = nowYr; v >= leastYr; v--) {
             $('#DOBYear').append('<option value ="' + v + '">' + v + '</option');
         }
-        //DISPLAY AGE//
+        
         $('#DOBMonth').change(function () {
             if ($(this).val() == 4 || $(this).val() == 6 || $(this).val() == 9 || $(this).val() == 11) {
                 $('#DOBDay option[value =31]').remove();
@@ -222,7 +217,7 @@
                 }
             }
         });
-        //DISPLAY AGE//
+
         $('#DOBYear,#DOBMonth,#DOBDay').on('change', function () {
             var day = $('#DOBDay').val();
             var month = $('#DOBMonth').val();
@@ -239,10 +234,9 @@
         $('#DOBMonth').val("{{date('m',strtotime($tennant->stallHBday))}}").trigger('change');
         $('#DOBDay').val("{{date('d',strtotime($tennant->stallHBday))}}").trigger('change');
         $('#DOBYear').val("{{date('Y',strtotime($tennant->stallHBday))}}").trigger('change');
-        /// SUBMIT REGISTRATION//
+
         $("#applyForm").submit(function (e) {
             e.preventDefault();
-            //  if (!$("#applyForm").valid()) return;
             var formData = new FormData($(this)[0]);
             $.ajax({
                 type: "POST"
@@ -277,13 +271,10 @@
         return pattern.test(value);
         }, 'Input valid email address');
 
-         //mobile number validation//
-          
          $.validator.addMethod("custom_mobno", function(value, element) {
           var pattern = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
          return pattern.test(value);
-         }, 'Input valid mobile number');
-        
+         }, 'Input valid mobile number');        
     });
 
     function textAreaAdjust(o) {

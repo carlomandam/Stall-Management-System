@@ -87,8 +87,9 @@ $(document).on('click','#uSaveReq', function(e){
 				},
 				success: function(data) {
 					if($.isEmptyObject(data.error)){
-						toastr.success('REcord Updated');
-			           	location.reload();
+						toastr.success('REcord Updated', function(){
+							location.reload();
+						});			           	
 			           	
 			           	}
 			           	else{
@@ -100,9 +101,6 @@ $(document).on('click','#uSaveReq', function(e){
 			 });
 		}
 })
-
-
-
 $(document).on('click', '#del', function(e){
 	id = $(this).attr('data-id');
 	console.log(id);

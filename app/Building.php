@@ -22,4 +22,23 @@ class Building extends Model
     public function Floor(){
         return $this->hasMany('App\Floor','bldgID');
     }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function($bldg) { // before delete() method call this
+             $floors = $bldg->Floor()->get();
+             foreach ($floors as $Floor) {
+                 $Floor->delete();
+             }
+        });
+
+        static::restoring(function($bldg)
+        {
+            $floors = $bldg->Floor()->withTrashed()->get();
+            foreach ($floors as $Floor) {
+                 $Floor->restore();
+            }
+        });
+    }
 }
