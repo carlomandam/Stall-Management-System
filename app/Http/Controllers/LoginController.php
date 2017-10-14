@@ -11,15 +11,15 @@ use Closure;
 class LoginController extends Controller
 {
     //
-    public function __construct()
-    {
-    $this->middleware('guest');
-    }
+   
+
+  
+
 
     public function login(){
 
        
-    	return view('/login/login');
+    	return view('login/login');
     }
     
     public function validateUser(Request $request){
@@ -55,5 +55,9 @@ class LoginController extends Controller
          Auth::logout();
         return redirect('/login');
     } 
+    public function addUsers(){
+        return view('login.register');
+    }
+
    
 }
