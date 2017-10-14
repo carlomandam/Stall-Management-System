@@ -10,14 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Auth::routes();
-// Route::get('/','HomeController@index');
+Auth::routes();
 Route::get('/login','LoginController@login');
 Route::post('/login/Validate','LoginController@validateUser');
 Route::get('/login/goTo','LoginController@goTo');
 Route::post('/logout','LoginController@logout');
 
 Route::group(['middleware' =>  ['admin']], function(){
+Route::get('/addUsers','LoginController@addUsers');
+Route::post('/register','LoginController@register');
+
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/Registration/{stallid}','ApplicationController@create');
@@ -47,29 +49,22 @@ Route::post('/acceptRental','ApplicationController@acceptRental');
 Route::post('/rejectRental','ApplicationController@rejectRental');
 /////MAINTENANCE///////
 
-Route::get('/Building', function () {
-    return view('Maintenance.Maintenance_Buildings');
-});
+
+
 Route::get('/ViewContract/{id}','ContractController@viewContract');
-Route::get('/Holiday', function () {
-    return view('Maintenance.Maintenance_Holiday');
-});
-Route::get('/StallType', function () {
-    return view('Maintenance.Maintenance_StallType');
-});
-Route::get('/Stall', function () {
-    return view('Maintenance.Maintenance_Stall');
-});
-Route::get('/StallRate', function () {
-    return view('Maintenance.Maintenance_StallRate');
-});
-Route::get('/Charges', function () {
-    return view('Maintenance.Maintenance_Charges');
-});
+
+
+
+
+
 Route::get('/yow', function () {
     return view('transaction.PaymentAndCollection.PaymentSuccess');
 });
+
 //Building
+Route::get('/Building', function () {
+    return view('Maintenance.Maintenance_Buildings');
+});
 Route::post('/AddBuilding', 'BuildingController@addBuilding');
 Route::get('/bldgTable', 'BuildingController@getBuildings');
 Route::post('/checkBldgName', 'BuildingController@checkBldgName');
@@ -83,6 +78,9 @@ Route::post('/getStallList', 'StallController@getStallList');
 Route::post('/restoreBldg', 'BuildingController@restore');
 Route::get('/bldgTableTrashed', 'BuildingController@getBuildingsTrashed');
 //Stall Type
+Route::get('/StallType', function () {
+    return view('Maintenance.Maintenance_StallType');
+});
 Route::get('/stypeTable', 'StallTypeController@getStallTypes');
 Route::post('/checkSTypeName', 'StallTypeController@checkSTypeName');
 Route::post('/addStallType', 'StallTypeController@addStallType');
@@ -94,6 +92,9 @@ Route::post('/deleteStypeSize', 'StallTypeController@deleteStypeSize');
 Route::post('/restoreSType', 'StallTypeController@restore');
 Route::get('/stypeTableTrashed', 'StallTypeController@getStallTypesTrashed');
 //Stall
+Route::get('/Stall', function () {
+    return view('Maintenance.Maintenance_Stall');
+});
 Route::get('/stallTable', 'StallController@getStalls');
 Route::get('/stallTableTrashed', 'StallController@getStallsTrashed');
 Route::post('/bldgOptions', 'StallController@getBuildingOption');
@@ -106,12 +107,18 @@ Route::post('/UpdateStall', 'StallController@updateStall');
 Route::post('/UpdateStalls', 'StallController@updateStalls');
 Route::post('/deleteStall', 'StallController@deleteStall');
 //Rate
+Route::get('/StallRate', function () {
+    return view('Maintenance.Maintenance_StallRate');
+});
 Route::post('/addStallRate', 'RateController@addStallRate');
 Route::get('/rateTable', 'RateController@getStallRates');
 Route::post('/stypeRate', 'RateController@getStallTypes');
 Route::post('/checkRate', 'Controller@checkRate');
 Route::post('/datesDisabled', 'RateController@datesDisabled');
 //Charge
+Route::get('/Charges', function () {
+    return view('Maintenance.Maintenance_Charges');
+});
 Route::get('/chargeTable', 'ChargeController@getCharges');
 Route::post('/addCharge', 'ChargeController@addCharge');
 Route::post('/updateCharge', 'ChargeController@updateCharge');
@@ -127,6 +134,9 @@ Route::get('/pdfview/{rentalid}','PDFController@pdfcreate');
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
 Route::get('/getVendor', 'ApplicationController@getVendor');
 //Holiday
+Route::get('/Holiday', function () {
+    return view('Maintenance.Maintenance_Holiday');
+});
 Route::get('/holidayTable', 'HolidayController@getHolidays');
 Route::get('/holidayTableTrashed', 'HolidayController@getHolidaysTrashed');
 Route::post('/addHoliday', 'HolidayController@addHoliday');
@@ -142,6 +152,7 @@ Route::get('/StallTypeArchive','ArchiveController@stallTypeIndex');
 Route::get('/StallArchive','ArchiveController@stallIndex');
 Route::get('/StallRateArchive','ArchiveController@stallRateIndex');
 Route::get('/HolidayArchive','ArchiveController@holidayIndex');
+
 ////////////////////MANAGE CONTRACTS////////////////////
 Route::get('/getStallHolderList','ManageContractsController@getStallHolderList');
 Route::get('/getTennants','ManageContractsController@getTennants');
@@ -156,6 +167,7 @@ Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
+
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment','PaymentController@index');
 Route::get('/CreateCollection/{id}','CollectionController@create');
