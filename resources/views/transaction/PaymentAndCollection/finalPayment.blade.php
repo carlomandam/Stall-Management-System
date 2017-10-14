@@ -9,6 +9,19 @@
   <li><i class="fa fa-dashboard"></i>Payment and Collection</li>
   <li class="active">Payment</li>
 </ol>
+
+<style>
+    .yellow{
+      background-color: #f7e64c;
+      color:black;
+    }
+    .label{
+      font-size:14px;
+    }
+    th,td{
+      text-align: center;
+    }
+</style>
 @stop
 
 @section('content')
@@ -39,13 +52,29 @@
                                                 
                                                  @foreach($stalls as $key => $stall)
                                                   
-                                                  <tr>
+                                                  <tr>    
                                                      <td>{{$stall->stallCode}}</td>
+
                                                      <td>{{$stall->tenantName}}</td>
 
                                                      <td>
+                                                     <center>
+                                                      @if($totalUnpaid[$key]['status'] == 'COLLECT')
+                                                          <label class="label bg-primary">{{$totalUnpaid[$key]['status']}}</label>
+                                                      @elseif($totalUnpaid[$key]['status'] == 'REMINDER')
+                                                          <span class="label bg-green"><label>{{$totalUnpaid[$key]['status']}}</label></span>
+                                                      @elseif($totalUnpaid[$key]['status'] == 'WARNING')
+                                                          <span class="label yellow"><label>{{$totalUnpaid[$key]['status']}}</label></span>
+                                                      @elseif($totalUnpaid[$key]['status'] == 'LOCK')
+                                                          <span class="label bg-orange"><label>{{$totalUnpaid[$key]['status']}}</label></span>
+                                                      @elseif($totalUnpaid[$key]['status'] == 'TERMINATE')
+                                                          <span class="label bg-red"><label>{{$totalUnpaid[$key]['status']}}</label></span>
+                                                     @endif
+                                                     </center>
                                                      </td>
-                                                     <td>Php {{number_format($totalUnpaid[$key++]['amount'],2)}}</td>
+
+                                                     <td>Php {{number_format($totalUnpaid[$key]['amount'],2)}}</td>
+
                                                      <td><a href="/ViewPayment/{{$stall->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a></td>
                                                   </tr>
 

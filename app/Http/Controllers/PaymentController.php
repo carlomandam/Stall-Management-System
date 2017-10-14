@@ -110,48 +110,91 @@ class PaymentController extends Controller{
 
     public function index(){
         $totalUnpaid =[[]];
-        $recordCtr = 0;
         $contractIDs = [];
         $dates = [];
+        $recordCtr = 0;
         $stalls =DB::select("Select stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHLName) as tenantName, contractID as contractID from tblcontractInfo left join tblstallholder as stallH on stallH.stallHID = tblcontractInfo.stallHID where tblcontractInfo.deleted_at IS NULL && tblcontractInfo.contractEnd >= ".date("Y-m-d"));
+   
+        $collectionStat = DB::select("select collect, reminder,warning, tblutilities.lock as lockstat, terminate FROM `tblutilities` WHERE utilitiesID = 'util_collection_status'");
+
+
+        foreach($stalls as $stall){
+            $totalUnpaid[$recordCtr]['amount'] =  PaymentController::computeUnpaid($stall->contractID);
+            foreach($collectionStat as $stat){
+                if($totalUnpaid[$recordCtr]['amount'] <= $stat->collect){
+                    $totalUnpaid[$recordCtr]['status'] = 'COLLECT';
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->reminder && $totalUnpaid[$recordCtr]['amount'] > $stat->collect){
+                    $totalUnpaid[$recordCtr]['status'] = 'REMINDER';
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->warning && $totalUnpaid[$recordCtr]['amount'] > $stat->reminder){
+                    $totalUnpaid[$recordCtr]['status'] = 'WARNING';
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->lockstat && $totalUnpaid[$recordCtr]['amount'] > $stat->warning){
+                    $totalUnpaid[$recordCtr]['status'] = 'LOCK';
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->terminate && $totalUnpaid[$recordCtr]['amount'] > $stat->lockstat){
+                    $totalUnpaid[$recordCtr]['status'] = 'TERMINATE';
+                }
+                else{
+                    $totalUnpaid[$recordCtr]['status'] = 'Undefine';
+                }
+                // var_dump($totalUnpaid);
+            }
+            
+            $recordCtr++;
+        }
+            
+           
+        return view('transaction/PaymentAndCollection/finalPayment',compact('collectionStat','stalls','totalUnpaid'));
+    }
+    public function computeUnpaid($contractID){
         $totalUnpaidAmt = 0;
-        $totalUnpaidAmts = [];
-       foreach($stalls as $stall)
-       {
-       
-        $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$stall->contractID' ORDER BY collect.contractID");
+         $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$contractID' ORDER BY collect.contractID");
         foreach($unpaidCollections as $unpaid){
-                $dates[] = $unpaid->collectDate;
-            }
-            $stallRateID = Contract::select('stallRateID')->where('contractID',$stall->contractID)->first();
+            $dates[] = $unpaid->collectDate;
+        }
+        
+        $stallRateID = Contract::select('stallRateID')->where('contractID',$contractID)->first();
            
-            if(count($dates)>0){
+        if(count($dates)>0){
 
-                 $totalAmt = PaymentController::getHistRate($dates,$stallRateID->stallRateID);
+            $totalAmt = PaymentController::getHistRate($dates,$stallRateID->stallRateID);
+                foreach($totalAmt as $total){
+                    $totalUnpaidAmt += $total['amount']; 
+                }
+        }
 
-                 $totalUnpaid[$recordCtr]['contractID'] = $stall->contractID;
-                 foreach($totalAmt as $total){
-                 $totalUnpaidAmt += $total['amount'];
-                 
-                 }
-                 $totalUnpaid[$recordCtr]['amount'] = $totalUnpaidAmt;
-                
-                 
-
+        $unpaidCharges = DB::select("select sum(chargeDet.chargeAmt) + sum(charge.chargeAmount) as totalAmt
+                from tblcharge_details as chargeDet 
+                LEFT JOIN tblbilling_charges as billcharge on billcharge.chargeDetID = chargeDet.chargeDetID
+                LEFT JOIN tblbilling_details as billdet on billdet.billDetID = billcharge.billDetID
+                LEFT JOIN tblcharges as charge on charge.chargeID = chargeDet.chargeID
+                WHERE billdet.transactionID is null and  chargeDet.contractID = '$contractID'");
+        if(count($unpaidCharges)>0){
+            foreach($unpaidCharges as $unpaid){
+                $totalUnpaidAmt+= $unpaid->totalAmt;
             }
-            else{
-                $totalUnpaid[$recordCtr]['contractID'] = $stall->contractID;
-                $totalUnpaidAmt += 0;
-                $totalUnpaid[$recordCtr]['amount'] = $totalUnpaidAmt;
-                
-            } $recordCtr++;
-           
 
-       }
+        }
 
-            $collectionStat = Utilities::find("util_collection_status");
-         
-             return view('transaction/PaymentAndCollection/finalPayment',compact('collectionStat','stalls','totalUnpaid'));
+        $unpaidUtilities = DB::select("select sum(utility.utilityAmt) as totalAmt
+            from tblstallutilities_meterid as utility 
+            LEFT JOIN tblbilling_utilities as billutil on billutil.stallMeterID = utility.stallMeterID
+            LEFT JOIN tblbilling_details as billdet on billdet.billDetID = billutil.billDetID
+            WHERE billdet.transactionID IS NULL and utility.contractID = '$contractID'");
+
+        if(count($unpaidUtilities)>0){
+          foreach($unpaidUtilities as $unpaid){
+                $totalUnpaidAmt+= $unpaid->totalAmt;
+            }
+        }
+
+        return $totalUnpaidAmt;
+
+            
+
+
     }
 
     public function getRate($dates,$rateID){
@@ -335,10 +378,40 @@ class PaymentController extends Controller{
             ->max('details.collectDate');
 
             $dateFrom = count($checkadvance) > 0 ? Carbon::parse($checkadvance)->addDays(1)->format('Y-m-d') : Carbon::today()->addDays(1)->format('Y-m-d');
+            $totalUnpaid = PaymentController::computeUnpaid($id);
+            $status = PaymentController::checkCollectStatus($totalUnpaid);
+           
+
         }
 
 
-        return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','unpaid','dateFrom','unpaidCollections','lastCollect','dates'));
+        return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','unpaid','dateFrom','unpaidCollections','lastCollect','dates','totalUnpaid','status'));
+    }
+    public function checkCollectStatus($amount){
+        $status = "";
+        $collectionStat = DB::select("select collect, reminder,warning, tblutilities.lock as lockstat, terminate FROM `tblutilities` WHERE utilitiesID = 'util_collection_status'");
+        foreach($collectionStat as $stat){
+             if($amount <= $stat->collect){
+                        $status  = 'COLLECT';
+                    }
+                    else if($amount <= $stat->reminder && $amount > $stat->collect){
+                        $status  = 'REMINDER';
+                    }
+                    else if($amount <= $stat->warning && $amount > $stat->reminder){
+                       $status  = 'WARNING';
+                    }
+                    else if($amount<= $stat->lockstat && $amount > $stat->warning){
+                        $status  = 'LOCK';
+                    }
+                    else if($amount <= $stat->terminate && $amount > $stat->lockstat){
+                       $status = 'TERMINATE';
+                    }
+                    else{
+                       $status = 'Undefine';
+                    }
+            
+        }
+        return $status;
     }
 
     public function createBill(){
@@ -550,9 +623,7 @@ class PaymentController extends Controller{
             if(count($billDetID) > 0)
             {
                 foreach ($billDetID as  $value) {
-
-                                
-                                           
+                              
                        if(count($value) > 0){
                             foreach($value->Billing_Utilities as $util)
                             {
@@ -563,12 +634,7 @@ class PaymentController extends Controller{
                                             $data[$recordCtr]["amount"] = number_format($utilamt->utilityAmt,2);
                                             $recordCtr++;
                                         }
-                                    }
-
-                               
-                                
-                                
-                                
+                                    }                                
                             }
                             $charge = Billing_Charges::where('billDetID',$value->billDetID)->get();
                             foreach($charge as $charge){
@@ -601,24 +667,6 @@ class PaymentController extends Controller{
                 }   
             } 
 
-         /*   $chargeAmount = Charge_Details::where('transactionID',$transactionID->transactionID)->get();
-            if(count($chargeAmount)>0){
-                foreach ($chargeAmount as $amt) {
-                    $data[$recordCtr]['description'] = $amt->Charges->chargeName;
-                    $data[$recordCtr]['amount'] = number_format($amt->Charges->chargeAmount,2);
-                    $recordCtr++;
-                }
-            }
-
-            $utilitiesAmt = Billing_Details::where('transactionID',$transactionID->transactionID)->get();
-            if(count($utilitiesAmt)>0){
-                foreach ($utilitiesAmt as $amt) {
-                    $data[$recordCtr]['description'] = "Utility Fee";
-                    $data[$recordCtr]['amount'] = number_format($amt->StallMeter->utilityAmt,2);
-                    $recordCtr++;
-                }
-            }
-       */
             $initAmt = InitFeeDetail::where('transactionID',$transactionID->transactionID)->get();
             if(count($initAmt)>0){
                 foreach ($initAmt as $amt) {
@@ -685,9 +733,9 @@ class PaymentController extends Controller{
         return $total;
     }
 
-    public function printReceipt($id){
+    public function printReceipt(){
 
-        return view('pdf/rentReceipt');
+        return view('pdf/invoice');
     }
 
     public function generateBill($id){

@@ -15,6 +15,9 @@
     #backButton {
         display: none;
     }
+    .label{
+      font-size: 14px;  
+    }
 </style> @stop @section('content-header')
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i> Payment and Collections</li>
@@ -54,22 +57,30 @@
                                     </div>
                                     <div class="row">
                                         <label class="col-md-3">Tenant Name</label>
-                                        <div class="col-md-3">
+                                        <div class="col-md-9">
                                             <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
                                         </div>
-                                        <label class="col-md-3">Date</label>
-                                        <div class="col-md-3">
-                                            <label class="form-control">{{\Illuminate\Support\Str::upper(\Carbon\Carbon::today()->format('F d,Y'))}}</label>
-                                        </div>
+                                        
                                     </div>
                                     <div class="row">
                                         <label class="col-md-3">Collection Status</label>
                                         <div class="col-md-3">
-                                            <label class="form-control"></label>
+
+                                                      @if($status == 'COLLECT')
+                                                      <span class="label bg-primary">{{$status}}</span>
+                                                      @elseif($status == 'REMINDER')
+                                                          <span class="label bg-green form-control"><label>{{$status}}</label></span>
+                                                      @elseif($status == 'WARNING')
+                                                          <span class="label yellow form-control"><label>{{$status}}</label></span>
+                                                      @elseif($status == 'LOCK')
+                                                          <span class="label bg-orange"><label>{{$status}}</label></span>
+                                                      @elseif($status == 'TERMINATE')
+                                                          <span class="label bg-red"><label>{{$status}}</label></span>
+                                                     @endif
                                         </div>
                                         <label class="col-md-3">Balance</label>
                                         <div class="col-md-3">
-                                            <label class="form-control"></label>
+                                            <label class="form-control">Php {{number_format($totalUnpaid,2)}}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -248,8 +259,18 @@
                                         <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
                                     </div>
                                     <label class="col-md-3">Collection Status</label>
-                                    <div class="col-md-3">
-                                        <label class="form-control"></label>
+                                    <div class="col-md-3" >
+                                        @if($status == 'COLLECT')
+                                          <span class="label bg-primary">{{$status}}</span>
+                                        @elseif($status == 'REMINDER')
+                                          <span class="label bg-green form-control"><label>{{$status}}</label></span>
+                                        @elseif($status == 'WARNING')
+                                          <span class="label yellow form-control"><label>{{$status}}</label></span>
+                                        @elseif($status == 'LOCK')
+                                          <span class="label bg-orange"><label>{{$status}}</label></span>
+                                        @elseif($status == 'TERMINATE')
+                                          <span class="label bg-red"><label>{{$status}}</label></span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -262,7 +283,6 @@
                                             <th>Payment Number</th>
                                             <th>Date Paid</th>
                                             <th>Amount Paid</th>
-                                            <th>Balance</th>
                                             <th>Action/s</th>
                                         </thead>
                                     </table>

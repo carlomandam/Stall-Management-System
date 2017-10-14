@@ -99,7 +99,7 @@
     </style>
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini" style="height:auto;min-height:100%;">
+<body class="hold-transition skin-blue sidebar-mini" style="height:auto;min-height:100%;" onload = "myTimer();">
     <div class="wrapper" style="overflow:hidden;">
         <header class="main-header">
             <a href="index2.html" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b></span> </a>
@@ -247,6 +247,7 @@
     <script src="{{ URL::asset('js/select2.js')}}"></script>
     <script src="{{ URL::asset('assets/datepicker/bootstrap-datepicker.min.js')}}"></script>
     <script>
+
         setInterval(myTimer, 1000);
         $.widget.bridge('uibutton', $.ui.button);
         $.ajaxSetup({

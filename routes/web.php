@@ -179,8 +179,9 @@ Route::get('/ViewBill/{id}','BillingController@viewBill');
 Route::get('/getPaymentStatus','PaymentController@getPaymentStatus');
 Route::get('/CheckBillingRecords','PaymentController@checkRecords');
 Route::get('/ViewPaymentDetails','PaymentController@getPaymentDetails');
-Route::post('/printReceipt/{id}','PaymentController@printReceipt');
+Route::get('/printReceipt','PaymentController@printReceipt');
 Route::post('/NewPaymentTransaction','PaymentController@newPaymentTransaction');
+
 ////////////////REQUESTS////////////
 Route::resource('/Requests', 'RequestController');
 Route::get("/Request/Current/{id}", 'RequestController@current');
@@ -190,6 +191,7 @@ Route::put("/Request/SaveLeaveStall", 'RequestController@SaveLeaveStall');
 Route::get('/Request/View/{id}', 'RequestController@View');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
+Route::get('/ExpiringContracts','QueriesController@getExpiringContracts');
 // /////////////////////Utilities/////////////////
 Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
 Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
@@ -201,6 +203,7 @@ Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 Route::post('/updateApplication','ApplicationController@updateApplication');
 });
+
 
 ?>
 
