@@ -11,11 +11,11 @@
     <div class="col-md-4">
       <section class="login-form">
        <div class="login">
-          <form class="form-horizontal" method="POST" action="/login/Validate">
+          <form class="form-horizontal" method="POST" action="{{route('login.submit')}}">
                         {{ csrf_field() }}
           <div>
             <img src="{{ URL::asset('image/LOGO.png') }}" width="150px" height="150px">
-            <h3 style="font-family: impact;margin-top: -10%;">Stalls Management System</h3>
+            <h3 style="font-family: impact;margin-top: -10%; text-align: center;">Stalls Management System</h3>
           </div>
           <input type="email" name="email" placeholder="Email" required class="form-control input-lg" />
           @if ($errors->has('email'))

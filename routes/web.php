@@ -10,18 +10,18 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
-Route::get('/login','LoginController@login');
-Route::post('/login/Validate','LoginController@validateUser');
-Route::get('/login/goTo','LoginController@goTo');
-Route::post('/logout','LoginController@logout');
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::group(['middleware' =>  ['admin']], function(){
-Route::get('/addUsers','LoginController@addUsers');
-Route::post('/register','LoginController@register');
 
-Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
+Route::get('/login', 'Auth\AdminController@showLoginForm');
+Route::post('/login', 'Auth\AdminController@login')->name('login.submit');
+Route::post('/logout', 'Auth\AdminController@logout');
+
+Route::group(['middleware' => 'auth'], function(){
 Route::get('/Dashboard','dashboardController@index');
+Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/UpdateRegistration/{ID}','ApplicationController@updateRegistration');
 Route::get('/List', 'ApplicationController@member');
@@ -47,20 +47,10 @@ Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfvie
 Route::get('/getStalls','StallController@getStalls');
 Route::post('/acceptRental','ApplicationController@acceptRental');
 Route::post('/rejectRental','ApplicationController@rejectRental');
-/////MAINTENANCE///////
-
 
 
 Route::get('/ViewContract/{id}','ContractController@viewContract');
-
-
-
-
-
-Route::get('/yow', function () {
-    return view('transaction.PaymentAndCollection.PaymentSuccess');
-});
-
+/////MAINTENANCE///////
 //Building
 Route::get('/Building', function () {
     return view('Maintenance.Maintenance_Buildings');
@@ -214,9 +204,8 @@ Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
 Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 Route::post('/updateApplication','ApplicationController@updateApplication');
+
 });
-
-
 ?>
 
 
