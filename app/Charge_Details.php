@@ -31,6 +31,4 @@ class Charge_Details extends Model
     public function Billing_Charges(){
         return $this->belongsToMany('App\Billing_Details','tblBilling_Charges','chargeDetID','billDetID');
     }
-    
-
 }

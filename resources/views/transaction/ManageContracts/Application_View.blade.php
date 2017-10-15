@@ -346,7 +346,7 @@
             , contentType: false
             , context: this
             , success: function (data) {
-                if (data == "init") {
+                if (data.trim() == "init") {
                     toastr.error('Initial Fees not set');
                 }
                 else {

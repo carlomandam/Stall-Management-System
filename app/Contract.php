@@ -32,6 +32,18 @@ class Contract extends Model
         return $this->hasMany('App\UtilityMeterID','contractID','stallMeterID');
     }
 
+    public function UnbilledUtilities(){
+        return $this->hasMany('App\UtilityMeterID','contractID')->doesntHave('Billing');
+    }
+
+    public function BilledUtilities(){
+        return $this->hasMany('App\UtilityMeterID','contractID')->has('Billing');
+    }
+
+    public function Charges(){
+        return $this->hasMany('App\Charge_Details','contractID');
+    }
+
     public function PrevContract(){
         return $this->belongsTo('App\Contract','prevContractID');
     }
@@ -46,7 +58,6 @@ class Contract extends Model
     public function StallMeter(){
         return $this->hasMany('App\StallMeter','contractID');
     }
-
 
     public function UnpaidInitial(){
         return $this->hasMany('App\InitFeeDetail','contractID')->whereNull('transactionID');

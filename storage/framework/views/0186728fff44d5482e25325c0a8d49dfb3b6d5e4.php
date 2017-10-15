@@ -1,8 +1,8 @@
-@extends('layout.app')
-@section('title')
-{{ 'Registration'}}
-@stop
-@section('content-header')
+<?php $__env->startSection('title'); ?>
+<?php echo e('Registration'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 <style>
 .col-md-12 column {  
    text-align:center;
@@ -45,14 +45,14 @@ label{
         <li><a href = "/StallList">Stall List</a></li>
         <li class="active">Registration</li>
       </ol>
-<script type="text/javascript" src ="{{ URL::asset('js/zepto.js')}}"> </script>
-<script type="text/javascript" src ="{{ URL::asset('js/icheck.js')}}"> </script>
-  @stop
+<script type="text/javascript" src ="<?php echo e(URL::asset('js/zepto.js')); ?>"> </script>
+<script type="text/javascript" src ="<?php echo e(URL::asset('js/icheck.js')); ?>"> </script>
+  <?php $__env->stopSection(); ?>
 
-  @section('content')
+  <?php $__env->startSection('content'); ?>
    <div class="row">
         <div style="margin-left: 20px; margin-bottom: 10px;">
-               <a href="{{ url('/RegistrationList') }}" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack to Registration List</a>
+               <a href="<?php echo e(url('/RegistrationList')); ?>" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack to Registration List</a>
         </div>
 
     <!--left table-->
@@ -77,25 +77,25 @@ label{
                 <input type = "text" class = "form-control" id = "orgname" name = "orgname" />
 
                 <label for="firstName"><b>First Name</b></label><span class="required">&nbsp*</span>
-                <input type="text" class="form-control" id="fname" name ="fname" placeholder="E.G. Jose Protacio" value ="{{$stallHolderDetails->stallHFName}}">
+                <input type="text" class="form-control" id="fname" name ="fname" placeholder="E.G. Jose Protacio" value ="<?php echo e($stallHolderDetails->stallHFName); ?>">
 
                 <label for="middleName"><b>Middle Name</b></label>
-                <input type="text" class="form-control" id="mname" name="mname" placeholder="E.G. Alonso Realonda" value ="{{$stallHolderDetails->stallHMName}}">
+                <input type="text" class="form-control" id="mname" name="mname" placeholder="E.G. Alonso Realonda" value ="<?php echo e($stallHolderDetails->stallHMName); ?>">
 
                 <label for="lastname"><b>Last Name</b></label><span class="required">&nbsp*</span>
-                <input type="text" class="form-control" id="lname" name="lname"  placeholder="E.G. Mercado Rizal" value ="{{$stallHolderDetails->stallHLName}}">
+                <input type="text" class="form-control" id="lname" name="lname"  placeholder="E.G. Mercado Rizal" value ="<?php echo e($stallHolderDetails->stallHLName); ?>">
 
                 <label for="sex"><b>Sex</b></label><span class="required">&nbsp*</span>
-                @if($stallHolderDetails->stallHSex == 0)
+                <?php if($stallHolderDetails->stallHSex == 0): ?>
                 
                   <label><input type="radio" name="sex" id = "sex0" value="0"  ><b>Male</b></label>
                   <label><input type="radio" name="sex" id = "sex0" value="0" checked ><b>Female</b></label>
                 
-                @else
+                <?php else: ?>
                   <label><input type="radio" name="sex" id = "sex0" value="0" checked=""><b>Male</b></label>
                     <label><input type="radio" name="iCheck" id = "sex1" value="1"><b>Female</b></label>
                     
-                @endif
+                <?php endif; ?>
                 <div class="form-inline">
                 <label for="bday"><b>Birthday</b></label><span class="required">&nbsp*</span>
                     
@@ -162,13 +162,13 @@ label{
                     
                      
                     <label for = "email">Email Address</label><span class="required">&nbsp*</span>
-                    <input type = "text" class = "form-control" id = "email" name = "email"  placeholder="email@domain.com" value = "{{$stallHolderDetails->stallHEmail}}"/>
+                    <input type = "text" class = "form-control" id = "email" name = "email"  placeholder="email@domain.com" value = "<?php echo e($stallHolderDetails->stallHEmail); ?>"/>
 
                     <label for="phone"><b>Mobile Number</b></label><span class="required">&nbsp*</span>
                     <input type="text" class="form-control" id="mob" name="mob"  placeholder="09xxxxxxxxx">
 
                     <label for="address"><b>Home Address</b></label><span class="required">&nbsp*</span>
-                    <textarea rows="4" class="form-control" id="address" name="address">{{$stallHolderDetails->stallHAddress}}</textarea>
+                    <textarea rows="4" class="form-control" id="address" name="address"><?php echo e($stallHolderDetails->stallHAddress); ?></textarea>
 
               </div>
                    
@@ -198,7 +198,7 @@ label{
             <div class="col-md-6">
               <div class="form-group">
                  <label>Stall Code</label>
-                 <input type="text" class="form-control" disabled="" value ="{{$stallDetails->stallID}}" />
+                 <input type="text" class="form-control" disabled="" value ="<?php echo e($stallDetails->stallID); ?>" />
            
                  <label>Stall Rate</label>
                  <textarea type="text" class="form-control" disabled=""></textarea>
@@ -212,15 +212,15 @@ label{
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Stall Type</label>
-                    <input type="text" class="form-control" disabled=""   value = " {{$stallDetails->stypeName }} ({{$stallDetails->stypeArea}} m&sup2) " />
+                    <input type="text" class="form-control" disabled=""   value = " <?php echo e($stallDetails->stypeName); ?> (<?php echo e($stallDetails->stypeArea); ?> m&sup2) " />
 
                     <label>Location</label>
-                    <textarea type="text" class="form-control" disabled=""  />Floor {{$stallDetails->floorLevel}},{{$stallDetails->bldgName}} Building</textarea>
+                    <textarea type="text" class="form-control" disabled=""  />Floor <?php echo e($stallDetails->floorLevel); ?>,<?php echo e($stallDetails->bldgName); ?> Building</textarea>
 
                 </div>
                 <div class="col-md-12">
                 <div class="pull-right" style="margin-top: 30px; ">
-                <button type = "button" class="btn btn-flat btn-primary" style="width: 100px;" onclick = "window.location= '{{ (url('/StallList')) }}'">Edit</button>
+                <button type = "button" class="btn btn-flat btn-primary" style="width: 100px;" onclick = "window.location= '<?php echo e((url('/StallList'))); ?>'">Edit</button>
                 </div>
             </div>
 
@@ -229,7 +229,7 @@ label{
 
             <div class="col-md-12">
                 <label for="bussiname">Business Name</label>
-                <input type="text" class="form-control" id="businessName" name ="businessName" value = "{{$stallrental->businessName}}"/>
+                <input type="text" class="form-control" id="businessName" name ="businessName" value = "<?php echo e($stallrental->businessName); ?>"/>
             </div>
 
             <div class="col-md-12">
@@ -285,8 +285,8 @@ label{
   </div>
 <!-- /.row -->
 
- @stop
-  @section('script')
+ <?php $__env->stopSection(); ?>
+  <?php $__env->startSection('script'); ?>
 <script type="text/javascript">
       $(document).ready(function(){
         //POPULATE YEAR DROPDOWN FOR BIRTHDAY///
@@ -332,7 +332,7 @@ label{
         ,format: 'mm-dd-yyyy'
        });
       //BIRTHDAY SELECTED//
-      var bday = {!! json_encode($stallHolderDetails->toArray(), JSON_HEX_TAG) !!};
+      var bday = <?php echo json_encode($stallHolderDetails->toArray(), JSON_HEX_TAG); ?>;
           $splitDate = bday["stallHBday"].split("-");
           $('#DOBYear').val($splitDate[0]).attr('selected', true).siblings('option').removeAttr('selected');
           $('#DOBMonth').val($splitDate[1]).attr('selected', true).siblings('option').removeAttr('selected');
@@ -347,4 +347,5 @@ label{
         $('#age').val(age);  
       });
 </script>
-  @stop 
+  <?php $__env->stopSection(); ?> 
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -30,15 +30,15 @@
                 <div class="col-md-3">
                     <label>Date:</label> {{date("F d, Y")}} </div>
                 <div class="col-md-9">
-                    <label>Customer Name:</label> Carl Omandam </div>
+                    <label>Customer Name:</label> {{$contract->StallHolder->stallHFName." ".strtoupper($contract->StallHolder->stallHMName[0]).". ".$contract->StallHolder->stallHLName}}</div>
                 <div class="col-md-3">
-                    <label>Stall No.:</label> MAIN-101 </div>
+                    <label>Stall No.:</label> {{$contract->stallID}} </div>
                 <div class="col-md-12">
-                    <label>Customer Address:</label> Blk 14 Lot 4 Pamahay Village, San Jose, Rodriguez, Rizal </div>
+                    <label>Customer Address:</label> {{$contract->StallHolder->stallHAddress}} </div>
                 <div class="col-md-12">
-                    <label>Contact No:</label> 09490059388 </div>
+                    <label>Contact No:</label> <?php for($i = 0;$i < count($contract->StallHolder->ContactNo);$i++){ echo $contract->StallHolder->ContactNo[$i]->contactNumber; if($i < count($contract->StallHolder->ContactNo) - 1) echo ", ";}?> </div>
                 <div class="col-md-12">
-                    <label>Email:</label>
+                    <label>Email: </label> {{$contract->StallHolder->stallHEmail}}
                 </div>
                 <div class="col-md-12">
                     <table class="table">
@@ -49,29 +49,77 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $total = 0?>
+                            @if(isset($init))
+                            @foreach($init as $i)
                             <tr>
-                                <td> Rental Fee October 11, 2017 </td>
-                                <td> Php. 200.00 </td>
+                            <td>
+                                {{$i->InitialFee->initDesc}}
+                            </td>
+                            <td>
+                                ₱ {{number_format($i->InitialFee->initAmt,2,'.',',')}}
+                            </td>
+                            <?php $total += $i->InitialFee->initAmt;?>
                             </tr>
+                            @endforeach
+                            @endif
+                            @if(isset($pc))
                             <tr>
-                                <td> Rental Fee October 12, 2017 </td>
-                                <td> Php. 200.00 </td>
+                                <td><label>Collections</label> </td>
+                                <td></td>
                             </tr>
+                            @foreach($pc as $p)
                             <tr>
-                                <td> Rental Fee October 13, 2017 </td>
-                                <td> Php. 200.00 </td>
+                                <td> {{$p['date']}} - {{date("l",strtotime($p['date']))}} </td>
+                                <td> ₱ {{number_format($p['amount'],2,'.',',')}} </td>
+                                <?php $total += $p['amount'];?>
                             </tr>
+                            @endforeach
+                            @endif
+                            @if(isset($bill))
                             <tr>
-                                <td> Rental Fee October 14, 2017 </td>
-                                <td> Php. 200.00 </td>
+                                <td><label>Bills</label> </td>
+                                <td></td>
                             </tr>
+                            @foreach($bill as $b)
+                            <tr>
+                                <td>
+                                    {{date("Ymd000",strtotime($b->created_at)).$b->billDetID}} 
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            @foreach($b->Billing_Utilities as $util)
+                            <tr>
+                            <td>
+                                {{($util->MonthlyReading->utilType == 1) ? "Electric Bill" : (($util->MonthlyReading->utilType == 2) ? "Water":"Unknown Utility Type")}} 
+                            </td>                                                               
+                            <td>
+                                ₱ {{number_format($util->utilityAmt,2,'.',',')}}
+                            </td>
+                            </tr>
+                            <?php $total += $util->utilityAmt;?>
+                            @endforeach
+                            @foreach($b->Charges as $charge)
+                            <tr>
+                            <td>
+                                {{($charge->chargeID == null) ? $charge->chargeDesc : $charge->Charges->chargeName}}
+                            </td>
+                            <td>
+                                ₱ {{number_format(($charge->chargeID == null) ? $charge->chargeAmt : $charge->Charges->chargeAmount,2,'.',',')}}
+                                <?php $total += number_format(($charge->chargeID == null) ? $charge->chargeAmt : $charge->Charges->chargeAmount,2,'.',',');?>
+                            </td>
+                            </tr>
+                            @endforeach
+                            @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
                 <div class="col-md-3 pull-right">
-                <lable>Total:</lable> Php. 800.00
+                <lable>Total:</lable>  ₱ {{number_format($total,2,'.',',')}}
                 <br>
-                <lable>Amount Paid:</lable> Php. 800.00
+                <lable>Amount Paid:</lable>
                 <br> </div>
             </div>
         </div>
@@ -83,5 +131,7 @@
     </div>
 </div> @stop @section('script')
 <script type="text/javascript">
-    $(document).on('ready', function () {});
+    $(document).on('ready', function () {
+       
+    });
 </script> @stop

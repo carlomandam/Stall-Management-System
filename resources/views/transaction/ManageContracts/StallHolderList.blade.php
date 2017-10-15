@@ -25,7 +25,7 @@
                     <li class="active"><a href="#tab3primary" data-toggle="tab">Contracts</a></li>
                     <li><a href="#tab1primary" data-toggle="tab">Available Stalls</a></li>
                     <li><a href="#tab2primary" data-toggle="tab">Pending Registrations</a></li>
-                    <li><a href="#tab4primary" data-toggle="tab">Tennants</a></li>         
+                    <li><a href="#tab4primary" data-toggle="tab">Tenants</a></li>         
                 </ul>
             </div>
             <div class="panel-body">

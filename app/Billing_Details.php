@@ -16,24 +16,26 @@ class Billing_Details extends Model
     protected $fillable = [
     	'billID',
         'transactionID'
-    
     ];
 
     public function Transaction(){
     	return $this->belongsTo('App\Transaction','transactionID');
     }
+
     public function Billing(){
-    	return $this->belongsTo('App\Billing_Details','billID');
+    	return $this->belongsTo('App\Billing','billID');
     }
+
     public function Billing_Utilities(){
         return $this->belongsToMany('App\StallMeter','tblBilling_Utilities',
             'billDetID','stallMeterID');
     }
+
     public function Billing_Charges(){
         return $this->belongsToMany('App\Billing_Details','tblBilling_Charges','billDetID','chargeDetID');
     }
-    
 
-
-
+    public function Charges(){
+        return $this->belongsToMany('App\Charge_Details','tblBilling_Charges','billDetID','chargeDetID');
+    }
 }

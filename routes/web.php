@@ -10,9 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 
 Route::get('/login', 'Auth\AdminController@showLoginForm');
@@ -47,7 +49,6 @@ Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfvie
 Route::get('/getStalls','StallController@getStalls');
 Route::post('/acceptRental','ApplicationController@acceptRental');
 Route::post('/rejectRental','ApplicationController@rejectRental');
-
 
 Route::get('/ViewContract/{id}','ContractController@viewContract');
 /////MAINTENANCE///////
@@ -176,14 +177,15 @@ Route::get('/Utilities/view/{id}', 'UtilityController@view');
 Route::get('/Utilities/update/{id}', 'UtilityController@edit');
 Route::put('/Utilities/finalize/{id}', 'UtilityController@finalize');
 Route::get('/getBills','PaymentController@getBills');
-Route::get('/createBill/{id}','BillingController@createBill');
-Route::get('/ViewBill/{id}','BillingController@viewBill');
+Route::get('/createBill','BillingController@createBill');
+Route::get('/ViewBill','BillingController@viewBill');
 Route::get('/getPaymentStatus','PaymentController@getPaymentStatus');
 Route::get('/CheckBillingRecords','PaymentController@checkRecords');
 Route::get('/ViewPaymentDetails','PaymentController@getPaymentDetails');
 Route::get('/printReceipt','PaymentController@printReceipt');
 Route::post('/NewPaymentTransaction','PaymentController@newPaymentTransaction');
 
+Route::post('/newBill','BillingController@newBill');
 ////////////////REQUESTS////////////
 Route::resource('/Requests', 'RequestController');
 Route::get("/Request/Current/{id}", 'RequestController@current');
