@@ -163,7 +163,7 @@ class UtilityController extends Controller
                     ->whereNull('contract.contractReason')
                     ->orderBy('contract.contractID', 'asc')
                     ->get();
-
+       
         $contractID = $con->pluck('contractID');
         $stalls = [];
         $stall=[];
@@ -172,7 +172,7 @@ class UtilityController extends Controller
           $stall = DB::table('tblContractInfo as contract')
                         ->join('tblStall as stall','contract.stallID','stall.stallID')
                         ->join('tblStall_Utilities as utility','stall.stallID','utility.stallID')
-                        ->leftjoin('tblSubMeter as meter','utility.stallUtilityID','meter.stallUtilityID')
+                        ->join('tblSubMeter as meter','utility.stallUtilityID','meter.stallUtilityID')
                         ->leftjoin('tblStallUtilities_MeterID as meterID','meterID.contractID','contract.contractID')
                         ->leftjoin('tblMonthlyReading as month','month.readingID','meterID.readingID')
                         ->select('contract.*','stall.stallID as stallID','utility.*','meter.prevRead','meter.presRead','month.readingFrom','month.readingTo','meter.subMeterID')

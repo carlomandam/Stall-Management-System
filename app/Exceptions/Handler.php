@@ -47,16 +47,16 @@ class Handler extends ExceptionHandler
         return parent::render($request, $exception);
 
         
-        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
-            return response()->view();
-        }
-        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
-            return response()->view();
-        }
-        if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
-            return response()->view();
-        }
-        return parent::render($request, $exception);
+        if($this->isHttpException($e))
+    {
+        if($e->getStatusCode == 404)
+           return redirect()->back();
+
+        if($e->getStatusCode == 500)
+           return redirect()->back();
+    }
+
+    return parent::render($request, $e);
     }
 
     /**
@@ -72,6 +72,6 @@ class Handler extends ExceptionHandler
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
-        return redirect()->guest(route('login'));
+        return redirect()->back();
     }
 }

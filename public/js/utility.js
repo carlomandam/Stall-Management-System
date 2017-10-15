@@ -12,13 +12,11 @@ $(document).on('change', '#utilityType', function () {
             type: "GET"
             , url: "/Utilities/" + id
             , success: function (data) {
-                // console.log(data);
+                console.log(data);
                 $.each(data.stalls, function (key, value) {
                     // console.log(value[0].presRead);
                     if (value[0].presRead == null) {
                         $('.stallList').append('<tr class ="stall" data-id ="' + value[0].contractID + '"><td>' + value[0].stallID + '</td><td><input type="text" data-id="' + value[0].stallUtilityID + '" class="form-control reading2" id="sub_prev" name="subPrev"></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres" ></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="' + value[0].stallUtilityID + '" name="stallUtility"></td> </tr>');
-                        // var x = $(this).index();
-                        // console.log(key); 
                     }
                     else {
                         $('.stallList').append('<tr class ="stall" data-id ="' + value[0].contractID + '"><td>' + value[0].stallID + '</td><td><input type="text" data-id="' + value[0].stallUtilityID + '" class="form-control reading2" id="sub_prev" name="subPrev" value ="' + value[0].presRead + '" disabled></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres"></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="' + value[0].stallUtilityID + '" name="stallUtility"></td>  </tr>');
