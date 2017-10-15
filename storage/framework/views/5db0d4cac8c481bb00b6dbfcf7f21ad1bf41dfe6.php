@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="<?php echo e(app()->getLocale()); ?>">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -68,12 +68,12 @@
         <div class="flex-center position-ref full-height">
            
                 <div class="top-right links">
-                    @if (Auth::check())
-                        <a href="{{ url('/welcome') }}">Home</a>
-                    @else
-                        <a href="{{ url('/login') }}">Login</a>
+                    <?php if(Auth::check()): ?>
+                        <a href="<?php echo e(url('/welcome')); ?>">Home</a>
+                    <?php else: ?>
+                        <a href="<?php echo e(url('/login')); ?>">Login</a>
                         
-                    @endif
+                    <?php endif; ?>
                 </div>
         
 
