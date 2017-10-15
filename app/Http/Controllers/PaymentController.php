@@ -100,11 +100,35 @@ class PaymentController extends Controller{
                     $pc->save();
                 }
             }
+
+            if(isset($_POST['bills'])){
+                foreach ($_POST['bills'] as $i) {
+                    $bill = Billing_Details::find($i);
+                    $bill->transactionID = $transaction->transactionID;
+                    $bill->save();
+                }
+            }
             $payment = new Payment;
             $payment->transactionID = $transaction->transactionID;
             $payment->paidAmt = $_POST['amtReceived'];
             $payment->paymentDate = date('Y-m-d');
-            $payment->save();
+            if($payment->save()){
+                $contract = Contract::find($_POST['contract']);
+                if(isset($_POST['init'])){
+                    $init = InitFeeDetail::findMany($_POST['init']);
+                }
+
+                if(isset($_POST['unpaid'])){
+                    $pc = CollectionDetails::findMany($_POST['unpaid']);
+                    $pc = PaymentController::getRate($pc , $contract->StallRate->stallRateID);
+                }
+
+                if(isset($_POST['bills'])){
+                    $bill = Billing_Details::with("Billing")->findMany($_POST['bills']);
+                }
+
+                return view('transaction/PaymentAndCollection/PaymentSuccess',compact('bill','pc','init','contract'));
+            }
         }
     }
 
@@ -119,6 +143,7 @@ class PaymentController extends Controller{
 
 
         foreach($stalls as $stall){
+            $this::checkPrevCollection($stall->contractID);
             $totalUnpaid[$recordCtr]['amount'] =  PaymentController::computeUnpaid($stall->contractID);
             foreach($collectionStat as $stat){
                 if($totalUnpaid[$recordCtr]['amount'] <= $stat->collect){
@@ -145,12 +170,13 @@ class PaymentController extends Controller{
             $recordCtr++;
         }
             
-           
+           // return $totalUnpaid;
         return view('transaction/PaymentAndCollection/finalPayment',compact('collectionStat','stalls','totalUnpaid'));
     }
     public function computeUnpaid($contractID){
         $totalUnpaidAmt = 0;
-         $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$contractID' ORDER BY collect.contractID");
+        $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$contractID' ORDER BY collect.contractID");
+        $dates = array();
         foreach($unpaidCollections as $unpaid){
             $dates[] = $unpaid->collectDate;
         }
@@ -344,7 +370,7 @@ class PaymentController extends Controller{
                 
                 DB::commit();
 
-                return $lastCollect."else";
+                //return $lastCollect."else";
             }
             catch(\Exception $e){
                 DB::rollback();
@@ -355,7 +381,7 @@ class PaymentController extends Controller{
     }
 
     public function makePayment($id){
-        $contract = Contract::find($id);
+        $contract = Contract::with('BilledUtilities.Billing','Charges.Billing_Charges')->find($id);
         $paymentLastID = Payment::whereRaw('paymentID = (select max(`paymentID`) from tblPayment)')->first();  
         $paymentLastID= count($paymentLastID) == 0 ? 1 : $paymentLastID->paymentID +1;
         $payID = 'PAYMENT-'.str_pad($paymentLastID, 5, '0', STR_PAD_LEFT);
@@ -378,14 +404,28 @@ class PaymentController extends Controller{
             ->max('details.collectDate');
 
             $dateFrom = count($checkadvance) > 0 ? Carbon::parse($checkadvance)->addDays(1)->format('Y-m-d') : Carbon::today()->addDays(1)->format('Y-m-d');
+
             $totalUnpaid = PaymentController::computeUnpaid($id);
             $status = PaymentController::checkCollectStatus($totalUnpaid);
            
-
+            $billID = array();
+            foreach ($contract->BilledUtilities as $bill) {
+                foreach ($bill->Billing as $id) {
+                  if(!in_array($id->billID, $billID))
+                    $billID[]=$id->billID; # code...
+                }
+            }
+            foreach ($contract->Charges as $bill) {
+                foreach ($bill->Billing_Charges as $id) {
+                  if(!in_array($id->billID, $billID))
+                    $billID[]=$id->billID; # code...
+                }
+            }
+            $bills = Billing_Details::with("Billing")->whereNull("transactionID")->findMany($billID);
         }
 
 
-        return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','unpaid','dateFrom','unpaidCollections','lastCollect','dates','totalUnpaid','status'));
+        return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','unpaid','dateFrom','unpaidCollections','lastCollect','dates','bills','totalUnpaid','status'));
     }
     public function checkCollectStatus($amount){
         $status = "";
@@ -580,7 +620,18 @@ class PaymentController extends Controller{
           
 
         }
-        return $data; 
+        if(count($data[0]) == 0){
+            echo '{
+                "sEcho": 1,
+                "iTotalRecords": "0",
+                "iTotalDisplayRecords": "0",
+            "aaData": []
+            }';
+
+            return;
+        }else
+        return $data;
+
     }
 
     public function getPaymentDetails(Request $request){

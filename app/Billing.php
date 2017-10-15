@@ -23,26 +23,23 @@ class Billing extends Model
         return $this->hasMany('App\Billing_Details','billID');
     }
    
-    public function Contract()
-    {
-    return $this->belongsTo('App\Contract','contractID');
+    public function Contract(){
+        return $this->belongsTo('App\Contract','contractID');
     }
 
-    public function Initial()
-    {
-    return $this->hasMany('App\initBill','billID');
+    public function Initial(){
+        return $this->hasMany('App\initBill','billID');
+    }
 
-    
-    public function Charges()
-    {
+    public function Charges(){
         return $this->belongsToMany('App\Charges','tblBill_Charges','billID','chargeID');
     }
-    public function MonthlyReading()
-    {
+
+    public function MonthlyReading(){
         return $this->belongsToMany('App\MonthlyReading','tblBill_Reading','billID','readingID');
     }
-     public function InitialFee()
-    {
+
+    public function InitialFee(){
         return $this->belongsToMany('App\InitialFee','tblBill_Initial','billID','billInitialID');
     }
 }

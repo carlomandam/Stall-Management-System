@@ -1,5 +1,5 @@
-@extends('layout.app') @section('title') {{ 'Payment'}} @stop @section('style')
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/panel-tab.css')}}">
+ <?php $__env->startSection('title'); ?> <?php echo e('Payment'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('style'); ?>
+<link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/bootstrap/css/panel-tab.css')); ?>">
 <style type="text/css">
     .col-md-12,
     .row {
@@ -19,14 +19,14 @@
     .label {
         font-size: 14px;
     }
-</style> @stop @section('content-header')
+</style> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?>
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i> Payment and Collections</li>
-</ol> @stop @section('content')
+</ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
 <div class="row">
     <div class="col-md-12">
         <div class="defaultNewButton">
-            <a href="{{url('/Payment')}}">
+            <a href="<?php echo e(url('/Payment')); ?>">
                 <button class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</button>
             </a>
         </div>
@@ -42,8 +42,9 @@
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="tab1primary">
                         <div class="row">
-                            <form id="paymentForm" method="post" action="/NewPaymentTransaction"> {{csrf_field()}}
-                                <input type="hidden" name="contract" value="{{$contract->contractID}}">
+                            <form id="paymentForm" method="post" action="/NewPaymentTransaction"> <?php echo e(csrf_field()); ?>
+
+                                <input type="hidden" name="contract" value="<?php echo e($contract->contractID); ?>">
                                 <div class="col-md-5">
                                     <div class="box box-primary">
                                         <div class="box-body">
@@ -52,30 +53,30 @@
                                                     <label>Payment No.</label>
                                                 </label>
                                                 <div class="col-md-9">
-                                                    <lable class="form-control">{{$payID}}</lable>
+                                                    <lable class="form-control"><?php echo e($payID); ?></lable>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-3">Stall Code</label>
                                                 <div class="col-md-9">
-                                                    <label class="form-control">{{$contract->stallID}}</label>
+                                                    <label class="form-control"><?php echo e($contract->stallID); ?></label>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-3">Tenant Name</label>
                                                 <div class="col-md-9">
-                                                    <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
+                                                    <label class="form-control"><?php echo e(\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)); ?> <?php echo e(\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)); ?> <?php echo e(\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)); ?></label>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-3">Balance</label>
                                                 <div class="col-md-9">
-                                                    <label class="form-control">Php @if(isset($totalUnpaid)){{number_format($totalUnpaid,2)}}@endif</label>
+                                                    <label class="form-control">Php <?php if(isset($totalUnpaid)): ?><?php echo e(number_format($totalUnpaid,2)); ?><?php endif; ?></label>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-3">Collection Status</label>
-                                                <div class="col-md-9"> @if(isset($status)) @if($status == 'COLLECT') <span class="label bg-primary">{{$status}}</span> @elseif($status == 'REMINDER') <span class="label bg-green form-control"><label>{{$status}}</label></span> @elseif($status == 'WARNING') <span class="label yellow form-control"><label>{{$status}}</label></span> @elseif($status == 'LOCK') <span class="label bg-orange"><label>{{$status}}</label></span> @elseif($status == 'TERMINATE') <span class="label bg-red"><label>{{$status}}</label></span> @endif @endif </div>
+                                                <div class="col-md-9"> <?php if(isset($status)): ?> <?php if($status == 'COLLECT'): ?> <span class="label bg-primary"><?php echo e($status); ?></span> <?php elseif($status == 'REMINDER'): ?> <span class="label bg-green form-control"><label><?php echo e($status); ?></label></span> <?php elseif($status == 'WARNING'): ?> <span class="label yellow form-control"><label><?php echo e($status); ?></label></span> <?php elseif($status == 'LOCK'): ?> <span class="label bg-orange"><label><?php echo e($status); ?></label></span> <?php elseif($status == 'TERMINATE'): ?> <span class="label bg-red"><label><?php echo e($status); ?></label></span> <?php endif; ?> <?php endif; ?> </div>
                                             </div>
                                         </div>
                                     </div>
@@ -86,72 +87,76 @@
                                             <div id="newEC" class="alert alert-danger print-error-msg" style="display:none">
                                                 <ul></ul>
                                             </div>
-                                            <div class="row"> @if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0)
+                                            <div class="row"> <?php if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0): ?>
                                                 <div class="col-md-12">
                                                     <div class="pull-right" style="margin-right:5%">
                                                         <label>Amount</label>
                                                     </div>
-                                                </div> @endif
-                                                <?php $total = 0;?> @if(count($contract->UnpaidInitial) > 0)
+                                                </div> <?php endif; ?>
+                                                <?php $total = 0;?> <?php if(count($contract->UnpaidInitial) > 0): ?>
                                                     <div class="col-md-12">
                                                         <label>Initial Fee</label>
-                                                        <ul id="initList" style="list-style:none"> @foreach($contract->UnpaidInitial as $i)
+                                                        <ul id="initList" style="list-style:none"> <?php $__currentLoopData = $contract->UnpaidInitial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                             <li>
                                                                 <div class="cblable" style="width:50% !important;display:inline !important">
                                                                     <label style="font-weight: normal">
-                                                                        <input name="initCB[]" style="width: 15px;height: 15px;display:none" type="checkbox" value="{{$i->initDetID}}" disabled>{{$i->InitialFee->initDesc}}
-                                                                        <input type="hidden" name="init[]" value="{{$i->initDetID}}"> </label>
+                                                                        <input name="initCB[]" style="width: 15px;height: 15px;display:none" type="checkbox" value="<?php echo e($i->initDetID); ?>" disabled><?php echo e($i->InitialFee->initDesc); ?>
+
+                                                                        <input type="hidden" name="init[]" value="<?php echo e($i->initDetID); ?>"> </label>
                                                                 </div>
-                                                                <div class="pull-right" style="margin-right:5%;width:10%">₱ {{number_format($i->InitialFee->initAmt,2,'.',',')}}</div>
+                                                                <div class="pull-right" style="margin-right:5%;width:10%">₱ <?php echo e(number_format($i->InitialFee->initAmt,2,'.',',')); ?></div>
                                                             </li>
-                                                            <?php $total += $i->InitialFee->initAmt;?> @endforeach </ul>
-                                                    </div> @endif @if(isset($unpaidCollections) && count($unpaidCollections) > 0)
+                                                            <?php $total += $i->InitialFee->initAmt;?> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
+                                                    </div> <?php endif; ?> <?php if(isset($unpaidCollections) && count($unpaidCollections) > 0): ?>
                                                     <div class="col-md-12">
                                                         <label>Unpaid Collection</label>
-                                                        <ul style="list-style:none"> @foreach($unpaidCollections as $u)
+                                                        <ul style="list-style:none"> <?php $__currentLoopData = $unpaidCollections; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                             <li>
                                                                 <div class="checkbox" style="display:inline !important">
                                                                     <label>
-                                                                        <input name="unpaid[]" style="width: 15px;height: 15px" type="checkbox" value="{{$u['detID']}}" checked> {{$u['date']}} - {{date("l",strtotime($u['date']))}} </label>
+                                                                        <input name="unpaid[]" style="width: 15px;height: 15px" type="checkbox" value="<?php echo e($u['detID']); ?>" checked> <?php echo e($u['date']); ?> - <?php echo e(date("l",strtotime($u['date']))); ?> </label>
                                                                 </div>
-                                                                <div class="pull-right" style="margin-right:5%;display:inline !important">₱ {{number_format($u['amount'],2,'.',',')}} </div>
+                                                                <div class="pull-right" style="margin-right:5%;display:inline !important">₱ <?php echo e(number_format($u['amount'],2,'.',',')); ?> </div>
                                                             </li>
-                                                            <?php $total += $u['amount']; ?> @endforeach </ul>
-                                                    </div> @endif @if(isset($bills) && count($bills) > 0)
+                                                            <?php $total += $u['amount']; ?> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
+                                                    </div> <?php endif; ?> <?php if(isset($bills) && count($bills) > 0): ?>
                                                     <div class="col-md-12">
                                                         <label>Unpaid Bills</label>
-                                                        <ul style="list-style:none"> @foreach($bills as $u)
+                                                        <ul style="list-style:none"> <?php $__currentLoopData = $bills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                             <li>
                                                                 <div class="checkbox" style="display:inline !important">
                                                                     <label>
-                                                                        <input name="bills[]" style="width: 15px;height: 15px" type="checkbox" value="{{$u->billDetID}}" checked> {{date("Ymd000",strtotime($u->created_at)).$u->billDetID}} </label>
+                                                                        <input name="bills[]" style="width: 15px;height: 15px" type="checkbox" value="<?php echo e($u->billDetID); ?>" checked> <?php echo e(date("Ymd000",strtotime($u->created_at)).$u->billDetID); ?> </label>
                                                                 </div>
-                                                                <ul> @foreach($u->Billing_Utilities as $util)
-                                                                    <li> {{($util->MonthlyReading->utilType == 1) ? "Electric Bill" : (($util->MonthlyReading->utilType == 2) ? "Water":"Unknown Utility Type")}}
-                                                                        <div class="pull-right" style="margin-right:5%;display:inline !important">₱ {{number_format($util->utilityAmt,2,'.',',')}} </div>
+                                                                <ul> <?php $__currentLoopData = $u->Billing_Utilities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $util): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                    <li> <?php echo e(($util->MonthlyReading->utilType == 1) ? "Electric Bill" : (($util->MonthlyReading->utilType == 2) ? "Water":"Unknown Utility Type")); ?>
+
+                                                                        <div class="pull-right" style="margin-right:5%;display:inline !important">₱ <?php echo e(number_format($util->utilityAmt,2,'.',',')); ?> </div>
                                                                         <?php $total += $util->utilityAmt;?>
-                                                                    </li> @endforeach @foreach($u->Charges as $charge)
-                                                                    <li> {{($charge->chargeID == null) ? $charge->chargeDesc : $charge->Charges->chargeName}}
-                                                                        <div class="pull-right" style="margin-right:5%;display:inline !important">₱ {{number_format(($charge->chargeID == null) ? $charge->chargeAmt : $charge->Charges->chargeAmount,2,'.',',')}} </div>
+                                                                    </li> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> <?php $__currentLoopData = $u->Charges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $charge): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                    <li> <?php echo e(($charge->chargeID == null) ? $charge->chargeDesc : $charge->Charges->chargeName); ?>
+
+                                                                        <div class="pull-right" style="margin-right:5%;display:inline !important">₱ <?php echo e(number_format(($charge->chargeID == null) ? $charge->chargeAmt : $charge->Charges->chargeAmount,2,'.',',')); ?> </div>
                                                                         <?php $total += number_format(($charge->chargeID == null) ? $charge->chargeAmt : $charge->Charges->chargeAmount,2,'.',',');?>
-                                                                    </li> @endforeach </ul>
-                                                            </li> @endforeach </ul>
-                                                    </div> @endif @if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0)
+                                                                    </li> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
+                                                            </li> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
+                                                    </div> <?php endif; ?> <?php if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0): ?>
                                                     <div class="col-md-12">
                                                         <hr style="border-color:black">
                                                         <div class="col-md-7">
-                                                            <label class="col-md-7">Total Amount:</label>&nbsp;₱ {{number_format($total,2,'.',',')}}
+                                                            <label class="col-md-7">Total Amount:</label>&nbsp;₱ <?php echo e(number_format($total,2,'.',',')); ?>
+
                                                             <label>Amount Received:</label>
                                                             <input type="text" name="amtReceived" id="amtReceived" /> </div>
                                                     </div>
-                                            </div> @else
+                                            </div> <?php else: ?>
                                             <div class="col-md-12">
                                                 <center>
                                                     <label>Nothing to pay</label>
                                                 </center>
-                                            </div> @endif </div>
+                                            </div> <?php endif; ?> </div>
                                     </div>
-                                </div> @if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0)
+                                </div> <?php if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0): ?>
                                 <div class="pull-right">
                                     <div class="defaultBtnSet col-md-12">
                                         <button type="button" class="btn btn-danger btn-flat" id="voidbtn"> Void Items</button>
@@ -161,7 +166,7 @@
                                         <button type="button" class="btn btn-danger btn-flat" id="cancelVoid">Cancel</button>
                                         <button class="btn btn-primary btn-flat" id="save"> <i class="fa fa-save"></i> Save</button>
                                     </div>
-                                </div> @endif
+                                </div> <?php endif; ?>
                                 <!-- box box-primary -->
                             </form>
                         </div>
@@ -177,25 +182,25 @@
                                         <label>Payment Number:</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-control">{{$payID}}</label>
+                                        <label class="form-control"><?php echo e($payID); ?></label>
                                     </div>
                                 </div>
                                 <div class="form-group" style="margin-top: 10px;">
                                     <label class="form-control">Tenant Name:</label>
-                                    <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
+                                    <label class="form-control"><?php echo e(\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)); ?> <?php echo e(\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)); ?> <?php echo e(\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)); ?></label>
                                 </div>
                                 <div class="row" style="margin-top: 10px;">
                                     <div class="col-md-2">
                                         <label>Stall Code:</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-control">{{$contract->stallID}}</label>
+                                        <label class="form-control"><?php echo e($contract->stallID); ?></label>
                                     </div>
                                     <div class="col-md-2">
                                         <label>Business Name:</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-control"> {{\Illuminate\Support\Str::upper($contract->businessName)}}</label>
+                                        <label class="form-control"> <?php echo e(\Illuminate\Support\Str::upper($contract->businessName)); ?></label>
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top: 10px;">
@@ -203,7 +208,7 @@
                                         <label>Date From:</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <label id="dateFrom" name="dateFrom" class="form-control"> @if(isset($dateFrom)) {{$dateFrom}}</label> @endif </div>
+                                        <label id="dateFrom" name="dateFrom" class="form-control"> <?php if(isset($dateFrom)): ?> <?php echo e($dateFrom); ?></label> <?php endif; ?> </div>
                                     <div class="col-md-2">
                                         <label>Date To:</label>
                                     </div>
@@ -258,16 +263,16 @@
                             <div class="row">
                                 <label class="col-md-3">Stall Code</label>
                                 <div class="col-md-3">
-                                    <label class="form-control">{{$contract->stallID}}</label>
+                                    <label class="form-control"><?php echo e($contract->stallID); ?></label>
                                 </div>
                             </div>
                             <div class="row">
                                 <label class="col-md-3">Tenant Name</label>
                                 <div class="col-md-3">
-                                    <label class="form-control">{{\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)}}</label>
+                                    <label class="form-control"><?php echo e(\Illuminate\Support\Str::upper($contract->StallHolder->stallHFName)); ?> <?php echo e(\Illuminate\Support\Str::upper($contract->StallHolder->stallHMName)); ?> <?php echo e(\Illuminate\Support\Str::upper($contract->StallHolder->stallHLName)); ?></label>
                                 </div>
                                 <label class="col-md-3">Collection Status</label>
-                                <div class="col-md-3"> @if(isset($status)) @if($status == 'COLLECT') <span class="label bg-primary">{{$status}}</span> @elseif($status == 'REMINDER') <span class="label bg-green form-control"><label>{{$status}}</label></span> @elseif($status == 'WARNING') <span class="label yellow form-control"><label>{{$status}}</label></span> @elseif($status == 'LOCK') <span class="label bg-orange"><label>{{$status}}</label></span> @elseif($status == 'TERMINATE') <span class="label bg-red"><label>{{$status}}</label></span> @endif @endif </div>
+                                <div class="col-md-3"> <?php if(isset($status)): ?> <?php if($status == 'COLLECT'): ?> <span class="label bg-primary"><?php echo e($status); ?></span> <?php elseif($status == 'REMINDER'): ?> <span class="label bg-green form-control"><label><?php echo e($status); ?></label></span> <?php elseif($status == 'WARNING'): ?> <span class="label yellow form-control"><label><?php echo e($status); ?></label></span> <?php elseif($status == 'LOCK'): ?> <span class="label bg-orange"><label><?php echo e($status); ?></label></span> <?php elseif($status == 'TERMINATE'): ?> <span class="label bg-red"><label><?php echo e($status); ?></label></span> <?php endif; ?> <?php endif; ?> </div>
                             </div>
                         </div>
                     </div>
@@ -311,8 +316,8 @@
         </div>
     </div>
     <!-- col-md-12-->
-    <!-- row-->@stop @section('script')
-    <script type="text/javascript" src="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
+    <!-- row--><?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/jquery.inputmask.bundle.js')); ?>"></script>
     <script type="text/javascript">
         var totalAmt = 0;
         var sum = 0;
@@ -378,13 +383,13 @@
                 , changeMonth: true
                 , changeYear: true
                 , autoclose: true
-                , startDate: '{{$dateFrom}}'
+                , startDate: '<?php echo e($dateFrom); ?>'
                 , orientation: 'bottom'
                 , format: 'yyyy-mm-dd'
             });
             $('#tbladpay').dataTable({});
             $('#tblpay').dataTable({});
-            var contractID = "{{$contract->contractID}}";
+            var contractID = "<?php echo e($contract->contractID); ?>";
             $.ajax({
                 type: "GET"
                 , url: "/ViewPaymentHistory"
@@ -418,7 +423,7 @@
                 sum = 0;
                 $("#sum").val(sum);
                 var dateFrom = $('#dateFrom').text();
-                var contractID = "{{$contract->contractID}}";
+                var contractID = "<?php echo e($contract->contractID); ?>";
                 var dateTo = $("#dateTo").val();
                 var rows_selected = [];
                 $.ajax({
@@ -476,7 +481,7 @@
             e.preventDefault();
             var _token = $("input[name='_token']").val();
             var dateFrom = $('#dateFrom').text();
-            var contractID = "{{$contract->contractID}}";
+            var contractID = "<?php echo e($contract->contractID); ?>";
             var dateTo = $("#dateTo").val();
             var amtPaid = $('#amtPaid').val();
             var temp3 = $('#amtPaid').val().replace("Php ", "", );
@@ -502,7 +507,7 @@
                     , success: function (data) {
                         if ($.isEmptyObject(data.error)) {
                             toastr.success(data.success);
-                            window.location = '/ViewPayment/' + "{{$contract->contractID}}";
+                            window.location = '/ViewPayment/' + "<?php echo e($contract->contractID); ?>";
                         }
                         else {
                             printErrorMsg(data.error);
@@ -575,4 +580,5 @@
             rightAlign: true
             , prefix: 'Php '
         , });
-    </script> @stop
+    </script> <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

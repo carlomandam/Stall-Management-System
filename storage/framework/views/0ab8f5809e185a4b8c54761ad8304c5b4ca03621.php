@@ -1,4 +1,4 @@
-@extends('layout.app') @section('title') {{ 'Registration'}} @stop @section('content-header')
+ <?php $__env->startSection('title'); ?> <?php echo e('Registration'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?>
 <style>
     .col-md-12 column {
         text-align: center;
@@ -64,12 +64,12 @@
     <li><a href="/StallList">Stall List</a></li>
     <li class="active">Registration</li>
 </ol>
-<script type="text/javascript" src="{{ URL::asset('js/zepto.js')}}">
+<script type="text/javascript" src="<?php echo e(URL::asset('js/zepto.js')); ?>">
 </script>
-<script type="text/javascript" src="{{ URL::asset('js/icheck.js')}}">
-</script> @stop @section('content')
+<script type="text/javascript" src="<?php echo e(URL::asset('js/icheck.js')); ?>">
+</script> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
 <div class="row">
-    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp;Back</a> </div>
+    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="<?php echo e(url('/StallHolderList')); ?>" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp;Back</a> </div>
     <div class="col-md-12">
         <div class="box box-primary ">
             <div class="col-md-12">
@@ -78,17 +78,17 @@
                 </div>
             </div>
             <div class="box-header with-border">
-                <h3 class="box-title">Stall Holder Details &nbsp;<a href="/getTennant/{{$stallHolderDetails->stallHID}}" style="font-size:11px"><span class='fa fa-pencil'></span>Update</a></h3> </div>
+                <h3 class="box-title">Stall Holder Details &nbsp;<a href="/getTennant/<?php echo e($stallHolderDetails->stallHID); ?>" style="font-size:11px"><span class='fa fa-pencil'></span>Update</a></h3> </div>
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-6">
                             <label for="firstName"><b>StallHolder Name</b></label>
-                            <p> {{$stallHolderDetails->stallHFName.' '.$stallHolderDetails->stallHLName}}</p>
+                            <p> <?php echo e($stallHolderDetails->stallHFName.' '.$stallHolderDetails->stallHLName); ?></p>
                         </div>
                         <div class="col-md-6">
                             <label for="address"><b>Home Address</b></label>
-                            <p>{{$stallHolderDetails->stallHAddress}}</p>
+                            <p><?php echo e($stallHolderDetails->stallHAddress); ?></p>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -105,18 +105,18 @@
                         </div>
                         <div class="col-md-6">
                             <label for="sex"><b>Gender</b></label>
-                            <p>{{($stallHolderDetails->stallHSex == 1) ? 'Male' : 'Female'}}</p>
+                            <p><?php echo e(($stallHolderDetails->stallHSex == 1) ? 'Male' : 'Female'); ?></p>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="col-md-6">
                             <label for="email">Email Address</label>
-                            <p>{{$stallHolderDetails->stallHEmail}}</p>
+                            <p><?php echo e($stallHolderDetails->stallHEmail); ?></p>
                         </div>
                         <div class="col-md-6">
                             <label for="phone"><b>Contact Number/s:</b></label>
-                            <ul> @foreach($stallHolderDetails->ContactNo as $contact)
-                                <li>{{$contact->contactNumber}}</li> @endforeach </ul>
+                            <ul> <?php $__currentLoopData = $stallHolderDetails->ContactNo; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $contact): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><?php echo e($contact->contactNumber); ?></li> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
                         </div>
                     </div>
                 </div>
@@ -136,24 +136,24 @@
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <label>Stall Code</label>
-                                    <p>{{$stallDetails->stallID}}</p>
+                                    <p><?php echo e($stallDetails->stallID); ?></p>
                                 </div>
                                 <div class="col-md-3">
                                     <label>Stall Type</label>
-                                    <p>{{$stallDetails->stypeName}}</p>
+                                    <p><?php echo e($stallDetails->stypeName); ?></p>
                                 </div>
                                 <div class="col-md-6">
                                     <label>Location</label>
-                                    <p>{{(($stallDetails->floorLevel == '1') ? $stallDetails->floorLevel.'st' : (($stallDetails->floorLevel == '2') ? $stallDetails->floorLevel.'nd' : (($stallDetails->floorLevel == '3') ? $stallDetails->floorLevel.'rd' : $stallDetails->floorLevel.'th'))).' Floor'}}, {{$stallDetails->bldgName}}</p>
+                                    <p><?php echo e((($stallDetails->floorLevel == '1') ? $stallDetails->floorLevel.'st' : (($stallDetails->floorLevel == '2') ? $stallDetails->floorLevel.'nd' : (($stallDetails->floorLevel == '3') ? $stallDetails->floorLevel.'rd' : $stallDetails->floorLevel.'th'))).' Floor'); ?>, <?php echo e($stallDetails->bldgName); ?></p>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="col-md-6">
                                     <label for="org">Name of Group/Organization<i><b>&nbsp&nbsp(If Applicable)</b></i> </label>
-                                    <input type="text" class="form-control" id="orgname" name="orgname" value="{{$contract->orgName}}" /> </div>
+                                    <input type="text" class="form-control" id="orgname" name="orgname" value="<?php echo e($contract->orgName); ?>" /> </div>
                                 <div class="col-md-6">
                                     <label for="bussiname">Business Name</label>
-                                    <input type="text" class="form-control" id="businessName" name="businessName" value="{{$contract->businessName}}" /> </div>
+                                    <input type="text" class="form-control" id="businessName" name="businessName" value="<?php echo e($contract->businessName); ?>" /> </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="col-md-6">
@@ -165,22 +165,22 @@
                                             }
                                         ?>
                                     </select>
-                                </div> @if(count($req) > 0)
+                                </div> <?php if(count($req) > 0): ?>
                                 <div class="col-md-6">
                                     <br>
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><b>Requirements</b></div>
                                         <div class="panel-body">
-                                            <div class="row"> @foreach($req as $r)
+                                            <div class="row"> <?php $__currentLoopData = $req; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $r): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="col-md-6">
                                                     <div class="checkbox">
                                                         <label>
-                                                            <input name="req[]" style="width: 15px;height: 15px" type="checkbox" value="{{$r->reqID}}" @if($stallHolderDetails->Requirement->contains($r))defaultChecked="true" checked=""@endif>{{$r->reqName}}</label>
+                                                            <input name="req[]" style="width: 15px;height: 15px" type="checkbox" value="<?php echo e($r->reqID); ?>" <?php if($stallHolderDetails->Requirement->contains($r)): ?>defaultChecked="true" checked=""<?php endif; ?>><?php echo e($r->reqName); ?></label>
                                                     </div>
-                                                </div> @endforeach </div>
+                                                </div> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </div>
                                         </div>
                                     </div>
-                                </div> @endif
+                                </div> <?php endif; ?>
                                 <div class="col-md-12">
                                     <p class="small text-danger" style="margin-left: 20px;">Fields with asterisks(*) are required</p>
                                 </div>
@@ -204,8 +204,8 @@
             </div>
         </div>
     </div>
-</div> @stop @section('script')
-<script type="text/javascript" src="{{ URL::asset('js/multipleAddinArea.js') }}"></script>
+</div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/multipleAddinArea.js')); ?>"></script>
 <script type="text/javascript">
     var selected = Array();
     $(document).ready(function () {
@@ -215,7 +215,7 @@
         $('#products').select2({
             width: 'resolve'
         });
-        $product = JSON.parse("{{json_encode($contract->Product)}}".replace(/&quot;/g, '"'));
+        $product = JSON.parse("<?php echo e(json_encode($contract->Product)); ?>".replace(/&quot;/g, '"'));
         for (var i = 0; i < $product.length; i++) {
             selected.push($product[i].productID);
         }
@@ -357,4 +357,5 @@
             }
         });
     }
-</script> @stop
+</script> <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

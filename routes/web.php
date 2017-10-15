@@ -11,6 +11,7 @@
 |
 */
 Auth::routes();
+Route::get('/','LoginController@login');
 Route::get('/login','LoginController@login');
 Route::post('/login/Validate','LoginController@validateUser');
 Route::get('/login/goTo','LoginController@goTo');
@@ -47,10 +48,10 @@ Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfvie
 Route::get('/getStalls','StallController@getStalls');
 Route::post('/acceptRental','ApplicationController@acceptRental');
 Route::post('/rejectRental','ApplicationController@rejectRental');
-/////MAINTENANCE///////
 
-
-
+Route::get('/Building', function () {
+    return view('Maintenance.Maintenance_Buildings');
+});
 Route::get('/ViewContract/{id}','ContractController@viewContract');
 
 
@@ -186,14 +187,15 @@ Route::get('/Utilities/view/{id}', 'UtilityController@view');
 Route::get('/Utilities/update/{id}', 'UtilityController@edit');
 Route::put('/Utilities/finalize/{id}', 'UtilityController@finalize');
 Route::get('/getBills','PaymentController@getBills');
-Route::get('/createBill/{id}','BillingController@createBill');
-Route::get('/ViewBill/{id}','BillingController@viewBill');
+Route::get('/createBill','BillingController@createBill');
+Route::get('/ViewBill','BillingController@viewBill');
 Route::get('/getPaymentStatus','PaymentController@getPaymentStatus');
 Route::get('/CheckBillingRecords','PaymentController@checkRecords');
 Route::get('/ViewPaymentDetails','PaymentController@getPaymentDetails');
 Route::get('/printReceipt','PaymentController@printReceipt');
 Route::post('/NewPaymentTransaction','PaymentController@newPaymentTransaction');
 
+Route::post('/newBill','BillingController@newBill');
 ////////////////REQUESTS////////////
 Route::resource('/Requests', 'RequestController');
 Route::get("/Request/Current/{id}", 'RequestController@current');
@@ -214,9 +216,8 @@ Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
 Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 Route::post('/updateApplication','ApplicationController@updateApplication');
+
 });
-
-
 ?>
 
 

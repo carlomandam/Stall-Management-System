@@ -1,16 +1,17 @@
-@extends('layout.app') @section('title') {{'Create Bill'}} @stop @section('content-header')
+ <?php $__env->startSection('title'); ?> <?php echo e('Create Bill'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?>
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i>Payment and Collection</li>
     <li class="active">Billing</li>
-</ol> @stop
+</ol> <?php $__env->stopSection(); ?>
 <style>
     body {
         margin-left: -80px;
     }
-</style> @section('content')
+</style> <?php $__env->startSection('content'); ?>
 <div class="defaultNewButton">
-    <form method="get" action="/ViewBill"> {{csrf_field()}}
-        <button class="btn btn-primary btn-flat" name="id" value="{{$contract->contractID}}"><span class='fa fa-arrow-left'></span>&nbsp;Back</button>
+    <form method="get" action="/ViewBill"> <?php echo e(csrf_field()); ?>
+
+        <button class="btn btn-primary btn-flat" name="id" value="<?php echo e($contract->contractID); ?>"><span class='fa fa-arrow-left'></span>&nbsp;Back</button>
     </form>
 </div>
 <div class="box box-primary">
@@ -21,26 +22,26 @@
                     <label>Billing Number:</label>
                 </div>
                 <div class="col-md-3">
-                    <input type="text" name="" class="form-control" disabled value="{{date('Y-m-d')}}"> </div>
+                    <input type="text" name="" class="form-control" disabled value="<?php echo e(date('Y-m-d')); ?>"> </div>
             </div>
             <div class="row" style="margin-top: 10px;">
                 <div class="col-md-2">
                     <label>Tenant Name:</label>
                 </div>
                 <div class="col-md-8">
-                    <input type="text" name="" class="form-control" disabled value="{{$contract->StallHolder->stallHFName}} {{$contract->StallHolder->stallHMName}} {{$contract->StallHolder->stallHLName}}"> </div>
+                    <input type="text" name="" class="form-control" disabled value="<?php echo e($contract->StallHolder->stallHFName); ?> <?php echo e($contract->StallHolder->stallHMName); ?> <?php echo e($contract->StallHolder->stallHLName); ?>"> </div>
             </div>
             <div class="row" style="margin-top: 10px;">
                 <div class="col-md-2">
                     <label>Stall Code:</label>
                 </div>
                 <div class="col-md-3">
-                    <input type="text" name="" class="form-control" disabled value="{{$contract->contractID}}"> </div>
+                    <input type="text" name="" class="form-control" disabled value="<?php echo e($contract->contractID); ?>"> </div>
                 <div class="col-md-2">
                     <label>Business Name:</label>
                 </div>
                 <div class="col-md-3">
-                    <input type="text" name="" class="form-control" disabled value="{{$contract->businessName}}"> </div>
+                    <input type="text" name="" class="form-control" disabled value="<?php echo e($contract->businessName); ?>"> </div>
             </div>
             <div class="row" style="margin-top: 10px;">
                 <div class="col-md-2">
@@ -68,12 +69,12 @@
                         <th>Amount</th>
                     </tr>
                 </thead>
-                <tbody> @foreach($contract->UnbilledUtilities as $util)
-                    <tr id="{{$util->stallMeterID}}">
+                <tbody> <?php $__currentLoopData = $contract->UnbilledUtilities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $util): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <tr id="<?php echo e($util->stallMeterID); ?>">
                         <td></td>
-                        <td>{{($util->MonthlyReading->utilType == 1) ? "Electricity ": (($util->MonthlyReading->utilType == 2) ? "Water" : "Invalid Utility Type")}}</td>
-                        <td>₱ {{number_format($util->utilityAmt,2,'.',',')}}</td>
-                    </tr> @endforeach
+                        <td><?php echo e(($util->MonthlyReading->utilType == 1) ? "Electricity ": (($util->MonthlyReading->utilType == 2) ? "Water" : "Invalid Utility Type")); ?></td>
+                        <td>₱ <?php echo e(number_format($util->utilityAmt,2,'.',',')); ?></td>
+                    </tr> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
@@ -106,13 +107,13 @@
                                 </tr>
                             </thead>
                             <tbody> 
-                            @foreach($charges as $c)
-                                <tr id="{{$c->chargeID}}">
+                            <?php $__currentLoopData = $charges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr id="<?php echo e($c->chargeID); ?>">
                                     <td></td>
-                                    <td>{{$c->chargeName}}</td>
-                                    <td>₱ {{number_format($c->chargeAmount,2,'.',',')}}</td>
+                                    <td><?php echo e($c->chargeName); ?></td>
+                                    <td>₱ <?php echo e(number_format($c->chargeAmount,2,'.',',')); ?></td>
                                 </tr> 
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -139,10 +140,10 @@
             </div>
         </div>
     </div>
-</div> @stop @section('script')
-<script type="text/javascript" src="{{ URL::asset('js/billing.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/dataTables.select.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/dataTables.buttons.min.js') }}"></script>
+</div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/billing.js')); ?>"></script>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/dataTables.select.min.js')); ?>"></script>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/dataTables.buttons.min.js')); ?>"></script>
 <script type="text/javascript">
     $(document).on('ready', function () {
         $("#createBtn").on('click',function(){
@@ -151,7 +152,7 @@
                 , "method": "POST"
             }).append(jQuery('<input>',{
                 "name":"_token"
-                , "value": "{{csrf_token()}}"
+                , "value": "<?php echo e(csrf_token()); ?>"
                 , "type": "hidden"   
             }));
             var selected = table.rows({selected:true}).data();
@@ -192,7 +193,7 @@
             }))
             form.append(jQuery('<input>',{
                 "name":"contract"
-                , "value": "{{$contract->contractID}}"
+                , "value": "<?php echo e($contract->contractID); ?>"
                 , "type": "hidden"   
             }))
             form.appendTo("body");
@@ -284,7 +285,7 @@
             , format: 'mm/dd/yyyy'
         });
         //else 
-        //$("#from").val("{{$last}}");
+        //$("#from").val("<?php echo e($last); ?>");
         //endif
 
         $("#datepicker").datepicker({
@@ -349,5 +350,6 @@
         });
     });
 </script>
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/select.dataTables.min.css')}}">
-@stop
+<link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('css/select.dataTables.min.css')); ?>">
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

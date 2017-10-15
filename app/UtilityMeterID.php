@@ -20,11 +20,15 @@ class UtilityMeterID extends Model{
     	'utilityAmt',
     ];
 
-    public function MonhtlyReading(){
-    	 return $this->belongsTo('App\MonhtlyReading','stallMeterID', 'readingID');
+    public function MonthlyReading(){
+    	 return $this->belongsTo('App\MonthlyReading','readingID');
     }
 
     public function Contract(){
     	return $this->belongsTo('App\Contract','stallMeterID', 'contractID');
+    }
+
+    public function Billing(){
+        return $this->belongsToMany('App\Billing_Details','tblbilling_utilities','stallMeterID','billDetID');
     }   
 }

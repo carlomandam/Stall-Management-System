@@ -1,5 +1,5 @@
-@extends('layout.app') @section('title') {{ 'Stall Holder List'}} @stop @section('style')
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/panel-tab.css')}}">
+ <?php $__env->startSection('title'); ?> <?php echo e('Stall Holder List'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('style'); ?>
+<link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/bootstrap/css/panel-tab.css')); ?>">
 <style>
     .take-all-space-you-can {
         width: 100%;
@@ -12,11 +12,11 @@
     #tblStallHolder th::after {
         display: none!important;
     }
-</style> @stop @section('content-header')
+</style> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?>
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i>Transactions</li>
     <li class="active">Manage Contracts</li>
-</ol> @stop @section('content')
+</ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
 <div class="row">
     <div class="col-md-12">
         <div class="panel with-nav-tabs panel-primary">
@@ -105,7 +105,7 @@
         </div>
     </div>
 </div>
-@stop @section('script')
+<?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
 <script>
     $(document).ready(function () {
 
@@ -170,7 +170,7 @@
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        return "<button class='btn btn-success btn-flat' onclick='window.location=&#39;" + "{{url('/Registration/')}}/" + data.stallID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-pencil'></span> Register</button>";
+                        return "<button class='btn btn-success btn-flat' onclick='window.location=&#39;" + "<?php echo e(url('/Registration/')); ?>/" + data.stallID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-pencil'></span> Register</button>";
                     }
                 }
             ]
@@ -220,7 +220,7 @@
                 }
                 , {
                     "data": function (data, type, dataToSet) {
-                        return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "{{url('/UpdateRegistration/')}}/"+ data.contractID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
+                        return "<button class='btn btn-primary btn-flat' onclick='window.location=&#39;" + "<?php echo e(url('/UpdateRegistration/')); ?>/"+ data.contractID + "&#39;' style='width:100%'><span class='glyphicon glyphicon-eye-open'></span> Details</button>";
                     }
                 }
             ]
@@ -275,4 +275,5 @@
             }
         });
     }
-</script> @stop
+</script> <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

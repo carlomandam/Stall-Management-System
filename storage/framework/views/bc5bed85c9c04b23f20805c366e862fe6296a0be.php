@@ -1,8 +1,8 @@
-@extends('layout.app') @section('title') {{'Payment and Collection'}} @stop @section('content-header')
+ <?php $__env->startSection('title'); ?> <?php echo e('Payment and Collection'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?>
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i>Payment and Collection</li>
     <li class="active">Billing</li>
-</ol> @stop @section('content')
+</ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
 <div>
     <div class="box box-solid box-default">
         <div class="box-body">
@@ -22,17 +22,18 @@
                                                 <th>Action/s</th>
                                             </tr>
                                         </thead>
-                                        <tbody> @foreach($stalls as $stall)
+                                        <tbody> <?php $__currentLoopData = $stalls; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $stall): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <tr>
-                                                <td>{{$stall->stallID}}</td>
-                                                <td>{{$stall->StallHolder->stallHFName}}&nbsp{{$stall->StallHolder->stallHMName}}&nbsp{{$stall->StallHolder->stallHLName}}</td>
+                                                <td><?php echo e($stall->stallID); ?></td>
+                                                <td><?php echo e($stall->StallHolder->stallHFName); ?>&nbsp<?php echo e($stall->StallHolder->stallHMName); ?>&nbsp<?php echo e($stall->StallHolder->stallHLName); ?></td>
                                                 <td>
                                                     <form method="get" action="/ViewBill">
-                                                        {{csrf_field()}}
-                                                        <button class="btn btn-success" name="id" value="{{$stall->contractID}}">View</button>
+                                                        <?php echo e(csrf_field()); ?>
+
+                                                        <button class="btn btn-success" name="id" value="<?php echo e($stall->contractID); ?>">View</button>
                                                     </form>
                                                 </td>
-                                            </tr> @endforeach </tbody>
+                                            </tr> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -42,7 +43,8 @@
             </div>
         </div>
     </div>
-</div> @stop @section('script')
-<script type="text/javascript" src="{{ URL::asset('js/billing.js') }}"></script>
+</div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/billing.js')); ?>"></script>
 <script type="text/javascript">
-</script> @stop
+</script> <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

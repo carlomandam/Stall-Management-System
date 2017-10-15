@@ -204,7 +204,7 @@ class ApplicationController extends Controller
 
             if(isset($_POST['req'])){
                 foreach ($_POST['req'] as $req) {
-                    $holder->Requirement()->attach($req)->withTimestamps();
+                    $holder->Requirement()->attach($req);
                 }
             }
         }
@@ -219,10 +219,19 @@ class ApplicationController extends Controller
         $rejects = Contract::where('stallID',$contract->stallID)->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->where('contractID','!=',$_POST['contract'])->delete();
 
         foreach ($initFees as $init) {
-            $ifd = new InitFeeDetail;
-            $ifd->contractID = $contract->contractID;
-            $ifd->initID = $init->initID;
-            $ifd->save();
+            $check = InitFeeDetail::where('contractID',$contract->contractID)->get();
+            $exist = array();
+            
+            foreach ($check as $c) {
+                $exist[] = $c->initID;
+            }
+
+            if(!in_array($init->initID, $exist)){
+                $ifd = new InitFeeDetail;
+                $ifd->contractID = $contract->contractID;
+                $ifd->initID = $init->initID;
+                $ifd->save();
+            }
         }
 
         return $contract->contractID;
