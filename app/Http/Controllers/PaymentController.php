@@ -154,6 +154,9 @@ class PaymentController extends Controller{
         foreach($stalls as $stall){
             $this::checkPrevCollection($stall->contractID);
             $totalUnpaid[$recordCtr]['amount'] =  PaymentController::computeUnpaid($stall->contractID);
+            if($totalUnpaid[$recordCtr]['amount'] == 0){
+                $totalUnpaid[$recordCtr]['actions'] = $stall->contractID;
+            }
             foreach($collectionStat as $stat){
                 if($totalUnpaid[$recordCtr]['amount'] <= $stat->collect){
                     $totalUnpaid[$recordCtr]['status'] = 'COLLECT';

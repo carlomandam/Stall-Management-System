@@ -16,9 +16,6 @@ Route::get('/', function () {
 });
 
 
-Route::get('/B', function () {
-    return view('transaction.PaymentAndCollection.bill');
-});
 
 Route::get('/login', 'Auth\AdminController@showLoginForm');
 Route::post('/login', 'Auth\AdminController@login')->name('login.submit');
@@ -26,8 +23,6 @@ Route::post('/logout', 'Auth\AdminController@logout');
 
 Route::group(['middleware' => 'auth'], function(){
 Route::get('/Dashboard','dashboardController@index');
-Route::get('/Layout','dashboardController@layout');
-
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/UpdateRegistration/{ID}','ApplicationController@updateRegistration');
@@ -155,15 +150,14 @@ Route::get('/getTennants','ManageContractsController@getTennants');
 Route::get('/getStallHolders','ManageContractsController@getStallHolders');
 Route::get('/getRegistrationList','ManageContractsController@getRegistrationList');
 Route::get('/getTennant/{tennantid}','ManageContractsController@getTennant');
+Route::post('/updateTennant','ManageContractsController@updateTennant');
+Route::post('/deleteTennant','ManageContractsController@deleteTennant');
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
-Route::post('/updateTennant','ManageContractsController@updateTennant');
-Route::post('/deleteTennant','ManageContractsController@deleteTennant');
-Route::post('/ChangeReading','ManageContractsController@ChangeReading');
 
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment','PaymentController@index');
@@ -215,7 +209,16 @@ Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
 Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 Route::post('/updateApplication','ApplicationController@updateApplication');
-
+//Reports
+Route::get('/StatusListReport','ReportController@stallStatusIndex');
+Route::get('/BalanceSummary','ReportController@balanceSummaryIndex');
+Route::get('/getBalanceSummary','ReportController@getBalanceSummary');
+Route::get('/getStallStatusReport','ReportController@getStallStatus');
+Route::get('/OverallSummary','ReportController@overallSummaryIndex');
+Route::get('/PaymentsCollectedReport','ReportController@revenueReportIndex');
+Route::get('/getRevenue','ReportController@getRevenue');
+Route::get('/getPaymentCollected','ReportController@getPaymentCollected');
+Route::get('/getPayment','ReportController@getPayment');
 });
 ?>
 

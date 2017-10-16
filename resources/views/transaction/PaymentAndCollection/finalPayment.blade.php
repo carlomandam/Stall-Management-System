@@ -74,8 +74,18 @@
                                                     </td>
 
                                                      <td>₱ {{number_format($totalUnpaid[$key]['amount'],2)}}</td>
+                                                     <td>
+                                                      @if(isset($totalUnpaid[$key]['actions']))
+                                                      
 
-                                                     <td><a href="/ViewPayment/{{$stall->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a></td>
+                                                     <a href="/ViewPayment/{{$stall->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a>
+
+                                                     <a href="/ViewClearance/'.$stall->contractID.'"><button class="btn btn-primary">Print Clearance</button></a>
+                                                     @else
+                                                     <a href="/ViewPayment/{{$stall->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a>
+                                                     </td>
+
+                                                     @endif
                                                   </tr>
 
                                                  @endforeach
