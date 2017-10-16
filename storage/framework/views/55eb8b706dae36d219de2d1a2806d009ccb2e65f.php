@@ -5,18 +5,18 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MySeoul | @yield('title')</title>
+    <title>MySeoul | <?php echo $__env->yieldContent('title'); ?></title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/dataTables.bootstrap.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/dist/css/skins/skin-blue.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/font-awesome/css/font-awesome.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/toastr.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/select2/select2.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datepicker/datepicker3.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/dropdown.css')}}"> @yield('style')
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/bootstrap/css/bootstrap.min.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/datatables/dataTables.bootstrap.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/dist/css/AdminLTE.min.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/dist/css/skins/skin-blue.min.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/font-awesome/css/font-awesome.min.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/datatables/toastr.min.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/select2/select2.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/datepicker/datepicker3.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('css/dropdown.css')); ?>"> <?php echo $__env->yieldContent('style'); ?>
     <style>
         * {
             font-family: "Trebuchet MS"
@@ -96,30 +96,6 @@
         .select2-selection__choice {
             color: black !important;
         }
-
-        .loadingDiv {
-            display:    none;
-            position:   fixed;
-            z-index:    1000000000;
-            top:        0;
-            left:       0;
-            height:     100%;
-            width:      100%;
-            background: rgba( 255, 255, 255, .8 ) 
-                        url('image/FhHRx.gif') 
-                        50% 50% 
-                        no-repeat;
-        }
-
-        body.loading {
-            overflow: hidden;   
-        }
-
-        /* Anytime the body has the loading class, our
-           modal element will be visible */
-        body.loading .modal {
-            display: block;
-        }
     </style>
 </head>
 
@@ -135,11 +111,11 @@
                     
                     <li class="dropdown" style="margin-right: 10px;"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         
-                        <span>{{ Auth::user()->name }}</span><span class="caret"></span> </a>
+                        <span><?php echo e(Auth::user()->name); ?></span><span class="caret"></span> </a>
                         <ul class="dropdown-menu" role="menu">
                             <li> <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                             <form id="logout-form" action="/logout" method="POST" style="display: none;">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
                             </form>
                             </li>
                             <li>
@@ -156,16 +132,16 @@
         <aside class="main-sidebar">
             <section class="sidebar">
                 <div class="user-panel">
-                    <div class="pull-left image"> <img src="{{ URL::asset('image/userimage2.png') }}" class="img-circle" alt="User Image"> </div>
+                    <div class="pull-left image"> <img src="<?php echo e(URL::asset('image/userimage2.png')); ?>" class="img-circle" alt="User Image"> </div>
                     <div class="pull-left info">
-                        <p id="userName">{{ Auth::user()->name }}</p>
-                        <p id="position" style="font-size: 11px;font-weight: normal;">{{ Auth::user()->position }}</p>
+                        <p id="userName"><?php echo e(Auth::user()->name); ?></p>
+                        <p id="position" style="font-size: 11px;font-weight: normal;"><?php echo e(Auth::user()->position); ?></p>
                     </div>
                 </div>
                 <ul class="sidebar-menu">
                     <li class="header"><span>MAIN NAVIGATION</span></li>
-                    <li class="treeview {{Route::getFacadeRoot()->current()->uri() == 'Dashboard' ? 'active' : ''}}" >
-                        <a href="/" > <i class="fa fa-dashboard"></i> <span>Dashboard</span> </a>
+                    <li class="treeview">
+                        <a href="/" class="<?php echo e(Route::getFacadeRoot()->current()->uri() == 'Dashboard' ? 'active' : ''); ?>"> <i class="fa fa-dashboard"></i> <span>Dashboard</span> </a>
                     </li>
                     <li class="treeview">
                         <a href="#"> <i class="fa fa-tasks"></i> <span>Transactions</span> <span class="pull-right-container">
@@ -181,13 +157,13 @@
                                 </span> </a>
                                 <ul class="treeview-menu">
                                     <li id="">
-                                        <a href="{{url('/Utilities')}}"> <i class="fa fa-circle-o"></i><span>Utilities</span></a>
+                                        <a href="<?php echo e(url('/Utilities')); ?>"> <i class="fa fa-circle-o"></i><span>Utilities</span></a>
                                     </li>
                                     <li id="">
-                                        <a href="{{url('/Billing')}}"> <i class="fa fa-circle-o"></i><span>Billing</span></a>
+                                        <a href="<?php echo e(url('/Billing')); ?>"> <i class="fa fa-circle-o"></i><span>Billing</span></a>
                                     </li>
                                     <li id="">
-                                        <a href="{{url('/Payment')}}"> <i class="fa fa-circle-o"></i><span>Payment</span></a>
+                                        <a href="<?php echo e(url('/Payment')); ?>"> <i class="fa fa-circle-o"></i><span>Payment</span></a>
                                     </li>
                                 </ul>
                                 <li class="treeview">
@@ -201,15 +177,15 @@
                                 </span> </a>
                             <ul class="treeview-menu">
                                 <li> <a href="/Building"><i class="fa fa-building"></i> <span>Building</span></a> </li>
-                                <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''}}"> <a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a> </li>
-                                <li class="{{Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''}}"> <a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a> </li>
-                                <li class="{{Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''}}"> <a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a> </li>
-                                <li class="{{Route::getFacadeRoot()->current()->uri() == 'Charges' ? 'active' : ''}}"> <a href="/Charges"><i class="fa fa-file-o"></i> <span>Charges</span></a> </li>
+                                <li class="<?php echo e(Route::getFacadeRoot()->current()->uri() == 'StallType' || Route::getFacadeRoot()->current()->uri() == 'StallTypeArchive' ? 'active' : ''); ?>"> <a href="/StallType"><i class="fa fa-link"></i> <span>Stall Type</span></a> </li>
+                                <li class="<?php echo e(Route::getFacadeRoot()->current()->uri() == 'Stall' || Route::getFacadeRoot()->current()->uri() == 'StallArchive' ? 'active' : ''); ?>"> <a href="/Stall"><i class="fa fa-link"></i> <span>Stall</span></a> </li>
+                                <li class="<?php echo e(Route::getFacadeRoot()->current()->uri() == 'StallRate' || Route::getFacadeRoot()->current()->uri() == 'StallRateArchive' ? 'active' : ''); ?>"> <a href="/StallRate"><i class="fa fa-money"></i> <span>Stall Rates</span></a> </li>
+                                <li class="<?php echo e(Route::getFacadeRoot()->current()->uri() == 'Charges' ? 'active' : ''); ?>"> <a href="/Charges"><i class="fa fa-file-o"></i> <span>Charges</span></a> </li>
                                 <li id="mReq">
-                                    <a href="{{url('/requirements')}}"> <i class="fa fa-list"></i><span>Requirements</span></a>
+                                    <a href="<?php echo e(url('/requirements')); ?>"> <i class="fa fa-list"></i><span>Requirements</span></a>
                                 </li>
                                 <li id="mReq">
-                                    <a href="{{url('/Holiday')}}"> <i class="fa fa-calendar"></i><span>Holidays</span></a>
+                                    <a href="<?php echo e(url('/Holiday')); ?>"> <i class="fa fa-calendar"></i><span>Holidays</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -222,19 +198,19 @@
                                 </span> </a>
                             <ul class="treeview-menu">
                                 <li id="">
-                                    <a href="{{url('#')}}"> <i class="fa fa-user"></i><span>Business Information</span></a>
+                                    <a href="<?php echo e(url('#')); ?>"> <i class="fa fa-user"></i><span>Business Information</span></a>
                                 </li>
                                 <li id="uDays">
-                                    <a href="{{url('/MarketDays')}}"> <i class="fa fa-calendar-times-o"></i><span>Market Days</span></a>
+                                    <a href="<?php echo e(url('/MarketDays')); ?>"> <i class="fa fa-calendar-times-o"></i><span>Market Days</span></a>
                                 </li>
                                 <li id="">
-                                    <a href="{{url('/PeakDays')}}"> <i class="fa fa-credit-card"></i><span>Peak Days</span></a>
+                                    <a href="<?php echo e(url('/PeakDays')); ?>"> <i class="fa fa-credit-card"></i><span>Peak Days</span></a>
                                 </li>
                                 <li id="">
-                                    <a href="{{url('/CollectionStatus')}}"> <i class="fa fa-bell"></i><span>Collection Status</span></a>
+                                    <a href="<?php echo e(url('/CollectionStatus')); ?>"> <i class="fa fa-bell"></i><span>Collection Status</span></a>
                                 </li>
                                 <li id="">
-                                    <a href="{{url('/InitialFee')}}"> <i class="fa fa-credit-card"></i><span>Initial Fee</span></a>
+                                    <a href="<?php echo e(url('/InitialFee')); ?>"> <i class="fa fa-credit-card"></i><span>Initial Fee</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -257,28 +233,22 @@
             </section>
         </aside>
         <div class="content-wrapper">
-            <section class="content-header"> @yield('content-header') </section>
-            <section class="content"> @yield('content') </section>
+            <section class="content-header"> <?php echo $__env->yieldContent('content-header'); ?> </section>
+            <section class="content"> <?php echo $__env->yieldContent('content'); ?> </section>
         </div>
     </div>
-    <div class="modal loadingDiv"></div>
-    <script src="{{ URL::asset('assets/jQuery/jquery-2.2.3.min.js')}}"></script>
-    <script src="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
-    <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
-    <script src="{{ URL::asset('assets/jQueryUI/jquery-ui.min.js')}}"></script>
-    <script src="{{ URL::asset('assets/jQueryUI/jquery-ui.min.js')}}"></script>
-    <script src="{{ URL::asset('assets/jQuery/jquery.validate.js')}}"></script>
-    <script src="{{ URL::asset('assets/datatables/jquery.dataTables.js')}}"></script>
-    <script src="{{ URL::asset('assets/datatables/dataTables.bootstrap.min.js')}}"></script>
-    <script src="{{ URL::asset('assets/datatables/toastr.min.js')}}"></script>
-    <script src="{{ URL::asset('js/select2.js')}}"></script>
-    <script src="{{ URL::asset('assets/datepicker/bootstrap-datepicker.min.js')}}"></script>
+    <script src="<?php echo e(URL::asset('assets/jQuery/jquery-2.2.3.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/bootstrap/js/bootstrap.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/dist/js/app.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/jQueryUI/jquery-ui.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/jQueryUI/jquery-ui.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/jQuery/jquery.validate.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/datatables/jquery.dataTables.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/datatables/dataTables.bootstrap.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/datatables/toastr.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('js/select2.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/datepicker/bootstrap-datepicker.min.js')); ?>"></script>
     <script>
-        $body = $("body");
-
-        $(document).on({
-             ajaxStop: function() { $body.removeClass("loading"); }    
-        });
 
         setInterval(myTimer, 1000);
         $.widget.bridge('uibutton', $.ui.button);
@@ -312,6 +282,6 @@
             $('#time small').text(today +" "+d.toLocaleTimeString());
            
             } 
-    </script> @yield('script') </body>
+    </script> <?php echo $__env->yieldContent('script'); ?> </body>
 
 </html>

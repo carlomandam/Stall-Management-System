@@ -8,6 +8,7 @@ use App\InitialFee;
 use Response;
 use Validator;
 use Redirect;
+use DB;
 
 class UtilitiesController extends Controller
 {
@@ -109,11 +110,33 @@ class UtilitiesController extends Controller
 
   }
   public function collectionStatusIndex(){
+    $init =[] ;
+    $initSec = DB::table('tblInitialFees')
+                  ->orderBy('initID','desc')
+                  ->where('initDesc','=','Security Deposit')
+                  // ->select('initAmt')
+                  ->take(1)
+                  ->get()
+                  ->pluck('initAmt');
+                  array_push($init, $initSec);
+    $initMain = DB::table('tblInitialFees')
+                  ->orderBy('initID','desc')
+                  ->where('initDesc','=','Maintenance Fee')
+                  // ->select('initAmt')
+                  ->take(1)
+                  ->get()
+                  ->pluck('initAmt');
+                  array_push($init, $initMain);
+
+    $i = $initSec->concat($initMain);
+    $init = $i->sum();
+    // return ($init);
+
     $utils  = Utilities::where('utilitiesID', "util_collection_status")
                         ->select('collect','reminder','warning','lock','terminate')
                         ->get();
     // return($utils);
-    return view('Utilities.CollectionStatus.index',compact('utils'));
+    return view('Utilities.CollectionStatus.index',compact('utils','init'));
   }
   public function collectionStatusUpdate(Request $request, $id){
       $util  = Utilities::find($id);

@@ -26,6 +26,8 @@ Route::post('/logout', 'Auth\AdminController@logout');
 
 Route::group(['middleware' => 'auth'], function(){
 Route::get('/Dashboard','dashboardController@index');
+Route::get('/Layout','dashboardController@layout');
+
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/UpdateRegistration/{ID}','ApplicationController@updateRegistration');
@@ -213,16 +215,7 @@ Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
 Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 Route::post('/updateApplication','ApplicationController@updateApplication');
-//Reports
-Route::get('/StatusListReport','ReportController@stallStatusIndex');
-Route::get('/BalanceSummary','ReportController@balanceSummaryIndex');
-Route::get('/getBalanceSummary','ReportController@getBalanceSummary');
-Route::get('/getStallStatusReport','ReportController@getStallStatus');
-Route::get('/OverallSummary','ReportController@overallSummaryIndex');
-Route::get('/PaymentsCollectedReport','ReportController@revenueReportIndex');
-Route::get('/getRevenue','ReportController@getRevenue');
-Route::get('/getPaymentCollected','ReportController@getPaymentCollected');
-Route::get('/getPayment','ReportController@getPayment');
+
 });
 ?>
 

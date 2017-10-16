@@ -90,4 +90,7 @@ class DashboardController extends Controller
     {
         //
     }
+    public function layout(){
+        return view('pdf.PDF-Layout');
+    }
 }
