@@ -51,7 +51,7 @@
                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
               <?php endif; ?>
 
-              </select>
+            </select>
 
           </div>
         </div>

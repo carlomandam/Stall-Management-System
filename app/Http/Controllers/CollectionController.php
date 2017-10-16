@@ -11,6 +11,7 @@ use App\StallRate;
 use App\Payment;
 use App\Transaction;
 use App\Payment_Collection;
+use App\Holiday;
 use DB;
 use Validator;
 use Illuminate\Validation\Rule;
@@ -86,6 +87,17 @@ class CollectionController extends Controller
             ->where('utilitiesID','util_peak_days') 
             ->select('utilitiesDesc')
             ->get();
+
+      $getHolidays = DB::select("select CONCAT(year(curdate()),'-',LPAD(holi.month,2,'00'),'-',LPAD(holi.day,2,'00')) as holidate, holi.Name as name from tblholiday as holi");
+      if(count($getHolidays) > 0){
+
+         foreach($getHolidays as $holi){
+            $holi = get_object_vars($holi);
+            $holidays[] = $holi['holidate'];
+          
+          }
+      }
+   
 
        $peakDays = []; 
             //dayOfWeek returns integer 0 if Sunday, and so on...
@@ -192,7 +204,7 @@ class CollectionController extends Controller
     
     foreach($dates as $date)
     {   
-       if(in_array(Carbon::parse($date)->dayOfWeek,$peakDays) || in_array(Carbon::parse($date)->dayOfWeek, $marketDays))
+       if(in_array(Carbon::parse($date)->dayOfWeek,$peakDays) || in_array(Carbon::parse($date)->dayOfWeek, $marketDays) || in_array($date, $holidays))
        {
         $marketDates[] = Carbon::parse($date)->format('Y-m-d');
        }
@@ -548,8 +560,17 @@ class CollectionController extends Controller
     foreach($dates as $date)
     {   
         $getIntegerDate[] = Carbon::parse($date)->dayOfWeek;
+
     }
-  
+      $getHolidays = DB::select("select CONCAT(year(curdate()),'-',LPAD(holi.month,2,'00'),'-',LPAD(holi.day,2,'00')) as holidate, holi.Name as name from tblholiday as holi");
+      if(count($getHolidays) > 0){
+
+         foreach($getHolidays as $holi){
+            $holi = get_object_vars($holi);
+            $holidays[] = $holi['holidate'];
+            $holinames[] = $holi['name'];
+          }
+      }
    
       $getPeakDays = DB::table('tblUtilities as a')
             ->where('utilitiesID','util_peak_days') 
@@ -658,7 +679,7 @@ class CollectionController extends Controller
                 }
 
             }
-
+    
     $contract = Contract::find($_GET['contractID']);
   
     $rates = StallRate::find($contract->stallRateID);
@@ -676,7 +697,7 @@ class CollectionController extends Controller
     foreach($getIntegerDate as $Gdates)
     {
 
-        if(in_array($Gdates, $peakDays) && in_array($Gdates, $marketDays))
+        if(in_array($Gdates, $peakDays) && in_array($Gdates, $marketDays) || in_array($dates[$ctr], $holidays))
         {
             $amount[$ctr] = number_format($peakDaysRate);
         }
@@ -696,13 +717,19 @@ class CollectionController extends Controller
     while($ctr < $size)
     {   
         $data[$ctr]["date"] = $dates[$ctr];
+
         if(!$amount[$ctr]== 0)
-        {$data[$ctr]['cb'] = "<input type = 'checkbox' id='chk'/>";
-          $data[$ctr]['desc'] = "Rental Fee for " . Carbon::parse($dates[$ctr])->format('l');
+        {
+          if(in_array($dates[$ctr], $holidays))
+          {   $key = array_search($dates[$ctr], $holidays);
+              $data[$ctr]['desc'] = $holinames[$key] . " (Holiday)";
+          }
+          else{
+          $data[$ctr]['desc'] = "Rental Fee for " . Carbon::parse($dates[$ctr])->format('l');}
           $data[$ctr]['amount'] = number_format($amount[$ctr],2);
       }
         else
-        {   $data[$ctr]['cb'] = "<input type = 'checkbox' disabled />";
+        {   
             $data[$ctr]['desc'] = "Not a Market Day";
             $data[$ctr]['amount'] = "0.00";
         }

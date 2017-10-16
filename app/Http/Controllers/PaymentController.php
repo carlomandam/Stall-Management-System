@@ -51,8 +51,16 @@ class PaymentController extends Controller{
 
         $marketDays = explode(",",$getMarketDays[0]->utilitiesDesc);
         $peakDays = explode(",",$getPeakDays[0]->utilitiesDesc);
-        //$holidays = Holiday::all();
 
+        $getHolidays = DB::select("select CONCAT(year(curdate()),'-',LPAD(holi.month,2,'00'),'-',LPAD(holi.day,2,'00')) as holidate, holi.Name as name from tblholiday as holi");
+      if(count($getHolidays) > 0){
+
+         foreach($getHolidays as $holi){
+            $holi = get_object_vars($holi);
+            $holidays[] = $holi['holidate'];
+            $holinames[] = $holi['name'];
+          }
+      }
         for($ctr = 0; $ctr < count($peakDays); $ctr++){ 
               $peakDays[$ctr] = PaymentController::dateStrToInt($peakDays[$ctr]);
         }
@@ -64,7 +72,7 @@ class PaymentController extends Controller{
         $collection = array();
 
         foreach ($dates as $date) {
-            if(in_array(Carbon::parse($date)->dayOfWeek, $peakDays) && in_array(Carbon::parse($date)->dayOfWeek, $marketDays)){
+            if(in_array(Carbon::parse($date)->dayOfWeek, $peakDays) && in_array(Carbon::parse($date)->dayOfWeek, $marketDays) || in_array($date, $holidays)){
                 $collection[] = array('date' => $date, 'amount' => number_format($peakDaysRate));
             }
             else if(in_array(Carbon::parse($date)->dayOfWeek, $marketDays)){
@@ -640,6 +648,15 @@ class PaymentController extends Controller{
         $recordCtr = 0;
         $transactionID = Payment::select('transactionID')
         ->where('paymentID',$paymentID)->get();
+        $getHolidays = DB::select("select CONCAT(year(curdate()),'-',LPAD(holi.month,2,'00'),'-',LPAD(holi.day,2,'00')) as holidate, holi.Name as name from tblholiday as holi");
+      if(count($getHolidays) > 0){
+
+         foreach($getHolidays as $holi){
+            $holi = get_object_vars($holi);
+            $holidays[] = $holi['holidate'];
+            $holinames[] = $holi['name'];
+          }
+      }
 
         foreach($transactionID as $transactionID){
             // $transactionID = get_object_vars($transactionID);
@@ -661,8 +678,13 @@ class PaymentController extends Controller{
                     
                     $amt = PaymentController::getHistRate($dates,$stallRateID);
                     foreach($amt as $amt){
-                       
-                        $data[$recordCtr]['description'] = "Rental Fee for " .Carbon::parse($amt['date'])->format("l")."( ". Carbon::parse($amt['date'])->format('F d,Y')." )";
+                        if(in_array($amt['date'], $holidays))
+                        {
+                         $key = array_search($amt['date'], $holidays);
+                         $data[$recordCtr]['description'] = "Rental Fee for " .$holinames[$key]." Holiday ( ". Carbon::parse($amt['date'])->format('F d,Y') .")";
+                        }
+                        else{
+                        $data[$recordCtr]['description'] = "Rental Fee for " .Carbon::parse($amt['date'])->format("l")."( ". Carbon::parse($amt['date'])->format('F d,Y')." )";}
                         $data[$recordCtr]['amount'] = number_format($amt['amount'],2);
                         $recordCtr++;
                     }

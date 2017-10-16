@@ -52,7 +52,7 @@
                       @endforeach
               @endif
 
-              </select>
+            </select>
 
           </div>
         </div>
