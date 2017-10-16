@@ -1,8 +1,8 @@
-@extends('login.layout')
-@section('title') {{ 'Login'}}
-@stop 
+<?php $__env->startSection('title'); ?> <?php echo e('Login'); ?>
 
-@section('content')
+<?php $__env->stopSection(); ?> 
+
+<?php $__env->startSection('content'); ?>
 <div class="container">
   
   <div class="row" id="pwd-container">
@@ -11,25 +11,26 @@
     <div class="col-md-4">
       <section class="login-form">
        <div class="login">
-          <form class="form-horizontal" method="POST" action="{{route('login.submit')}}">
-                        {{ csrf_field() }}
+          <form class="form-horizontal" method="POST" action="<?php echo e(route('login.submit')); ?>">
+                        <?php echo e(csrf_field()); ?>
+
           <div>
-            <img src="{{ URL::asset('image/LOGO.png') }}" width="150px" height="150px">
+            <img src="<?php echo e(URL::asset('image/LOGO.png')); ?>" width="150px" height="150px">
             <h3 style="font-family: impact;margin-top: -10%; text-align: center;">Stalls Management System</h3>
           </div>
           <input type="email" name="email" placeholder="Email" required class="form-control input-lg" />
-          @if ($errors->has('email'))
+          <?php if($errors->has('email')): ?>
           <span class="help-block">
-            <strong>{{ $errors->first('email') }}</strong>
+            <strong><?php echo e($errors->first('email')); ?></strong>
           </span>
-          @endif
+          <?php endif; ?>
           
           <input type="password" class="form-control input-lg" name="password" id="password" placeholder="Password"/>
-          @if ($errors->has('password'))
+          <?php if($errors->has('password')): ?>
           <span class="help-block">
-            <strong>{{ $errors->first('password') }}</strong>
+            <strong><?php echo e($errors->first('password')); ?></strong>
           </span>
-          @endif
+          <?php endif; ?>
           
           <!-- <div class="pwstrength_viewport_progress"></div> -->
           
@@ -48,4 +49,5 @@
 
   </div>
 </div>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('login.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

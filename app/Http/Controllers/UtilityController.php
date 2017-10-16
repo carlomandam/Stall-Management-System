@@ -154,34 +154,47 @@ class UtilityController extends Controller
     {
         // 
            $today= Carbon::now();
-           $con = DB::table('tblContractInfo as contract')
-                     ->join('tblStall as stall','contract.stallID','stall.stallID')
-                     ->join('tblStall_Utilities as utility','stall.stallID','utility.stallID')
-                    ->where('utility.utilityType','=', $id)
-                    ->where('contract.contractStart','<=', $today)
-                    ->whereNull('contract.deleted_at')
-                    ->whereNull('contract.contractReason')
-                    ->orderBy('contract.contractID', 'asc')
-                    ->get();
 
-        $contractID = $con->pluck('contractID');
-        $stalls = [];
-        $stall=[];
-        foreach ($contractID as $con) {
+           $stalls = DB::table('tblContractInfo as contract')
+                            ->join('tblStall_Utilities as stallUtil','stallUtil.stallID','contract.stallID')
+                            ->leftjoin('tblSubMeter as meter','meter.stallUtilityID','stallUtil.stallUtilityID')
+                            ->where('stallUtil.utilityType','=', $id)
+                            ->where('contract.contractStart','<=', $today)
+                            ->whereNull('contract.deleted_at')
+                            ->whereNull('contract.contractReason')
+                            ->select('contract.stallID as stallID', 'meter.presRead as pres','meter.prevRead as prev','contract.contractID as contractID','stallUtil.stallUtilityID as stallUtilityID')
+
+                            ->get();
+
+
+           // $con = DB::table('tblContractInfo as contract')
+           //           ->join('tblStall as stall','contract.stallID','stall.stallID')
+           //           ->join('tblStall_Utilities as utility','stall.stallID','utility.stallID')
+           //          ->where('utility.utilityType','=', $id)
+           //          ->where('contract.contractStart','<=', $today)
+           //          ->whereNull('contract.deleted_at')
+           //          ->whereNull('contract.contractReason')
+           //          ->orderBy('contract.contractID', 'asc')
+           //          ->get();
+
+        // $contractID = $con->pluck('contractID');
+        // $stalls = [];
+        // $stall=[];
+        // foreach ($contractID as $con) {
                   
-          $stall = DB::table('tblContractInfo as contract')
-                        ->join('tblStall as stall','contract.stallID','stall.stallID')
-                        ->join('tblStall_Utilities as utility','stall.stallID','utility.stallID')
-                        ->leftjoin('tblSubMeter as meter','utility.stallUtilityID','meter.stallUtilityID')
-                        ->leftjoin('tblStallUtilities_MeterID as meterID','meterID.contractID','contract.contractID')
-                        ->leftjoin('tblMonthlyReading as month','month.readingID','meterID.readingID')
-                        ->select('contract.*','stall.stallID as stallID','utility.*','meter.prevRead','meter.presRead','month.readingFrom','month.readingTo','meter.subMeterID')
-                        ->where('contract.contractID','=', $con)
-                        ->orderBy('meter.subMeterID','desc')
-                        ->take(1) 
-                        ->get(); 
-                        array_push($stalls,$stall);  
-            }
+        //   $stall = DB::table('tblContractInfo as contract')
+        //                 ->join('tblStall as stall','contract.stallID','stall.stallID')
+        //                 ->join('tblStall_Utilities as utility','stall.stallID','utility.stallID')
+        //                 ->join('tblSubMeter as meter','utility.stallUtilityID','meter.stallUtilityID')
+        //                 ->leftjoin('tblStallUtilities_MeterID as meterID','meterID.contractID','contract.contractID')
+        //                 ->leftjoin('tblMonthlyReading as month','month.readingID','meterID.readingID')
+        //                 ->select('contract.*','stall.stallID as stallID','utility.*','meter.prevRead','meter.presRead','month.readingFrom','month.readingTo','meter.subMeterID')
+        //                 ->where('contract.contractID','=', $con)
+        //                 ->orderBy('meter.subMeterID','desc')
+        //                 ->take(1) 
+        //                 ->get(); 
+        //                 array_push($stalls,$stall);  
+        //     }
             
         return response()->json(['stalls'=>$stalls]);
     }
