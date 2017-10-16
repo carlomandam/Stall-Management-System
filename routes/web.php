@@ -10,20 +10,19 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
+Route::get('/','LoginController@login');
+Route::get('/login','LoginController@login');
+Route::post('/login/Validate','LoginController@validateUser');
+Route::get('/login/goTo','LoginController@goTo');
+Route::post('/logout','LoginController@logout');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::group(['middleware' =>  ['admin']], function(){
+Route::get('/addUsers','LoginController@addUsers');
+Route::post('/register','LoginController@register');
 
-
-
-Route::get('/login', 'Auth\AdminController@showLoginForm');
-Route::post('/login', 'Auth\AdminController@login')->name('login.submit');
-Route::post('/logout', 'Auth\AdminController@logout');
-
-Route::group(['middleware' => 'auth'], function(){
-Route::get('/Dashboard','dashboardController@index');
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
+Route::get('/Dashboard','dashboardController@index');
 Route::get('/Registration/{stallid}','ApplicationController@create');
 Route::get('/UpdateRegistration/{ID}','ApplicationController@updateRegistration');
 Route::get('/List', 'ApplicationController@member');
@@ -50,8 +49,19 @@ Route::get('/getStalls','StallController@getStalls');
 Route::post('/acceptRental','ApplicationController@acceptRental');
 Route::post('/rejectRental','ApplicationController@rejectRental');
 
+Route::get('/Building', function () {
+    return view('Maintenance.Maintenance_Buildings');
+});
 Route::get('/ViewContract/{id}','ContractController@viewContract');
-/////MAINTENANCE///////
+
+
+
+
+
+Route::get('/yow', function () {
+    return view('transaction.PaymentAndCollection.PaymentSuccess');
+});
+
 //Building
 Route::get('/Building', function () {
     return view('Maintenance.Maintenance_Buildings');
@@ -200,13 +210,22 @@ Route::get('/ExpiringContracts','QueriesController@getExpiringContracts');
 Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
 Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
 Route::get('/PeakDays', 'UtilitiesController@peakDaysIndex');
-Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');\
+Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');
 Route::get('/InitialFee', 'UtilitiesController@initialFeeIndex');
 Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
 Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
 Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
 Route::post('/updateApplication','ApplicationController@updateApplication');
-
+//Reports
+Route::get('/StatusListReport','ReportController@stallStatusIndex');
+Route::get('/BalanceSummary','ReportController@balanceSummaryIndex');
+Route::get('/getBalanceSummary','ReportController@getBalanceSummary');
+Route::get('/getStallStatusReport','ReportController@getStallStatus');
+Route::get('/OverallSummary','ReportController@overallSummaryIndex');
+Route::get('/PaymentsCollectedReport','ReportController@revenueReportIndex');
+Route::get('/getRevenue','ReportController@getRevenue');
+Route::get('/getPaymentCollected','ReportController@getPaymentCollected');
+Route::get('/getPayment','ReportController@getPayment');
 });
 ?>
 

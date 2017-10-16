@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('title')
-{{'Stall Status Report'}}
+{{'Status List Report'}}
 @stop
 @section('content-header')
 
@@ -18,8 +18,11 @@
     .label{
       font-size:14px;
     }
-    th,td{
+    th{
       text-align: center;
+    }
+    tfoot > tr > th{
+      text-align: left;
     }
     
 </style>
@@ -33,27 +36,41 @@
         <div class="box-body" >
        
         <div class = "col-xs-12">
-            <div class="dropdown-holder">
-              <div class="dropdown">
-                  <button class="btn btn-primary btn-flat btn-city dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin-top: 20px; width: 200px;">
-                      -- Select -- 
-                     <span class="caret caret-search"></span>
-                     </button>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="width: 200px;">
-                            <li><a href="#">Daily</a></li>
-                            <li><a href="#">Weekly</a></li>
-                            <li><a href="#">Monthly</a></li>
-                            <li><a>Yearly</a></li>
-                            <li><a href="#">Custom Date</a></li>
-                          </ul>
-                  </div>
-                </div>
-              </div>
+        <div class="defaultNewButton">
+          <div class=" pull-right" id="print" style="margin-right: 20px; "> <a href="" class="btn btn-success btn-flat"  style="width: 200px;"><span class='fa fa-print'></span>&nbsp;Generate</a>
+          </div>
+          <div class = "col-md-6">
+              <select class="form-control" id = "bldg">
+               <option value="" selected disabled>-- SELECT BUILDING --</option>
+              @if(isset($building) && count($building)> 1)
+                  @foreach($building as $build)
+                  <option value = "{{$build->bldgID}}">{{$build->bldgName}}</option>
+                    @endforeach
+              @else
+                   @foreach($building as $build)
+                  <option value = "{{$build->bldgID}}" selected="">{{$build->bldgName}}</option>     
+                      @endforeach
+              @endif
+
+              </select>
+
+          </div>
+        </div>
+            
            
             <div class="col-md-12">
+
                   <div class="box box-solid box-primary" style= "margin-top: 20px;">
                         <div class="box-header with-border">
-                          <h5 style="display: none;"><center>Stall Status Report for</center> </h5>
+                          <h4><center>Status List Report as of today({{Carbon\Carbon::today()->format('F d,Y')}} )</center> </h4>
+                          <h4 id = "bldgName" style="text-align: center;">
+                          @if(isset($building) && count($building)==1)
+
+                          @foreach($building as $build)
+                          in Building{{$build->bldgName}}
+                          @endforeach
+                          @endif
+                          </h4>
                         </div>
                         <div>
                               <div class="box-body">
@@ -69,7 +86,15 @@
                                                     <th>Total Amount</th>
                                                   </tr>
                                                 </thead> 
+                                                <tfoot>
 
+                                                    <tr>
+                                                   
+                                                       <th ></th>
+                                                       <th></th>
+                                                       <th></th>
+                                                  </tr>
+                                                </tfoot>
                                               
                                             </table>
                                           </div>
@@ -91,7 +116,64 @@
     autoWidth:false,
     destroy:true
  });
+ $(document).on('ready',function(){
+$('#tblStatus').dataTable();
 
+ });
+ $('#bldg').on('change',function(){
+      $('#bldgName').text("in " + $('#bldg').find(":selected").text() +" Building"); 
+      $.ajax({
+          type: "GET"
+        , url: "/getStallStatusReport"
+        , data: {
+                  'bldgID': $('#bldg').val()
+                }
+            }).done(function (data) {
+                var table = $('#tblStatus').DataTable({
+               
+                    "aaData": data
+                    , destroy: true
+                    ,"columns": [
+                        {
+                            "data": "status"
+
+                        }
+                        , {
+                            "data": "count"
+                        }
+                        , {
+                            "data": "amount"
+                        }
+
+                        
+               ]
+              });
+                  $('#tblStatus').dataTable({
+                    destroy: true
+                    , "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
+                       var api = this.api(), aaData;
+                        // converting to interger to find total
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+                    $( api.column( 1 ).footer() ).html("Total Stall/s: " +
+                    api.column( 1 ).data().reduce( function ( a, b ) {
+                    return intVal(a) + intVal(b);
+                     }, 0 )
+                    );
+                    $( api.column( 2 ).footer() ).html("Total Amount Receivables: Php " +
+                    api.column( 2 ).data().reduce( function ( a, b ) {
+                    return intVal(a) + intVal(b);
+                     }, 0. )
+                    );
+                    }
+                });
+            });
+ });
+ 
 
 </script>
 @stop

@@ -219,8 +219,10 @@
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> </a>
                             <ul class="treeview-menu">
-                                <li class="active"><a href="#"><i class="fa fa-circle-o "></i>Receivables Report</a></li>
-                                <li><a href="#"><i class="fa fa-circle-o"></i>Stall Status Report</a></li>
+                                <li ><a href="/BalanceSummary"><i class="fa fa-circle-o "></i>Balance Summary</a></li>
+                                <li><a href="/StatusListReport"><i class="fa fa-circle-o"></i>Status List Report</a></li>
+                              
+                                <li><a href = "/PaymentsCollectedReport"><i class="fa fa-circle-o"></i>Payments Collected Report</a></li>
                             </ul>
                         </li>
                         <li class="header"><span>ACCOUNT SETTINGS</span></li>
