@@ -50,13 +50,15 @@
                                                       <td>Transfer Stall</td>
                                                       @elseif($req->requestType ==2)
                                                       <td>Leave Stall</td>
+                                                      @elseif($req->requestType == 3)
+                                                      <td>Other/s</td>
                                                       @endif
                                                       @if($req->status == 0)
                                                       <td>Pending</td>
                                                       @elseif($req->status == 1)
                                                       <td>Approved</td>
                                                       @elseif($req->status == 2)
-                                                      <td>Not Approved</td>
+                                                      <td>Reject</td>
                                                       @endif
                                                     
                                                      <td>{{\Carbon\Carbon::parse($req->submitDate)->format('F d, Y')}}
@@ -70,15 +72,18 @@
                                                       @if($req->status == 0)
                                                       <td>
                                                         <button class="btn btn-info" id="view" data-id="{{$req->requestID}}">View</button>
-                                                        <button class="btn btn-primary" data-id="{{$req->requestID}}">Update</button>
+                                                        <button class="btn btn-primary" data-id="{{$req->requestID}}" id="edit">Edit</button>
+                                                        <button id="delete" class="btn btn-danger" data-id="{{$req->requestID}}" style="width: 60px;">Delete</button>
                                                       </td>
                                                       @elseif($req->status == 1)
                                                       <td>
                                                         <button class="btn-info" id="view" data-id="{{$req->requestID}}">View</button>
+                                                         <button id="delete" class="btn btn-danger" data-id="{{$req->requestID}}" style="width: 60px;">Delete</button>
                                                       </td>
                                                       @elseif($req->status == 2)
                                                       <td>
                                                         <button class="btn-info" id="view" data-id="{{$req->requestID}}">View</button>
+                                                        <button id="delete" class="btn btn-danger" data-id="{{$req->requestID}}" style="width: 60px;">Delete</button>
                                                       </td>
                                                       @endif
                                                    </tr>

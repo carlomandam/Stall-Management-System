@@ -10,11 +10,17 @@ $(document).on('click','#view', function(){
 	console.log(id);
 	window.location.href="/Request/View/"+id;
 })
+$(document).on('click','#edit', function(){
+	id = $(this).attr('data-id');
+	console.log(id);
+	window.location.href="/Request/Edit/"+id;
+})
 $(document).on('change','#requestType',function(){
 	id = $(this).val();
 	if(id ==1){
 		$('#transferStall').show();
 		$('#leaveStall').hide();
+		$('#others').hide();
 		  $(document).ready(function() {
     	$('#tenantTS').select2({  });
   	});
@@ -22,8 +28,18 @@ $(document).on('change','#requestType',function(){
 	else if(id == 2){
 		$('#transferStall').hide();
 		$('#leaveStall').show();
+		$('#others').hide();
 		  $(document).ready(function() {
     	$('#tenantLS').select2({  });
+  	});
+
+	}
+	else if(id == 3){
+			$('#transferStall').hide();
+		$('#leaveStall').hide();
+		$('#others').show();
+		  $(document).ready(function() {
+    	$('#tenantO').select2({  });
   	});
 	}
 })
@@ -136,7 +152,7 @@ $(document).on('click','#saveTransferStall',function(e){
 			success: function(data) {
 				if($.isEmptyObject(data.error)){
 					toastr.success('Request Save');
-					// window.location.href="/Utilities";
+					window.location.href="/Requests";
 				}else{
 					// toastr.error(data.error);
 					printErrorMsg(data.error);
@@ -181,7 +197,7 @@ $(document).on('click','#saveLeaveStall',function(e){
 			success: function(data) {
 				if($.isEmptyObject(data.error)){
 					toastr.success('Request Save');
-					// window.location.href="/Utilities";
+					window.location.href="/Requests";
 				}else{
 					// toastr.error(data.error);
 					printErrorMsg(data.error);
@@ -198,3 +214,105 @@ $(document).on('click','#saveLeaveStall',function(e){
 		}
 
 })
+
+$(document).on('click','#saveOther',function(e){
+	e.preventDefault();
+	var requestType = $("select[name='requestType']").val();
+	var tenant = $("select[name='tenantO']").val();
+	var subject = $("input[name='subject']").val();
+	var reason = $("textarea[name='transferReasonO']").val();
+
+	console.log(requestType);
+	console.log(tenant);
+	console.log(subject);
+	console.log(reason);
+		$.ajax({
+			type: "PUT",
+			url: "/Request/SaveOther",
+			data: { 
+				'requestType': requestType,
+				'tenant': tenant,
+				'reason': reason,
+				'status': 0,
+				'subject': subject
+				
+			},
+			success: function(data) {
+				if($.isEmptyObject(data.error)){
+					toastr.success('Request Save');
+					window.location.href="/Requests";
+				}else{
+					// toastr.error(data.error);
+					printErrorMsg(data.error);
+				}
+			}
+
+		});
+		function printErrorMsg (msg) {
+			$(".print-error-msg").find("ul").html('');
+			$(".print-error-msg").css('display','block');
+			$.each( msg, function( key, value ) {
+				$(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+			});
+		}
+
+})
+$(document).on('click','#update',function(e){
+	e.preventDefault();
+	id = $(this).attr('data-id');
+	console.log(id);
+	var status = $("select[name='status']").val();
+	var remarks = $("textarea[name='remarks']").val();
+	console.log(remarks);
+				$.ajax({
+			type: "PUT",
+			url: "/Requests/"+id,
+			data: { 
+				'status': status,
+				'remarks': remarks,
+				
+				
+			},
+			success: function(data) {
+				if($.isEmptyObject(data.error)){
+					toastr.success('Request Update');
+					window.location.href="/Requests";
+				}else{
+					// toastr.error(data.error);
+					printErrorMsg(data.error);
+				}
+			}
+
+		});
+		function printErrorMsg (msg) {
+			$(".print-error-msg").find("ul").html('');
+			$(".print-error-msg").css('display','block');
+			$.each( msg, function( key, value ) {
+				$(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+			});
+		}
+
+
+
+})
+
+$(document).on('click','#delete',function(e){
+e.preventDefault();
+id = $(this).attr('data-id');
+
+	$.ajax({
+   			type: "DELETE",
+   			url: "/Requests/"+id,
+   			data: { 
+   				'_token' : $('input[name=_token]').val(),},
+   				success: function(data) {
+   					if($.isEmptyObject(data.error)){
+   						toastr.error('Record Deactivated');
+   						location.reload();	           					}
+   				}
+
+
+   			});
+
+})
+

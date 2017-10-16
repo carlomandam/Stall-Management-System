@@ -27,6 +27,7 @@ class RequestController extends Controller
         
         $reqs = DB::table('tblRequest as request')
                     ->join('tblStallHolder as holder','holder.stallHID','request.stallHID')
+                    ->whereNull('request.deleted_at')
                     ->get();
         
         return view('transaction/Requests.index',compact('reqs'));
@@ -91,6 +92,21 @@ class RequestController extends Controller
     public function edit($id)
     {
         //
+
+        $req = DB::table('tblRequest as request')
+                ->join('tblStallHolder as holder','request.stallHID','holder.stallHID')
+                ->where('request.requestID','=', $id)
+                // ->groupBy('request.requestID')
+                ->select('request.requestType as Type','holder.stallHFName as First','holder.stallHMName as Middle','holder.stallHLName as Last','request.status as status','request.requestText as reason','request.requestID as ID','request.subject as subject')
+                ->get();
+
+        $info = DB::table('tblRequestInfo as i')
+                    ->join('tblContractInfo as c','i.contractID','c.contractID')
+                    ->select('i.stallRequested as stallRequested','c.stallID as stallFrom')
+                    ->where('requestID','=',$id)
+                    ->get();        
+                // return ($info);
+          return view ('transaction/Requests.edit',compact('req','info')); 
     }
 
     /**
@@ -103,6 +119,51 @@ class RequestController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $req =RequestT::findorFail($id);
+         $rules = [
+            'status' => 'required',
+            'remarks'=> 'required',
+           
+         
+        ];
+        $messages = [
+            
+            'required' => 'The :attribute field is required.',
+          
+
+        ];
+        $niceNames = [
+            'status' => 'Request Status',
+            'remarks' => 'Remarks',
+            
+   
+        ];
+         $today = Carbon::now();
+        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator->setAttributeNames($niceNames);
+             if($validator->passes()) {
+
+            if($request->status == 1){
+            $req->status = $request->status;
+            $req->remarks = $request->remarks;
+            $req->approvedDate = $today;
+            $req->save();
+            }
+            else if($request->status == 2){
+            $req->status = $request->status;
+            $req->remarks = $request->remarks; 
+            $req->save(); 
+            }
+         
+           
+
+            
+         
+            return response()->json(['success'=>'Records Update.']);
+        }
+          else{
+            return response()->json(['error'=>$validator->errors()->all()]);
+        }
 
 
 
@@ -258,15 +319,78 @@ class RequestController extends Controller
         }
 
     }
+ public function SaveOther(Request $request){
+
+         $rules = [
+            'requestType' => 'required',
+            'tenant'=> 'required',
+            'reason'=> 'nullable',
+            'status'=> 'required',
+            'subject'=> 'required'
+         
+        ];
+        $messages = [
+            
+            'required' => 'The :attribute field is required.',
+          
+
+        ];
+        $niceNames = [
+            'requestType' => 'Request Type',
+            'tenant' => 'Stall Holder',
+            'finalDateTo' => 'Date To',
+            'subject'=> 'Request Subeject',
+   
+        ];
+         $today = Carbon::now();
+        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator->setAttributeNames($niceNames);
+             if($validator->passes()) {
+
+            $req = new RequestT;
+            $req->requestType = $request->requestType;
+            $req->stallHID = $request->tenant;
+            $req->requestText = $request->reason;
+            $req->status = $request->status;
+            $req->submitDate = $today;
+            $req->subject = $request->subject;
+
+            $req->save();
+         
+            
+         
+            
+            return response()->json(['success'=>'Added new records.']);
+        }
+          else{
+            return response()->json(['error'=>$validator->errors()->all()]);
+        }
+
+    }
     public function View($id){
 
         $req = DB::table('tblRequest as request')
                 ->join('tblStallHolder as holder','request.stallHID','holder.stallHID')
                 ->where('request.requestID','=', $id)
                 // ->groupBy('request.requestID')
-                ->select('request.requestType as Type','holder.stallHFName as First','holder.stallHMName as Middle','holder.stallHLName as Last','request.status as status','request.requestText as reason','request.requestID as ID')
+                ->select('request.requestType as Type','holder.stallHFName as First','holder.stallHMName as Middle','holder.stallHLName as Last','request.status as status','request.requestText as reason','request.requestID as ID','request.subject as subject')
                 ->get();
+
+        $info = DB::table('tblRequestInfo as i')
+                    ->join('tblContractInfo as c','i.contractID','c.contractID')
+                    ->select('i.stallRequested as stallRequested','c.stallID as stallFrom')
+                    ->where('requestID','=',$id)
+                    ->get();        
+                // return ($info);
+          return view ('transaction/Requests.view',compact('req','info'));      
         
                
     }
+       public function destroy($id)
+    {
+        //
+        $req = RequestT::findOrFail($id);
+        $req->delete();
+    }
+
 }

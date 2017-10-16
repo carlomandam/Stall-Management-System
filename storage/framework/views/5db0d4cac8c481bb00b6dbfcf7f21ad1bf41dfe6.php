@@ -69,7 +69,7 @@
            
                 <div class="top-right links">
                     <?php if(Auth::check()): ?>
-                        <a href="<?php echo e(url('/welcome')); ?>">Home</a>
+                        <a href="<?php echo e(url('/Dashboard')); ?>">Dashboard</a>
                     <?php else: ?>
                         <a href="<?php echo e(url('/login')); ?>">Login</a>
                         
@@ -79,7 +79,8 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    MySeoul Stalls Management System
+                    <b>S</b>talls&nbsp<b>M</b>anagement&nbsp<b>S</b>ystem
+                    <!-- Stalls Management System -->
                 </div>
             </div>
         </div>

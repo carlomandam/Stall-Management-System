@@ -194,6 +194,8 @@ Route::put("/Request/SaveTransferStall", 'RequestController@SaveTransferStall');
 Route::put("/Request/SaveLeaveStall", 'RequestController@SaveLeaveStall');
 Route::put("/Request/SaveOther", 'RequestController@SaveOther');
 Route::get('/Request/View/{id}', 'RequestController@View');
+Route::get('/Request/Edit/{id}', 'RequestController@edit');
+// Route::get('/Request/Update/{id}', 'RequestController@update');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
 Route::get('/ExpiringContracts','QueriesController@getExpiringContracts');

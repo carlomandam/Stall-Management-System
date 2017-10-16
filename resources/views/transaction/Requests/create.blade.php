@@ -34,6 +34,7 @@
                                            <option selected disabled>---/----</option>
                                             <option value="1">Transfer Stall</option>
                                             <option value="2">Leave Stall</option>
+                                            <option value="3">Other/s</option>
                                         </select>
                                       </div>
                                   </div>
@@ -144,6 +145,53 @@
                                        <div class="row" style="margin-top: 10px;">
                                         <div class="col-md-4">
                                           <button class="btn btn-primary" id="saveLeaveStall">Save</button>
+                                          <button class="btn btn-danger">Cancel</button>
+                                        </div>
+                                       
+                                      </div>
+
+                                  </div>
+                                  <!-- Leaving the Stall -->
+
+                                  <!-- Others   -->
+                                  <div class="others" id="others" style="display: none;">
+
+                                      <div class="row" style="margin-top: 10px;">
+                                          <div class="col-md-2">
+                                              <label>Name:</label>
+                                          </div>
+                                          <div  class="col-md-1">
+                                              <select id="tenantO" name="tenantO" >
+                                                  <option selected disabled>Choose Tenants Name</option>
+                                                  @foreach($tenants as $tenant)
+                                                  <option value="{{$tenant->id}}">{{$tenant->firstName}} {{$tenant->middleName}} {{$tenant->lastName}}</option>
+                                                  @endforeach
+                                              </select>
+                                          </div>
+                                      </div>
+
+                                      <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-2">
+                                          <label>Subject:</label>
+                                        </div>
+                                        <div  class="col-md-4">
+                                         
+                                          <input type="text" class="form-control" name="subject">    
+                                        </div>
+                                      </div>
+
+                                      <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-2">
+                                          <label>Reason:</label>
+                                        </div>
+                                        <div  class="col-md-4">
+                                          <textarea class="form-control" name="transferReasonO" rows="5"> </textarea>
+                                        </div>
+                                      </div>
+
+                                       <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-4">
+                                          <button class="btn btn-primary" id="saveOther">Save</button>
                                           <button class="btn btn-danger">Cancel</button>
                                         </div>
                                        

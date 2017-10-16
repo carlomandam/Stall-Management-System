@@ -47,13 +47,11 @@
                                               <label>Status:</label>
                                           </div>
                                           <div  class="col-md-2">
-                                          @if($r->status==0)
-                                        Pending
-                                       @elseif($r->status==1)
-                                       Approved
-                                       @elseif($r->status==2)
-                                       Disapproved
-                                       @endif
+                                            <select class="form-control" name="status">
+                                              <option selected disabled>Pending</option>
+                                              <option class="alert-success" value="1">Apporved</option>
+                                              <option class="alert-danger" value="2">Reject</option>
+                                            </select>
                                           </div>
                                       </div>
 
@@ -137,10 +135,20 @@
                                         </div>
                                       </div>
 
+                                      <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-2">
+                                          <label>Remarks:</label>
+                                        </div>
+                                        <div  class="col-md-4">
+                                          <textarea class="form-control" name="remarks" rows="5"></textarea>
+                                        </div>
+                                      </div>
+
                                        <div class="row" style="margin-top: 10px;">
                                         <div class="col-md-4">
                                           <a href="/Requests"><button class="btn btn-primary" id>BACK</button>
-</a>                                          
+                                            <button class="btn btn-success" data-id="{{$r->ID}}" id="update">Update</button>
+                                          </a>                                          
                                         </div>
                                        
                                       </div>

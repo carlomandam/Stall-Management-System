@@ -17,12 +17,13 @@ class TblRequest extends Migration
          Schema::create('tblRequest', function (Blueprint $table) {
             $table->increments('requestID');
             $table->integer('stallHID')->unsigned();
+            $table->string('subject')->nullable();
             $table->integer('requestType');
             $table->string('requestText',191)->nullable();
             $table->integer('status');
             $table->string('remarks',191)->nullable();
             $table->dateTime('approvedDate')->nullable();
-             $table->dateTime('submitDate');     
+            $table->dateTime('submitDate');     
             $table->timestamps();
             $table->softDeletes();
              $table->foreign('stallHID')->references('stallHID')

@@ -1,17 +1,16 @@
-@extends('layout.app')
+<?php $__env->startSection('title'); ?>
+<?php echo e('Request'); ?>
 
-@section('title')
-{{'Request'}}
-@stop
-@section('content-header')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 
 <ol class="breadcrumb">
   <li><i class="fa fa-dashboard"></i>Manage Request</li>
   <li class="active">Request List</li>
 </ol>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div>
   <div class="alert alert-danger print-error-msg" style="display:none">
@@ -25,20 +24,20 @@
                         </div>
                         <div>
                               <div class="box-body">
-                                   @foreach($req as $r)
+                                   <?php $__currentLoopData = $req; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $r): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                   <div class="row">
                                       <div class="col-md-2">
                                         <label>Request Type</label>
                                       </div>
                                      
                                       <div class="col-md-2">
-                                        @if($r->Type==1)
+                                        <?php if($r->Type==1): ?>
                                         Transafer Stall
-                                       @elseif($r->Type==2)
+                                       <?php elseif($r->Type==2): ?>
                                        Leave Stall
-                                       @elseif($r->Type==3)
+                                       <?php elseif($r->Type==3): ?>
                                        Other/s
-                                       @endif
+                                       <?php endif; ?>
                                       </div>
                                     
                                   </div>
@@ -47,13 +46,11 @@
                                               <label>Status:</label>
                                           </div>
                                           <div  class="col-md-2">
-                                          @if($r->status==0)
-                                        Pending
-                                       @elseif($r->status==1)
-                                       Approved
-                                       @elseif($r->status==2)
-                                       Disapproved
-                                       @endif
+                                            <select class="form-control" name="status">
+                                              <option selected disabled>Pending</option>
+                                              <option class="alert-success" value="1">Apporved</option>
+                                              <option class="alert-danger" value="2">Reject</option>
+                                            </select>
                                           </div>
                                       </div>
 
@@ -62,10 +59,10 @@
                                               <label>Name:</label>
                                           </div>
                                           <div  class="col-md-3">
-                                            {{$r->First}} {{$r->Middle}} {{$r->Last}}   
+                                            <?php echo e($r->First); ?> <?php echo e($r->Middle); ?> <?php echo e($r->Last); ?>   
                                           </div>
                                       </div>
-                                         @if($r->Type==1)
+                                         <?php if($r->Type==1): ?>
                                          <div class="row" style="margin-top: 10px;">
                                           <div class="col-md-2">
                                             <label>Stall:</label>
@@ -80,18 +77,18 @@
                                                 </tr>
                                               </thead>
                                               <tbody>
-                                                @foreach($info as $i)
+                                                <?php $__currentLoopData = $info; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <tr>
-                                                  <td>{{$i->stallFrom}}</td>
-                                                  <td>{{$i->stallRequested}}</td>
+                                                  <td><?php echo e($i->stallFrom); ?></td>
+                                                  <td><?php echo e($i->stallRequested); ?></td>
                                                 </tr>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                               </tbody>
                                               
                                             </table>
                                           </div>
                                         </div>
-                                         @elseif($r->Type==2)
+                                         <?php elseif($r->Type==2): ?>
                                          <div class="row" style="margin-top: 10px;">
                                           <div class="col-md-2">
                                             <label>Stall:</label>
@@ -106,26 +103,27 @@
                                                 </tr>
                                               </thead>
                                               <tbody>
-                                                @foreach($info as $i)
+                                                <?php $__currentLoopData = $info; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <tr>
-                                                  <td>{{$i->stallFrom}}</td>
+                                                  <td><?php echo e($i->stallFrom); ?></td>
                                                 </tr>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                               </tbody>
                                               
                                             </table>
                                           </div>
                                         </div>
-                                       @elseif($r->Type==3)
+                                       <?php elseif($r->Type==3): ?>
                                             <div class="row" style="margin-top: 10px;">
                                         <div class="col-md-2">
                                           <label>Subject:</label>
                                         </div>
                                         <div  class="col-md-4">
-                                         {{$r->subject}}
+                                         <?php echo e($r->subject); ?>
+
                                         </div>
                                       </div>
-                                       @endif 
+                                       <?php endif; ?> 
                                       
 
                                       <div class="row" style="margin-top: 10px;">
@@ -133,14 +131,24 @@
                                           <label>Reason:</label>
                                         </div>
                                         <div  class="col-md-4">
-                                          <textarea class="form-control" name="transferReasonTS" rows="5" readonly>{{$r->reason}} </textarea>
+                                          <textarea class="form-control" name="transferReasonTS" rows="5" readonly><?php echo e($r->reason); ?> </textarea>
+                                        </div>
+                                      </div>
+
+                                      <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-2">
+                                          <label>Remarks:</label>
+                                        </div>
+                                        <div  class="col-md-4">
+                                          <textarea class="form-control" name="remarks" rows="5"></textarea>
                                         </div>
                                       </div>
 
                                        <div class="row" style="margin-top: 10px;">
                                         <div class="col-md-4">
                                           <a href="/Requests"><button class="btn btn-primary" id>BACK</button>
-</a>                                          
+                                            <button class="btn btn-success" data-id="<?php echo e($r->ID); ?>" id="update">Update</button>
+                                          </a>                                          
                                         </div>
                                        
                                       </div>
@@ -148,7 +156,7 @@
                                   
 
 
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
                   </div>
@@ -157,10 +165,11 @@
     </div>
 </div>
 
-@stop
-@section('script')
- <script type="text/javascript" src="{{ URL::asset('js/request.js') }}"></script>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+ <script type="text/javascript" src="<?php echo e(URL::asset('js/request.js')); ?>"></script>
 <script type="text/javascript">
 
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

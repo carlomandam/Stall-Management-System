@@ -49,13 +49,15 @@
                                                       <td>Transfer Stall</td>
                                                       <?php elseif($req->requestType ==2): ?>
                                                       <td>Leave Stall</td>
+                                                      <?php elseif($req->requestType == 3): ?>
+                                                      <td>Other/s</td>
                                                       <?php endif; ?>
                                                       <?php if($req->status == 0): ?>
                                                       <td>Pending</td>
                                                       <?php elseif($req->status == 1): ?>
                                                       <td>Approved</td>
                                                       <?php elseif($req->status == 2): ?>
-                                                      <td>Not Approved</td>
+                                                      <td>Reject</td>
                                                       <?php endif; ?>
                                                     
                                                      <td><?php echo e(\Carbon\Carbon::parse($req->submitDate)->format('F d, Y')); ?>
@@ -70,15 +72,18 @@
                                                       <?php if($req->status == 0): ?>
                                                       <td>
                                                         <button class="btn btn-info" id="view" data-id="<?php echo e($req->requestID); ?>">View</button>
-                                                        <button class="btn btn-primary" data-id="<?php echo e($req->requestID); ?>">Update</button>
+                                                        <button class="btn btn-primary" data-id="<?php echo e($req->requestID); ?>" id="edit">Edit</button>
+                                                        <button id="delete" class="btn btn-danger" data-id="<?php echo e($req->requestID); ?>" style="width: 60px;">Delete</button>
                                                       </td>
                                                       <?php elseif($req->status == 1): ?>
                                                       <td>
                                                         <button class="btn-info" id="view" data-id="<?php echo e($req->requestID); ?>">View</button>
+                                                         <button id="delete" class="btn btn-danger" data-id="<?php echo e($req->requestID); ?>" style="width: 60px;">Delete</button>
                                                       </td>
                                                       <?php elseif($req->status == 2): ?>
                                                       <td>
                                                         <button class="btn-info" id="view" data-id="<?php echo e($req->requestID); ?>">View</button>
+                                                        <button id="delete" class="btn btn-danger" data-id="<?php echo e($req->requestID); ?>" style="width: 60px;">Delete</button>
                                                       </td>
                                                       <?php endif; ?>
                                                    </tr>

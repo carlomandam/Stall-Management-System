@@ -29,7 +29,7 @@ class AdminController extends Controller
     	]);
 
     	if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password])){
-    		return redirect('/Dashboard');
+    		return view('welcome');
     	}
 
     	return redirect()->back();
