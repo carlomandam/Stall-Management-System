@@ -96,6 +96,30 @@
         .select2-selection__choice {
             color: black !important;
         }
+
+        .loadingDiv {
+            display:    none;
+            position:   fixed;
+            z-index:    1000000000;
+            top:        0;
+            left:       0;
+            height:     100%;
+            width:      100%;
+            background: rgba( 255, 255, 255, .8 ) 
+                        url('image/FhHRx.gif') 
+                        50% 50% 
+                        no-repeat;
+        }
+
+        body.loading {
+            overflow: hidden;   
+        }
+
+        /* Anytime the body has the loading class, our
+           modal element will be visible */
+        body.loading .modal {
+            display: block;
+        }
     </style>
 </head>
 
@@ -140,8 +164,8 @@
                 </div>
                 <ul class="sidebar-menu">
                     <li class="header"><span>MAIN NAVIGATION</span></li>
-                    <li class="treeview">
-                        <a href="/" class="{{Route::getFacadeRoot()->current()->uri() == 'Dashboard' ? 'active' : ''}}"> <i class="fa fa-dashboard"></i> <span>Dashboard</span> </a>
+                    <li class="treeview {{Route::getFacadeRoot()->current()->uri() == 'Dashboard' ? 'active' : ''}}" >
+                        <a href="/" > <i class="fa fa-dashboard"></i> <span>Dashboard</span> </a>
                     </li>
                     <li class="treeview">
                         <a href="#"> <i class="fa fa-tasks"></i> <span>Transactions</span> <span class="pull-right-container">
@@ -237,6 +261,7 @@
             <section class="content"> @yield('content') </section>
         </div>
     </div>
+    <div class="modal loadingDiv"></div>
     <script src="{{ URL::asset('assets/jQuery/jquery-2.2.3.min.js')}}"></script>
     <script src="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
@@ -249,6 +274,11 @@
     <script src="{{ URL::asset('js/select2.js')}}"></script>
     <script src="{{ URL::asset('assets/datepicker/bootstrap-datepicker.min.js')}}"></script>
     <script>
+        $body = $("body");
+
+        $(document).on({
+             ajaxStop: function() { $body.removeClass("loading"); }    
+        });
 
         setInterval(myTimer, 1000);
         $.widget.bridge('uibutton', $.ui.button);

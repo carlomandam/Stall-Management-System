@@ -191,6 +191,7 @@
                         error.appendTo('#new .print-error-msg ul');
                     }
                     , submitHandler: function(form){
+                        $body.addClass("loading");
                         $(form).find(":submit").attr('disabled',true);
                         var formData = new FormData(form);
                         $.ajax({
@@ -219,7 +220,7 @@
                                 , type: 'post'
                                 , data: {
                                     stypeName: function () {
-                                        return $("#newform").find("input[name=stypeName]").val();
+                                        return $("#updateform").find("input[name=stypeName]").val();
                                     }
                                     , _token: function () {
                                         return $("#_token").val();
@@ -255,6 +256,7 @@
                         error.appendTo('#update .print-error-msg ul');
                     }
                     , submitHandler: function(form){
+                        $body.addClass("loading");
                         $(form).find(":submit").attr('disabled',true);
                         var formData = new FormData(form);
                         $.ajax({
@@ -336,6 +338,7 @@
             }
             
             function getInfo(id) {
+                $body.addClass("loading");
                 $.ajax({
                     type: "POST"
                     , url: '/getSTypeInfo'
@@ -393,7 +396,7 @@
                         , "id": id
                     }
                     , success: function (data) {
-                        if(data == ""){
+                        if(data.trim() == ""){
                         $('#table').DataTable().ajax.reload();
                         toastr.success('Stall Type Deleted');
                         }else if(data == "rental"){

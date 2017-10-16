@@ -227,6 +227,7 @@
             , submitHandler: function (form) {
                 $(form).find('button').prop('disabled',true);
                 //$(form).find('.bldgSelect').val(selected.bldgID);
+                $body.addClass("loading");
                 var formData = new FormData(form);
                 $.ajax({
                     type: "POST"
@@ -236,6 +237,7 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
+                        $body.removeClass("loading");
                         toastr.success('Added New Stall');
                         $('#table').DataTable().ajax.reload();
                         $('#new').modal('hide');
@@ -248,6 +250,7 @@
             errorClass: "error-class"
             , validClass: "valid-class"
             , submitHandler: function (form) {
+                $body.addClass("loading");
                 var formData = new FormData(form);
                 $.ajax({
                     type: "POST"
@@ -257,7 +260,7 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
-                        if (data) {
+                        if (data.trim() != "false" ) {
                             toastr.success('Updated Stall Type Information');
                             $('#table').DataTable().ajax.reload();
                             $('#update').modal('hide');
@@ -327,6 +330,7 @@
         $("#updatemultiform").unbind('submit').bind('submit', function (e) {
             e.preventDefault();
             if (!$("#updatemultiform").valid()) return;
+            $body.addClass("loading");
             var formData = new FormData($(this)[0]);
             $.ajax({
                 type: "POST"
@@ -336,9 +340,11 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
-                    toastr.success('Updated Stalls');
-                    $('#table').DataTable().ajax.reload();
-                    $('#updatemultiple').modal('hide');
+                    if(data.trim() != "false"){
+                        toastr.success('Updated Stalls');
+                        $('#table').DataTable().ajax.reload();
+                        $('#updatemultiple').modal('hide');
+                    }
                 }
             });
         });
@@ -349,6 +355,7 @@
             });
             $(this).find('form').validate().resetForm();
             $(this).find('form')[0].reset();
+            $('.js-example-basic-multiple').select2("val", "");
             $(".removable").remove();
         });
         $(".modal").on('shown.bs.modal', function () {
@@ -402,6 +409,7 @@
     });
 
     function getInfo(id) {
+        $body.addClass("loading");
         $.ajax({
             type: "POST"
             , url: '/getStallInfo'

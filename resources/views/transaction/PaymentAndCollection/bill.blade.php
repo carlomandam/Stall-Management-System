@@ -75,7 +75,7 @@
         </div>
         <div class="banner">
             <b>Goods and Garments</b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <b style="margin-left: 30px;">Bill No: {{$billID}}</b>
+            <b style="margin-left: 30px;">Bill No: 001</b>
 
         </div>
          <div class="banner1">
@@ -93,11 +93,11 @@
                 <tbody>
                     <tr>
                         <td  width="25%"><b>Stall Code:</b></td>
-                        <td>{{$billing->StallRental->Stall->stallID}}</td>
+                        <td>id</td>
                     </tr>
                     <tr>
                         <td  width="25%"><b>Stall Holder:</b></td>
-                        <td  width="75%">{{$billing->StallRental->StallHolder->stallHFName." ".$billing->StallRental->StallHolder->stallHLName}}</td>
+                        <td  width="75%">some name</td>
                     </tr>
                    
                 </tbody>
@@ -109,9 +109,6 @@
         <div class="col-md-12">
             <table width="100%">
                 <thead >
-           
-                  @foreach($contract as $con)      
-
                     <tr>
                         <th style="text-align: left;">Date</th>
                         <th style="text-align: left;"">Description</th>
@@ -120,53 +117,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                  <?php $total = 0;?> 
-            @foreach($con->StallRate->RateDetail as $rd)    
-           <?php
-           $first = Carbon\Carbon::parse($billing->billDateFrom)->format('d');
-           $last = Carbon\Carbon::parse($billing->billDateTo)->format('d');
-           $nextDay = Carbon\Carbon::parse($billing->billDateFrom);
-           
-           ?>
-                        @for($i = $first; $i<= $last; $i++)
+                    <tr>
 
-                     
-                        <tr>
-
-                        <td>{{$nextDay->format('F d, Y')}}</td>
+                    <td>
                             
-                            @if($con->StallRate->frequencyDesc==1)
-                             <td>Monthly Rate</td>
-                            @elseif($con->StallRate->frequencyDesc==2)
-                               <td>Weekly Rate</td>
-                            @elseif($con->StallRate->frequencyDesc==3)
-                               <td>{{$nextDay->format("l")}} Rental Rate</td>
-                            @elseif($con->StallRate->frequencyDesc==4)
-                                <td>{{$nextDay->format("l")}} Rental Rate</td>
-                            @endif
+                    </td>
                        
                        
-                        <td>Php {{number_format($rd->dblRate,2)}} <?php
-                        $total += $rd->dblRate;
-                        ?></td>
-                      
-                        <?php
-                        $nextDay = $nextDay->addDays(1);
-                        ?>
-                        </tr>
-                        @endfor
-                        @endforeach 
-                       
+                    <td>Php </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <div style="margin-top: 10px;margin-left: 73%;">
             <b style="font-size: 15px;">Total:</b>
-            <b style="font-size: 14px;color: red;">Php {{number_format($total,2)}}</b>
+            <b style="font-size: 14px;color: red;">Php </b>
         </div>
         <div>
-            
-                        @endforeach
         </div>
     </body>
 </html>

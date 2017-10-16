@@ -206,7 +206,8 @@
             </div>
         </div>
     </div>
-</div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+</div>
+<?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
 <script type="text/javascript" src="<?php echo e(URL::asset('js/floor_js.js')); ?>"></script>
 <script type="text/javascript">
     var obj;
@@ -286,6 +287,7 @@
             ,submitHandler: function(form){
                 $(form).find(":submit").attr('disabled',true);
                 var formData = new FormData(form);
+                $body.addClass("loading");
                 $.ajax({
                     type: "POST"
                     , url: '/AddBuilding'
@@ -294,6 +296,7 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
+                        $body.removeClass("loading");
                         toastr.success('Added New Building');
                         $('#prodtbl').DataTable().ajax.reload();
                         $('#new').modal('hide');
@@ -373,6 +376,7 @@
             }
             ,submitHandler: function(form){
                 var formData = new FormData(form);
+                $body.addClass("loading");
                 $.ajax({
                     type: "POST"
                     , url: '/UpdateBuilding'
@@ -381,6 +385,7 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
+                        $body.removeClass("loading");
                         if (data) {
                             toastr.success('Updated Building Information');
                             $('#prodtbl').DataTable().ajax.reload();
@@ -454,6 +459,7 @@
     });
 
     function getInfo(id) {
+        $body.addClass("loading");
         $.ajax({
             type: "POST"
             , url: '/getBuildingInfo'
@@ -467,6 +473,7 @@
                 $("#bldgCodeUp").val(obj.bldgCode);
                 $("#bldgDescUp").val(obj.bldgDesc);
                 $("#curfloor").val(obj.noOfFloor);
+                $body.removeClass("loading");
                 $('#update').modal('show');
             }
         });

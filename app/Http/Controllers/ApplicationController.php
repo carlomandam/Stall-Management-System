@@ -53,6 +53,7 @@ class ApplicationController extends Controller
     public function updateRegistration($ID){
         $prod = Product::all();
         $contract = Contract::find($ID);
+        $stall = Stall::find($contract->stallID);
         if(count($contract) == 0)
             return redirect('/StallHolderList');
 
@@ -69,7 +70,7 @@ class ApplicationController extends Controller
         ->leftJoin('tblBuilding as bldg','floor.bldgID','=','bldg.bldgID')
         ->where('tblStall.stallID',$contract->stallID)
         ->first();
-        return view('transaction/ManageContracts/Application_View',compact('contract','stallHolderDetails','stallDetails','contacts','prod','req'));
+        return view('transaction/ManageContracts/Application_View',compact('contract','stallHolderDetails','stallDetails','contacts','prod','req','stall'));
     }
 
     function newApplication(){
@@ -216,7 +217,6 @@ class ApplicationController extends Controller
         if(count($initFees) == 0)
             return "init";
         $contract = Contract::find($_POST['contract']);
-        $rejects = Contract::where('stallID',$contract->stallID)->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->where('contractID','!=',$_POST['contract'])->delete();
 
         foreach ($initFees as $init) {
             $check = InitFeeDetail::where('contractID',$contract->contractID)->get();
@@ -264,14 +264,15 @@ class ApplicationController extends Controller
 
         if($request->has('id')){
             $data = StallHolder::with('ContactNo')->find($request->id);
+            $data['DOB'] = date("F d, Y",strtotime($data->stallHBday));
         }
 
         return response()->json($data);
     }
 
     function rejectRental(){
-        $rental = StallRental::where('stallRentalID',$_POST['rental'])->first();
-        $rental->stallRentalStatus = 3;
-        $rental->save();
+        $contract = Contract::where('contractID',$_POST['id'])->first();
+        return $contract->contractID."yow";
+        //$contract->delete();
     }
 }

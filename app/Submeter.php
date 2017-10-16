@@ -16,6 +16,5 @@ class Submeter extends Model
     	'stallUtilityID',
     	'prevRead',
     	'presRead',
-    
     ];
 }

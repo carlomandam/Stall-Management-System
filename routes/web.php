@@ -16,6 +16,9 @@ Route::get('/', function () {
 });
 
 
+Route::get('/B', function () {
+    return view('transaction.PaymentAndCollection.bill');
+});
 
 Route::get('/login', 'Auth\AdminController@showLoginForm');
 Route::post('/login', 'Auth\AdminController@login')->name('login.submit');
@@ -150,14 +153,15 @@ Route::get('/getTennants','ManageContractsController@getTennants');
 Route::get('/getStallHolders','ManageContractsController@getStallHolders');
 Route::get('/getRegistrationList','ManageContractsController@getRegistrationList');
 Route::get('/getTennant/{tennantid}','ManageContractsController@getTennant');
-Route::post('/updateTennant','ManageContractsController@updateTennant');
-Route::post('/deleteTennant','ManageContractsController@deleteTennant');
 Route::get('/StallList','ManageContractsController@stallListIndex');
 Route::get('/RegistrationList','ManageContractsController@regListIndex');
 Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
+Route::post('/updateTennant','ManageContractsController@updateTennant');
+Route::post('/deleteTennant','ManageContractsController@deleteTennant');
+Route::post('/ChangeReading','ManageContractsController@ChangeReading');
 
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment','PaymentController@index');

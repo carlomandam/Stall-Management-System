@@ -98,6 +98,7 @@ class PaymentController extends Controller{
                 $contract->contractStart = date('Y-m-d');
                 $contract->contractEnd = date('Y-m-d',strtotime(date('Y-m-d') . "+1 year"));
                 $contract->save();
+                $rejects = Contract::where('stallID',$contract->stallID)->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->where('contractID','!=',$_POST['contract'])->delete();
             }
 
             if(isset($_POST['unpaid'])){
@@ -394,6 +395,9 @@ class PaymentController extends Controller{
         $paymentLastID= count($paymentLastID) == 0 ? 1 : $paymentLastID->paymentID +1;
         $payID = 'PAYMENT-'.str_pad($paymentLastID, 5, '0', STR_PAD_LEFT);
         $dateFrom = date('Y-m-d +1 days');
+        $unpaidCollections = null;
+        $bills = null;
+
         if($contract->contractStart != null && $contract->contractEnd != null){
             $lastCollect = $this::checkPrevCollection($id);
             $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionDetID as detID, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$id' ORDER BY det.collectDate ASC");

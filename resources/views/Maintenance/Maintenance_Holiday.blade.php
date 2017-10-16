@@ -49,7 +49,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="Name">Holiday Name</label><span class="required">&nbsp*</span>
-                                    <input type="text" class="form-control" id="Name" name="Name" placeholder="Holiday Name" /> </div>
+                                    <input type="text" class="form-control" id="Name" name="Name" placeholder="ex. New Year" /> </div>
                             </div>
                         </div>
                         <div class="row">
@@ -151,22 +151,9 @@
     $(document).ready(function () {
         var today = new Date(Date.now()).toLocaleString()
         for (var i = 1; i < 32; i++) $('.day').append("<option value='" + i + "'>" + i + "</option>");
-        $("#newform").validate({
+        $validator = $("#newform").validate({
             rules: {
-                Name: {
-                    required: true
-                    , maxlength: 200
-                    , remote: {
-                        url: '/CheckHolidayName'
-                        , type: 'post'
-                        , data: {
-                            Name: function () {
-                                return $("#newform").find("input[name=Name]").val();
-                            }
-                        }
-                    }
-                }
-                , Day: {
+                Day: {
                     required: true
                     , remote: {
                         type: "POST"
@@ -177,6 +164,19 @@
                             }
                             , Month: function () {
                                 return $("#Month").val();
+                            }
+                        }
+                    }
+                }
+                , Name: {
+                    required: true
+                    , maxlength: 200
+                    , remote: {
+                        url: '/CheckHolidayName'
+                        , type: 'post'
+                        , data: {
+                            Name: function () {
+                                return $("#newform").find("input[name=Name]").val();
                             }
                         }
                     }
@@ -199,6 +199,7 @@
                 error.appendTo('#new .print-error-msg ul');
             }
             , submitHandler: function(form){
+                $body.addClass("loading");
                 $(form).find(":submit").attr('disabled',true);
                 var formData = new FormData(form);
                 $.ajax({
@@ -209,10 +210,12 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
+                        $body.removeClass("loading");
                         toastr.success('Added New Holiday');
                         $('#prodtbl').DataTable().ajax.reload();
                         $('#new').modal('hide');
                         $(form).find(":submit").attr('disabled',false);
+                        $validator.resetForm();
                     }
                 });
             }
@@ -271,6 +274,7 @@
                 error.appendTo('#update .print-error-msg ul');
             }
             , submitHandler: function(form){
+                $body.addClass("loading");
                 $(form).find(":submit").attr('disabled',true);
                 var formData = new FormData(form);
                 $.ajax({
@@ -281,7 +285,8 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
-                        if (data == 'true') {
+                        $body.removeClass("loading");
+                        if (data.trim() == 'true') {
                             toastr.success('Updated Holiday Information');
                             $('#prodtbl').DataTable().ajax.reload();
                             $('#update').modal('hide');
@@ -385,6 +390,7 @@
     });
 
     function getInfo(id) {
+        $body.addClass("loading");
         $.ajax({
             type: "POST"
             , url: '/getHolidayInfo'
@@ -398,6 +404,7 @@
                 $("#DayUp").val(obj.Day);
                 $("#MonthUp").val(obj.Month);
 
+                $body.removeClass("loading");
                 $('#update').modal('show');
             }
         });

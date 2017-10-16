@@ -96,11 +96,11 @@
                             <label for="bday"><b>Birthday</b></label>
                             <p>
                                 <?php
-                                            $today = date("Y-m-d");
-                                            $diff = date_diff(date_create($stallHolderDetails->stallHBday), date_create($today));
+                                    $today = date("Y-m-d");
+                                    $diff = date_diff(date_create($stallHolderDetails->stallHBday), date_create($today));
 
-                                            echo date('F',strtotime($stallHolderDetails->stallHBday)).' '.date('d',strtotime($stallHolderDetails->stallHBday)).', '.date('Y',strtotime($stallHolderDetails->stallHBday)).' ('.$diff->format('%y').' years old)';
-                                        ?>
+                                    echo date('F',strtotime($stallHolderDetails->stallHBday)).' '.date('d',strtotime($stallHolderDetails->stallHBday)).', '.date('Y',strtotime($stallHolderDetails->stallHBday)).' ('.$diff->format('%y').' years old)';
+                                ?>
                             </p>
                         </div>
                         <div class="col-md-6">
@@ -142,9 +142,16 @@
                                     <label>Stall Type</label>
                                     <p><?php echo e($stallDetails->stypeName); ?></p>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label>Location</label>
                                     <p><?php echo e((($stallDetails->floorLevel == '1') ? $stallDetails->floorLevel.'st' : (($stallDetails->floorLevel == '2') ? $stallDetails->floorLevel.'nd' : (($stallDetails->floorLevel == '3') ? $stallDetails->floorLevel.'rd' : $stallDetails->floorLevel.'th'))).' Floor'); ?>, <?php echo e($stallDetails->bldgName); ?></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Utilities</label>
+                                    <p><?php for($i=0;$i < count($stall->StallUtility);$i++): ?>
+                                        <?php echo e(($stall->StallUtility[$i]->utilityType == 1) ? "Electricity":(($stall->StallUtility[$i]->utilityType == 2) ? "Water" : "Unkown Utility")); ?><?php if($i < count($stall->StallUtility)-1): ?>, <?php endif; ?>
+                                        <?php endfor; ?>
+                                    </p>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -188,8 +195,8 @@
                             <div class="col-md-12" id="registerButtons">
                                 <div class="pull-right">
                                     <button type='button' id='upbtn' onclick="updateContract(1)" class="btn btn-primary"><span class='fa fa-pencil'></span>&nbsp;Update</button>
-                                    <button type="button" onclick="reject();" class="btn btn-danger">Cancel</button>
-                                    <button type="button" class="btn btn-success" onclick="accept()">Proceed To Payment</button>
+                                    <button type="button" data-toggle="modal" data-target="#confirm-delete" class="btn btn-danger">Reject</button>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirm-accept">Proceed To Payment</button>
                                 </div>
                             </div>
                             <div class="col-md-12" id="updateButtons" style="display:none">
@@ -201,6 +208,44 @@
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirm Rejection</h4>
+            </div>
+        
+            <div class="modal-body">
+                <p>You are about to reject a stall rental application from <b><?php echo e($stallHolderDetails->stallHFName.' '.$stallHolderDetails->stallHLName); ?></b>, this procedure is irreversible.</p>
+                <p>Do you want to proceed?</p>
+                <p class="debug-url"></p>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger btn-ok" onclick="reject()" data-dismiss="modal">Proceed</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm-accept" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Accept Application</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to accept this application?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-success btn-ok" onclick="accept();return false;">Yes</a>
             </div>
         </div>
     </div>
@@ -292,11 +337,13 @@
             type: "POST"
             , url: '/rejectRental'
             , data: {
-                "rental": $('#rental').val()
+                "id": "<?php echo e($contract->contractID); ?>"
             }
             , success: function (data) {
                 toastr.warning('Rental Declined');
-                //window.location;
+                setTimeout(function () {
+                    window.location = "/StallHolderList";
+                }, 1000);
             }
         });
     }

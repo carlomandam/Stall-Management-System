@@ -120,13 +120,13 @@ class StallController extends Controller
     }
     
     function updateStall(){
-        $hasChange = false;
+        $hasChange = "false";
         $stall = Stall::where('stallID',$_POST['stallID'])->first();
         $stall->stype_SizeID = (isset($_POST['type'])) ? $_POST['type'] : null;
         $stall->stallDesc = $_POST['desc'];
         if($stall->isDirty()){
             $stall->save();
-            $hasChange = true;
+            $hasChange = "true";
         }
         
         $electricity = StallUtility::where('stallID',$stall->stallID)->where('utilityType','1')->first();
@@ -135,11 +135,11 @@ class StallController extends Controller
             $electricity->stallID = $stall->stallID;
             $electricity->utilityType = 1;
             $electricity->save();
-            $hasChange = true;
+            $hasChange = "true";
         }
         else if(!isset($_POST['electricity']) && count($electricity) > 0){
             $electricity->delete();
-            $hasChange = true;
+            $hasChange = "true";
         }
         
         $water = StallUtility::where('stallID',$stall->stallID)->where('utilityType','2')->first();        
@@ -148,17 +148,19 @@ class StallController extends Controller
             $water->stallID = $stall->stallID;
             $water->utilityType = 2;
             $water->save();
-            $hasChange = true;
+            $hasChange = "true";
         }
         else if(!isset($_POST['water']) && count($water) > 0){
             $water->delete();
-            $hasChange = true;
+            $hasChange = "true";
         }
         
         echo $hasChange;
     }
     
     function updateStalls(){
+        if(!isset($_POST['stalls']))
+            return "false";
         foreach($_POST['stalls'] as $stall){
             $temp = Stall::where('stallId',$stall)->first();
             $temp->stype_SizeID = $_POST['type'];

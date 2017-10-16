@@ -92,10 +92,18 @@
                                         <input type="radio" name="sex" value="0"><b>Female</b></label>
                                 </div>
                                 <br>
-                                <label>Date of Birth</label>
-                                <div class="input-group date datepicker">
-                                    <input type="text" class="form-control" name="DOB" style="cursor:pointer;background-color:#FFFFFF" readonly>
-                                    <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div>
+                                <div class="col-md-6" style="padding:0px">
+                                    <label>Date of Birth</label>
+                                    <div class="input-group date datepicker">
+                                        <input type="text" class="form-control" id="DOB" name="DOB" style="cursor:pointer;background-color:#FFFFFF" readonly>
+                                        <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="padding-left: 5px">
+                                    <label>Age</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="age" style="cursor:pointer;background-color:#FFFFFF" readonly>
+                                    </div>
                                 </div>
                                 <label for="email">Email Address</label><span class="required">&nbsp;*</span>
                                 <input type="text" class="form-control email" id="email" name="email" placeholder="email@domain.com" />
@@ -138,7 +146,7 @@
                                 <label>Stall Rate</label>
                                 <p>{{'₱'.$stall->StallType->StallRate->dblRate}}</p>
                                 <label>Peak Days Additional Rate</label>
-                                <p>{{($stall->StallType->StallRate->peakRateType == 1) ? '₱'.$stall->StallType->StallRate->dblPeakAdditional : $stall->StallType->StallRate->dblPeakAdditional.'%'}}</p>
+                                <p>{{($stall->StallType->StallRate->peakRateType == 1) ? '₱ '.number_format($stall->StallType->StallRate->dblPeakAdditional,2,'.',',') : $stall->StallType->StallRate->dblPeakAdditional.'% (₱ '.number_format(($stall->StallType->StallRate->dblRate * ($stall->StallType->StallRate->dblPeakAdditional / 100)),2,'.',',').')'}}</p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -147,6 +155,10 @@
                                 <p>{{$stall->StallType->StallType->stypeName }} ({{$stall->StallType->StallTypeSize->stypeArea}}m&sup2;)</p>
                                 <label>Location</label>
                                 <p>{{(($stall->Floor->floorLevel == '1') ? $stall->Floor->floorLevel.'st' : (($stall->Floor->floorLevel == '2') ? $stall->Floor->floorLevel.'nd' : (($stall->Floor->floorLevel == '3') ? $stall->Floor->floorLevel.'rd' : $stall->Floor->floorLevel.'th'))).' Floor'}}, {{$stall->Floor->Building->bldgName}}</p>
+                                <label>Utilities</label>
+                                <p>@for($i=0;$i < count($stall->StallUtility);$i++)
+                                    {{($stall->StallUtility[$i]->utilityType == 1) ? "Electricity":(($stall->StallUtility[$i]->utilityType == 2) ? "Water" : "Unkown Utility")}}@if($i < count($stall->StallUtility)-1), @endif
+                                    @endfor
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -178,7 +190,17 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var stall = JSON.parse("{{json_encode($stall)}}".replace(/&quot;/g, '"'));
-        $(".datepicker").datepicker({
+        $("#DOB").on("change", function(){
+            var birthDate = new Date($(this).val());
+            var today = new Date();
+            var age = today.getFullYear() - birthDate.getFullYear();
+            var m = today.getMonth() + 1 - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            $('#age').val(age);
+        });
+        $("#DOB").datepicker({
             showOtherMonths: true
             , selectOtherMonths: true
             , changeMonth: true
@@ -187,7 +209,7 @@
             , startDate: "01/01/1900"
             , todayHighlight: true
             , orientation: 'bottom'
-            , format: 'mm/dd/yyyy'
+            , format: 'MM dd, yyyy'
         });
         $("#applyForm").validate({
             rules: {
@@ -196,7 +218,7 @@
                 , sex: 'required'
                 , DOB: 'required'
                 , email: 'required'
-                , "contact[]": 'required'
+                , "numbers[]": 'required'
                 , address: 'required'
                 , "products[]": 'required'
                 , businessName:"required"
@@ -207,7 +229,7 @@
                 , sex: 'Sex is required'
                 , DOB: 'Day of Birth is required'
                 , email: 'Email is required'
-                , "contact[]": 'Enter atleast 1 contact number'
+                , "numbers[]":{required : 'Enter atleast 1 contact number'}
                 , address: 'Address is required'
                 , "products[]": 'Specify products'
                 , businessName:"Business Name is required"
@@ -216,10 +238,11 @@
             , validClass: "valid-class"
             , errorElement: "li"
             , errorPlacement: function (error) {
-                error.appendTo('#new .print-error-msg ul');
+                error.appendTo('#newEC ul');
             }
             , errorContainer: "#newEC"
             , submitHandler: function (form) {
+                $body.addClass("loading");
                 var formData = new FormData(form);
                 $.ajax({
                     type: "POST"
@@ -229,7 +252,8 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
-                        if (data == 'exist') {
+                        $body.removeClass("loading");
+                        if (data.trim() == 'exist') {
                             toastr.warning("User's application already exist");
                             return;
                         }
@@ -273,9 +297,7 @@
                     $('#mname').val(item.stallHMName);
                     $('#lname').val(item.stallHLName);
                     var parts = item.stallHBday.split('-');
-                    $('#DOBMonth').val(parts[1]);
-                    $('#DOBDay').val(parts[2]);
-                    $('#DOBYear').val(parts[0]).trigger('change');
+                    $("#DOB").datepicker("setDate",item.DOB);
                     $('form input[name=sex][value=' + item.stallHSex + ']').click();
                     $('#email').val(item.stallHEmail);
                     $('#address').val(item.stallHAddress);

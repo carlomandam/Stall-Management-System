@@ -164,6 +164,7 @@
                 error.appendTo('#new .print-error-msg ul');
             }
             , submitHandler: function (form) {
+                $body.addClass("loading");
                 var formData = new FormData(form);
                 $.ajax({
                     type: "POST"

@@ -10,6 +10,12 @@ use App\Contract;
 class ManageContractsController extends Controller
 {
     //'
+
+    public function ChangeReading(){
+        $contract = Contract::find($_POST['id']);
+        return view("transaction.ManageContracts.ChangeReading",compact('contract'));
+    }
+
     public function getAvailableStalls(){
         $stalls = Stall::with('Floor.Building')->withCount('Pending')->has('StallType.StallRate')->doesntHave('CurrentTennant')->get();
         $data = array();
@@ -71,7 +77,7 @@ class ManageContractsController extends Controller
         $tennant->stallHLName = $_POST['lname'];
         $tennant->stallHAddress = $_POST['address'];
         $tennant->stallHSex = $_POST['sex'];
-        $tennant->stallHBday = date_format(date_create($_POST['DOBYear'].'-'.$_POST['DOBMonth'].'-'.$_POST['DOBDay']),"Y-m-d");
+        $tennant->stallHBday = date("Y-m-d",strtotime($_POST['DOB']));
         $tennant->stallHEmail = $_POST['email'];
             
             foreach($_POST['numbers'] as $no){
@@ -100,7 +106,7 @@ class ManageContractsController extends Controller
     }
 
     public function getTennants(){
-        $stalls = StallHolder::with('ContactNo')->get();
+        $stalls = StallHolder::with('ContactNo')->has('ActiveContracts')->get();
         $data = array();
         
         foreach ($stalls as $stall) {

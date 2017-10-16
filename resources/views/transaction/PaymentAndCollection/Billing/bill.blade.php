@@ -72,11 +72,8 @@
                           <button class="btn btn-success">Generate Bill</button>
                       </div>
                   </div>
-                
-        
               </div>
           </div>
-
     </div>
 
 @stop

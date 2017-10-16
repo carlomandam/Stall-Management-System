@@ -39,4 +39,8 @@ class Stall extends Model
     public function Contract(){
         return $this->hasMany('App\Contract','stallID');
     }
+
+    public function Submeter(){
+        return $this->belongsToMany('App\Submeter', 'tblstall_utilities', 'stallID', 'stallUtilityID')->wherePivot('utilityType',"=","2");
+    }
 }

@@ -84,60 +84,10 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="col-md-6">
-                                        <label for="bday"><b>Birthday</b></label><span class="required">&nbsp*</span>
-                                        <div class="form-inline">
-                                            <select class="form-control" name="DOBMonth" id="DOBMonth">
-                                                <option disabled="" selected=""> - Month - </option>
-                                                <option value="01">January</option>
-                                                <option value="02">Febuary</option>
-                                                <option value="03">March</option>
-                                                <option value="04">April</option>
-                                                <option value="05">May</option>
-                                                <option value="06">June</option>
-                                                <option value="07">July</option>
-                                                <option value="08">August</option>
-                                                <option value="09">September</option>
-                                                <option value="10">October</option>
-                                                <option value="11">November</option>
-                                                <option value="12">December</option>
-                                            </select>
-                                            <select class="form-control" name="DOBDay" id="DOBDay">
-                                                <option disabled="" selected=""> - Day - </option>
-                                                <option value="01">01</option>
-                                                <option value="02">02</option>
-                                                <option value="03">03</option>
-                                                <option value="04">04</option>
-                                                <option value="05">05</option>
-                                                <option value="06">06</option>
-                                                <option value="07">07</option>
-                                                <option value="08">08</option>
-                                                <option value="09">09</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
-                                                <option value="13">13</option>
-                                                <option value="14">14</option>
-                                                <option value="15">15</option>
-                                                <option value="16">16</option>
-                                                <option value="17">17</option>
-                                                <option value="18">18</option>
-                                                <option value="19">19</option>
-                                                <option value="20">20</option>
-                                                <option value="21">21</option>
-                                                <option value="22">22</option>
-                                                <option value="23">23</option>
-                                                <option value="24">24</option>
-                                                <option value="25">25</option>
-                                                <option value="26">26</option>
-                                                <option value="27">27</option>
-                                                <option value="28">28</option>
-                                                <option value="29">29</option>
-                                                <option value="30">30</option>
-                                                <option value="31">31</option>
-                                            </select>
-                                            <select class="form-control" name="DOBYear" id="DOBYear">
-                                                <option disabled="" selected=""> - Year - </option>
-                                            </select>
+                                        <label>Date of Birth</label>
+                                        <div class="input-group date datepicker">
+                                            <input type="text" class="form-control" id="DOB" name="DOB" style="cursor:pointer;background-color:#FFFFFF" readonly>
+                                            <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -162,18 +112,8 @@
                                 </div>
                                 <div class="col-md-12" id="registerButtons">
                                     <div class="pull-right">
+                                        <button type="button" data-toggle="modal" data-target="#confirm-delete" class="btn btn-danger">Remove</button>
                                         <button type="submit" class="btn btn-success">Save</button>
-                                        <div class='btn-group dropup'>
-                                            <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button>
-                                            <ul class='dropdown-menu pull-right' role='menu'>
-                                                <center>
-                                                    <h4>Are You Sure?</h4>
-                                                    <li class='divider'></li>
-                                                    <li><a href='#' onclick='deleteTennant("<?php echo e($tennant->stallHID); ?>");return false;'>YES</a></li>
-                                                    <li><a href='#' onclick='return false'>NO</a></li>
-                                                </center>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -184,46 +124,35 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirm Rejection</h4>
+            </div>
+        
+            <div class="modal-body">
+                <p>You are about to delete records of <b><?php echo e($tennant->stallHFName.' '.$tennant->stallHLName); ?></b>, this procedure is irreversible.</p>
+                <p>Do you want to proceed?</p>
+                <p class="debug-url"></p>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger btn-ok" onclick='deleteTennant("<?php echo e($tennant->stallHID); ?>");' data-dismiss="modal">Proceed</a>
+            </div>
+        </div>
+    </div>
+</div>
 <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
 <script type="text/javascript" src="<?php echo e(URL::asset('js/multipleAddinArea.js')); ?>"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         
-        var select = $('#DOBYear');
-        var leastYr = 1900;
-        var nowYr = new Date().getFullYear();
-        for (var v = nowYr; v >= leastYr; v--) {
-            $('#DOBYear').append('<option value ="' + v + '">' + v + '</option');
-        }
-        
-        $('#DOBMonth').change(function () {
-            if ($(this).val() == 4 || $(this).val() == 6 || $(this).val() == 9 || $(this).val() == 11) {
-                $('#DOBDay option[value =31]').remove();
-                if ($("#DOBDay option[value='30']").length == 0) {
-                    $('#DOBDay').append('<option value="' + 30 + '">' + 30 + '</option>');
-                }
-            }
-            else if ($(this).val() == 2) {
-                $('#DOBDay option[value =30]').remove();
-                $('#DOBDay option[value =31]').remove();
-            }
-            else {
-                if ($("#DOBDay option[value='30']").length == 0) {
-                    $('#DOBDay').append('<option value="' + 30 + '">' + 30 + '</option>');
-                    $('#DOBDay').append('<option value="' + 31 + '">' + 31 + '</option>');
-                }
-                else if ($("#DOBDay option[value = '31']").length == 0) {
-                    $('#DOBDay').append('<option value="' + 31 + '">' + 31 + '</option>');
-                }
-            }
-        });
-
-        $('#DOBYear,#DOBMonth,#DOBDay').on('change', function () {
-            var day = $('#DOBDay').val();
-            var month = $('#DOBMonth').val();
-            var year = $('#DOBYear').val();
+        $("#DOB").on("change", function(){
+            var birthDate = new Date($(this).val());
             var today = new Date();
-            var birthDate = new Date(year, month, day);
             var age = today.getFullYear() - birthDate.getFullYear();
             var m = today.getMonth() + 1 - birthDate.getMonth();
             if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
@@ -231,9 +160,18 @@
             }
             $('#age').val(age);
         });
-        $('#DOBMonth').val("<?php echo e(date('m',strtotime($tennant->stallHBday))); ?>").trigger('change');
-        $('#DOBDay').val("<?php echo e(date('d',strtotime($tennant->stallHBday))); ?>").trigger('change');
-        $('#DOBYear').val("<?php echo e(date('Y',strtotime($tennant->stallHBday))); ?>").trigger('change');
+        $("#DOB").datepicker({
+            showOtherMonths: true
+            , selectOtherMonths: true
+            , changeMonth: true
+            , changeYear: true
+            , autoclose: true
+            , startDate: "01/01/1900"
+            , todayHighlight: true
+            , orientation: 'bottom'
+            , format: 'MM dd, yyyy'
+        });
+        $("#DOB").datepicker("setDate","<?php echo e(date("F d, Y",strtotime($tennant->stallHBday))); ?>");
 
         $("#applyForm").submit(function (e) {
             e.preventDefault();
@@ -246,7 +184,7 @@
                 , contentType: false
                 , context: this
                 , success: function (data) {
-                    if(data == 'true')
+                    if(data.trim() == 'true')
                     toastr.success('Successfully Updated!');
                 }
             });

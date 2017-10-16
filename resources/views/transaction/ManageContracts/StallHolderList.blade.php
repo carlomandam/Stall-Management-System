@@ -24,7 +24,7 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab3primary" data-toggle="tab">Contracts</a></li>
                     <li><a href="#tab1primary" data-toggle="tab">Available Stalls</a></li>
-                    <li><a href="#tab2primary" data-toggle="tab">Pending Registrations</a></li>
+                    <li><a href="#tab2primary" data-toggle="tab">Pending Applications</a></li>
                     <li><a href="#tab4primary" data-toggle="tab">Tenants</a></li>         
                 </ul>
             </div>
@@ -119,7 +119,7 @@
                         for (var i = 0; i < data.active_contracts.length; i++) {
                             contracts += "<tr><td>" + data.active_contracts[i].stallID + "</td><td><a href='/pdfview/" + data.active_contracts[i].contractID + "'><button class='btn-primary pull-right' value='" + data.active_contracts[i].contractID + "'>Generate Contract</button></a></td><td><a href='ViewContract/"+data.active_contracts[i].contractID+"'><button class='btn-success pull-right'>View</button></a></td></tr>";
                         }
-                        return '<div class="accordion-group" style="width:100%"><div class="accordion-heading" style="text-align:left;width:100%"><a class="accordion-toggle" data-toggle="collapse-next" style="width:100%">' + data.stallHFName + ' ' + data.stallHLName + '<i class="fa fa-angle-left pull-right"></i></a></div><div class="accordion-body collapse" style="margin-top:10px;text-indent:10px"><div class="accordion-inner"><table clas="table"><thead><th>Stall ID</th><th></th></thead><tbody>' + contracts + '</tbody></table></div></div></div>';
+                        return '<div class="accordion-group" style="width:100%"><div class="accordion-heading" style="text-align:left;width:100%"><a class="accordion-toggle" data-toggle="collapse-next" style="width:100%;cursor:pointer;">' + data.stallHFName + ' ' + data.stallHLName + '<i class="fa fa-angle-left pull-right"></i></a></div><div class="accordion-body collapse" style="margin-top:10px;text-indent:10px"><div class="accordion-inner"><table clas="table"><thead><th>Stall ID</th><th></th></thead><tbody>' + contracts + '</tbody></table></div></div></div>';
                     }
                 }
             ]

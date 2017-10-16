@@ -148,6 +148,7 @@
             }
             , submitHandler: function (form) {
                 var formData = new FormData(form);
+                $body.addClass("loading");
                 $.ajax({
                     type: "POST"
                     , url: '/addCharge'
@@ -156,6 +157,7 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
+                        $body.removeClass("loading");
                         toastr.success('Added New Charge');
                         $('#table').DataTable().ajax.reload();
                         $('#new').modal('hide');
@@ -197,6 +199,7 @@
             }
             , submitHandler: function (form) {
                 var formData = new FormData($(this)[0]);
+                $body.addClass("loading");
                 $.ajax({
                     type: "POST"
                     , url: '/updateCharge'
@@ -205,6 +208,7 @@
                     , contentType: false
                     , context: this
                     , success: function (data) {
+                        $body.removeClass("loading");
                         if (data) {
                             toastr.success('Updated Charge');
                             $('#table').DataTable().ajax.reload();
@@ -247,6 +251,7 @@
     });
 
     function getInfo(id) {
+        $body.addClass("loading");
         $.ajax({
             type: "POST"
             , url: '/chargeInfo'
@@ -259,6 +264,7 @@
                 $('#update').find('input[name=Name]').val(obj.chargeName);
                 $('#update').find('input[name=Amount]').val(obj.chargeAmount);
                 $('#update').find('textarea[name=Desc]').val(obj.chargeDesc);
+                $body.removeClass("loading");
                 $('#update').modal('show');
             }
         });
