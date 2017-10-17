@@ -135,7 +135,7 @@
                     
                     <li class="dropdown" style="margin-right: 10px;"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         
-                        <span>{{ Auth::user()->name }}</span><span class="caret"></span> </a>
+                        <span>{{Auth::user()->name}}</span><span class="caret"></span> </a>
                         <ul class="dropdown-menu" role="menu">
                             <li> <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                             <form id="logout-form" action="/logout" method="POST" style="display: none;">

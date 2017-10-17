@@ -34,9 +34,6 @@ class ContractController extends Controller
       if(count($contract) == 0){
         return redirect("/StallHolderList");
       }
-      foreach ($contract->Stall->Submeter as $c) {
-        echo $c->subMeterID;//utilityType;
-      }
       $stall = Stall::with("Floor.Building","StallType.StallTypeSize","StallType.StallType")->find($contract->stallID);
       $prod = $contract->Product;
       $rates = StallRate::withTrashed()->where('stype_SizeID',$stall->stype_SizeID)->get();

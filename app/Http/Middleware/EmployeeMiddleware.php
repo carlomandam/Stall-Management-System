@@ -15,7 +15,7 @@ class EmployeeMiddleware
      */
     public function handle($request, Closure $next)
     {
-          if(Auth::guard($guard)->check() && Auth::user()->position == 'Employee'){
+        if(Auth::guard($guard)->check() && Auth::user()->position == 'Employee'){
             return $next($request);
         }
         else

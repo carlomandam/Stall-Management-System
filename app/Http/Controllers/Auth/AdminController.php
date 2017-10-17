@@ -17,7 +17,6 @@ class AdminController extends Controller
         else{
             return view('login.login');
         }
-    	
     }
 
     public function login(Request $request){
@@ -29,14 +28,14 @@ class AdminController extends Controller
     	]);
 
     	if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password])){
-    		return view('welcome');
+    		return view('dashboard.index');
     	}
 
     	return redirect()->back();
     }
 
-     public function logout(){
-         Auth::logout();
+    public function logout(){
+        Auth::logout();
         return redirect('/login');
     } 
 }

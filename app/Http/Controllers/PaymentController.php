@@ -31,6 +31,7 @@ class PaymentController extends Controller{
     public function getHistRate($dates,$rateID){
         $rates = StallRate::find($rateID);
         $regularRate = $rates->dblRate;
+        $holidays = array();
 
         if($rates->peakRateType == 1){
             $peakDaysRate = $rates->dblPeakAdditional + $rates->dblRate;
@@ -149,7 +150,6 @@ class PaymentController extends Controller{
         $stalls =DB::select("Select stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHLName) as tenantName, contractID as contractID from tblcontractInfo left join tblstallholder as stallH on stallH.stallHID = tblcontractInfo.stallHID where tblcontractInfo.deleted_at IS NULL && tblcontractInfo.contractEnd >= ".date("Y-m-d"));
    
         $collectionStat = DB::select("select collect, reminder,warning, tblutilities.lock as lockstat, terminate FROM `tblutilities` WHERE utilitiesID = 'util_collection_status'");
-
 
         foreach($stalls as $stall){
             $this::checkPrevCollection($stall->contractID);
@@ -656,14 +656,14 @@ class PaymentController extends Controller{
         $transactionID = Payment::select('transactionID')
         ->where('paymentID',$paymentID)->get();
         $getHolidays = DB::select("select CONCAT(year(curdate()),'-',LPAD(holi.month,2,'00'),'-',LPAD(holi.day,2,'00')) as holidate, holi.Name as name from tblholiday as holi");
-      if(count($getHolidays) > 0){
-
-         foreach($getHolidays as $holi){
-            $holi = get_object_vars($holi);
-            $holidays[] = $holi['holidate'];
-            $holinames[] = $holi['name'];
-          }
-      }
+        $holidays = array();
+        if(count($getHolidays) > 0){
+            foreach($getHolidays as $holi){
+                $holi = get_object_vars($holi);
+                $holidays[] = $holi['holidate'];
+                $holinames[] = $holi['name'];
+            }
+        }
 
         foreach($transactionID as $transactionID){
             // $transactionID = get_object_vars($transactionID);

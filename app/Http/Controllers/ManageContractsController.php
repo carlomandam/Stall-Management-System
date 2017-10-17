@@ -46,6 +46,10 @@ class ManageContractsController extends Controller
                 $water->save();
             }
         }
+
+        $contract = Contract::find($_POST['id']);
+        $stall = Stall::find($contract->stallID);
+        return view("transaction.ManageContracts.ChangeReading",compact('stall','contract'));
     }
 
     public function getAvailableStalls(){

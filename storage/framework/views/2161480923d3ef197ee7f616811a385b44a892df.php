@@ -32,7 +32,7 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3><span style="font-size:21px;font-weight: light">Stall Holder:</span> <?php echo e($contract->StallHolder->stallHFName.' '.$contract->StallHolder->stallHMName[0].'. '.$contract->StallHolder->stallHLName); ?> <a href="/getTennant/<?php echo e($contract->StallHolder->stallHID); ?>" style="font-size: 12px">View Details</a></h3> </div>
+                        <h3><span style="font-size:21px;font-weight: light">Stall Holder:</span> <?php echo e($contract->StallHolder->stallHFName.' '.(($contract->StallHolder->stallHMName != null) ? $contract->StallHolder->stallHMName[0].'. ': '').$contract->StallHolder->stallHLName); ?> <a href="/getTennant/<?php echo e($contract->StallHolder->stallHID); ?>" style="font-size: 12px">View Details</a></h3> </div>
                     <div class="col-md-12">
                         <label for="bussiname" style="font-size:18px;font-weight: normal">Business Name: <span style="font-size:20px;font-weight: normal"><?php echo e($contract->businessName); ?></span> <a href="#" style="font-size: 12px"><span class='glyphicon glyphicon-pencil'></span>Rename</a></label>
                     </div>
@@ -60,11 +60,11 @@
                     </div>
                     <div class="col-md-3" id="changeClass">
                         <label for="startdate">Start Date </label>
-                        <p><?php echo e($contract->contractStart); ?></p>
+                        <p><?php echo e(date("F d, Y",strtotime($contract->contractStart))); ?></p>
                     </div>
                     <div class="col-md-3">
                         <label for="startdate">End Date </label>
-                        <p><?php echo e($contract->contractEnd); ?></p>
+                        <p><?php echo e(date("F d, Y",strtotime($contract->contractEnd))); ?></p>
                     </div>
                     <div class="col-md-6">
                         <label for="address"><b>Products</b></label>
@@ -84,7 +84,9 @@
                     <div class="col-md-12">
                         <div class="pull-right">
                             <button type="button" class="btn btn-danger btn-flat">Terminate</button>
-                            <button type="button" class="btn btn-primary btn-flat tablinks" onclick="openTab('#1', '#2');">Extend</button>
+                            <?php if($contract->contractEnd <= date("Y-m-d", strtotime("+1 month"))): ?>
+                            <button type="button" class="btn btn-primary btn-flat tablinks">Extend</button>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

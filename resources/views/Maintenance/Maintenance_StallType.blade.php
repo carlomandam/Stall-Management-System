@@ -169,6 +169,7 @@
                             unique: true
                             , number: true
                             , required: true
+                            , min: .01
                         }
                     }
                     , messages: {
@@ -181,6 +182,7 @@
                             unique: "Area must be unique"
                             , number: "Invalid Area"
                             , required: "Please enter Area"
+                            , min: "Invalid Area"
                         }
                     }
                     , errorClass: "error-class"
@@ -235,6 +237,7 @@
                         , "newSize[]":{
                             unique: true
                             , number: true
+                            , min: .01
                         }
                     }
                     , messages: {
@@ -246,6 +249,7 @@
                         , "newSize[]":{
                             unique: "Area must be unique"
                             , number: "Invalid size"
+                            , min: "Invalid Area"
                         }
                     }
                     , errorClass: "error-class"
