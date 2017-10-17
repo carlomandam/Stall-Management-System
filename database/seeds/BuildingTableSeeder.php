@@ -12,6 +12,7 @@ class BuildingTableSeeder extends Seeder
     public function run()
     {
         //
+
            DB::table('tblBuilding')->insert([
             'bldgID' => 1,
             'bldgName' => 'My Seoul',

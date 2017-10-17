@@ -16,12 +16,14 @@ Route::get('/', function () {
 });
 
 
-
-Route::get('/login', 'Auth\AdminController@showLoginForm');
+Route::get('/log', 'Auth\AdminController@preLogin');
+Route::get('/login', 'Auth\AdminController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\AdminController@login')->name('login.submit');
 Route::post('/logout', 'Auth\AdminController@logout');
 
 Route::group(['middleware' => 'auth'], function(){
+	
+	
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Registration/{stallid}','ApplicationController@create');
@@ -195,7 +197,8 @@ Route::put("/Request/SaveLeaveStall", 'RequestController@SaveLeaveStall');
 Route::put("/Request/SaveOther", 'RequestController@SaveOther');
 Route::get('/Request/View/{id}', 'RequestController@View');
 Route::get('/Request/Edit/{id}', 'RequestController@edit');
-// Route::get('/Request/Update/{id}', 'RequestController@update');
+Route::get('/Request/Update/{id}', 'RequestController@update');
+Route::get('/RequestPDF/{id}', 'RequestController@pdfRequest');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
 Route::get('/ExpiringContracts','QueriesController@getExpiringContracts');

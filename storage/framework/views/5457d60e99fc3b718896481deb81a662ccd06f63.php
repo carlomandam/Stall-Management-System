@@ -36,12 +36,13 @@
        
         <div class = "col-xs-12">
         <div class="defaultNewButton">
-          <div class=" pull-right" id="print" style="margin-right: 20px; "> <a href="" class="btn btn-success btn-flat"  style="width: 200px;"><span class='fa fa-print'></span>&nbsp;Generate</a>
+       
+          <div class=" pull-right" id="print" style="margin-right: 20px; "> <a  id = "btnGenerate" class="btn btn-success btn-flat"  style="width: 200px;"><span class='fa fa-print'></span>&nbsp;Generate</a>
           </div>
           <div class = "col-md-6">
               <select class="form-control" id = "bldg">
                <option value="" selected disabled>-- SELECT BUILDING --</option>
-              <?php if(isset($building) && count($building)> 1): ?>
+               <?php if(isset($building) && count($building)> 1): ?>
                   <?php $__currentLoopData = $building; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $build): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <option value = "<?php echo e($build->bldgID); ?>"><?php echo e($build->bldgName); ?></option>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -63,13 +64,7 @@
                         <div class="box-header with-border">
                           <h4><center>Status List Report as of today(<?php echo e(Carbon\Carbon::today()->format('F d,Y')); ?> )</center> </h4>
                           <h4 id = "bldgName" style="text-align: center;">
-                          <?php if(isset($building) && count($building)==1): ?>
-
-                          <?php $__currentLoopData = $building; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $build): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          in Building<?php echo e($build->bldgName); ?>
-
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                          <?php endif; ?>
+                        
                           </h4>
                         </div>
                         <div>
@@ -173,7 +168,10 @@ $('#tblStatus').dataTable();
                 });
             });
  });
- 
+ $("#btnGenerate").on('click',function(){
+    var id = $('#bldg').val();
+   window.location.href="/printStatusList/"+id;
+ });
 
 </script>
 <?php $__env->stopSection(); ?>

@@ -660,7 +660,7 @@ class ReportController extends Controller
             $data[$ctr]["paymentID"] = 'PAYMENT-'.str_pad($array[$ctr], 5, '0', STR_PAD_LEFT);
             $data[$ctr]['tenantName'] = $checkName[$ctr];
             $data[$ctr]["paymentDate"] =$arrayDates[$ctr];
-            $data[$ctr]["totalAmt"] =number_format($arrayAmt[$ctr],2);
+            $data[$ctr]["totalAmt"] =number_format($arrayAmt[$ctr],2,'.','');
             $total += $data[$ctr]["totalAmt"];
             $ctr++;
           

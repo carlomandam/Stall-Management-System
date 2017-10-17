@@ -16,6 +16,7 @@ class AdminController extends Controller
              return redirect()->route('login');
         }
           
+
     }
 
     public function showLoginForm(){

@@ -18,7 +18,9 @@ class EmployeeMiddleware
     {
 
 
+
         if(Auth::guard($guard)->check() && Auth::user()->position == 'Staff'){
+
 
             return $next($request);
         }

@@ -48,7 +48,7 @@
                                           <div  class="col-md-2">
                                             <select class="form-control" name="status">
                                               <option selected disabled>Pending</option>
-                                              <option class="alert-success" value="1">Apporved</option>
+                                              <option class="alert-success" value="1">Approved</option>
                                               <option class="alert-danger" value="2">Reject</option>
                                             </select>
                                           </div>

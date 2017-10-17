@@ -100,8 +100,8 @@
 	</div>
 
 	<div style="margin-left: 50px;margin-top: 20px;">
-		<b style="padding-top: 20px;">______________</b><br>
-		<b style="margin-left: 30px;">Owner</b>
+		<b style="padding-top: 20px;">________________________</b><br>
+		<b style="margin-left: 25px;"><?php echo e(Auth::user()->name); ?></b>
 
 	</div>
 
