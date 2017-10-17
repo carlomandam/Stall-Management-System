@@ -250,6 +250,9 @@
                                 <li><a href = "/PaymentsCollectedReport"><i class="fa fa-circle-o"></i>Payments Collected Report</a></li>
                             </ul>
                         </li>
+                          <li class="treeview">
+                            <a href="/BackupandRecovery"> <i class="fa fa-undo"></i> <span>Backup and Recovery</span> </a>
+                        </li>
                         
                 </ul>
             </section>

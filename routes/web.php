@@ -228,6 +228,7 @@ Route::get('/PaymentsCollectedReport','ReportController@revenueReportIndex');
 Route::get('/getRevenue','ReportController@getRevenue');
 Route::get('/getPaymentCollected','ReportController@getPaymentCollected');
 Route::get('/getPayment','ReportController@getPayment');
+Route::get('/BackupandRecovery','dashboardController@back');
 });
 ?>
 
