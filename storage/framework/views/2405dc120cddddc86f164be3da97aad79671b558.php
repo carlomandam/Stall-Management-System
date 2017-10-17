@@ -1,17 +1,16 @@
-@extends('layout.app')
+<?php $__env->startSection('title'); ?>
+<?php echo e('Request'); ?>
 
-@section('title')
-{{'Request'}}
-@stop
-@section('content-header')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 
 <ol class="breadcrumb">
   <li><i class="fa fa-dashboard"></i>Manage Request</li>
   <li class="active">Request List</li>
 </ol>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div>
   <div class="alert alert-danger print-error-msg" style="display:none">
@@ -48,9 +47,9 @@
                                           <div  class="col-md-1">
                                               <select id="tenantTS" name="tenantTS" >
                                                   <option selected disabled>Choose Tenants Name</option>
-                                                  @foreach($tenants as $tenant)
-                                                  <option value="{{$tenant->id}}">{{$tenant->firstName}} {{$tenant->middleName}} {{$tenant->lastName}}</option>
-                                                  @endforeach
+                                                  <?php $__currentLoopData = $tenants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tenant): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                  <option value="<?php echo e($tenant->id); ?>"><?php echo e($tenant->firstName); ?> <?php echo e($tenant->middleName); ?> <?php echo e($tenant->lastName); ?></option>
+                                                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                               </select>
                                           </div>
                                       </div>
@@ -114,9 +113,9 @@
                                           <div  class="col-md-1">
                                               <select id="tenantLS" name="tenantLS" >
                                                   <option selected disabled>Choose Tenants Name</option>
-                                                  @foreach($tenants as $tenant)
-                                                  <option value="{{$tenant->id}}">{{$tenant->firstName}} {{$tenant->middleName}} {{$tenant->lastName}}</option>
-                                                  @endforeach
+                                                  <?php $__currentLoopData = $tenants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tenant): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                  <option value="<?php echo e($tenant->id); ?>"><?php echo e($tenant->firstName); ?> <?php echo e($tenant->middleName); ?> <?php echo e($tenant->lastName); ?></option>
+                                                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                               </select>
                                           </div>
                                       </div>
@@ -181,9 +180,9 @@
                                           <div  class="col-md-1">
                                               <select id="tenantO" name="tenantO" >
                                                   <option selected disabled>Choose Tenants Name</option>
-                                                  @foreach($tenants as $tenant)
-                                                  <option value="{{$tenant->id}}">{{$tenant->firstName}} {{$tenant->middleName}} {{$tenant->lastName}}</option>
-                                                  @endforeach
+                                                  <?php $__currentLoopData = $tenants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tenant): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                  <option value="<?php echo e($tenant->id); ?>"><?php echo e($tenant->firstName); ?> <?php echo e($tenant->middleName); ?> <?php echo e($tenant->lastName); ?></option>
+                                                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                               </select>
                                           </div>
                                       </div>
@@ -236,9 +235,9 @@
     </div>
 </div>
 
-@stop
-@section('script')
- <script type="text/javascript" src="{{ URL::asset('js/request.js') }}"></script>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+ <script type="text/javascript" src="<?php echo e(URL::asset('js/request.js')); ?>"></script>
 <script type="text/javascript">
  var d = new Date();
  d.setDate(d.getDate()+ 4);
@@ -263,4 +262,5 @@ $('#desiredO').datepicker({
         , todayHighlight: true
   });
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

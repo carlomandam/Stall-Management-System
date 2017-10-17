@@ -123,6 +123,7 @@ $(document).on('click','#saveTransferStall',function(e){
 	var requestType = $("select[name='requestType']").val();
 	var tenant = $("select[name='tenantTS']").val();
 	var reason = $("textarea[name='transferReasonTS']").val();
+	var desired = $("input[name='desiredTS']").val();
 	var stallRequested=  [];
 	$('.currentStallTS tr').each(function() {
 		
@@ -146,7 +147,8 @@ $(document).on('click','#saveTransferStall',function(e){
 				'tenant': tenant,
 				'reason': reason,
 				'status': 0,
-				'stallRequested': stallRequested
+				'stallRequested': stallRequested,
+				'desired': desired
 				
 			},
 			success: function(data) {
@@ -174,6 +176,7 @@ $(document).on('click','#saveLeaveStall',function(e){
 	var requestType = $("select[name='requestType']").val();
 	var tenant = $("select[name='tenantLS']").val();
 	var reason = $("textarea[name='transferReasonLS']").val();
+	var desired = $("input[name='desiredLS']").val();
 	var stallRequested=  [];
 	$("input[name='chkStall']:checked").each(function(i){
 		stall = $(this).val();
@@ -191,7 +194,8 @@ $(document).on('click','#saveLeaveStall',function(e){
 				'tenant': tenant,
 				'reason': reason,
 				'status': 0,
-				'stallRequested': stallRequested
+				'stallRequested': stallRequested,
+				'desired': desired
 				
 			},
 			success: function(data) {
@@ -221,6 +225,7 @@ $(document).on('click','#saveOther',function(e){
 	var tenant = $("select[name='tenantO']").val();
 	var subject = $("input[name='subject']").val();
 	var reason = $("textarea[name='transferReasonO']").val();
+	var desired = $("input[name='desiredO']").val();
 
 	console.log(requestType);
 	console.log(tenant);
@@ -234,7 +239,8 @@ $(document).on('click','#saveOther',function(e){
 				'tenant': tenant,
 				'reason': reason,
 				'status': 0,
-				'subject': subject
+				'subject': subject,
+				'desired':desired
 				
 			},
 			success: function(data) {
@@ -276,7 +282,7 @@ $(document).on('click','#update',function(e){
 			success: function(data) {
 				if($.isEmptyObject(data.error)){
 					toastr.success('Request Update');
-					window.location.href="/Requests";
+					window.location.href="/RequestPDF/"+id;
 				}else{
 					// toastr.error(data.error);
 					printErrorMsg(data.error);

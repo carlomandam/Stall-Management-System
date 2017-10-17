@@ -3,9 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
 use Auth;
-class AdminMiddleware
+
+class LoginMiddlewre
 {
     /**
      * Handle an incoming request.
@@ -16,18 +16,9 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next,  $guard = null)
     {
-
-
-
-        // if(Auth::guard($guard)->check()){
-        //     return $next($request);
-        // }
-        if(Auth::guard($guard)->check() &&Auth::user()->position == "Admin"){
-
-
-            return $next($request);
+          if(Auth::check()){
+          return redirect()->back();
         }
-        return redirect()->back();
+        return redirect('/login');
     }
-    
 }

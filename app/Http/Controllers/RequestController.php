@@ -13,6 +13,7 @@ use DB;
 use Response;
 use Validator;
 use Redirect;
+use PDF;
 
 class RequestController extends Controller
 {
@@ -47,7 +48,7 @@ class RequestController extends Controller
                     ->where('contract.contractStart','<=', $today)
                     ->whereNull('contract.deleted_at')
                     ->whereNull('contract.contractReason')
-                    ->orderBy('contract.contractID', 'asc')
+                    ->orderBy('contract.contractID', 'desc')
                     ->groupBy('contract.stallHID')
                     ->select('tenants.stallHFName as firstName','tenants.stallHMName as middleName','tenants.stallHLName as lastName','tenants.stallHID as id')
                     ->get();
@@ -97,7 +98,7 @@ class RequestController extends Controller
                 ->join('tblStallHolder as holder','request.stallHID','holder.stallHID')
                 ->where('request.requestID','=', $id)
                 // ->groupBy('request.requestID')
-                ->select('request.requestType as Type','holder.stallHFName as First','holder.stallHMName as Middle','holder.stallHLName as Last','request.status as status','request.requestText as reason','request.requestID as ID','request.subject as subject')
+                ->select('request.requestType as Type','holder.stallHFName as First','holder.stallHMName as Middle','holder.stallHLName as Last','request.status as status','request.requestText as reason','request.requestID as ID','request.subject as subject', 'request.desired as desired')
                 ->get();
 
         $info = DB::table('tblRequestInfo as i')
@@ -156,14 +157,11 @@ class RequestController extends Controller
             }
          
            
-
-            
-         
-            return response()->json(['success'=>'Records Update.']);
         }
           else{
             return response()->json(['error'=>$validator->errors()->all()]);
         }
+
 
 
 
@@ -205,6 +203,7 @@ class RequestController extends Controller
             'reason'=> 'nullable',
             'status'=> 'required',
             'stallFrom.*'=> 'required',
+            'desired'=> 'required',
             'stallTo.*'=> 'nullable',
          
         ];
@@ -218,6 +217,7 @@ class RequestController extends Controller
             'requestType' => 'Request Type',
             'tenant' => 'Stall Holder',
             'finalDateTo' => 'Date To',
+            'desired'=> 'Desired Date',
    
         ];
          $today = Carbon::now();
@@ -231,6 +231,7 @@ class RequestController extends Controller
             $req->requestText = $request->reason;
             $req->status = $request->status;
             $req->submitDate = $today;
+            $req->desired = $request->desired;
 
             $req->save();
             
@@ -267,6 +268,7 @@ class RequestController extends Controller
             'tenant'=> 'required',
             'reason'=> 'nullable',
             'status'=> 'required',
+            'desired' => 'required'
             // 'stallFrom.*'=> 'required'
          
         ];
@@ -280,6 +282,7 @@ class RequestController extends Controller
             'requestType' => 'Request Type',
             'tenant' => 'Stall Holder',
             'finalDateTo' => 'Date To',
+            'desired'=>'Desired Date'
    
         ];
          $today = Carbon::now();
@@ -293,6 +296,7 @@ class RequestController extends Controller
             $req->requestText = $request->reason;
             $req->status = $request->status;
             $req->submitDate = $today;
+            $req->desired = $request->desired;
 
             $req->save();
             
@@ -326,7 +330,8 @@ class RequestController extends Controller
             'tenant'=> 'required',
             'reason'=> 'nullable',
             'status'=> 'required',
-            'subject'=> 'required'
+            'subject'=> 'required',
+            'desired'=> 'nullable'
          
         ];
         $messages = [
@@ -340,6 +345,8 @@ class RequestController extends Controller
             'tenant' => 'Stall Holder',
             'finalDateTo' => 'Date To',
             'subject'=> 'Request Subeject',
+            'desired' => 'Desire Date'
+
    
         ];
          $today = Carbon::now();
@@ -354,6 +361,7 @@ class RequestController extends Controller
             $req->status = $request->status;
             $req->submitDate = $today;
             $req->subject = $request->subject;
+            $req->desired = $request->desired;
 
             $req->save();
          
@@ -373,7 +381,7 @@ class RequestController extends Controller
                 ->join('tblStallHolder as holder','request.stallHID','holder.stallHID')
                 ->where('request.requestID','=', $id)
                 // ->groupBy('request.requestID')
-                ->select('request.requestType as Type','holder.stallHFName as First','holder.stallHMName as Middle','holder.stallHLName as Last','request.status as status','request.requestText as reason','request.requestID as ID','request.subject as subject')
+                ->select('request.requestType as Type','holder.stallHFName as First','holder.stallHMName as Middle','holder.stallHLName as Last','request.status as status','request.requestText as reason','request.requestID as ID','request.subject as subject','request.desired as desired')
                 ->get();
 
         $info = DB::table('tblRequestInfo as i')
@@ -393,4 +401,24 @@ class RequestController extends Controller
         $req->delete();
     }
 
+    public function pdfRequest($id){
+
+        $req = DB::table('tblRequest as request')
+                ->join('tblStallHolder as holder','request.stallHID','holder.stallHID')
+                ->where('request.requestID','=', $id)
+                // ->groupBy('request.requestID')
+                ->select('request.requestType as Type','holder.stallHFName as First','holder.stallHMName as Middle','holder.stallHLName as Last','request.status as status','request.requestText as reason','request.requestID as ID','request.subject as subject','request.desired as desired','request.remarks as remarks')
+                ->get();
+
+        $info = DB::table('tblRequestInfo as i')
+                    ->join('tblContractInfo as c','i.contractID','c.contractID')
+                    ->select('i.stallRequested as stallRequested','c.stallID as stallFrom')
+                    ->where('requestID','=',$id)
+                    ->get();        
+                // return ($info);
+          $pdf = PDF::loadview('transaction/Requests.PdfRequest',compact('req','info'))->setPaper([0,0,612,396]);
+        return $pdf->stream('transaction/Requests.PdfRequest');  
+    }
+
+  
 }

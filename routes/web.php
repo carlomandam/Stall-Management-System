@@ -16,44 +16,16 @@ Route::get('/', function () {
 });
 
 
-
-Route::get('/login', 'Auth\AdminController@showLoginForm');
+Route::get('/log', 'Auth\AdminController@preLogin');
+Route::get('/login', 'Auth\AdminController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\AdminController@login')->name('login.submit');
 Route::post('/logout', 'Auth\AdminController@logout');
 
-Route::group(['middleware' => 'employee'], function(){
-Route::get('/Dashboard','dashboardController@index');
-Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
-Route::get('/Registration/{stallid}','ApplicationController@create');
-Route::get('/UpdateRegistration/{ID}','ApplicationController@updateRegistration');
-Route::get('/List', 'ApplicationController@member');
-Route::get('/View', 'ApplicationController@Memview');
-Route::get('/Update', 'ApplicationController@Update');
-Route::get('/CreateContract','ContractController@create');
-Route::get('/Contract', 'ContractController@index');
-Route::get('/ViewContracts', 'ContractController@view');
-Route::get('/ShowDetails', 'ContractController@showdetails');
-Route::post('/checkEmail','ApplicationController@checkEmail');
-Route::post('/ammendContract','ContractController@ammend');
-Route::post('/AddVendor','ApplicationController@newApplication');
-Route::get('/getVendor','ApplicationController@getVendor');
-Route::get('/contractTable','ApplicationController@contractTable');
-Route::post('/getVendorInfo','ApplicationController@getVendorInfo');
-Route::post('/UpdateVendor','ApplicationController@updateVendor');
-Route::get('/searchVendor','ApplicationController@searchVendor');
-Route::post('/getVendorData','ApplicationController@getVendorData');
-Route::get('displaySearch','ApplicationController@displaySearch');
-Route::get('/Stalls','ApplicationController@stall');
-Route::get('/htmltopdfview/{rentid}',['uses' => 'ContractController@htmltopdfview',
-										'as' => 'htmltopdfview']);
-Route::get('/getStalls','StallController@getStalls');
-Route::post('/acceptRental','ApplicationController@acceptRental');
-Route::post('/rejectRental','ApplicationController@rejectRental');
 
-Route::get('/ViewContract/{id}','ContractController@viewContract');
-});
 
-Route::group(['middleware' => 'admin'], function(){
+
+Route::group(['middleware' => 'auth'], function(){
+
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Registration/{stallid}','ApplicationController@create');
@@ -230,6 +202,8 @@ Route::put("/Request/SaveLeaveStall", 'RequestController@SaveLeaveStall');
 Route::put("/Request/SaveOther", 'RequestController@SaveOther');
 Route::get('/Request/View/{id}', 'RequestController@View');
 Route::get('/Request/Edit/{id}', 'RequestController@edit');
+Route::get('/RequestPDF/{id}', 'RequestController@pdfRequest');
+
 // Route::get('/Request/Update/{id}', 'RequestController@update');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');

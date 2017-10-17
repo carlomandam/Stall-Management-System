@@ -33,6 +33,18 @@ class ChargeController extends Controller
         $charge = Charges::where('chargeID',$_POST['id'])->first();
         $charge->delete();
     }
+
+    function archiveCharges(){
+        $charge = Charges::withTrashed()
+                            ->whereNotNull('deleted_at')
+                             ->get();
+                  return(json_encode($charge))           
+    }
+    function restoreCharges($id){
+       $charge = Charges::withTrashed()
+                            ->findOrFail($id)
+                            ->restore();         
+    }
     
     function checkChargeName(){
         if(isset($_POST['id'])){

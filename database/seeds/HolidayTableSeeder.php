@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BuildingTableSeeder extends Seeder
+class HolidayTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,14 +12,14 @@ class BuildingTableSeeder extends Seeder
     public function run()
     {
         //
-           DB::table('tblBuilding')->insert([
-            'bldgID' => 1,
-            'bldgName' => 'My Seoul',
-            'bldgCode' => 'MYSE',
-            'bldgDesc'=> 'Goods and Garments',
+             DB::table('tblHoliday')->insert([
+            'ID' => 1,
+            'Name' => 'Christmas',
+            'Month' => 12,
+            'Day'=> 24,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
-
         ]);
+
     }
 }

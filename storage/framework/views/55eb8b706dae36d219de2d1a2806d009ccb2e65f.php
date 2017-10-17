@@ -195,6 +195,7 @@
                                 </li>
                         </ul>
                         </li>
+                        <?php if(Auth::user()->position == "Admin"): ?>
                         <li class="treeview">
                             <a href="#"> <i class="fa fa-gear"></i> <span>Maintenance</span> <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
@@ -221,9 +222,7 @@
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> </a>
                             <ul class="treeview-menu">
-                                <li id="">
-                                    <a href="<?php echo e(url('#')); ?>"> <i class="fa fa-user"></i><span>Business Information</span></a>
-                                </li>
+                              
                                 <li id="uDays">
                                     <a href="<?php echo e(url('/MarketDays')); ?>"> <i class="fa fa-calendar-times-o"></i><span>Market Days</span></a>
                                 </li>
@@ -238,7 +237,9 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="treeview">
+                      
+                        <?php endif; ?>
+                          <li class="treeview">
                             <a href="#"> <i class="fa fa-bar-chart"></i> <span>Reports</span> <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i> 
                                 </span> </a>
@@ -249,10 +250,7 @@
                                 <li><a href = "/PaymentsCollectedReport"><i class="fa fa-circle-o"></i>Payments Collected Report</a></li>
                             </ul>
                         </li>
-                        <li class="header"><span>ACCOUNT SETTINGS</span></li>
-                        <li class="treeview">
-                            <a href="#"> <i class="fa fa-user"></i> <span>Profile</span> </a>
-                        </li>
+                        
                 </ul>
             </section>
         </aside>

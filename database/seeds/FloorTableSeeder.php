@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BuildingTableSeeder extends Seeder
+class FloorTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,14 +12,12 @@ class BuildingTableSeeder extends Seeder
     public function run()
     {
         //
-           DB::table('tblBuilding')->insert([
+             DB::table('tblFloor')->insert([
+            'floorID' => 1,
             'bldgID' => 1,
-            'bldgName' => 'My Seoul',
-            'bldgCode' => 'MYSE',
-            'bldgDesc'=> 'Goods and Garments',
+            'floorLevel' => 1,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
-
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth; 
 
 class EmployeeMiddleware
 {
@@ -13,9 +14,12 @@ class EmployeeMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next,$guard = null)
     {
-        if(Auth::guard($guard)->check() && Auth::user()->position == 'Employee'){
+
+
+        if(Auth::guard($guard)->check() && Auth::user()->position == 'Staff'){
+
             return $next($request);
         }
         else

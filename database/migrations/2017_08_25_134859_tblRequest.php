@@ -23,7 +23,8 @@ class TblRequest extends Migration
             $table->integer('status');
             $table->string('remarks',191)->nullable();
             $table->dateTime('approvedDate')->nullable();
-            $table->dateTime('submitDate');     
+            $table->dateTime('submitDate');
+            $table->dateTime('desired')->nullable();     
             $table->timestamps();
             $table->softDeletes();
              $table->foreign('stallHID')->references('stallHID')

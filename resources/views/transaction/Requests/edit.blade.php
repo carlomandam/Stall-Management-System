@@ -125,6 +125,14 @@
                                       </div>
                                        @endif 
                                       
+                                          <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-2">
+                                          <label>Desired Date:</label>
+                                        </div>
+                                        <div  class="col-md-2">
+                                          <input type="text" name="desiredTS" value="{{$r->desired}}" readonly>
+                                        </div>
+                                      </div>
 
                                       <div class="row" style="margin-top: 10px;">
                                         <div class="col-md-2">
@@ -146,9 +154,15 @@
 
                                        <div class="row" style="margin-top: 10px;">
                                         <div class="col-md-4">
+                                          @if(Auth::user()->position == "Admin")
+
                                           <a href="/Requests"><button class="btn btn-primary" id>BACK</button>
+
                                             <button class="btn btn-success" data-id="{{$r->ID}}" id="update">Update</button>
-                                          </a>                                          
+                                          </a>
+                                          @elseif(Auth::user()->position == "Employee")
+                                               <a href="/Requests"><button class="btn btn-primary" id>BACK</button>
+                                           @endif                                     
                                         </div>
                                        
                                       </div>
