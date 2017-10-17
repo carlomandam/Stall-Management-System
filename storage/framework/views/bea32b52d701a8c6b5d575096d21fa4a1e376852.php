@@ -1,16 +1,16 @@
-@extends('layout.app')
-@section('title')
-{{'Payment and Collection'}}
-@stop
-@section('content-header')
+<?php $__env->startSection('title'); ?>
+<?php echo e('Payment and Collection'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 
 <ol class="breadcrumb">
   <li><i class="fa fa-dashboard"></i>Payment and Collection</li>
   <li class="active">Utilites</li>
 </ol>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div>
  <div class="alert alert-danger print-error-msg" style="display:none">
         <ul></ul>
@@ -27,18 +27,18 @@
                               
                             
                                 <div class="box-body">
-                                  @foreach($reading as $read)
+                                  <?php $__currentLoopData = $reading; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $read): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                   <div class="row" style="margin-top: 10px;">
                                       <div class="col-md-2">
                                           <label>Utility Type</label>
                                       </div>
 
                                       <div class="col-md-2">
-                                        @if($read->utilType==1)
-                                          <input type="text" class="form-control" data-id="{{$read->utilType}}" value="Electricity" name="utilityType" readonly>
-                                         @elseif($read->utilType==2)
-                                          <input type="text" class="form-control" data-id="{{$read->utilType}}" value="Water" name="utilityType"readonly >
-                                          @endif 
+                                        <?php if($read->utilType==1): ?>
+                                          <input type="text" class="form-control" data-id="<?php echo e($read->utilType); ?>" value="Electricity" name="utilityType" readonly>
+                                         <?php elseif($read->utilType==2): ?>
+                                          <input type="text" class="form-control" data-id="<?php echo e($read->utilType); ?>" value="Water" name="utilityType"readonly >
+                                          <?php endif; ?> 
                                       </div>
 
                                   </div>
@@ -49,7 +49,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control" name="dateFrom" id="date_from" value="{{\Carbon\Carbon::parse($read->readingFrom)->format('Y-m-d')}}" readonly>
+                                         <input type="text" class="form-control" name="dateFrom" id="date_from" value="<?php echo e(\Carbon\Carbon::parse($read->readingFrom)->format('Y-m-d')); ?>" readonly>
                                       </div>
 
                                       <div class="col-md-1">
@@ -57,7 +57,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control" name="dateTo" id="date_to" value="{{\Carbon\Carbon::parse($read->readingTo)->format('Y-m-d')}}" readonly>
+                                         <input type="text" class="form-control" name="dateTo" id="date_to" value="<?php echo e(\Carbon\Carbon::parse($read->readingTo)->format('Y-m-d')); ?>" readonly>
                                       </div>
                                   </div> 
 
@@ -72,14 +72,14 @@
                                           <label>Previous Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control reading" name="prevRead" id="prev_read" value="{{$read->prevReading}}" disabled>
+                                        <input type="text" class="form-control reading" name="prevRead" id="prev_read" value="<?php echo e($read->prevReading); ?>" disabled>
                                       </div>
 
                                        <div class="col-md-2">
                                           <label>Present Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" value="{{$read->presReading}}" >
+                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" value="<?php echo e($read->presReading); ?>" >
                                       </div>
                                   </div>
 
@@ -88,14 +88,14 @@
                                           <label>Total Bill Amount:</label>
                                       </div>
                                       <div class="col-md-2">
-                                          <input type="text" class="form-control money" name="totalBill" id="total_bill" value="{{$read->totalBillAmount}}"  >
+                                          <input type="text" class="form-control money" name="totalBill" id="total_bill" value="<?php echo e($read->totalBillAmount); ?>"  >
                                       </div>
 
                                        <div class="col-md-2">
                                           <label>Rate:</label>
                                       </div>
                                       <div class="col-md-2">
-                                          <input type="text" class="form-control money" name="multiplierAmt" id="multiplier_amt" value="{{$read->multiplier}}" disabled>
+                                          <input type="text" class="form-control money" name="multiplierAmt" id="multiplier_amt" value="<?php echo e($read->multiplier); ?>" disabled>
                                       </div>
                                   </div>
 
@@ -119,13 +119,13 @@
 
                                   <div class="row" style="margin-top: 20px;">
                                       <div class="col-md-4">
-                                          <button class="btn btn-success" id="isFinalize" data-id="{{$read->readingID}}" >Finalize</button>
-                                          <button class="btn btn-primary" id="update" data-id="{{$read->readingID}}" >Update</button>
-                                          <a href="{{url('/Utilities')}}"><button class="btn btn-danger">Cancel</button></a>
+                                          <button class="btn btn-success" id="isFinalize" data-id="<?php echo e($read->readingID); ?>" >Finalize</button>
+                                          <button class="btn btn-primary" id="update" data-id="<?php echo e($read->readingID); ?>" >Update</button>
+                                          <a href="<?php echo e(url('/Utilities')); ?>"><button class="btn btn-danger">Cancel</button></a>
                                       </div>
                                   </div>
 
-                                  @endforeach
+                                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                               </div>
                              
                         </div>
@@ -135,10 +135,10 @@
     </div>
 </div>
 
-@stop
-@section('script')
-<script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
-<script type="text/javascript" src ="{{ URL::asset('js/utility.js') }}"></script>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript" src ="<?php echo e(URL::asset('js/jquery.inputmask.bundle.js')); ?>"></script>
+<script type="text/javascript" src ="<?php echo e(URL::asset('js/utility.js')); ?>"></script>
 
 <script type="text/javascript">
   
@@ -160,7 +160,7 @@
 
 <?php foreach ($subMeter as $sub): ?>
 
-        $('.stallList').append('<tr><td>{{$sub->stall}}</td><td><input type="text" value="{{$sub->prev}}" class="form-control reading2" id="sub_prev" name="subPrev" disabled></td><td><input type="text" class="form-control reading2" id="sub_press" name="subPres" value = "{{$sub->pres}}"  ></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" value = "{{$sub->amount}}" disabled></td><td><input type="hidden" name="subMeterID" value="{{$sub->subID}}"></td><td><input type="hidden" name="meterID" value="{{$sub->metID}}"></td></tr>');  
+        $('.stallList').append('<tr><td><?php echo e($sub->stall); ?></td><td><input type="text" value="<?php echo e($sub->prev); ?>" class="form-control reading2" id="sub_prev" name="subPrev" disabled></td><td><input type="text" class="form-control reading2" id="sub_press" name="subPres" value = "<?php echo e($sub->pres); ?>"  ></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" value = "<?php echo e($sub->amount); ?>" disabled></td><td><input type="hidden" name="subMeterID" value="<?php echo e($sub->subID); ?>"></td><td><input type="hidden" name="meterID" value="<?php echo e($sub->metID); ?>"></td></tr>');  
 
 <?php endforeach ?>  
  $(".reading2").inputmask("9999999", { numericInput: true, placeholder: "0",clearMaskOnLostFocus: false});
@@ -208,4 +208,5 @@ $(".money2").inputmask('currency', {rightAlign: true, prefix: 'Php '});
             }
         })
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

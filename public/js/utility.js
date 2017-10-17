@@ -14,13 +14,27 @@ $(document).on('change', '#utilityType', function () {
             , success: function (data) {
                 console.log(data);
                 $.each(data.stalls, function (key, value) {
-                    console.log(value.pres);
-                    if (value.pres == null) {
-                        $('.stallList').append('<tr class ="stall" data-id ="' + value.contractID + '"><td>' + value.stallID + '</td><td><input type="text" data-id="' + value.stallUtilityID + '" class="form-control reading2" id="sub_prev" name="subPrev"></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres" ></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="' + value.stallUtilityID + '" name="stallUtility"></td> </tr>');
+                    console.log(value.stall.electricity_util.stallUtilityID);
+                    if(value.stall.electricity_util == undefined){
+                        console.log('water');
+                         if (value.stall.water_util.latest == null) {
+                            $('.stallList').append('<tr class ="stall" data-id ="' + value.contractID + '"><td>' + value.stallID + '</td><td><input type="text" data-id="' + value.stall.water_util.stallUtilityID + '" class="form-control reading2" id="sub_prev" name="subPrev"></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres" ></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="' + value.stall.water_util.stallUtilityID + '" name="stallUtility"></td> </tr>');
+                        }
+                        else {
+                            $('.stallList').append('<tr class ="stall" data-id ="' + value.contractID + '"><td>' + value.stallID + '</td><td><input type="text" data-id="' + value.stall.water_util.stallUtilityID + '" class="form-control reading2" id="sub_prev" name="subPrev" value ="' + value.stall.water_util.latest.presRead + '" disabled></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres"></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="' + value.stall.water_util.stallUtilityID + '" name="stallUtility"></td>  </tr>');
+                        }
                     }
-                    else {
-                        $('.stallList').append('<tr class ="stall" data-id ="' + value.contractID + '"><td>' + value.stallID + '</td><td><input type="text" data-id="' + value.stallUtilityID + '" class="form-control reading2" id="sub_prev" name="subPrev" value ="' + value.pres + '" disabled></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres"></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="' + value.stallUtilityID + '" name="stallUtility"></td>  </tr>');
+                    else{
+                        console.log('Electricity');
+                        if (value.stall.electricity_util.latest == null) {
+                            $('.stallList').append('<tr class ="stall" data-id ="' + value.contractID + '"><td>' + value.stallID + '</td><td><input type="text" data-id="' + value.stall.electricity_util.stallUtilityID + '" class="form-control reading2" id="sub_prev" name="subPrev"></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres" ></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="' + value.stall.electricity_util.stallUtilityID + '" name="stallUtility"></td> </tr>');
+                        }
+                        else {
+                            $('.stallList').append('<tr class ="stall" data-id ="' + value.contractID + '"><td>' + value.stallID + '</td><td><input type="text" data-id="' + value.stall.electricity_util.stallUtilityID + '" class="form-control reading2" id="sub_prev" name="subPrev" value ="' + value.stall.electricity_util.latest.presRead + '" disabled></td><td><input type="text" class="form-control reading2" id="sub_pres" name="subPres"></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" disabled></td><td><input type="hidden" value ="' + value.stall.electricity_util.stallUtilityID + '" name="stallUtility"></td>  </tr>');
+                        }
                     }
+
+                  
                     $(document).on("input", "#sub_pres", function () {
                         ind = $(this).closest('tr').index();
                         console.log(ind);
@@ -30,8 +44,8 @@ $(document).on('change', '#utilityType', function () {
                         prev = Number(temp1);
                         temp2 = $(this).val();
                         pres = Number(temp2);
-                        console.log(pres);
-                        console.log(prev);
+                        // console.log(pres);
+                        // console.log(prev);
                         if (pres > prev) {
                             var total = 0;
                             temp = (pres - prev) * multi;
@@ -41,8 +55,8 @@ $(document).on('change', '#utilityType', function () {
                                 amount = Number(amount);
                                 total = total + amount;
                             })
-                            console.log(total);
-                            console.log(amountBill);
+                            // console.log(total);
+                            // console.log(amountBill);
                             if (total > amountBill) {
                                 alert('Invalid INPUT ' + amountBill);
                                 $('input[name*=subPres]').eq(ind).val(" ");
@@ -412,45 +426,45 @@ $(document).on("click", "#update", function (e) {
             });
         }
     })
-    // $(document).on("input", "#sub_pres", function () {
-    //         ind = $(this).closest('tr').index();
-    //         console.log(ind);
-    //         document.getElementById('total_bill').disabled = true;
-    //         document.getElementById('pres_read').disabled = true;
-    //         temp1 = $('input[name*=subPrev]').eq(ind).val();
-    //         prev = Number(temp1);
-    //         console.log(prev);
-    //         multi = $('input[name=multiplierAmt]').val().replace("Php ", "", ).replace(",", "", );
-    //         temp2 = $(this).val();
-    //         pres = Number(temp2);
-    //         console.log(pres);
-    //         if (pres > prev) {
-    //             console.log(multi);
-    //             temp = (pres - prev) * multi;
-    //             var total = temp;
-    //             console.log(temp);
-    //             $(' .stallList tr ').each(function () {
-    //                 ind2 = $(this).index();
-    //                 var amount = $('input[name=totalAmt]').eq(ind2).val().replace("Php ", "", ).replace(",", "", );
-    //                 amount = Number(amount);
-    //                 console.log(amount);
-    //                 total = total + amount;
-    //                 console.log(total);
-    //             })
-    //             console.log(total);
-    //             if (total > amountBill) {
-    //                 alert('Invalid INPUT');
-    //                 $('input[name*=subPres]').eq(ind).val(" ");
-    //                 $('input[name*=totalAmt]').eq(ind).val("0");
-    //             }
-    //             else {
-    //                 $('input[name*=totalAmt]').eq(ind).val(temp);
-    //             }
-    //         }
-    //         else {
-    //             $('input[name*=totalAmt]').eq(ind).val("0");
-    //         }
-    //     })
+    $(document).on("input", "#sub_press", function () {
+            ind = $(this).closest('tr').index();
+            console.log(ind);
+            document.getElementById('total_bill').disabled = true;
+            document.getElementById('pres_read').disabled = true;
+            temp1 = $('input[name*=subPrev]').eq(ind).val();
+            prev = Number(temp1);
+            console.log(prev);
+            multi = $('input[name=multiplierAmt]').val().replace("Php ", "", ).replace(",", "", );
+            temp2 = $(this).val();
+            pres = Number(temp2);
+            console.log(pres);
+            if (pres > prev) {
+                console.log(multi);
+                temp = (pres - prev) * multi;
+                var total = temp;
+                console.log(temp);
+                $(' .stallList tr ').each(function () {
+                    ind2 = $(this).index();
+                    var amount = $('input[name=totalAmt]').eq(ind2).val().replace("Php ", "", ).replace(",", "", );
+                    amount = Number(amount);
+                    console.log(amount);
+                    total = total + amount;
+                    console.log(total);
+                })
+                console.log(total);
+                if (total > amountBill) {
+                    alert('Invalid INPUT');
+                    $('input[name*=subPres]').eq(ind).val(" ");
+                    $('input[name*=totalAmt]').eq(ind).val("0");
+                }
+                else {
+                    $('input[name*=totalAmt]').eq(ind).val(temp);
+                }
+            }
+            else {
+                $('input[name*=totalAmt]').eq(ind).val("0");
+            }
+        })
     // Finalize MOnthly reading
 $(document).on('click', '#isFinalize', function () {
     id = $(this).attr('data-id');
