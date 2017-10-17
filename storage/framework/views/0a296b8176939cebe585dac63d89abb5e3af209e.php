@@ -73,8 +73,18 @@
                                                     </td>
 
                                                      <td>₱ <?php echo e(number_format($totalUnpaid[$key]['amount'],2)); ?></td>
+                                                     <td>
+                                                      <?php if(isset($totalUnpaid[$key]['actions'])): ?>
+                                                      
 
-                                                     <td><a href="/ViewPayment/<?php echo e($stall->contractID); ?>"><button class="btn btn-primary">Proceed to Payment</button></a></td>
+                                                     <a href="/ViewPayment/<?php echo e($stall->contractID); ?>"><button class="btn btn-primary">Proceed to Payment</button></a>
+
+                                                     <a href="/ViewClearance/'.$stall->contractID.'"><button class="btn btn-primary">Print Clearance</button></a>
+                                                     <?php else: ?>
+                                                     <a href="/ViewPayment/<?php echo e($stall->contractID); ?>"><button class="btn btn-primary">Proceed to Payment</button></a>
+                                                     </td>
+
+                                                     <?php endif; ?>
                                                   </tr>
 
                                                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -97,6 +97,7 @@ Route::post('/getStallInfo', 'StallController@getStallInfo');
 Route::post('/UpdateStall', 'StallController@updateStall');
 Route::post('/UpdateStalls', 'StallController@updateStalls');
 Route::post('/deleteStall', 'StallController@deleteStall');
+Route::post('/restoreStall', 'StallController@restoreStall');
 //Rate
 Route::get('/StallRate', function () {
     return view('Maintenance.Maintenance_StallRate');
@@ -158,6 +159,8 @@ Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
+Route::post('/ChangeReading','ManageContractsController@ChangeReading');
+Route::post('/UpdateReading','ManageContractsController@UpdateReading');
 
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment','PaymentController@index');

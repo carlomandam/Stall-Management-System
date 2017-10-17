@@ -377,10 +377,10 @@
                         , "size": size
                     }
                     , success: function (data) {
-                        if(data == "success"){
+                        if(data.trim() == "success"){
                             $(elem).closest('div').remove();
                             $('#table').DataTable().ajax.reload();
-                        }else if(data == "rental"){
+                        }else if(data.trim() == "rental"){
                             toastr.warning('Unable to delete stall type size. A stall is currently rented');
                         }
                     }
@@ -399,7 +399,7 @@
                         if(data.trim() == ""){
                         $('#table').DataTable().ajax.reload();
                         toastr.success('Stall Type Deleted');
-                        }else if(data == "rental"){
+                        }else if(data.trim() == "rental"){
                             toastr.warning('Unable to delete stall type. A stall is currently rented');
                         }
                     }

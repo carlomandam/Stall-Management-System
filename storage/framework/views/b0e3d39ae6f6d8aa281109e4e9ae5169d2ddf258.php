@@ -151,16 +151,16 @@
                                                         <div class="form-group form-inline" style="display:inline">
                                                             <label class="" style="margin-right :0%;display:inline">Amount Received:</label>
                                                             <div class="input-group" style="width:25%;"> <span class="input-group-addon">₱</span>
-                                                                <input class="form-control money" type="text" name="amtReceived" id="amtReceived" style="text-align: right" /> 
-                                                            </div>
+                                                                <input class="form-control money" type="text" name="amtReceived" id="amtReceived" style="text-align: right" /> </div>
                                                         </div>
                                                     </div>
-                                            </div> <?php else: ?>
+                                            <?php else: ?>
                                             <div class="col-md-12">
                                                 <center>
                                                     <label>Nothing to pay</label>
                                                 </center>
-                                            </div> <?php endif; ?> </div>
+                                            </div> <?php endif; ?></div>  
+                                        </div>
                                     </div>
                                 </div> <?php if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0): ?>
                                 <div class="pull-right">
@@ -251,9 +251,8 @@
                                         <div class="col-md-3"></div>
                                         <label class="col-md-3">Amount Received:</label>
                                         <div class="col-md-3">
-                                                <div class="input-group"> <span class="input-group-addon">₱</span>
-                                                    <input class="form-control money" type="text" id="amtPaid" name="amtPaid" style="text-align: right" /> 
-                                                </div>
+                                            <div class="input-group"> <span class="input-group-addon">₱</span>
+                                                <input class="form-control money" type="text" id="amtPaid" name="amtPaid" style="text-align: right" /> </div>
                                         </div>
                                     </div>
                                 </div>
@@ -341,19 +340,17 @@
             if ($val.length == 0 && $("input[name=unpaid\\[\\]]").length != 0) return false;
             else return true;
         });
-        $.validator.addMethod('pay', function (valu,elem,param) {
-            var amt = parseFloat(elem.value.repalace(",",''));
+        $.validator.addMethod('pay', function (valu, elem, param) {
+            var amt = parseFloat(elem.value.replace(",", ''));
             alert(amt);
-            if(amt < <?php echo e($total); ?>)
-                return false
-            else
-                return true;
+            if (amt < <?php echo e($total); ?>) return false
+            else return true;
         });
         $("#paymentForm").validate({
             rules: {
                 amtReceived: {
                     "hasToPay": true
-                    , "pay":true
+                    , "pay": true
                     , number: true
                 }
             }

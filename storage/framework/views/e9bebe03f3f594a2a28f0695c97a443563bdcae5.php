@@ -1,17 +1,16 @@
-@extends('layout.app')
+<?php $__env->startSection('title'); ?>
+    <?php echo e('Stall Archive'); ?>
 
-@section('title')
-    {{ 'Stall Archive'}}
-@stop
-@section('content-header')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
             <li class="active">Stall</li>
         </ol>
-        @stop
+        <?php $__env->stopSection(); ?>
 
-        @section('content')
+        <?php $__env->startSection('content'); ?>
 
 
    
@@ -20,7 +19,7 @@
         <div class="table-responsive">
             <div class="defaultNewButton">
                 <div  class = "defaultNewButton">
-                    <a href="{{ url('/Stall') }}" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack</a>
+                    <a href="<?php echo e(url('/Stall')); ?>" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack</a>
                 </div>
             </div>
             </div>
@@ -91,7 +90,7 @@
             </div>
         </form>
     </div>
-</div> @stop @section('script')
+</div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
 <script type="text/javascript">
     var obj;
     var building;
@@ -295,7 +294,7 @@
                 , data: {
                     "code": building[$(this).parent().parent().prev().find(".bldgSelect")[0].selectedIndex].bldgCode
                     , "floor": this.selectedIndex + 1
-                    , "_token": "{{ csrf_token() }}"
+                    , "_token": "<?php echo e(csrf_token()); ?>"
                 }
                 , context: this
                 , success: function (data) {
@@ -318,7 +317,7 @@
             type: "POST"
             , url: '/getStallInfo'
             , data: {
-                "_token": "{{ csrf_token() }}"
+                "_token": "<?php echo e(csrf_token()); ?>"
                 , "id": id
             }
             , success: function (data) {
@@ -333,7 +332,7 @@
             type: "POST"
             , url: '/bldgOptions'
             , data: {
-                "_token": "{{ csrf_token() }}"
+                "_token": "<?php echo e(csrf_token()); ?>"
             }
             , success: function (data) {
                 building = JSON.parse(data);
@@ -353,7 +352,7 @@
             type: "POST"
             , url: '/stypeOptions'
             , data: {
-                "_token": "{{ csrf_token() }}"
+                "_token": "<?php echo e(csrf_token()); ?>"
             }
             , success: function (data) {
                 stype = JSON.parse(data);
@@ -379,7 +378,7 @@
             type: "POST"
             , url: '/restoreStall'
             , data: {
-                "_token": "{{ csrf_token() }}"
+                "_token": "<?php echo e(csrf_token()); ?>"
                 , "id": id
             }
             , success: function (data) {
@@ -389,4 +388,5 @@
         });
     }
 </script>
-    @stop
+    <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

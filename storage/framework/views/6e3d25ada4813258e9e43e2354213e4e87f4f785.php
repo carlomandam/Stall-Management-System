@@ -1,8 +1,8 @@
-@extends('layout.app') @section('title') {{'Payment and Collection'}} @stop @section('content-header')
+ <?php $__env->startSection('title'); ?> <?php echo e('Payment and Collection'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?>
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i>Payment and Collection</li>
     <li class="active">Utilites</li>
-</ol> @stop @section('content')
+</ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
 <div>
     <div class="alert alert-danger print-error-msg" style="display:none">
         <ul></ul>
@@ -85,7 +85,7 @@
                             <div class="row" style="margin-top: 20px;">
                                 <div class="col-md-4">
                                     <button class="btn btn-primary" id="save" name="save">Save</button>
-                                    <a href="{{url('/Utilities')}}">
+                                    <a href="<?php echo e(url('/Utilities')); ?>">
                                         <button class="btn btn-danger">Cancel</button>
                                     </a>
                                 </div>
@@ -96,9 +96,9 @@
             </div>
         </div>
     </div>
-</div> @stop @section('script')
-<script type="text/javascript" src="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/utility.js') }}"></script>
+</div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/jquery.inputmask.bundle.js')); ?>"></script>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/utility.js')); ?>"></script>
 <script type="text/javascript">
     $(".reading").inputmask("9999999", {
         numericInput: true
@@ -109,4 +109,5 @@
         rightAlign: true
         , prefix: 'Php '
     , });
-</script> @stop
+</script> <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

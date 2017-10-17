@@ -192,4 +192,9 @@ class StallController extends Controller
             }
         }
     }
+
+    function restoreStall(){
+        $stall = Stall::onlyTrashed()->find($_POST['id']);
+        $stall->restore();
+    }
 }

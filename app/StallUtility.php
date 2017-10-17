@@ -17,5 +17,9 @@ class StallUtility extends Model
         return $this->belongsTo('App\Stall','stallID');
     }
 
+    public function Submeter(){
+        return $this->hasMany('App\Submeter','stallUtilityID');
+    }
+
     
 }

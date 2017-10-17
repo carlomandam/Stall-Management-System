@@ -6,6 +6,7 @@ use App\StallHolder;
 use App\Stall;
 use App\ContactNo;
 use App\Product;
+use App\Submeter;
 use App\Contract;
 class ManageContractsController extends Controller
 {
@@ -13,7 +14,38 @@ class ManageContractsController extends Controller
 
     public function ChangeReading(){
         $contract = Contract::find($_POST['id']);
-        return view("transaction.ManageContracts.ChangeReading",compact('contract'));
+        $stall = Stall::find($contract->stallID);
+        return view("transaction.ManageContracts.ChangeReading",compact('stall','contract'));
+    }
+
+    public function UpdateReading(){
+        if(isset($_POST['elecID']) && $_POST['electricity'] != 0){
+            $elec = Submeter::find($_POST['elecID']);
+            if(Submeter::find($_POST['elecID']) != null){
+                $elec->presRead = $_POST['electricity'];
+                if($elec->isDirty())
+                    $elec->save();
+            }else{
+                $elec = new Submeter;
+                $elec->presRead = $_POST['electricity'];
+                $elec->stallUtilityID = $_POST['elecUtil'];
+                $elec->save();
+            }
+        }
+
+        if(isset($_POST['waterID']) && $_POST['water'] != 0){
+            $water = Submeter::find($_POST['waterID']);
+            if(Submeter::find($_POST['waterID']) != null){
+                $water->presRead = $_POST['water'];
+                if($water->isDirty())
+                    $water->save();
+            }else{
+                $water = new Submeter;
+                $water->presRead = $_POST['water'];
+                $water->stallUtilityID = $_POST['waterUtil'];
+                $water->save();
+            }
+        }
     }
 
     public function getAvailableStalls(){

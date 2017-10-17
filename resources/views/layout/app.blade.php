@@ -106,7 +106,7 @@
             height:     100%;
             width:      100%;
             background: rgba( 255, 255, 255, .8 ) 
-                        url('image/FhHRx.gif') 
+                        url('{{ URL::asset('image/FhHRx.gif')}}') 
                         50% 50% 
                         no-repeat;
         }

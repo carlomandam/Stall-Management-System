@@ -106,7 +106,7 @@
             height:     100%;
             width:      100%;
             background: rgba( 255, 255, 255, .8 ) 
-                        url('image/FhHRx.gif') 
+                        url('<?php echo e(URL::asset('image/FhHRx.gif')); ?>') 
                         50% 50% 
                         no-repeat;
         }
@@ -126,7 +126,7 @@
 <body class="hold-transition skin-blue sidebar-mini" style="height:auto;min-height:100%;" onload = "myTimer();">
     <div class="wrapper" style="overflow:hidden;">
         <header class="main-header">
-            <a href="index2.html" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b></span> </a>
+            <a href="/" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b></span> </a>
             <nav class="navbar navbar-fixed-top">
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a> <span class="system-name"><b>Stalls Management System</b></span>
              

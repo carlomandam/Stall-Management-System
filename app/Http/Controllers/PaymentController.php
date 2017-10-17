@@ -119,7 +119,7 @@ class PaymentController extends Controller{
             }
             $payment = new Payment;
             $payment->transactionID = $transaction->transactionID;
-            $payment->paidAmt = $_POST['amtReceived'];
+            $payment->paidAmt = floatval(str_replace(',', '', $_POST['amtReceived']));
             $payment->paymentDate = date('Y-m-d');
             if($payment->save()){
                 $contract = Contract::find($_POST['contract']);
