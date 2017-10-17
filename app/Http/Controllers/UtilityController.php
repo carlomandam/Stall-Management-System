@@ -155,18 +155,18 @@ class UtilityController extends Controller
         // 
            $today= Carbon::now();
 
-           $stalls = DB::table('tblContractInfo as contract')
+           /*$stalls = DB::table('tblContractInfo as contract')
                             ->join('tblStall_Utilities as stallUtil','stallUtil.stallID','contract.stallID')
-                            ->leftjoin('tblSubMeter as meter','meter.stallUtilityID','stallUtil.stallUtilityID')
-                            ->where('stallUtil.utilityType','=', $id)
-                            ->where('contract.contractStart','<=', $today)
+                            ->rightjoin('tblSubMeter as meter','meter.stallUtilityID','stallUtil.stallUtilityID')
+                            ->where('stallUtil.utilityType','=', $id and 'contract.contractStart','<=', $today )
+                            // ->where()
                             ->whereNull('contract.deleted_at')
                             ->whereNull('contract.contractReason')
                             ->select('contract.stallID as stallID', 'meter.presRead as pres','meter.prevRead as prev','contract.contractID as contractID','stallUtil.stallUtilityID as stallUtilityID')
 
-                            ->get();
+                            ->get();*/
 
-
+            $stalls = ($id==1) ? Contract::with('Stall.ElectricityUtil.Latest')->has('Stall.ElectricityUtil')->whereNotNull('contractStart')->whereNotNull('contractEnd')->get() : Contract::with('Stall.WaterUtil.Latest')->has('Stall.WaterUtil')->whereNotNull('contractStart')->whereNotNull('contractEnd')->get();
            // $con = DB::table('tblContractInfo as contract')
            //           ->join('tblStall as stall','contract.stallID','stall.stallID')
            //           ->join('tblStall_Utilities as utility','stall.stallID','utility.stallID')

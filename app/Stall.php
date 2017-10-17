@@ -51,4 +51,10 @@ class Stall extends Model
     public function Water(){
         return $this->belongsToMany('App\Submeter', 'tblstall_utilities', 'stallID', 'stallUtilityID')->wherePivot('utilityType',"=","2");
     }
+    public function WaterUtil(){
+        return $this->hasOne('App\StallUtility','stallID')->where('utilityType',"=","2");
+    }
+    public function ElectricityUtil(){
+        return $this->hasOne('App\StallUtility','stallID')->where('utilityType',"=","1");
+    }
 }
