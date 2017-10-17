@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use PDF;
+use DB;
 class DashboardController extends Controller
 {
     /**
@@ -90,8 +91,15 @@ class DashboardController extends Controller
     {
         //
     }
-    public function layout(){
-        return view('pdf.PDF-Layout');
+    public function layout($id){
+        $tenants = DB::table('tblContractInfo as c')
+                    ->join('tblStallHolder as t','t.stallHID','c.stallHID')
+                    ->where('stallID','=',$id)
+                    ->select('t.stallHFname as first','t.stallHMnAme as middle','t.stallHLname as last','c.stallID as stall')
+                    ->get();
+                    // return($tenants);
+          $pdf = PDF::loadview('pdf.clearancepdf',compact('tenants'))->setPaper([0,0,612,396]);
+        return $pdf->stream('pdf.clearancepdf'); 
     }
     public function back(){
         return view('dashboard.backup');

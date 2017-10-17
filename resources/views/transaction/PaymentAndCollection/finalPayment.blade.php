@@ -80,7 +80,7 @@
 
                                                      <a href="/ViewPayment/{{$stall->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a>
 
-                                                     <a href="/ViewClearance/'.$stall->contractID.'"><button class="btn btn-primary">Print Clearance</button></a>
+                                                     <button id="clearance"  data-id ="{{$stall->stallCode}}" class="btn btn-primary">Print Clearance</button>
                                                      @else
                                                      <a href="/ViewPayment/{{$stall->contractID}}"><button class="btn btn-primary">Proceed to Payment</button></a>
                                                      </td>
@@ -107,6 +107,10 @@
 @section('script')
 <script type="text/javascript" src ="{{ URL::asset('js/billing.js') }}"></script>
 <script type="text/javascript">
- 
+ $(document).on('click','#clearance', function(){
+  id = $(this).attr("data-id");
+  console.log(id);
+  window.location.href="/ClearancePDF/"+id;
+ })
 </script>
 @stop

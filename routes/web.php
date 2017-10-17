@@ -229,6 +229,7 @@ Route::get('/getPayment','ReportController@getPayment');
 Route::get('/printBalanceReport', 'ReportController@printBalance');
 Route::get('/printStatusList/{id}', 'ReportController@printStatus');
 Route::get('/printCollectedReport/{startdate}/{enddate}', 'ReportController@printCollected');
+Route::get('/ClearancePDF/{id}','dashboardController@layout');
 });
 ?>
 
