@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use DB;
 use App\MonthlyReading;
 use App\StallMeter;
+use PDF;
+use Carbon\Carbon;
 class QueriesController extends Controller
 {
     public function index()
@@ -87,5 +89,13 @@ class QueriesController extends Controller
                     JOIN tblcontractinfo as contract on contract.contractID = meter.contractID
                     where meter.utilityAmt = (SELECT MAX(utilityAmt) from tblstallutilities_meterid as m where m.readingID = month.readingID) and month.utilType = 2 and month.isFinalize = 1");
         return response()->json($data);
+    }
+
+    function printNotice($id)
+    {$data = DB::select("Select a.stallID as stallID, b.floorID as floorID, c.bldgName as bldgName, f.stypeName as stypeName, a.stallStatus as stallStatus,  e.stypeArea as stypeArea, date_format(con.contractEnd,'%M %d, %Y') as endcon from tblstall a join tblfloor b join tblbuilding c join tblstalltype_stallsize d join tblstalltype_size e join tblstalltype f join tblcontractinfo as con on con.stallID = a.stallID where a.floorID = b.floorID and b.bldgID = c.bldgID and a.stype_SizeID = d.stype_SizeID and e.stypeSizeID = d.stypeSizeID and d.stypeID = f.stypeID and a.stallID = '$id'");
+     //  return view('pdf/contractRenewal',compact('data'));
+
+           $pdf = PDF::loadview('pdf/contractRenewal',compact('data'));
+        return $pdf->stream(Carbon::today()->format('Ymd').'contractRenewal.pdf');
     }
 }

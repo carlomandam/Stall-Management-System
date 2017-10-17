@@ -206,11 +206,12 @@ Route::get('/ExpiredContracts','QueriesController@getExpiredContracts');
 Route::get('/TerminatedContracts','QueriesController@getTerminatedContracts');
 Route::get('/ElectricConsumption','QueriesController@getElectricConsumption');
 Route::get('/WaterConsumption','QueriesController@getWaterConsumption');
+Route::get('/printNotice/{id}','QueriesController@printNotice');
 // /////////////////////Utilities/////////////////
 Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
 Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
 Route::get('/PeakDays', 'UtilitiesController@peakDaysIndex');
-Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');\
+Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');
 Route::get('/InitialFee', 'UtilitiesController@initialFeeIndex');
 Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
 Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
