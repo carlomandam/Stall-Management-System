@@ -12,20 +12,16 @@
 */
 
 Route::get('/', function () {
-    return view('login.login');
+    return view('welcome');
 });
 
 
-Route::get('/log', 'Auth\AdminController@preLogin');
-Route::get('/login', 'Auth\AdminController@showLoginForm')->name('login');
+
+Route::get('/login', 'Auth\AdminController@showLoginForm');
 Route::post('/login', 'Auth\AdminController@login')->name('login.submit');
 Route::post('/logout', 'Auth\AdminController@logout');
 
-
-
-
 Route::group(['middleware' => 'auth'], function(){
-
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Registration/{stallid}','ApplicationController@create');
@@ -101,7 +97,6 @@ Route::post('/getStallInfo', 'StallController@getStallInfo');
 Route::post('/UpdateStall', 'StallController@updateStall');
 Route::post('/UpdateStalls', 'StallController@updateStalls');
 Route::post('/deleteStall', 'StallController@deleteStall');
-Route::post('/restoreStall', 'StallController@restoreStall');
 //Rate
 Route::get('/StallRate', function () {
     return view('Maintenance.Maintenance_StallRate');
@@ -163,8 +158,6 @@ Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
-Route::post('/ChangeReading','ManageContractsController@ChangeReading');
-Route::post('/UpdateReading','ManageContractsController@UpdateReading');
 
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment','PaymentController@index');
@@ -202,12 +195,14 @@ Route::put("/Request/SaveLeaveStall", 'RequestController@SaveLeaveStall');
 Route::put("/Request/SaveOther", 'RequestController@SaveOther');
 Route::get('/Request/View/{id}', 'RequestController@View');
 Route::get('/Request/Edit/{id}', 'RequestController@edit');
-Route::get('/RequestPDF/{id}', 'RequestController@pdfRequest');
-
 // Route::get('/Request/Update/{id}', 'RequestController@update');
 ////////////////Queries/////////////
 Route::get('/Queries','QueriesController@index');
 Route::get('/ExpiringContracts','QueriesController@getExpiringContracts');
+Route::get('/ExpiredContracts','QueriesController@getExpiredContracts');
+Route::get('/TerminatedContracts','QueriesController@getTerminatedContracts');
+Route::get('/ElectricConsumption','QueriesController@getElectricConsumption');
+Route::get('/WaterConsumption','QueriesController@getWaterConsumption');
 // /////////////////////Utilities/////////////////
 Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
 Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
@@ -228,7 +223,9 @@ Route::get('/PaymentsCollectedReport','ReportController@revenueReportIndex');
 Route::get('/getRevenue','ReportController@getRevenue');
 Route::get('/getPaymentCollected','ReportController@getPaymentCollected');
 Route::get('/getPayment','ReportController@getPayment');
-Route::get('/BackupandRecovery','dashboardController@back');
+Route::get('/printBalanceReport', 'ReportController@printBalance');
+Route::get('/printStatusList/{id}', 'ReportController@printStatus');
+Route::get('/printCollectedReport/{startdate}/{enddate}', 'ReportController@printCollected');
 });
 ?>
 

@@ -76,7 +76,7 @@
         background-color: #d0d6e0;
     }
     
-    @media only screen and (max-width: 600px) {
+    @media  only screen and (max-width: 600px) {
         .invoice-box table tr.top table td {
             width: 100%;
             display: block;

@@ -1,8 +1,8 @@
-@extends('layout.app') @section('title') {{ 'Building'}} @stop @section('content-header')
+ <?php $__env->startSection('title'); ?> <?php echo e('Building'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?>
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i> Maintenance</li>
     <li class="active">Building</li>
-</ol> @stop @section('content')
+</ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
 <style>
     #floortbl td {
         padding-bottom: 5px;
@@ -21,7 +21,7 @@
         <div class="table-responsive">
             <div class="defaultNewButton">
                 <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp;New Building</button>
-                <div class=" pull-right" id="archive"> <a href="{{ url('/BuildingArchive') }}" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbsp;Archive</a> </div>
+                <div class=" pull-right" id="archive"> <a href="<?php echo e(url('/BuildingArchive')); ?>" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbsp;Archive</a> </div>
             </div>
             <table id="prodtbl" class="table table-responsive table-bordered table-striped" role="grid">
                 <thead>
@@ -207,8 +207,8 @@
         </div>
     </div>
 </div>
-@stop @section('script')
-<script type="text/javascript" src="{{ URL::asset('js/floor_js.js') }}"></script>
+<?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/floor_js.js')); ?>"></script>
 <script type="text/javascript">
     var obj;
     $(document).ready(function () {
@@ -598,4 +598,5 @@
     /*function resetCapacity() {
         $('input[name="capacity[]"').val('');
     }*/
-</script> @stop
+</script> <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

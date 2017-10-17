@@ -37,7 +37,7 @@
        
         <div class = "col-xs-12"> 
           <div class="defaultNewButton">  
-            <div class=" pull-right" id="print" style="margin-right: 20px; "> <a href="" class="btn btn-success btn-flat"  style="width: 200px;"><span class='fa fa-print'></span>&nbsp;Generate</a>
+            <div class=" pull-right" id="print" style="margin-right: 20px; "> <a href="{{ url('/printBalanceReport') }}" class="btn btn-success btn-flat"  style="width: 200px;"><span class='fa fa-print'></span>&nbsp;Generate</a>
             </div>
           </div>
             

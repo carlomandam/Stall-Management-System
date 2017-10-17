@@ -1,8 +1,8 @@
-@extends('layout.app')
-@section('title')
-{{ 'Utilities'}}
-@stop
-@section('content-header')
+<?php $__env->startSection('title'); ?>
+<?php echo e('Utilities'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 <style>
 .col-md-12, .col-md-10 {  
    
@@ -21,9 +21,9 @@
     <li><i class="fa fa-cogs"></i>Utilities</li>
     <li class="active">Initial Fee</li>
 </ol> 
-  @stop
+  <?php $__env->stopSection(); ?>
 
-  @section('content')
+  <?php $__env->startSection('content'); ?>
  
    <div class="row">
     <!--left table-->
@@ -106,13 +106,13 @@
               </thead>
               <tbody>
                   <tr>
-                    @foreach($oldSecurity as $security)
+                    <?php $__currentLoopData = $oldSecurity; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $security): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <td>
                       Security  Deposit
                     </td>
                     <td>
                      
-                      <input type="text" name="recSecAmount" id="rec_secAmount" class="form-control money" value="{{$security->initAmt}}" readonly>
+                      <input type="text" name="recSecAmount" id="rec_secAmount" class="form-control money" value="<?php echo e($security->initAmt); ?>" readonly>
                       
                     </td>
                     <td>
@@ -120,21 +120,21 @@
                       <input type="text" name="recSecDate" id="rec_secDate" class="form-control"  disabled>
                       
                     </td>
-                     @endforeach
+                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                   </tr>
                  
                   <tr>
-                    @foreach($oldMain as $main)
+                    <?php $__currentLoopData = $oldMain; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $main): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <td>
                       Maintenance Fee
                     </td>
                     <td>
-                      <input type="text" name="recMainAmount" id="rec_mainAmount" class="form-control money" readonly value="{{$main->initAmt}}">
+                      <input type="text" name="recMainAmount" id="rec_mainAmount" class="form-control money" readonly value="<?php echo e($main->initAmt); ?>">
                     </td>
                     <td>
                       <input type="text" name="recMainDate" id="rec_mainDate" class="form-control" disabled="">
                     </td>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                   </tr>
               </tbody>
           </table>
@@ -146,11 +146,11 @@
 
 <!-- /.row -->
 
-@stop
-@section('script')
-<script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
-<!-- <script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.numeric.extensions.js') }}"></script>
-<script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.extensions.js') }}"></script> -->
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript" src ="<?php echo e(URL::asset('js/jquery.inputmask.bundle.js')); ?>"></script>
+<!-- <script type="text/javascript" src ="<?php echo e(URL::asset('js/jquery.inputmask.numeric.extensions.js')); ?>"></script>
+<script type="text/javascript" src ="<?php echo e(URL::asset('js/jquery.inputmask.extensions.js')); ?>"></script> -->
 <script type="text/javascript">
    $('.datepicker').datepicker({
       autoclose: true,
@@ -183,7 +183,7 @@ var newMainAmount;
 
     <?php foreach ($newSecurity as $security): ?>
       <?php if ($newSecurity->first()== $security): ?>
-        oldAmount = {{$security->initAmt}};
+        oldAmount = <?php echo e($security->initAmt); ?>;
         oldSecAmount =oldAmount;
       <?php endif ?>
     <?php endforeach ?>
@@ -205,7 +205,7 @@ $("#main_amount").bind("change paste keydown keyup click", function() {
     var oldAmount;
     <?php foreach ($newMain as $main): ?>
        <?php if ($newMain->first()== $main): ?>
-         oldAmount = {{$main->initAmt}};
+         oldAmount = <?php echo e($main->initAmt); ?>;
          oldMainAmount = oldAmount;
       <?php endif ?>
     <?php endforeach ?>
@@ -222,17 +222,17 @@ $("#main_amount").bind("change paste keydown keyup click", function() {
 
 <?php foreach ($newSecurity as $security): ?>
   <?php if ($newSecurity->first()== $security): ?>
-    $('#sec_amount').val('{{$security->initAmt}}');
-    $('#sec_date').val('{{ Carbon\Carbon::parse($security->initEffectiveDate)->format('m-d-Y ') }}');
-    $('#rec_secDate').val('{{ Carbon\Carbon::parse($security->created_at)->format('m-d-Y ') }}');
+    $('#sec_amount').val('<?php echo e($security->initAmt); ?>');
+    $('#sec_date').val('<?php echo e(Carbon\Carbon::parse($security->initEffectiveDate)->format('m-d-Y ')); ?>');
+    $('#rec_secDate').val('<?php echo e(Carbon\Carbon::parse($security->created_at)->format('m-d-Y ')); ?>');
   <?php endif ?>
 <?php endforeach ?>
 
 <?php foreach ($newMain as $main): ?>
   <?php if ($newMain->first()== $main): ?>
-    $('#main_amount').val('{{$main->initAmt}}');
-    $('#main_date').val('{{ Carbon\Carbon::parse($main->initEffectiveDate)->format('m-d-Y ') }}');
-    $('#rec_mainDate').val('{{ Carbon\Carbon::parse($main->created_at)->format('m-d-Y ') }}');
+    $('#main_amount').val('<?php echo e($main->initAmt); ?>');
+    $('#main_date').val('<?php echo e(Carbon\Carbon::parse($main->initEffectiveDate)->format('m-d-Y ')); ?>');
+    $('#rec_mainDate').val('<?php echo e(Carbon\Carbon::parse($main->created_at)->format('m-d-Y ')); ?>');
   <?php endif ?>
 <?php endforeach ?>
 
@@ -323,4 +323,5 @@ $(document).on('click','#save', function(e){
 
 
 </script>
-@stop 
+<?php $__env->stopSection(); ?> 
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

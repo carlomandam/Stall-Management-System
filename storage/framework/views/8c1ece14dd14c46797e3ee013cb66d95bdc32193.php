@@ -1,9 +1,8 @@
-@extends('layout.app')
+<?php $__env->startSection('title'); ?>
+<?php echo e('Status List Report'); ?>
 
-@section('title')
-{{'Status List Report'}}
-@stop
-@section('content-header')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 
 <ol class="breadcrumb">
   <li><i class="fa fa-dashboard"></i>Reports</li>
@@ -26,9 +25,9 @@
     }
     
 </style>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div>
     
     <div class="box box-solid box-default">
@@ -43,15 +42,15 @@
           <div class = "col-md-6">
               <select class="form-control" id = "bldg">
                <option value="" selected disabled>-- SELECT BUILDING --</option>
-               @if(isset($building) && count($building)> 1)
-                  @foreach($building as $build)
-                  <option value = "{{$build->bldgID}}">{{$build->bldgName}}</option>
-                    @endforeach
-              @else
-                   @foreach($building as $build)
-                  <option value = "{{$build->bldgID}}" selected="">{{$build->bldgName}}</option>     
-                      @endforeach
-              @endif
+               <?php if(isset($building) && count($building)> 1): ?>
+                  <?php $__currentLoopData = $building; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $build): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <option value = "<?php echo e($build->bldgID); ?>"><?php echo e($build->bldgName); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+              <?php else: ?>
+                   <?php $__currentLoopData = $building; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $build): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <option value = "<?php echo e($build->bldgID); ?>" selected=""><?php echo e($build->bldgName); ?></option>     
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+              <?php endif; ?>
 
             </select>
 
@@ -63,7 +62,7 @@
 
                   <div class="box box-solid box-primary" style= "margin-top: 20px;">
                         <div class="box-header with-border">
-                          <h4><center>Status List Report as of today({{Carbon\Carbon::today()->format('F d,Y')}} )</center> </h4>
+                          <h4><center>Status List Report as of today(<?php echo e(Carbon\Carbon::today()->format('F d,Y')); ?> )</center> </h4>
                           <h4 id = "bldgName" style="text-align: center;">
                         
                           </h4>
@@ -103,9 +102,9 @@
     </div>
 </div>
 
-@stop
-@section('script')
-<script type="text/javascript" src ="{{ URL::asset('js/billing.js') }}"></script>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript" src ="<?php echo e(URL::asset('js/billing.js')); ?>"></script>
 <script type="text/javascript">
  $('#stallList').dataTable({
     responsive:true,
@@ -175,4 +174,5 @@ $('#tblStatus').dataTable();
  });
 
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

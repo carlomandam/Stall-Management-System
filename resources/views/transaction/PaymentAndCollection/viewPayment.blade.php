@@ -409,7 +409,12 @@
                 , 'contractID': contractID
             }
         }).done(function (data) {
+            if(!$.trim(data)){
+                $('#tblhistory').DataTable({});
+            }
+            else{
             var table = $('#tblhistory').DataTable({
+        
                 "aaData": data
                 , destroy: true
                 , "columns": [
@@ -428,6 +433,7 @@
                         }
                ]
             });
+        }
         });
         var rows_selected = [];
         $("#dateTo").on('change', function () {
@@ -591,4 +597,7 @@
         rightAlign: true
         , prefix: ''
     , });
-</script> @stop
+
+    
+</script>
+ @stop

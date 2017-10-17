@@ -590,6 +590,7 @@ class PaymentController extends Controller{
          $totalAmt = 0;
 
          $stallRateID = Contract::find($id)->first();
+         $tenantPaymentIDs = null;
          $tenantPaymentIDs = DB::select("select distinct payment.paymentID as paymentID, payment.paymentDate as paidDate,
             payment.paidAmt as paidAmt, transactionDet.transactionID as transacID
             FROM tblpayment as payment 
@@ -630,21 +631,16 @@ class PaymentController extends Controller{
             $data[$ctr]["paymentDate"] =$arrayDates[$ctr];
             $data[$ctr]["totalAmt"] ='Php ' .number_format($arrayAmt[$ctr],2);
             $data[$ctr]["balance"] = 'Php ' .number_format(($arrayTotalAmt[$ctr] - $arrayAmt[$ctr]),2);
-            $data[$ctr]['actions'] = "<button  value = '".$array[$ctr]."' onclick = 'return getDetails(this.value);' class='btn btn-primary'><span class = 'fa fa-eye'></span></button>  <button  value = '".$array[$ctr]."' onclick = '' class='btn btn-success'><span class = 'fa fa-print'></span></button>";
+            $data[$ctr]['actions'] = "<button  value = '".$array[$ctr]."' onclick = 'return getDetails(this.value);' class='btn btn-primary'><span class = 'fa fa-eye'></span></button>  <button  value = '".$array[$ctr]."' onclick = 'printReceipt(this.value)' class='btn btn-success'><span class = 'fa fa-print'></span></button>";
             $ctr++;
           
 
         }
         if(count($data[0]) == 0){
-            echo '{
-                "sEcho": 1,
-                "iTotalRecords": "0",
-                "iTotalDisplayRecords": "0",
-            "aaData": []
-            }';
+            $data = null;
 
-            return;
-        }else
+            
+        }
         return $data;
 
     }

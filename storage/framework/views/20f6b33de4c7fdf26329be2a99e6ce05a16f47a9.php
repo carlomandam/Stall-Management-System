@@ -1,9 +1,8 @@
-@extends('layout.app')
+<?php $__env->startSection('title'); ?>
+<?php echo e('Payments Collected Report'); ?>
 
-@section('title')
-{{'Payments Collected Report'}}
-@stop
-@section('content-header')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 
 <ol class="breadcrumb">
   <li><i class="fa fa-dashboard"></i>Reports</li>
@@ -26,11 +25,11 @@
     }
  
 </style>
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/daterangepicker/daterangepicker.css')}}">
+<link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/daterangepicker/daterangepicker.css')); ?>">
 
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div>
     
     <div class="box box-solid box-default">
@@ -100,11 +99,11 @@
     </div>
 </div>
 
-@stop
-@section('script')
-<script type="text/javascript"  src = "{{URL::asset('assets/daterangepicker/moment.min.js')}}"></script>
-<script type="text/javascript" src = "{{URL::asset('assets/daterangepicker/daterangepicker.js')}}"></script>
-<script type="text/javascript" src ="{{ URL::asset('js/billing.js') }}"></script>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript"  src = "<?php echo e(URL::asset('assets/daterangepicker/moment.min.js')); ?>"></script>
+<script type="text/javascript" src = "<?php echo e(URL::asset('assets/daterangepicker/daterangepicker.js')); ?>"></script>
+<script type="text/javascript" src ="<?php echo e(URL::asset('js/billing.js')); ?>"></script>
 <script type="text/javascript">
  $('#tblRevenue').dataTable({
     responsive:true,
@@ -213,4 +212,5 @@ $(function() {
 
 
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

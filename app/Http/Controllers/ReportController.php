@@ -8,6 +8,7 @@ use App\Contract;
 use App\Building;
 use App\StallRate;
 use Carbon\Carbon;
+use PDF;
 class ReportController extends Controller
 {
     function stallStatusIndex(){
@@ -22,6 +23,7 @@ class ReportController extends Controller
 
         return view('/Reports/balanceSummary');
     }
+
     public function getBalanceSummary(){
          $totalUnpaid =[[]];
         $contractIDs = [];
@@ -411,7 +413,265 @@ class ReportController extends Controller
         return view('Reports/revenueReport');
 
     }
+     function printBalance(){
+         $totalUnpaid =[[]];
+        $contractIDs = [];
+        $dates = [];
+        $recordCtr = 0;
+        $totalAmtCtr = 0;
+        $stalls =DB::select("Select stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHLName) as tenantName, contractID as contractID from tblcontractInfo left join tblstallholder as stallH on stallH.stallHID = tblcontractInfo.stallHID where tblcontractInfo.deleted_at IS NULL && tblcontractInfo.contractEnd >= ".date("Y-m-d"));
+   
+        $collectionStat = DB::select("select collect, reminder,warning, tblutilities.lock as lockstat, terminate FROM `tblutilities` WHERE utilitiesID = 'util_collection_status'");
 
+
+        foreach($stalls as $stall){
+            $totalUnpaid[$recordCtr]['amount'] =  ReportController::computeUnpaid($stall->contractID);
+            $totalAmtCtr += $totalUnpaid[$recordCtr]['amount'];
+            foreach($collectionStat as $stat){
+                if($totalUnpaid[$recordCtr]['amount'] <= $stat->collect){
+                    $totalUnpaid[$recordCtr]['stallID'] = $stall->stallCode;
+                    $totalUnpaid[$recordCtr]['status'] = 'COLLECT';
+                    $totalUnpaid[$recordCtr]['name'] = $stall->tenantName;
+                    $totalUnpaid[$recordCtr]['amount'] = number_format($totalUnpaid[$recordCtr]['amount'],2);
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->reminder && $totalUnpaid[$recordCtr]['amount'] > $stat->collect){
+                    $totalUnpaid[$recordCtr]['stallID'] = $stall->stallCode;
+                    $totalUnpaid[$recordCtr]['status'] = 'REMINDER';
+                    $totalUnpaid[$recordCtr]['name'] = $stall->tenantName;
+                    $totalUnpaid[$recordCtr]['amount'] = number_format($totalUnpaid[$recordCtr]['amount'],2);
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->warning && $totalUnpaid[$recordCtr]['amount'] > $stat->reminder){
+                    $totalUnpaid[$recordCtr]['stallID'] = $stall->stallCode;
+                    $totalUnpaid[$recordCtr]['status'] = 'WARNING';
+                    $totalUnpaid[$recordCtr]['name'] = $stall->tenantName;
+                    $totalUnpaid[$recordCtr]['amount'] = number_format($totalUnpaid[$recordCtr]['amount'],2);
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->lockstat && $totalUnpaid[$recordCtr]['amount'] > $stat->warning){
+                    $totalUnpaid[$recordCtr]['stallID'] = $stall->stallCode;
+                    $totalUnpaid[$recordCtr]['status'] = 'LOCK';
+                    $totalUnpaid[$recordCtr]['name'] = $stall->tenantName;
+                    $totalUnpaid[$recordCtr]['amount'] = number_format($totalUnpaid[$recordCtr]['amount'],2);
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->terminate && $totalUnpaid[$recordCtr]['amount'] > $stat->lockstat){
+                    $totalUnpaid[$recordCtr]['stallID'] = $stall->stallCode;
+                    $totalUnpaid[$recordCtr]['status'] = 'TERMINATE';
+                    $totalUnpaid[$recordCtr]['name'] = $stall->tenantName;
+                    $totalUnpaid[$recordCtr]['amount'] = number_format($totalUnpaid[$recordCtr]['amount'],2);
+                }
+                else{
+                    $totalUnpaid[$recordCtr]['status'] = 'Undefine';
+                }
+                // var_dump($totalUnpaid);
+            }
+            
+            $recordCtr++;
+        }
+        $pdf = PDF::loadview('pdf/reports',compact('totalUnpaid','stalls','totalAmtCtr'));
+        return $pdf->stream(Carbon::today()->format('Ymd').'balanceSummary.pdf');
+     }
+
+     function printStatus($id){
+         $totalUnpaid =[[]];
+        $contractIDs = [];
+        $stallStatus =[[]];
+        $dates = [];
+        $recordCtr =0;
+        $collectCtr = 0;
+        $collectAmt = 0;
+        $reminderCtr = 0;
+        $reminderAmt = 0;
+        $warningCtr = 0;
+        $warningAmt = 0;
+        $lockCtr = 0;
+        $lockAmt = 0;
+        $terminateCtr = 0;
+        $terminateAmt = 0;
+        $vacantCtr =0;
+
+           $stallctr = 0;
+        $amtReceive =0;
+
+        $stalls =DB::select("Select stall.stallID as stallCode, contractID as contractID from tblcontractInfo as contract
+            left JOIN tblstall as stall on stall.stallID = contract.stallID
+            join tblfloor as floor on floor.floorID = stall.floorID
+            JOIN tblbuilding as building on building.bldgID = floor.bldgID
+            where contract.deleted_at IS NULL && contract.contractEnd >= curdate() && building.bldgID = '$id'");
+   
+        $collectionStat = DB::select("select collect, reminder,warning, tblutilities.lock as lockstat, terminate FROM `tblutilities` WHERE utilitiesID = 'util_collection_status'");
+
+        $stallctr = count($stalls);
+        foreach($stalls as $stall){
+            $totalUnpaid[$recordCtr]['amount'] =  ReportController::computeUnpaid($stall->contractID);
+            $amtReceive +=$totalUnpaid[$recordCtr]['amount'];
+            foreach($collectionStat as $stat){
+                if($totalUnpaid[$recordCtr]['amount'] <= $stat->collect){
+                    // $totalUnpaid[$recordCtr]['status'] = 'COLLECT';
+                    $collectCtr++;
+                    $collectAmt += $totalUnpaid[$recordCtr]['amount'];
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->reminder && $totalUnpaid[$recordCtr]['amount'] > $stat->collect){
+                    // $totalUnpaid[$recordCtr]['status'] = 'REMINDER';
+                    $reminderCtr++;
+                    $reminderAmt += $totalUnpaid[$recordCtr]['amount'];
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->warning && $totalUnpaid[$recordCtr]['amount'] > $stat->reminder){
+                    // $totalUnpaid[$recordCtr]['status'] = 'WARNING';
+                    $warningCtr++;
+                    $warningAmt += $totalUnpaid[$recordCtr]['amount'];
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->lockstat && $totalUnpaid[$recordCtr]['amount'] > $stat->warning){
+                    // $totalUnpaid[$recordCtr]['status'] = 'LOCK';
+                    $lockCtr++;
+                    $lockAmt += $totalUnpaid[$recordCtr]['amount'];
+                }
+                else if($totalUnpaid[$recordCtr]['amount'] <= $stat->terminate && $totalUnpaid[$recordCtr]['amount'] > $stat->lockstat){
+                    // $totalUnpaid[$recordCtr]['status'] = 'TERMINATE';
+                     $terminateCtr++;
+                    $terminateAmt += $totalUnpaid[$recordCtr]['amount'];
+                }
+                else{
+                    // $totalUnpaid[$recordCtr]['status'] = 'Undefined';
+                }
+                // var_dump($totalUnpaid);
+            }
+            
+            $recordCtr++;
+        }
+
+        for($i = 0; $i <= 6; $i++){
+
+            if($i == 0){
+                $stallStatus[$i]['status'] = 'COLLECT';
+                $stallStatus[$i]['count'] = $collectCtr;
+                $stallStatus[$i]['amount'] = $collectAmt; 
+            }
+            else if($i == 1){
+                $stallStatus[$i]['status'] = 'REMINDER';
+                $stallStatus[$i]['count'] = $reminderCtr;
+                $stallStatus[$i]['amount'] = $reminderAmt; 
+            }
+            else if($i == 2){
+                $stallStatus[$i]['status'] = 'WARNING';
+                $stallStatus[$i]['count'] = $warningCtr;
+                $stallStatus[$i]['amount'] = $warningAmt; 
+
+            }
+            else if($i == 3){
+                $stallStatus[$i]['status'] = 'LOCK';
+                $stallStatus[$i]['count'] = $lockCtr;
+                $stallStatus[$i]['amount'] = $lockAmt; 
+
+            }
+            else if($i ==4){
+                $stallStatus[$i]['status'] = 'TERMINATE';
+                $stallStatus[$i]['count'] = $terminateCtr;
+                $stallStatus[$i]['amount'] = $terminateAmt; 
+
+            }
+            else if($i == 5){
+                $count = DB::select("Select( (Select count(stall.stallID) as contracts from tblstall as stall
+            join tblfloor as floor on floor.floorID = stall.floorID
+            JOIN tblbuilding as building on building.bldgID = floor.bldgID
+            where building.bldgID = '$id') - count(stall.stallID))as contracts from tblcontractInfo as contract
+            left JOIN tblstall as stall on stall.stallID = contract.stallID
+            join tblfloor as floor on floor.floorID = stall.floorID
+            JOIN tblbuilding as building on building.bldgID = floor.bldgID
+            where contract.deleted_at IS NULL && contract.contractEnd >= curdate() && building.bldgID = '$id'");
+
+                 $stallStatus[$i]['status'] = 'VACANT';
+
+                 foreach($count as $count){
+                $stallStatus[$i]['count'] = $count->contracts;}
+                $stallStatus[$i]['amount'] = 0; 
+                $stallctr += $count->contracts;
+            }
+            else{
+
+            }
+        }
+     
+        $pdf = PDF::loadview('pdf/statusListReport',compact('stallStatus','count','amtReceive','stallctr'));
+        return $pdf->stream(Carbon::today()->format('Ymd').'statusListReport.pdf');
+     }
+
+
+     function printCollected($start,$end){
+         $startdate = $start;
+        $enddate = $end;
+     
+        $array=[];
+        $data =[];
+        $paid = DB::select("select distinct  payment.paymentID as paymentID, payment.paymentDate as paidDate,
+                payment.paidAmt as paidAmt,  details.contractID as detID, collect.contractID as colID,  chargedet.contractID as chargeID, util.contractID as utilID
+               
+                FROM tblpayment as payment 
+                LEFT JOIN tblpayment_transaction as transactionDet on transactionDet.transactionID = payment.transactionID
+                LEFT JOIN tblinitial_details as details on details.transactionID = transactionDet.transactionID
+                LEFT JOIN tblpayment_collection as payCollect on payCollect.transactionID = transactionDet.transactionID
+                LEFT JOIN tblcollection_details as collection on collection.collectionDetID = payCollect.collectionDetID
+                LEFT JOIN tblcollection as collect on collect.collectionID = collection.collectionID
+                LEFT JOIN tblbilling_details as billdetails on billdetails.transactionID = transactionDet.transactionID
+                LEFT JOIN tblinitial_details as initdetails on initdetails.transactionID = transactionDet.transactionID
+                LEFT JOIN tblbilling_charges as billcharge on billcharge.billDetID = billdetails.billDetID
+                LEFT JOIN tblcharge_details as chargedet on chargedet.chargeDetID = billcharge.chargeDetID
+                LEFT JOIN tblbilling_utilities as billutil on billutil.billDetID = billdetails.billDetID
+                LEFT JOIN tblstallutilities_meterid as util on util.stallMeterID = billutil.stallMeterID
+                WHERE payment.paymentDate BETWEEN '$startdate' and '$enddate' ORDER BY payment.paymentID");
+
+
+        foreach($paid as $paid){
+            $array[]= $paid->paymentID;
+            $arrayDates[] =  Carbon::parse($paid->paidDate)->format('F d,Y');   
+            $arrayAmt[] = $paid->paidAmt;
+
+            if(!is_null($paid->detID)) {
+                    $arrayContractID[] = $paid->detID;
+            }
+           else if( !is_null($paid->colID))
+           {
+                $arrayContractID[] = $paid->colID;
+           } 
+           else if(!is_null($paid->chargeID))
+           {
+                $arrayContractID[] = $paid->chargeID;
+           } 
+           else if(!is_null($paid->utilID)){
+                $arrayContractID[] = $paid->utilID;
+           }
+           else{
+
+           }
+            $ctr = 0;
+           foreach($arrayContractID as $id)
+           {
+           $checkName[$ctr] = ReportController::getName($id);  
+           $ctr++;
+            } 
+                
+            
+        }
+
+      
+
+        $size = count($array);
+        $ctr = 0;
+        $total = 0;
+        while($ctr < $size){   
+            $data[$ctr]["paymentID"] = 'PAYMENT-'.str_pad($array[$ctr], 5, '0', STR_PAD_LEFT);
+            $data[$ctr]['tenantName'] = $checkName[$ctr];
+            $data[$ctr]["paymentDate"] =$arrayDates[$ctr];
+            $data[$ctr]["totalAmt"] =number_format($arrayAmt[$ctr],2);
+            $total += $data[$ctr]["totalAmt"];
+            $ctr++;
+          
+
+        }
+    
+         $pdf = PDF::loadview('pdf/collectedReport',compact('data','start','end','size','total'));
+        return $pdf->stream(Carbon::today()->format('Ymd').'collectedReport.pdf');
+
+
+     }
    
 
 }

@@ -8,8 +8,13 @@
     .label{
         font-size: 12px;
     }
-    #contracts,#tenants{
+    #contracts,#electric,#terminated{
         display:none;
+    }
+    #queryName{
+        font-size: 25px;
+        color: black;
+        font-family: sans-serif;
     }
 </style>
 
@@ -21,8 +26,11 @@
               <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose Queries
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
-                <li><a href="" onclick="event.preventDefault(); loadExpiring();">List of Expiring Contracts</a></li>
-                <li><a href="" onclick="event.preventDefault(); loadTenants();">List of Deliquent Tenants</a></li>
+                <li><a href="" onclick="event.preventDefault(); loadExpiring();">List of Current Contracts</a></li>
+                 <li><a href="" onclick="event.preventDefault(); loadExpired();">List of Expired Contracts</a></li>
+                  <li><a href="" onclick="event.preventDefault(); loadTerminated();">List of Terminated Contracts</a></li>
+                <li><a href="" onclick="event.preventDefault(); loadElectric();">Highest Electric Consumption</a></li>
+                <li><a href="" onclick="event.preventDefault(); loadWater();">Highest Water Consumption</a></li>
               </ul>
         </div>
         </label>
@@ -30,7 +38,9 @@
     <div>
 
         <div class="box-body">
-
+        <div class = "box-title box-primary">
+            <h4 id = "queryName" style="text-align: center;"></h4>
+        </div>
             <div class="col-xs-12">
                     <div class="table-responsive" id = "contracts">
                         <table id="tblcontract" class="table table-striped" role="grid">
@@ -46,14 +56,30 @@
                     </div>      
             </div>
 
-             <div class="col-xs-12">
-                    <div class="table-responsive" id = "tenants">
-                        <table id="tbltenants" class="table table-striped" role="grid">
+            <div class="col-xs-12">
+                    <div class="table-responsive" id = "terminated">
+                        <table id="tblterminated" class="table table-striped" role="grid">
                                 <thead>
                                     <tr>
+                                        <th>Stall Code</th>
                                         <th>Tenant Name</th>
-                                        <th>Stall Code/s</th>
-                                        <th>Balance</th>
+                                        <th>Contract Start Date</th>
+                                        <th>Contract Terminated Date</th>
+                                        <th>Reason/s</th>
+                                    </tr>
+                                </thead>
+                        </table>
+                    </div>      
+            </div>
+
+             <div class="col-xs-12">
+                    <div class="table-responsive" id = "electric">
+                        <table id="tblelectric" class="table table-striped" role="grid">
+                                <thead>
+                                    <tr>
+                                        <th>Reading Date</th>
+                                        <th>Stall Code</th>
+                                        <th>Consumption</th>
                                     </tr>
                                 </thead>
                         </table>
@@ -73,17 +99,44 @@
     $(document).ready(function(){
     
       $('#tblcontract').DataTable();
-      $('#tbltenants').DataTable();
+      $('#tblelectric').DataTable();
+      $('#tblterminated').DataTable();
 
     
 
     });
-
-    function loadExpiring(){
-        $('#tenants').hide();
+    function loadExpired(){
+        
+        $('#electric').hide();
+        $('#terminated').hide();
         $('#contracts').fadeIn();
+        $('#queryName').text("List of Expired Contracts");
+        
+          $.get('/ExpiredContracts', function(data){
+                var table = $('#tblcontract').DataTable().clear().draw();
+                console.log(data);
+                $.each(data, function(i,data){
+                    table.row.add([
+                        data.stallID,
+                        data.tenantName,
+                        data.contractStart,
+                        data.contractEnd
+                        
+                        
+                        ]).draw();
+                });
+               
+              //  $('#tblcontract tbody').empty();
+            });
+    }
+    function loadExpiring(){
+        $('#electric').hide();
+        $('#terminated').hide();
+        $('#contracts').fadeIn();
+        $('#queryName').text("List of Current Contracts");
+          
           $.get('/ExpiringContracts', function(data){
-                var table = $('#tblcontract').DataTable().clear();
+                var table = $('#tblcontract').DataTable().clear().draw();
                 console.log(data);
                 $.each(data, function(i,data){
                     table.row.add([
@@ -91,6 +144,55 @@
                         data.tenantName,
                         data.contractStart,
                         data.contractEnd + " &nbsp &nbsp &nbsp <label> <span class = 'label label-warning'>will expire in "+ data.days +" days</span></label>"
+                        
+                        
+                        ]).draw();
+                });
+    
+            });
+          
+    }
+    function loadTerminated(){
+        $('#electric').hide();
+        $('#contracts').hide();
+        $('#terminated').fadeIn();
+        
+        $('#queryName').text("List of Terminated Contracts");
+          var table = $('#tblterminated').DataTable().clear().draw();
+          $.get('/TerminatedContracts', function(data){
+              
+                console.log(data);
+                $.each(data, function(i,data){
+                    table.row.add([
+                        data.stallID,
+                        data.tenantName,
+                        data.contractStart,
+                       data.contractEnd,
+                       "<label> <span class ='label label-danger'>"+data.reasons
+                        + "</span></label>"
+                        ]).draw();
+                });
+    
+            });
+      
+    }
+
+
+      function loadElectric(){
+         $('#queryName').text("Highest Electric Consumption");
+        $('#contracts').hide();
+           $('#terminated').hide();
+        
+        $('#electric').fadeIn();
+
+          $.get('/ElectricConsumption', function(data){
+                var table = $('#tblelectric').DataTable().clear();
+                console.log(data);
+                $.each(data, function(i,data){
+                    table.row.add([
+                        data.reading,
+                        data.stallCode,
+                        data.cons +" of Total Electric Consumption( "+ data.totalRead +" )"
                         
                         
                         ]).draw();
@@ -98,24 +200,27 @@
             });
     }
 
-      function loadTenants(){
-
+    function loadWater(){
+        $('#queryName').text("Highest Water Consumption");
         $('#contracts').hide();
-        $('#tenants').fadeIn();
-          $.get('/ExpiringContracts', function(data){
-                var table = $('#tblcontract').DataTable().clear();
+       $('#terminated').hide();
+        
+        $('#electric').fadeIn();
+
+          $.get('/WaterConsumption', function(data){
+                var table = $('#tblelectric').DataTable().clear();
                 console.log(data);
                 $.each(data, function(i,data){
                     table.row.add([
-                        data.stallID,
-                        data.tenantName,
-                        data.contractStart,
-                        data.contractEnd + " &nbsp &nbsp &nbsp <label> <span class = 'label label-warning'>will expire in "+ data.days +" days</span></label>"
+                        data.reading,
+                        data.stallCode,
+                        data.cons +" of Total Water Consumption( "+ data.totalRead +" )"
                         
                         
                         ]).draw();
                 });
             });
+
     }
     
 </script> @stop 

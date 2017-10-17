@@ -413,7 +413,12 @@
                 , 'contractID': contractID
             }
         }).done(function (data) {
+            if(!$.trim(data)){
+                $('#tblhistory').DataTable({});
+            }
+            else{
             var table = $('#tblhistory').DataTable({
+        
                 "aaData": data
                 , destroy: true
                 , "columns": [
@@ -432,6 +437,7 @@
                         }
                ]
             });
+        }
         });
         var rows_selected = [];
         $("#dateTo").on('change', function () {
@@ -595,5 +601,8 @@
         rightAlign: true
         , prefix: ''
     , });
-</script> <?php $__env->stopSection(); ?>
+
+    
+</script>
+ <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,8 +1,8 @@
-@extends('layout.app')
-@section('title')
-{{ 'Utilities'}}
-@stop
-@section('content-header')
+<?php $__env->startSection('title'); ?>
+<?php echo e('Utilities'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 <style>
 .col-md-12, .col-md-10 {  
    
@@ -21,9 +21,9 @@
     <li><i class="fa fa-cogs"></i>Utilities</li>
     <li class="active">Market Days</li>
 </ol> 
-  @stop
+  <?php $__env->stopSection(); ?>
 
-  @section('content')
+  <?php $__env->startSection('content'); ?>
  
    <div class="row">
     <!--left table-->
@@ -115,8 +115,8 @@
 
 <!-- /.row -->
 
-@stop
-@section('script')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
 <script type="text/javascript">
 $(document).ready(function() {
     $('tr').click(function(event) {
@@ -173,11 +173,11 @@ $(document).on('click','#save',function(){
 });
 //Pagkuha ng Array sa Controller
 var marketD = [];//variable ng market days
- @foreach($utils as $util)
-      @foreach(explode(',', $util->utilitiesDesc) as $days)
-       marketD.push('{{$days}}');
-      @endforeach                
-  @endforeach
+ <?php $__currentLoopData = $utils; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $util): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <?php $__currentLoopData = explode(',', $util->utilitiesDesc); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $days): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+       marketD.push('<?php echo e($days); ?>');
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>                
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
   // console.log(marketD.length);
   var  tempdays = [];
   for (var i = 0; i < 7; i++) {
@@ -216,4 +216,5 @@ var marketD = [];//variable ng market days
 </script>
 
 
-@stop 
+<?php $__env->stopSection(); ?> 
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

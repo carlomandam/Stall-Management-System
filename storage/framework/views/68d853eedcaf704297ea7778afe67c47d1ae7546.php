@@ -1,8 +1,8 @@
-@extends('layout.app')
-@section('title')
-{{ 'Utilities'}}
-@stop
-@section('content-header')
+<?php $__env->startSection('title'); ?>
+<?php echo e('Utilities'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content-header'); ?>
 <style>
 .col-md-12, .col-md-10 {  
    
@@ -21,9 +21,9 @@
     <li><i class="fa fa-cogs"></i>Utilities</li>
     <li class="active">Collection Status</li>
 </ol> 
-  @stop
+  <?php $__env->stopSection(); ?>
 
-  @section('content')
+  <?php $__env->startSection('content'); ?>
  
    <div class="row">
     <!--left table-->
@@ -85,7 +85,7 @@
                     <tr style="background-color: red;">
                       <td style="color: white;">Terminate</td>
                       <td><input type="text" name="" class="form-control terminateFrom" readonly></td>
-                      <td> <input type="text" name="name_terminate" class="form-control terminateTo" value="{{$init}}" id="id_terminate" disabled></td>
+                      <td> <input type="text" name="name_terminate" class="form-control terminateTo" value="<?php echo e($init); ?>" id="id_terminate" disabled></td>
                     </tr>
 
                 </form>
@@ -108,26 +108,26 @@
 
 <!-- /.row -->
 
-@stop
-@section('script')
-<script type="text/javascript" src ="{{ URL::asset('js/jquery.inputmask.bundle.js') }}"></script>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript" src ="<?php echo e(URL::asset('js/jquery.inputmask.bundle.js')); ?>"></script>
 <script type="text/javascript">
-@foreach($utils as $util)
-$('#id_collect').val('{{$util->collect}}');
-$('.reminderFrom').val('{{$util->collect}}+.01');
+<?php $__currentLoopData = $utils; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $util): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+$('#id_collect').val('<?php echo e($util->collect); ?>');
+$('.reminderFrom').val('<?php echo e($util->collect); ?>+.01');
 
-$('#id_reminder').val('{{$util->reminder}}');
-$('.warningFrom').val('{{$util->reminder}}+.01');
+$('#id_reminder').val('<?php echo e($util->reminder); ?>');
+$('.warningFrom').val('<?php echo e($util->reminder); ?>+.01');
 
-$('#id_warning').val('{{$util->warning}}');
-$('.lockFrom').val('{{$util->warning}}+.01');
+$('#id_warning').val('<?php echo e($util->warning); ?>');
+$('.lockFrom').val('<?php echo e($util->warning); ?>+.01');
 
-$('#id_lock').val('{{$util->lock}}');
-$('.terminateFrom').val('{{$util->lock}}+.01')
+$('#id_lock').val('<?php echo e($util->lock); ?>');
+$('.terminateFrom').val('<?php echo e($util->lock); ?>+.01')
 
-// $('#id_terminate').val('{{$util->terminate}}');
+// $('#id_terminate').val('<?php echo e($util->terminate); ?>');
 
-@endforeach
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 $(document).on('click', '#edit', function(){
   document.getElementById('id_collect').disabled =false;
@@ -292,4 +292,5 @@ $("#id_lock").bind("change paste keydown keyup click", function() {
  
   });
 </script>
-@stop 
+<?php $__env->stopSection(); ?> 
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
