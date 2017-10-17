@@ -24,6 +24,5 @@ class StallUtility extends Model
     public function Latest(){
         return $this->hasOne('App\Submeter','stallUtilityID')->latest();
     }
-
     
 }

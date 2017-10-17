@@ -373,6 +373,7 @@ $(document).on("click", "#update", function (e) {
                 "finalSubID": $('input[name=subMeterID]').eq(ind).val(), // "finalSubPrev" : parseInt($('input[name=subPrev]').eq(ind).val()),
                 "finalSubPrev": (isNaN(parseInt($('input[name=subPrev]').eq(ind).val())) ? 0 : parseInt($('input[name=subPrev]').eq(ind).val()))
                 , "finalSubPres": (isNaN(parseInt($('input[name=subPres]').eq(ind).val()))) ? 0 : parseInt($('input[name=subPres]').eq(ind).val())
+
             }
             subMeter.push(sub);
             var fRead = parseInt($('input[name=finalRead]').val());
