@@ -166,7 +166,7 @@ class UtilityController extends Controller
 
                             ->get();*/
 
-            $stalls = ($id==1) ? Contract::with('Stall.ElectricityUtil.Latest')->has('Stall.ElectricityUtil')->whereNotNull('contractStart')->whereNotNull('contractEnd')->get() : Contract::with('Stall.WaterUtil.Latest')->has('Stall.WaterUtil')->whereNotNull('contractStart')->whereNotNull('contractEnd')->get();
+            $stalls = ($id==1) ? Contract::with('Stall.ElectricityUtil.Latest')->has('Stall.ElectricityUtil')->whereNotNull('contractStart')->whereNotNull('contractEnd')->where('contractEnd','>=',date("Y-m-d"))->where('contractStart','<=',date("Y-m-d"))->get() : Contract::with('Stall.WaterUtil.Latest')->has('Stall.WaterUtil')->whereNotNull('contractStart')->whereNotNull('contractEnd')->where('contractEnd','>=',date("Y-m-d"))->where('contractStart','<=',date("Y-m-d"))->get();
            // $con = DB::table('tblContractInfo as contract')
            //           ->join('tblStall as stall','contract.stallID','stall.stallID')
            //           ->join('tblStall_Utilities as utility','stall.stallID','utility.stallID')

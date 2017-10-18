@@ -16,39 +16,36 @@
             <div>
                 <div id="header" style="text-align:center">
                     <h3 style="font-weight:bold">My Seoul Tiangge</h3>
-                    <h4>Rental Agreement</h4> </div>
+                    <h4>KASUNDUAN SA PAG-UPA</h4> </div>
                 <div style="margin-left:10%;margin-right:10%;">
                     <p style="text-indent:50px">
-                        <center> THIS AGREEMENT made this (day) <b>{{date_format(date_create($data['contract']->contractStart), 'd')}} </b>of (Month) <b>{{date_format(date_create($data['contract']->contractStart), 'F')}}</b>, (Year) <b>{{date_format(date_create($data['contract']->contractStart), 'Y')}}</b>,
+                        <center> My Seoul Tiangge, ay isang korporasyon na inorganisa at umiiral na sa ilalim at sa bisa ng mga batas ng Republika ng Pilipinas, at may address ng lugar ng negosyo sa Lot 4 Block 5 Manila East Road, Phase 1 Taytay, Rizal, simula dito ay tinutukoy na OWNER;</center>
+						
+                                <center><p>- and -</p></center>
                             <p>
-                                <center>is between:</center>
-                            </p>
-                            <p>
-                                <center><b>Benito Roger L. De Joya </b> (OWNER) of My Seoul Tiangge </center>
+                                <center><u>{{\Illuminate\Support\Str::upper($data['contract']->StallHolder->stallHFName)}} {{\Illuminate\Support\Str::upper($data['contract']->StallHolder->stallHMName)}} {{\Illuminate\Support\Str::upper($data['contract']->StallHolder->stallHLName)}}</u>, nasa wastong gulang, Filipino, may-asawa/walang asawa at naninirahan sa <u>{{$data['contract']->StallHolder->stallHAddress}}</u>, simula dito ay tinutukoy na VENDOR;</center>
                             </p>and
                             <p>
-                                <center> <b>  {{ $data['contract']->StallHolder->stallHFName. " ". $data['contract']->StallHolder->stallHMName[0]. ". ". $data['contract']->StallHolder->stallHLName}} </b>(VENDOR)</center>
-                            </p> The OWNER and VENDOR hereby agree the rental of Stall No. <b> {{$data['contract']->stallID}} </b>located on (Floor) <b> {{$data['contract']->Stall->Floor->floorLevel}} </b>,(Building) <b> {{$data['contract']->Stall->Floor->Building->bldgName}}.</b> Commencing on this day until {{$data['contract']->contractEnd}}. This agreement is subject to the following terms and conditions: </center>
-                    </p>
+                                <center>DATAPWA’T, ang OWNER ay may stalls na pinapaupahan sa Lot 4 Block 5 Manila East Road, Phase 1 Taytay, Rizal, at ang VENDOR na nagnanais na umupa ng isang stall ng OWNER ay naglalathala at sumasang-ayon na pumasok sa isang Kasunduan ng Pag-upa sa ilalim ng sumusunod na mga alituntunin at kondisyon:</center>
+							</p>
                     <br> </div>
+                    <?php
+                        $prate = $data['contract']->Stall->StallType->StallRate->dblRate * ($data['contract']->Stall->StallType->StallRate->dblPeakAdditional / 100);
+                        $rate = $data['contract']->Stall->StallType->StallRate->dblRate;
+                    ?>
                 <div style="margin-left:10%;margin-right:10%;">
-                    <p>1. Membership</p>
-                    <p style="text-indent:50px;">Vendor agrees to pay the annual membership fee for the maintenance of the facilities. This membership fee is non-refundable. </p>
-                    <p>2. Contract Period</p>
-                    <p style="text-indent:50px;">The contract shall be a term of starting on the (day) @if($data['contract']->contractStart != "") <b> {{date_format(date_create($data['contract']->contractStart), 'd')}} </b> of (Month) <b> {{date_format(date_create($data['contract']->contractStart), 'F')}} </b>,(Year) <b> {{date_format(date_create($data['contract']->contractStart), 'Y')}} </b>.</p> @endif
-                    <p>3. Security Deposit</p>
-                    <p style="text-indent:50px;">Vendor agrees to pay the security deposit. This security deposit is non – refundable but consumable. It will cover unpaid rent upon termination of the rent agreement.</p>
-                    <p>4. Rental fees</p>
-                    <p style="text-indent:50px;">Vendor shall pay rent of Php {{ number_format($data['contract']->StallRate->dblRate, 2, '.', ',')}} daily with additional @if($data['contract']->StallRate->peakRateType == 1) Php.{{$data['contract']->StallRate->dblPeakRate}}
-                    @elseIf($data['contract']->StallRate->peakRateType == 2) {{$data['contract']->StallRate->dblPeakRate . '% (Php.'.($data['contract']->StallRate->dblRate * $data['contract']->StallRate->dblPeakRate) / 100}})@endIf on peak days</p>
-                    <p>5. Termination</p>
-                    <p style="text-indent:50px;">This agreement may be renewed subject to the sole discretion of the management of MySeoul, Inc. The agreement may be terminated beforehand upon mutual written agreement of both parties. It may also be terminated if the vendor violates any stipulation of this agreement; OR if the vendor violates any rule, regulation, or policy declared by the management of MySeoul, Inc. in the course of operations. </p>
-                    <p>6. Clearance </p>
-                    <p style="text-indent:50px;">A clearance shall be issued to the vendor upon full account settlement. It shall serve as a gate pass for the egress of goods and merchandise owned by the vendor. </p>
-                    <p>7. Installation of additional structure or utilities</p>
-                    <p style="text-indent:50px;">The vendor shall not install power lines or outlets, plumbing, drainage, or any structure within the premises and perimeter of the property without a written consent of the owner. Violation is subject to immediate termination of lease, forfeiture of security deposit, and repair charges. </p> @if(!empty($util))
-                    <p style="text-indent:50px;">(a)The following utilities shall be provided and/or paid by the vendor indicated beside each item:
-                        <style>
+                    <p><strong>1.</strong>	Na ang stall na uupahan ng VENDOR ay Stall No. <u>{{$data['contract']->stallID}}</u> ayon sa stall plan na nakalakip dito bilang “<u>{{$data['contract']->Stall->Floor->Building->bldgName}}</u>”. </p>
+                    
+                    <p><strong>2.</strong>	Ang Stall no. <u>{{$data['contract']->stallID}}</u> na uupahan ng VENDOR ay <u>{{$data['contract']->Stall->StallType->StallTypeSize->stypeArea}}</u>sq. m. ang laki ayon sa stall plan na minarkahan ng OWNER. </p>
+                    
+                    <p><strong>3.</strong>	Ang halaga ng upa ng stall ay <u>Php {{number_format($data['contract']->Stall->StallType->StallRate->dblRate,2,'.',',')}}</u> na mayroong karagdagang <u>{{($data['contract']->Stall->StallType->StallRate->peakRateType == 1) ? 'Php '.number_format($data['contract']->Stall->StallType->StallRate->dblPeakAdditional,2,'.',',') : $data['contract']->Stall->StallType->StallRate->dblPeakAdditional.'% (Php '.number_format(($data['contract']->Stall->StallType->StallRate->dblRate * ($data['contract']->Stall->StallType->StallRate->dblPeakAdditional / 100)),2,'.',',').')'}}</u> tuwing <i>"Peak Days"</i> o <i>"Holidays"</i>, na babayaran ng VENDOR sa OWNER bawat araw ng pagtitinda. Magagamit o mababawasan and deposito sa anumang pagka-antala sa pagbabayad ng VENDOR ng upa.</p>
+                    
+                    <p><strong>4.</strong>  Ang termino ng pag-gamit sa stall ay hanggang isang taon na magsisimula sa araw ng pagbabayad ng membership/registration fee at automatikong magtatapos kahit walang “NOTICE” o “PASABI” ang OWNER.  Matutuloy lamang ang pag-upa sa stall sa pamamagitan lamang ng pagbabayad ng renewal ng registration ng VENDOR. </p>
+                    
+					<p style="text-indent:50px;"><b>INITIAL PAYMENT: Php {{number_format($data['main'] + $data['sec'],2,'.',',')}}.</b></p>
+					<p style="text-indent:50px;">Php {{number_format($data['main'],2,'.',',')}}: Maintenance Fee (Paid Annually)</p>
+					<p style="text-indent:50px;">Php {{number_format($data['sec'],2,'.',',')}}: Security Deposit (Consumable / Non-Refundable)</p>
+					 <style>
                             table {
                                 font-family: arial, sans-serif;
                                 width: 100%;
@@ -62,32 +59,89 @@
                                 padding: 8px;
                             }
                         </style>
-                            <table>
+                            <table>                                
                                 <tr>
-                                    <th>Stall Utilities</th>
-                                    <th>Utilities Rate</th>
-                                    <th>Meter ID</th>
+                                    <th>Market Days</th>
+                                    <th>RATES</th>
                                 </tr>
+                                @if(in_array('sun',$data['mdays']))
                                 <tr>
-                                    <td> Electricity </td>
-                                    <td> </td>
-                                    <td> </td>
+                                    <td>Sunday</td>
+                                    <td>Php {{(in_array('sun',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
                                 </tr>
+                                @endif
+								@if(in_array('mon',$data['mdays']))
+                                <tr>
+                                    <td>Monday</td>
+                                    <td>Php {{(in_array('mon',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                </tr>
+                                @endif
+                                @if(in_array('tue',$data['mdays']))
+                                <tr>
+                                    <td>Tuesday</td>
+                                    <td>Php {{(in_array('tue',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                </tr>
+                                @endif
+                                @if(in_array('wed',$data['mdays']))
+                                <tr>
+                                    <td>Wednesday</td>
+                                    <td>Php {{(in_array('wed',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                </tr>
+                                @endif
+                                @if(in_array('thu',$data['mdays']))
+                                <tr>
+                                    <td>Thursday</td>
+                                    <td>Php {{(in_array('thu',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                </tr>
+                                @endif
+                                @if(in_array('fri',$data['mdays']))
+                                <tr>
+                                    <td>Friday</td>
+                                    <td>Php {{(in_array('fri',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                </tr>
+                                @endif
+                                @if(in_array('sat',$data['mdays']))
+                                <tr>
+                                    <td>Saturday</td>
+                                    <td>Php {{(in_array('sat',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                </tr>
+                                @endif
                                 <p></p>
                             </table>
-                    @endif
-                    <p>8. Stall and Merchandise</p>
-                    <p style="text-indent:50px;">The vendor shall be the responsible for the safety and order of his merchandise. MySeoul, Inc. provides security services but will not be liable for any loss or damage including but not limited to improper use of facilities, facility failure, theft, robbery, force majeure, or acts of god. </p>
-                    <p>9. Rules and Regulation</p>
-                    <p style="text-indent:50px;">Vendor must obey all the rules and regulations given by the management including but not limited to policies, procedures, projects, business practices, merchandise selection and display. Any violation shall be subject to fines, disciplinary action, or termination of contract as deemed by the owner.</p>
-                    <p>10. Product storage, handling, and sales</p>
-                    <p style="text-indent:50px;">The vendor shall not sell, store, or handle hazardous, illegal, stolen, or counterfeit merchandise or materials within the premises or perimeter of MySeoul Tiangge. All products to be sold, handled, or stored at MySeoul Tiangge are subject to sole written consent of the owner. The owner reserves the rights to reject, disapprove, and dispose any product or merchandise that violates safety and legal standards without prior notification or consent.</p>
-                </div>
+					
+					
+                    <p><strong>5.</strong>	Ang VENDOR ay magbabayad ng <u>Php {{number_format($data['sec'],2,'.',',')}}</u> bilang security deposit para sa anumang pinsala (damages) sa stall na maaaring mangyari habang inuupahan at inuukupahan ito ng VENDOR.  Ang halagang ito ay dapat na i-replenish ng VENDOR kung sakaling magamit sa pagpapagawa ng anumang pinsala sa stall.  </p>
+                    
+                    <p><strong>6.</strong>	Ang VENDOR ay hindi dapat mag-kabit ng linya ng kuryente o outlets, plumbing, drainage, o kahit anong structure sa stall na inuupahan ng walang written consent ang OWNER.  Ang paglabag dito ay nangangahulugan ng maagang pagtatapos ng kasunduan ng pag-upa, forfeiture ng security deposit, at pagbabayad ng halaga sa mga repairs. </p>
+                    <p>Ang VENDOR ay maaaring humingi ng pahintulot sa OWNER sa pagpapa-aayos ng structure at utilities na naayon sa written approval mula sa OWNER.  Ang lahat ng halaga na magagastos sa pagpapagawa o pagpapa-ayos ay manggagaling lamang sa VENDOR.</p>
+                    
+					
+					<p><strong>7.</strong>	Ang VENDOR ay kailangang humingi ng written approval sa OWNER kung nais ng VENDOR na lumipat sa ibang stall sa loob ng MySeoul Tiangge.</p>
+                    
+					<p><strong>8.</strong>	Lahat ng signages at iba pang promotional strategies at gimmicks na isasagawa ng VENDOR na lagpas sa paligid ng inuupahang stall ay dapat na may written approval galling sa OWNER.</p>
+                       
+                    <p><strong>9.</strong>	Ang VENDOR ay siyang tanging tagapag-ingat ng kanyang paninda. Ang OWNER walang pananagutan sa anumang pagkawala o pinsala ng paninda ng VENDOR kahit na ito ay sanhi ng improper use of facilities, facility failure, theft, robbery, force majeure, o acts of god. </p>
+                    
+                    <p><strong>10.</strong> Ang VENDOR ay hindi dapat magtinda, maglagak at maglagay ng anumang hazardous, illegal, stolen, o counterfeit (pekeng) merchandise o materials sa loob at paligid ng stall na pag-aari ng MySeoul Tiangge.  Ang OWNER ay may karapatang mag- reject, mag-disapprove at mag-dispose ng anumang produkto o paninda kapag ito ay labag sa safety at legal standards kahit na walang pasabi sa VENDOR.</p>
+                    
+                    <p><strong>11.</strong> Ang VENDOR ay dapat sa lahat ng pagkakataon ay panatilihing malinis at maganda ang stall at ang paligid nito.  Ang VENDOR ay dapat na hindi gumawa ng mga bagay o aksyon na makakaapekto sa kalinisan ng buong stall at sa paligid nito.</p>
+					
+					<p><strong>12.</strong> Ang VENDOR pati ng kanyang mga empleyado ay dapat na sa lahat ng pagkakataon ay panatilihin ang magandang samahan sa kanilang kapwa vendor at huwag maging sanhi o magdudulot ng anumang sigalot, hidwaan, away o anumang violence sa kapwa vendor.  Anumang hidwaan, away o sigalot na makakaapekto sa kaayusan ng negosyo at ng samahan ng mga vendors sa mga tiangge ay dapat na maayos sa pamamagitan ng mediation process na pangungunahan ng VENDOR. Ang hindi pagtupad sa tuntunin ng kasunduan sa panahon ng mediation ay magiging sanhi ng termination ng Kasunduang ito at nangangahulugan na ang VENDOR sampu ng kinatawan niyo ay hindi na maaring pumasok sa Tiangge. </p>
+					<p><strong>13.</strong> Ang VENDOR ay dapat na sumunod sa lahat ng alintuntunin at patakaran ng namamahala ng tiangge kabilang dito pero hindi limitado sa policies, procedures, projects, business practices, merchandise selection at display.  Anumang paglabag dito ay nangangahulugan ng termination ng Kasunduang ito. </p>
+					<p><strong>14.</strong> Ang Kasunduang ito ay maaaring tapusin ng mas maaga sa termino nito kung may written agreement ang bawat partido. Dapat na magbigay agad ng NOTICE o PASABI ang VENDOR kung tatapusin na ang Kasunduang ito.</p>
+					<p><strong>15.</strong> Ang Kasunduang ito ay maagang matapos kapag may paglabag ang VENDOR sa kahit na aling alituntunin na nakasaad sa Kasunduang ito o anumang rules, regulations o policies na isinaad ng management ng MySeoul, Inc. habang nag-ooperate ang Tiangge</p>
+					<p><strong>16.</strong> Sa araw ng pagtatapos ng Kasunduan sa kahit na anong kadahilanan o walang bagong kasunduan sa pag-upa, ang OWNER ay may karapatan na kunin ang stall kahit walang pahintulot ng VENDOR o PASABI o NOTICE sa kanya ang OWNER. May karapatan din na ipagbawal ang pagpasok ng VENDOR o sinumang kinatawan/katiwala nito sa Tiangge ng walang pahintulot mula sa OWNER.  Kasama dito, karapatan din ng OWNER na iligpit o itago ang ano mang panindang naiwan sa stall na inupahan ng VENDOR.  Maaaring kunin ng VENDOR ang mga naitagong paninda matapos bayaran sa OWNER ang halaga ng kanyang nagastos sa pagpapatago at pagliligpit ng paninda pati na ang halaga ng pagkakautang ng VENDOR sa OWNER, kung mayroon man.  Pagkalipas ng sampung (10) araw mula sa pagtatapos ng kasunduang ito, kung hindi pa rin kinukuha o tinutubos ng VENDOR ang mga panindang itinago o iniligpit ng OWNER, ito ay nangangahulugan na wala na itong balak pang kunin ng VENDOR. </p>
+					<p><strong>17.</strong> Ang OWNER ay magbibigay ng clearance sa VENDOR kapag nabayaran na lahat ng VENDOR ang dapat bayaran sa OWNER.  Ito ay magsisilbing gate pass ng VENDOR sa pagkuha o paglabas ng mga produkto o paninda nito na galling sa stall na inupahan niya.</p>
+					<p><strong>18.</strong> Ang hindi striktong pagpapatupad ng OWNER sa alintunin at kondisyon ng Kasunduang ito ay hindi nangangahulugan na pagpapabaya o pagpapaubaya sa ibang alituntunin at kondisyon ng Kasunduang ito. Ang “pag-ubaya” ay magiging isang pagpalit ng Kasunduan, kung ito ay nakasaad o nakasulat sa isang dokumento. </p>
+					<p></p>
+				
+				
+				</div>
                 <div style="margin-top:5%;">
+					<p style="text-indent:50px;">IN WITNESS WHEREOF, we hereby set our hands, this <u>{{date('jS',strtotime($data['contract']->contractStart))}}</u> day of <u>{{date('F',strtotime($data['contract']->contractStart))}}</u> <u>{{date('Y',strtotime($data['contract']->contractStart))}}</u> in _____________________, Philippines. </p>
                     <p>
                         <center>
-                            <input type="text" value="Benito Roger L. De Joya" style="border:transparent;border-bottom:2px solid black;width:160px;background-color:transparent margin-right:28%;text-align: center;" disabled>
-                            <input type="text" value="{{ $data['contract']->StallHolder->stallHFName. ' '. $data['contract']->StallHolder->stallHMName[0]. '. '. $data['contract']->StallHolder->stallHLName}}" style="border:transparent;border-bottom:2px solid black;width:160px;background-color:transparent;margin-left:28%; text-align: center;" disabled> </center>
+                            <input type="text" value="Benito Roger L. De Joya" style="border:transparent;border-bottom:2px solid black;width:160px;background-color:transparent margin-right:28%;text-align: center;" disabled></center>
                     </p>
                     <p>
                         <center>

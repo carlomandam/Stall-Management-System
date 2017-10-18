@@ -3,8 +3,12 @@
 namespace App\Http\Middleware;
 
 use Closure;
+<<<<<<< Updated upstream
 use Auth; 
 
+=======
+use Auth;
+>>>>>>> Stashed changes
 class EmployeeMiddleware
 {
     /**
@@ -14,7 +18,9 @@ class EmployeeMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
+
     public function handle($request, Closure $next,$guard = null)
+
     {
 
 

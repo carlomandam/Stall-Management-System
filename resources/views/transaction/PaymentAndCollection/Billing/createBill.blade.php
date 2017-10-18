@@ -278,7 +278,6 @@
             , changeMonth: true
             , changeYear: true
             , autoclose: true
-            , startDate: "01/01/2017"
             , todayHighlight: true
             , orientation: 'bottom'
             , format: 'mm/dd/yyyy'
@@ -293,7 +292,6 @@
             , changeMonth: true
             , changeYear: true
             , autoclose: true
-            , startDate: "dateToday"
             , todayHighlight: true
             , orientation: 'bottom'
             , format: 'mm/dd/yyyy'

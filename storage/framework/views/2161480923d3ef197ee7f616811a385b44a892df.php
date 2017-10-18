@@ -28,7 +28,13 @@
     <div class="col-md-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title"><b>Contract Details</b></h3> </div>
+                <h3 class="box-title"><b>Contract Details</b></h3>
+                <?php if($contract->NextContract != null): ?>
+                <div class="pull-right" style="display:inline !important;">
+                    <h4 style="display:inline !important;">Note: This contract is renewed.</h4> 
+                </div>
+                <?php endif; ?>
+            </div>
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -83,9 +89,9 @@
                     </div>
                     <div class="col-md-12">
                         <div class="pull-right">
-                            <button type="button" class="btn btn-danger btn-flat">Terminate</button>
-                            <?php if($contract->contractEnd <= date("Y-m-d", strtotime("+1 month"))): ?>
-                            <button type="button" class="btn btn-primary btn-flat tablinks">Extend</button>
+                            <button type="button" class="btn btn-danger btn-flat" data-toggle="modal" data-target="#confirm-terminate">Terminate</button>
+                            <?php if($contract->contractEnd <= date("Y-m-d", strtotime("+1 month")) && $contract->NextContract == null): ?>
+                            <button type="button" class="btn btn-primary btn-flat tablinks" data-toggle="modal" data-target="#confirm-extend">Extend</button>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -93,7 +99,49 @@
             </div>
         </div>
     </div>
-</div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+</div>
+<div class="modal fade" id="confirm-extend" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Renew Contract</h4>
+            </div>
+        
+            <div class="modal-body">
+                <p>Are you sure you want to renew this contract?</p>
+                <p class="debug-url"></p>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-success btn-ok" onclick='renewContract()' data-dismiss="modal">Proceed</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm-terminate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Terminate Contract</h4>
+            </div>
+        
+            <div class="modal-body">
+                <p>Are you sure you want to terminate this contract?</p>
+                <p>Note: <span class="required">THIS PROCEDURE IS IRREVERSIBLE</span></p>
+                <p class="debug-url"></p>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger btn-ok" onclick='terminateContract()' data-dismiss="modal">Proceed</a>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
 <script type="text/javascript" src="<?php echo e(URL::asset('js/multipleAddinArea.js')); ?>"></script>
 <script type="text/javascript" src="<?php echo e(URL::asset('js/icheck.js')); ?>">
 </script>
@@ -164,6 +212,39 @@
                 $(this).addClass('active');
             })
         });
+    }
+
+    function renewContract(){
+        var form = jQuery('<form>',{
+                "action":"/RenewContract"
+                , "method": "POST"
+            }).append(jQuery('<input>',{
+                "name":"_token"
+                , "value": "<?php echo e(csrf_token()); ?>"
+                , "type": "hidden"   
+            })).append(jQuery('<input>',{
+                "name":"id"
+                , "value": "<?php echo e($contract->contractID); ?>"
+                , "type": "hidden"   
+            }));
+        form.appendTo("body");
+        form.submit();
+    }
+    function terminateContract(){
+        var form = jQuery('<form>',{
+                "action":"/rejectRental"
+                , "method": "POST"
+            }).append(jQuery('<input>',{
+                "name":"_token"
+                , "value": "<?php echo e(csrf_token()); ?>"
+                , "type": "hidden"   
+            })).append(jQuery('<input>',{
+                "name":"id"
+                , "value": "<?php echo e($contract->contractID); ?>"
+                , "type": "hidden"   
+            }));
+        form.appendTo("body");
+        form.submit();
     }
 </script>
 <script src="<?php echo e(URL::asset('js/jquery.inputmask.bundle.js')); ?>"></script>

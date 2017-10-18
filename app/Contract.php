@@ -48,6 +48,10 @@ class Contract extends Model
         return $this->belongsTo('App\Contract','prevContractID');
     }
 
+    public function NextContract(){
+        return $this->hasOne('App\Contract','prevContractID');
+    }
+
     public function Collection(){
         return $this->hasMany('App\Collection','contractID');
     }

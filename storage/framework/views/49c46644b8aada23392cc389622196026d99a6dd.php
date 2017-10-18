@@ -23,25 +23,28 @@
 						
                                 <center><p>- and -</p></center>
                             <p>
-                                <center>_______________________________, nasa wastong gulang, Filipino, may-asawa/walang asawa at naninirahan sa ______________________________, simula dito ay tinutukoy na VENDOR;</center>
+                                <center><u><?php echo e(\Illuminate\Support\Str::upper($data['contract']->StallHolder->stallHFName)); ?> <?php echo e(\Illuminate\Support\Str::upper($data['contract']->StallHolder->stallHMName)); ?> <?php echo e(\Illuminate\Support\Str::upper($data['contract']->StallHolder->stallHLName)); ?></u>, nasa wastong gulang, Filipino, may-asawa/walang asawa at naninirahan sa <u><?php echo e($data['contract']->StallHolder->stallHAddress); ?></u>, simula dito ay tinutukoy na VENDOR;</center>
                             </p>and
                             <p>
                                 <center>DATAPWA’T, ang OWNER ay may stalls na pinapaupahan sa Lot 4 Block 5 Manila East Road, Phase 1 Taytay, Rizal, at ang VENDOR na nagnanais na umupa ng isang stall ng OWNER ay naglalathala at sumasang-ayon na pumasok sa isang Kasunduan ng Pag-upa sa ilalim ng sumusunod na mga alituntunin at kondisyon:</center>
 							</p>
                     <br> </div>
+                    <?php
+                        $prate = $data['contract']->Stall->StallType->StallRate->dblRate * ($data['contract']->Stall->StallType->StallRate->dblPeakAdditional / 100);
+                        $rate = $data['contract']->Stall->StallType->StallRate->dblRate;
+                    ?>
                 <div style="margin-left:10%;margin-right:10%;">
-                    <p><strong>1.</strong>	Na ang stall na uupahan ng VENDOR ay Stall No. _____ ayon sa stall plan na nakalakip dito bilang “ANNEX A”. </p>
+                    <p><strong>1.</strong>	Na ang stall na uupahan ng VENDOR ay Stall No. <u><?php echo e($data['contract']->stallID); ?></u> ayon sa stall plan na nakalakip dito bilang “<u><?php echo e($data['contract']->Stall->Floor->Building->bldgName); ?></u>”. </p>
                     
-                    <p><strong>2.</strong>	Ang Stall no. _____ na uupahan ng VENDOR ay ______sq. m. ang laki ayon sa stall plan na minarkahan ng OWNER. </p>
+                    <p><strong>2.</strong>	Ang Stall no. <u><?php echo e($data['contract']->stallID); ?></u> na uupahan ng VENDOR ay <u><?php echo e($data['contract']->Stall->StallType->StallTypeSize->stypeArea); ?></u>sq. m. ang laki ayon sa stall plan na minarkahan ng OWNER. </p>
                     
-                    <p><strong>3.</strong>	Ang halaga ng upa ng stall ay Php700.00 kada linggo na babayaran ng VENDOR sa OWNER bawat araw ng pagtitinda. Magagamit o mababawasan and deposito sa anumang pagka-antala sa pagbabayad ng VENDOR ng upa.</p>
+                    <p><strong>3.</strong>	Ang halaga ng upa ng stall ay <u>Php <?php echo e(number_format($data['contract']->Stall->StallType->StallRate->dblRate,2,'.',',')); ?></u> na mayroong karagdagang <u><?php echo e(($data['contract']->Stall->StallType->StallRate->peakRateType == 1) ? 'Php '.number_format($data['contract']->Stall->StallType->StallRate->dblPeakAdditional,2,'.',',') : $data['contract']->Stall->StallType->StallRate->dblPeakAdditional.'% (Php '.number_format(($data['contract']->Stall->StallType->StallRate->dblRate * ($data['contract']->Stall->StallType->StallRate->dblPeakAdditional / 100)),2,'.',',').')'); ?></u> tuwing <i>"Peak Days"</i> o <i>"Holidays"</i>, na babayaran ng VENDOR sa OWNER bawat araw ng pagtitinda. Magagamit o mababawasan and deposito sa anumang pagka-antala sa pagbabayad ng VENDOR ng upa.</p>
                     
                     <p><strong>4.</strong>  Ang termino ng pag-gamit sa stall ay hanggang isang taon na magsisimula sa araw ng pagbabayad ng membership/registration fee at automatikong magtatapos kahit walang “NOTICE” o “PASABI” ang OWNER.  Matutuloy lamang ang pag-upa sa stall sa pamamagitan lamang ng pagbabayad ng renewal ng registration ng VENDOR. </p>
                     
-					<p style="text-indent:50px;"><b>INITIAL PAYMENT: P5000.00.</b></p>
-					<p style="text-indent:50px;">P1,000.00: Annual Membership/Registration Fee (Renewable Annually)</p>
-					<p style="text-indent:50px;">P4,000.00: Deposit (Consumable / Non-Refundable)</p>
-					 
+					<p style="text-indent:50px;"><b>INITIAL PAYMENT: Php <?php echo e(number_format($data['main'] + $data['sec'],2,'.',',')); ?>.</b></p>
+					<p style="text-indent:50px;">Php <?php echo e(number_format($data['main'],2,'.',',')); ?>: Maintenance Fee (Paid Annually)</p>
+					<p style="text-indent:50px;">Php <?php echo e(number_format($data['sec'],2,'.',',')); ?>: Security Deposit (Consumable / Non-Refundable)</p>
 					 <style>
                             table {
                                 font-family: arial, sans-serif;
@@ -56,27 +59,58 @@
                                 padding: 8px;
                             }
                         </style>
-                            <table>
+                            <table>                                
                                 <tr>
                                     <th>Market Days</th>
-                                    <th>TIME</th>
                                     <th>RATES</th>
                                 </tr>
+                                <?php if(in_array('sun',$data['mdays'])): ?>
                                 <tr>
-                                    <td>Monday </td>
-                                    <td>3:00 PM to  </td>
-                                    <td> </td>
+                                    <td>Sunday</td>
+                                    <td>Php <?php echo e((in_array('sun',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')); ?></td>
                                 </tr>
-								<tr>
-                                    <td>Tuesday </td>
-                                    <td>3:00 PM</td>
-                                    <td> </td>
+                                <?php endif; ?>
+								<?php if(in_array('mon',$data['mdays'])): ?>
+                                <tr>
+                                    <td>Monday</td>
+                                    <td>Php <?php echo e((in_array('mon',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')); ?></td>
                                 </tr>
+                                <?php endif; ?>
+                                <?php if(in_array('tue',$data['mdays'])): ?>
+                                <tr>
+                                    <td>Tuesday</td>
+                                    <td>Php <?php echo e((in_array('tue',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')); ?></td>
+                                </tr>
+                                <?php endif; ?>
+                                <?php if(in_array('wed',$data['mdays'])): ?>
+                                <tr>
+                                    <td>Wednesday</td>
+                                    <td>Php <?php echo e((in_array('wed',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')); ?></td>
+                                </tr>
+                                <?php endif; ?>
+                                <?php if(in_array('thu',$data['mdays'])): ?>
+                                <tr>
+                                    <td>Thursday</td>
+                                    <td>Php <?php echo e((in_array('thu',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')); ?></td>
+                                </tr>
+                                <?php endif; ?>
+                                <?php if(in_array('fri',$data['mdays'])): ?>
+                                <tr>
+                                    <td>Friday</td>
+                                    <td>Php <?php echo e((in_array('fri',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')); ?></td>
+                                </tr>
+                                <?php endif; ?>
+                                <?php if(in_array('sat',$data['mdays'])): ?>
+                                <tr>
+                                    <td>Saturday</td>
+                                    <td>Php <?php echo e((in_array('sat',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')); ?></td>
+                                </tr>
+                                <?php endif; ?>
                                 <p></p>
                             </table>
 					
 					
-                    <p><strong>5.</strong>	Ang VENDOR ay magbabayad ng P4,000.00 bilang security deposit para sa anumang pinsala (damages) sa stall na maaaring mangyari habang inuupahan at inuukupahan ito ng VENDOR.  Ang halagang ito ay dapat na i-replenish ng VENDOR kung sakaling magamit sa pagpapagawa ng anumang pinsala sa stall.  </p>
+                    <p><strong>5.</strong>	Ang VENDOR ay magbabayad ng <u>Php <?php echo e(number_format($data['sec'],2,'.',',')); ?></u> bilang security deposit para sa anumang pinsala (damages) sa stall na maaaring mangyari habang inuupahan at inuukupahan ito ng VENDOR.  Ang halagang ito ay dapat na i-replenish ng VENDOR kung sakaling magamit sa pagpapagawa ng anumang pinsala sa stall.  </p>
                     
                     <p><strong>6.</strong>	Ang VENDOR ay hindi dapat mag-kabit ng linya ng kuryente o outlets, plumbing, drainage, o kahit anong structure sa stall na inuupahan ng walang written consent ang OWNER.  Ang paglabag dito ay nangangahulugan ng maagang pagtatapos ng kasunduan ng pag-upa, forfeiture ng security deposit, at pagbabayad ng halaga sa mga repairs. </p>
                     <p>Ang VENDOR ay maaaring humingi ng pahintulot sa OWNER sa pagpapa-aayos ng structure at utilities na naayon sa written approval mula sa OWNER.  Ang lahat ng halaga na magagastos sa pagpapagawa o pagpapa-ayos ay manggagaling lamang sa VENDOR.</p>
@@ -104,10 +138,10 @@
 				
 				</div>
                 <div style="margin-top:5%;">
-					<p style="text-indent:50px;">IN WITNESS WHEREOF, we hereby set our hands, this ____ day of _____________ 201__ in _____________________, Philippines. </p>
+					<p style="text-indent:50px;">IN WITNESS WHEREOF, we hereby set our hands, this <u><?php echo e(date('jS',strtotime($data['contract']->contractStart))); ?></u> day of <u><?php echo e(date('F',strtotime($data['contract']->contractStart))); ?></u> <u><?php echo e(date('Y',strtotime($data['contract']->contractStart))); ?></u> in _____________________, Philippines. </p>
                     <p>
                         <center>
-                            <input type="text" value="Benito Roger L. De Joya" style="border:transparent;border-bottom:2px solid black;width:160px;background-color:transparent margin-right:28%;text-align: center;" disabled>
+                            <input type="text" value="Benito Roger L. De Joya" style="border:transparent;border-bottom:2px solid black;width:160px;background-color:transparent margin-right:28%;text-align: center;" disabled></center>
                     </p>
                     <p>
                         <center>

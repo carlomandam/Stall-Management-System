@@ -22,8 +22,7 @@ Route::post('/login', 'Auth\AdminController@login')->name('login.submit');
 Route::post('/logout', 'Auth\AdminController@logout');
 
 Route::group(['middleware' => 'auth'], function(){
-	
-	
+
 Route::get('/Dashboard','dashboardController@index');
 Route::get('/UpdateRegistration/goToPayment/{id}','ApplicationController@goToPayment');
 Route::get('/Registration/{stallid}','ApplicationController@create');
@@ -124,6 +123,7 @@ Route::get('/requirements/show/{id}', 'RequirementsController@show');
 Route::get('/requirementsArchive', 'RequirementsController@archive');
 Route::PUT('/requirements/restore/{id}', 'RequirementsController@restore');
 Route::get('/pdfview/{rentalid}','PDFController@pdfcreate');
+Route::get('/receipt/{id}','PDFController@receipt');
 Route::post('/getVendorInfo', 'ApplicationController@getVendorInfo');
 Route::get('/getVendor', 'ApplicationController@getVendor');
 //Holiday
@@ -160,6 +160,10 @@ Route::get('/StallHolderList','ManageContractsController@stallHListIndex');
 Route::get('/ContractList','ManageContractsController@contractListIndex');
 Route::get('/getStallList','ManageContractsController@getStallList');
 Route::get('/getAvailableStalls','ManageContractsController@getAvailableStalls');
+
+Route::post('/ChangeReading','ManageContractsController@ChangeReading');
+Route::post('/UpdateReading','ManageContractsController@UpdateReading');
+Route::post('/RenewContract','ManageContractsController@RenewContract');
 
 ///////////////////PAYMENT AND COLLECTIONS///////////////
 Route::get('/Payment','PaymentController@index');

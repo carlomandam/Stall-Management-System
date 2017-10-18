@@ -19,7 +19,7 @@ class StallHolder extends Model
     
     public function ActiveContracts()
     {
-        return $this->hasMany('App\Contract','stallHID')->whereNotNull('contractStart');
+        return $this->hasMany('App\Contract','stallHID')->whereNotNull('contractStart')->whereNotNull('contractEnd')->where('contractEnd','>=',date("Y-m-d"))->where('contractStart','<=',date("Y-m-d"));
     }
     
     public function ContactNo()

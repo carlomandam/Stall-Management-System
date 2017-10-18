@@ -102,16 +102,6 @@ class PaymentController extends Controller{
                 $rejects = Contract::where('stallID',$contract->stallID)->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd')->where('contractID','!=',$_POST['contract'])->delete();
             }
 
-            if(isset($_POST['renew'])){
-                $renew = InitFeeDetail::find($_POST['renew']);
-                $renew->transactionID = $transaction->transactionID;
-                $contract = $renew->Contract->contractID;
-                $renew->save();
-                $contract = Contract::find($contract);
-                $contract->contractEnd = date('Y-m-d',strtotime($contract->contractStart . "+1 year"));
-                $contract->save();
-            }
-
             if(isset($_POST['unpaid'])){
                 foreach ($_POST['unpaid'] as $i) {
                     $pc = new Payment_Collection;
@@ -138,10 +128,6 @@ class PaymentController extends Controller{
                     $init = InitFeeDetail::findMany($_POST['init']);
                 }
 
-                if(isset($_POST['renew'])){
-                    $renew = InitFeeDetail::find($_POST['renew']);
-                }
-
                 if(isset($_POST['unpaid'])){
                     $pc = CollectionDetails::findMany($_POST['unpaid']);
                     $pc = PaymentController::getRate($pc , $contract->StallRate->stallRateID);
@@ -150,8 +136,8 @@ class PaymentController extends Controller{
                 if(isset($_POST['bills'])){
                     $bill = Billing_Details::with("Billing")->findMany($_POST['bills']);
                 }
-                
-                return view('transaction/PaymentAndCollection/PaymentSuccess',compact('bill','pc','init','contract','renew','transaction'));
+
+                return view('transaction/PaymentAndCollection/PaymentSuccess',compact('bill','pc','init','contract'));
             }
         }
     }
@@ -161,7 +147,7 @@ class PaymentController extends Controller{
         $contractIDs = [];
         $dates = [];
         $recordCtr = 0;
-        $stalls =DB::select("Select stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHLName) as tenantName, contractID as contractID, contractStart from tblcontractInfo left join tblstallholder as stallH on stallH.stallHID = tblcontractInfo.stallHID where tblcontractInfo.deleted_at IS NULL && tblcontractInfo.contractEnd >= curdate() && contractStart <= curdate()");
+        $stalls =DB::select("Select stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHLName) as tenantName, contractID as contractID from tblcontractInfo left join tblstallholder as stallH on stallH.stallHID = tblcontractInfo.stallHID where tblcontractInfo.deleted_at IS NULL && tblcontractInfo.contractEnd >= ".date("Y-m-d"));
    
         $collectionStat = DB::select("select collect, reminder,warning, tblutilities.lock as lockstat, terminate FROM `tblutilities` WHERE utilitiesID = 'util_collection_status'");
 
@@ -269,15 +255,6 @@ class PaymentController extends Controller{
         ->where('utilitiesID','util_market_days') 
         ->select('utilitiesDesc')
         ->get();
-        $getHolidays = DB::select("select CONCAT(year(curdate()),'-',LPAD(holi.month,2,'00'),'-',LPAD(holi.day,2,'00')) as holidate, holi.Name as name from tblholiday as holi");
-        $holidays[] = array();
-        if(count($getHolidays) > 0){
-            foreach($getHolidays as $holi){
-                $holi = get_object_vars($holi);
-                $holidays[] = $holi['holidate'];
-                $holinames[] = $holi['name'];
-            }
-        }
 
         $marketDays = explode(",",$getMarketDays[0]->utilitiesDesc);
         $peakDays = explode(",",$getPeakDays[0]->utilitiesDesc);
@@ -294,7 +271,7 @@ class PaymentController extends Controller{
         $collection = array();
 
         foreach ($dates as $date) {
-            if(in_array(Carbon::parse($date->collectDate)->dayOfWeek, $peakDays) && in_array(Carbon::parse($date->collectDate)->dayOfWeek, $marketDays) || in_array($date, $holidays)){
+            if(in_array(Carbon::parse($date->collectDate)->dayOfWeek, $peakDays) && in_array(Carbon::parse($date->collectDate)->dayOfWeek, $marketDays)){
                 $collection[] = array('date' => $date->collectDate, 'amount' => number_format($peakDaysRate),'detID' => $date->detID);
             }
             else if(in_array(Carbon::parse($date->collectDate)->dayOfWeek, $marketDays)){
@@ -423,6 +400,7 @@ class PaymentController extends Controller{
         $dateFrom = date('Y-m-d +1 days');
         $unpaidCollections = null;
         $bills = null;
+
         if($contract->contractStart != null && $contract->contractEnd != null){
             $lastCollect = $this::checkPrevCollection($id);
             $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionDetID as detID, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$id' ORDER BY det.collectDate ASC");
@@ -612,7 +590,6 @@ class PaymentController extends Controller{
          $totalAmt = 0;
 
          $stallRateID = Contract::find($id)->first();
-         $tenantPaymentIDs = null;
          $tenantPaymentIDs = DB::select("select distinct payment.paymentID as paymentID, payment.paymentDate as paidDate,
             payment.paidAmt as paidAmt, transactionDet.transactionID as transacID
             FROM tblpayment as payment 
@@ -653,16 +630,21 @@ class PaymentController extends Controller{
             $data[$ctr]["paymentDate"] =$arrayDates[$ctr];
             $data[$ctr]["totalAmt"] ='Php ' .number_format($arrayAmt[$ctr],2);
             $data[$ctr]["balance"] = 'Php ' .number_format(($arrayTotalAmt[$ctr] - $arrayAmt[$ctr]),2);
-            $data[$ctr]['actions'] = "<button  value = '".$array[$ctr]."' onclick = 'return getDetails(this.value);' class='btn btn-primary'><span class = 'fa fa-eye'></span></button>  <button  value = '".$array[$ctr]."' onclick = 'printReceipt(this.value)' class='btn btn-success'><span class = 'fa fa-print'></span></button>";
+            $data[$ctr]['actions'] = "<button  value = '".$array[$ctr]."' onclick = 'return getDetails(this.value);' class='btn btn-primary'><span class = 'fa fa-eye'></span></button>  <button  value = '".$array[$ctr]."' onclick = '' class='btn btn-success'><span class = 'fa fa-print'></span></button>";
             $ctr++;
           
 
         }
         if(count($data[0]) == 0){
-            $data = null;
+            echo '{
+                "sEcho": 1,
+                "iTotalRecords": "0",
+                "iTotalDisplayRecords": "0",
+            "aaData": []
+            }';
 
-            
-        }
+            return;
+        }else
         return $data;
 
     }

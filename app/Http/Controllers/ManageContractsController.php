@@ -10,7 +10,18 @@ use App\Submeter;
 use App\Contract;
 class ManageContractsController extends Controller
 {
-    //'
+    //
+    public function RenewContract(){
+        $prev = Contract::find($_POST['id']);
+        $new = new Contract;
+        $new->prevContractID = $prev->contractID; 
+        $new->stallHID = $prev->stallHID;
+        $new->stallID = $prev->stallID;
+        $new->stallRateID = $prev->stallRateID;
+        $new->businessName = $prev->businessName;
+        $new->contractStart = date("Y-m-d",strtotime($prev->contractEnd."+1 day"));
+        $new->save();
+    }
 
     public function ChangeReading(){
         $contract = Contract::find($_POST['id']);

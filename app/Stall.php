@@ -25,7 +25,7 @@ class Stall extends Model
     }
 
     public function CurrentTennant(){
-        return $this->hasOne('App\Contract','stallID')->where('contractStart','!=','NULL')->with('StallHolder');
+        return $this->hasOne('App\Contract','stallID')->whereNotNull('contractStart')->whereNotNull('contractEnd')->where('contractEnd','>=',date("Y-m-d"))->where('contractStart','<=',date("Y-m-d"))->with('StallHolder');
     }
     
     public function StallUtility(){

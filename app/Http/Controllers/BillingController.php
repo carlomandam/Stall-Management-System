@@ -17,7 +17,7 @@ use DB;
 class BillingController extends Controller{
 
     public function index(){
-      $stalls = Contract::with('PrevContract','Stall','StallHolder')->whereNotNull('contractStart')->whereNotNull('contractEnd')->get();
+      $stalls = Contract::with('PrevContract','Stall','StallHolder')->whereNotNull('contractStart')->whereNotNull('contractEnd')->where('contractEnd','>=',date("Y-m-d"))->where('contractStart','<=',date("Y-m-d"))->get();
     	return view('transaction/PaymentAndCollection/Billing.index',compact('stalls'));
     }
 
