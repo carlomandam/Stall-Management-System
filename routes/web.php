@@ -74,6 +74,10 @@ Route::get('/Charges', function () {
     return view('Maintenance.Maintenance_Charges');
 });
 
+Route::get('/yow', function () {
+    return view('transaction.PaymentAndCollection.PaymentSuccess');
+});
+
 //Building
 
 Route::post('/AddBuilding', 'BuildingController@addBuilding');
@@ -207,6 +211,7 @@ Route::get('/getPaymentStatus','PaymentController@getPaymentStatus');
 Route::get('/CheckBillingRecords','PaymentController@checkRecords');
 Route::get('/ViewPaymentDetails','PaymentController@getPaymentDetails');
 Route::post('/printReceipt/{id}','PaymentController@printReceipt');
+Route::post('/NewPaymentTransaction','PaymentController@newPaymentTransaction');
 ////////////////REQUESTS////////////
 Route::resource('/Requests', 'RequestController');
 Route::get("/Request/Current/{id}", 'RequestController@current');

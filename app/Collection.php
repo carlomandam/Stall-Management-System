@@ -28,8 +28,7 @@ class Collection extends Model
         return $this->hasMany('App\CollectionDetails','collectionID');
     }
 
-  
-
-
-   
+    public function TodayDet(){
+        return $this->hasOne('App\CollectionDetails','collectionID')->where('collectDate',date("Y-m-d"));
+    }
 }

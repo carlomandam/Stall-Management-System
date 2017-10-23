@@ -16,6 +16,7 @@ use App\Charge_Details;
 use App\Billing_Details;
 use App\InitFeeDetail;
 use App\Charges;
+use App\Transaction;
 use DateTime;
 use PDF;
 use PDFF;
@@ -25,10 +26,34 @@ use Carbon\Carbon;
 use DatePeriod;
 use DateInterval;
 class PaymentController extends Controller{
-   public function index(){   
+    public function newPaymentTransaction(){
+        $transaction = new Transaction;
+        $transaction->transactionDate = date('Y-m-d');
+        if($transaction->save()){
+            if(isset($_POST['init'])){
+                foreach ($_POST['init'] as $i) {
+                    $init = InitFeeDetail::find($i);
+                    $init->transactionID = $transaction->transactionID;
+                    $contract = $init->Contract->contractID;
+                    $init->save();
+                }
+                $contract = Contract::find($contract);
+                $contract->contractStart = date('Y-m-d');
+                $contract->contractEnd = date('Y-m-d',strtotime(date('Y-m-d') . "+1 year"));
+                $contract->save();
+            }
+            $payment = new Payment;
+            $payment->transactionID = $transaction->transactionID;
+            $payment->paidAmt = $_POST['amtReceived'];
+            $payment->paymentDate = date('Y-m-d');
+            $payment->save();
+        }
+    }
+
+    public function index(){
         $totalUnpaid =[[]];
 
-        $stalls =DB::select("Select stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHLName) as tenantName, contractID as contractID from tblcontractInfo left join tblstallholder as stallH on stallH.stallHID = tblcontractInfo.stallHID where tblcontractInfo.deleted_at IS NULL");
+        $stalls =DB::select("Select stallID as stallCode,CONCAT(stallH.stallHFName,' ',stallH.stallHLName) as tenantName, contractID as contractID from tblcontractInfo left join tblstallholder as stallH on stallH.stallHID = tblcontractInfo.stallHID where tblcontractInfo.deleted_at IS NULL && tblcontractInfo.contractEnd >= ".date("Y-m-d"));
 
         $getPeakDays = DB::table('tblUtilities as a')
         ->where('utilitiesID','util_peak_days') 
@@ -95,17 +120,17 @@ class PaymentController extends Controller{
             }
 
             if($lastValue != $unpaid->contractID){
-              $totalUnpaid[$ctr]["contractID"] = $lastValue;
-              $totalUnpaid[$ctr]["totalUnpaid"] = $totalAmt;
-              $totalAmt = 0;
-              $ctr++;
+                $totalUnpaid[$ctr]["contractID"] = $lastValue;
+                $totalUnpaid[$ctr]["totalUnpaid"] = $totalAmt;
+                $totalAmt = 0;
+                $ctr++;
             }
             
             $lastCtr++;
             $lastValue = $unpaid->contractID;
-        } 
             
-        $collectionStat = Utilities::find("util_collection_status");
+            $collectionStat = Utilities::find("util_collection_status");
+        }
           
         return view('transaction/PaymentAndCollection/finalPayment',compact('collectionStat','stalls'));
     }
@@ -193,72 +218,112 @@ class PaymentController extends Controller{
         ->get()[0]->max;
     
         $date = date('Y/m/d H:i:s');
-        $lastCollect = date('Y/m/d H:i:s',strtotime($lastCollect . "+1 days"));
-        $period = new DatePeriod(
-            new DateTime($lastCollect),
-            new DateInterval('P1D'),
-            new DateTime($date)
-        );
 
-        $array = array();
-        foreach( $period as $date){ 
-            $array[] = $date->format('Y-m-d');
+        $getMarketDays = DB::table('tblUtilities as a')
+        ->where('utilitiesID','util_market_days') 
+        ->select('utilitiesDesc')
+        ->get();
+
+        $marketDays = explode(",",$getMarketDays[0]->utilitiesDesc);
+
+        for($ctr = 0; $ctr < count($marketDays); $ctr++){
+              $marketDays[$ctr] = PaymentController::dateStrToInt($marketDays[$ctr]);
         }
-        
-        try{
-            DB::beginTransaction();
 
-            foreach($array as $i)
-            {   
+
+        if($lastCollect == null && !in_array($lastCollect, $marketDays)){
+            try{
+                DB::beginTransaction();
                 $newCollection = Collection::create([
                     'contractID' => $id
                 ]);
 
                 $newColDetails = CollectionDetails::create([
                     'collectionID' => $newCollection->collectionID,
-                    'collectDate' => $i
+                    'collectDate' => date("Y-m-d")
                 ]);
+                
+                DB::commit();
+            }
+            catch(\Exception $e){
+                DB::rollback();
+                $error = $e->getMessage();
+                return response()->json(['error'=>$error]);
+            }
+        }else if($lastCollect != date("Y-m-d")){
+            $lastCollect = date('Y/m/d H:i:s',strtotime($lastCollect."+1 days"));
+            $period = new DatePeriod(
+                new DateTime($lastCollect),
+                new DateInterval('P1D'),
+                new DateTime($date)
+            );
+
+            $array = array();
+            foreach( $period as $date){ 
+                $array[] = $date->format('Y-m-d');
             }
             
-            DB::commit();
-        }
-        catch(\Exception $e){
-            DB::rollback();
-            $error = $e->getMessage();
-            return response()->json(['error'=>$error]);
+            try{
+                DB::beginTransaction();
+
+                foreach($array as $i)
+                {   
+                    if(in_array(Carbon::parse($i)->dayOfWeek, $marketDays)){
+                        $newCollection = Collection::create([
+                            'contractID' => $id
+                        ]);
+    
+                        $newColDetails = CollectionDetails::create([
+                            'collectionID' => $newCollection->collectionID,
+                            'collectDate' => $i
+                        ]);
+                    }
+                }
+                
+                DB::commit();
+
+                return $lastCollect."else";
+            }
+            catch(\Exception $e){
+                DB::rollback();
+                $error = $e->getMessage();
+                return response()->json(['error'=>$error]);
+            }
         }
     }
 
     public function makePayment($id){
-        $lastCollect = $this::checkPrevCollection($id);
         $contract = Contract::find($id);
         $paymentLastID = Payment::whereRaw('paymentID = (select max(`paymentID`) from tblPayment)')->first();  
         $paymentLastID= count($paymentLastID) == 0 ? 1 : $paymentLastID->paymentID +1;
         $payID = 'PAYMENT-'.str_pad($paymentLastID, 5, '0', STR_PAD_LEFT);
 
-        $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblpayment_collection as payment on payment.collectionDetID = det.collectionDetID LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE payment.collectionDetID IS NULL and det.collectDate <= NOW() and collect.contractID = '$id' ORDER BY collect.contractID");
-        $dates =  array();
+        if($contract->contractStart != null && $contract->contractEnd != null){
+            $lastCollect = $this::checkPrevCollection($id);
+            $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$id' ORDER BY collect.contractID");
+            $dates =  array();
 
-        foreach ($unpaidCollections as $i) {
-            $dates[] = $i->collectDate;
+            foreach ($unpaidCollections as $i) {
+                $dates[] = $i->collectDate;
+            }
+
+            if(count($unpaidCollections) > 0)
+            {
+                $unpaidCollections = PaymentController::getRate($dates , $contract->StallRate->stallRateID);
+            }
+
+            $checkadvance = DB::table('tblcollection_details as details')
+            ->join('tblpayment_collection as payment','payment.collectionDetID','details.collectionDetID')
+            ->join('tblcollection as collect','collect.collectionID','details.collectionID')
+            ->where('collect.contractID','=',$id)
+            ->orderBy('details.collectDate','desc')
+            ->select('details.collectDate')
+            ->max('details.collectDate');
+
+            $dateFrom = count($checkadvance) > 0 ? Carbon::parse($checkadvance)->addDays(1)->format('Y-m-d') : Carbon::today()->addDays(1)->format('Y-m-d');
         }
-         if(count($unpaidCollections) > 0)
-        {
-        $unpaidCollections = PaymentController::getRate($dates , $contract->StallRate->stallRateID);
-        }
 
-        $checkadvance = DB::table('tblcollection_details as details')
-        ->join('tblpayment_collection as payment','payment.collectionDetID','details.collectionDetID')
-        ->join('tblcollection as collect','collect.collectionID','details.collectionID')
-        ->where('collect.contractID','=',$id)
-        ->orderBy('details.collectDate','desc')
-        ->select('details.collectDate')
-        ->max('details.collectDate');
-                                // ->get();
-
-        $dateFrom = count($checkadvance) > 0 ? Carbon::parse($checkadvance)->addDays(1)->format('Y-m-d') : Carbon::today()->addDays(1)->format('Y-m-d');
-       
-        return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','unpaid','dateFrom','unpaidCollections','lastCollect'));
+        return view('transaction/PaymentAndCollection/viewPayment',compact('contract','payID','unpaid','dateFrom','unpaidCollections','lastCollect','dates'));
     }
 
     public function createBill(){
@@ -382,58 +447,50 @@ class PaymentController extends Controller{
          $totalAmt = 0;
 
          $stallRateID = Contract::find($id)->first();
-         $tenantPaymentIDs = DB::select("select distinct payment.paymentID as paymentID, payment.paymentDate as paidDate, payment.paidAmt as paidAmt, transactionDet.transactionID as transacID
-                                        FROM tblpayment as payment 
-                                        LEFT JOIN tblpayment_transaction as transactionDet on transactionDet.transactionID = payment.transactionID
-                                        LEFT JOIN tblinitial_details as details on details.transactionID = transactionDet.transactionID
-                                        LEFT JOIN tblinitialfees as fees on fees.initID =  details.initID 
-                                        LEFT JOIN tblpayment_collection as payCollect on payCollect.transactionID = transactionDet.transactionID
-                                        LEFT JOIN tblcollection_details as collectDet on collectDet.collectionDetID = payCollect.collectionDetID
-                                        LEFT JOIN tblcollection as collection on collection.collectionID = collectDet.collectionID 
-                                        LEFT JOIN tblbilling_details as billdetails on billdetails.transactionID = transactionDet.transactionID
-                                        LEFT JOIN tblstallutilities_meterid as utilities on utilities.stallMeterID =  billdetails.stallMeterID
-                                        WHERE details.contractID = '$id' or collection.contractID = '$id' or utilities.contractID = '$id'");
-       
-        
+         $tenantPaymentIDs = DB::select("select distinct payment.paymentID as paymentID, payment.paymentDate as paidDate,
+            payment.paidAmt as paidAmt, transactionDet.transactionID as transacID
+            FROM tblpayment as payment 
+            LEFT JOIN tblpayment_transaction as transactionDet on transactionDet.transactionID = payment.transactionID
+            LEFT JOIN tblinitial_details as details on details.transactionID = transactionDet.transactionID
+            LEFT JOIN tblinitialfees as fees on fees.initID =  details.initID 
+            LEFT JOIN tblpayment_collection as payCollect on payCollect.transactionID = transactionDet.transactionID
+            LEFT JOIN tblcollection_details as collectDet on collectDet.collectionDetID = payCollect.collectionDetID
+            LEFT JOIN tblcollection as collection on collection.collectionID = collectDet.collectionID 
+            LEFT JOIN tblbilling_details as billdetails on billdetails.transactionID = transactionDet.transactionID
+            LEFT JOIN tblstallutilities_meterid as utilities on utilities.stallMeterID =  billdetails.stallMeterID
+            WHERE details.contractID = '$id' or collection.contractID = '$id' or utilities.contractID = '$id'");
 
-       foreach($tenantPaymentIDs as $tenantPaymentIDs){
-         $array[]= $tenantPaymentIDs->paymentID;
-         $arrayDates[] =  Carbon::parse($tenantPaymentIDs->paidDate)->format('F d,Y');   
-         $arrayAmt[] = $tenantPaymentIDs->paidAmt;
-         $arrayTransactionID[] = $tenantPaymentIDs->transacID;
+        foreach($tenantPaymentIDs as $tenantPaymentIDs){
+            $array[]= $tenantPaymentIDs->paymentID;
+            $arrayDates[] =  Carbon::parse($tenantPaymentIDs->paidDate)->format('F d,Y');   
+            $arrayAmt[] = $tenantPaymentIDs->paidAmt;
+            $arrayTransactionID[] = $tenantPaymentIDs->transacID;
         }
 
         $ctr = 0;
-        foreach($arrayTransactionID  as $transacID){
 
+        foreach($arrayTransactionID  as $transacID){
             $total = PaymentController::getTotalAmt($transacID);
             $arrayTotalAmt[$ctr] = $total;
-            $ctr++;
-
-          
+            $ctr++;          
         }
-        // return $arrayTotalAmt;
 
         $size = count($array);
         $ctr = 0;
-        while($ctr < $size)
-        {   
-             $data[$ctr]["paymentID"] = 'PAYMENT-'.str_pad($array[$ctr], 5, '0', STR_PAD_LEFT);
-             $data[$ctr]["paymentDate"] =$arrayDates[$ctr];
-             $data[$ctr]["totalAmt"] ='Php ' .number_format($arrayAmt[$ctr],2);
-             $data[$ctr]["balance"] = 'Php ' .number_format(($arrayTotalAmt[$ctr] - $arrayAmt[$ctr]),2);
-             $data[$ctr]['actions'] = "<button  value = '".$array[$ctr]."' onclick = 'return getDetails(this.value);' class='btn btn-primary'><span class = 'fa fa-eye'></span></button>  <button  value = '".$array[$ctr]."' onclick = '' class='btn btn-success'><span class = 'fa fa-print'></span></button>";
+
+        while($ctr < $size){   
+            $data[$ctr]["paymentID"] = 'PAYMENT-'.str_pad($array[$ctr], 5, '0', STR_PAD_LEFT);
+            $data[$ctr]["paymentDate"] =$arrayDates[$ctr];
+            $data[$ctr]["totalAmt"] ='Php ' .number_format($arrayAmt[$ctr],2);
+            $data[$ctr]["balance"] = 'Php ' .number_format(($arrayTotalAmt[$ctr] - $arrayAmt[$ctr]),2);
+            $data[$ctr]['actions'] = "<button  value = '".$array[$ctr]."' onclick = 'return getDetails(this.value);' class='btn btn-primary'><span class = 'fa fa-eye'></span></button>  <button  value = '".$array[$ctr]."' onclick = '' class='btn btn-success'><span class = 'fa fa-print'></span></button>";
             $ctr++;
           
 
         }
-
-       
-
-       
-         return $data;
-     
+        return $data; 
     }
+
     public function getPaymentDetails(Request $request){
         $paymentID = $request->paymentID;
         $data =[[]];
@@ -441,61 +498,61 @@ class PaymentController extends Controller{
         $transactionID = Payment::select('transactionID')
         ->where('paymentID',$paymentID)->get();
 
-     foreach($transactionID as $transactionID)
-     {
-        // $transactionID = get_object_vars($transactionID);
-        $collectedDates = DB::select("select  collectDet.collectDate as date,collection.contractID as contractID
-                            from tblPayment_Collection as payment 
-                            left JOIN tblCollection_Details as collectDet on collectDet.collectionDetID = payment.collectionDetID 
-                            left JOIN tblcollection as collection on collection.collectionID = collectDet.collectionID
-                            where payment.transactionID = '$transactionID->transactionID'
-                            order by collectDet.collectDate");
-    if(count($collectedDates) > 0){
-        foreach($collectedDates as $date){
-            $date = get_object_vars($date);
-            $dates[] = $date['date'];
-            $contractID = $date['contractID'];
-        }
-        if(count($dates)>0){
-            $stallRateID = Contract::where('contractID',$contractID)->pluck('stallRateID')->first();
-            
-            $amt = PaymentController::getRate($dates,$stallRateID);
-            foreach($amt as $amt){
-               
-                $data[$recordCtr]['description'] = "Rental Fee for " .Carbon::parse($amt['date'])->format("l")."( ". Carbon::parse($amt['date'])->format('F d,Y')." )";
-                $data[$recordCtr]['amount'] = number_format($amt['amount'],2);
-                $recordCtr++;
+        foreach($transactionID as $transactionID){
+            // $transactionID = get_object_vars($transactionID);
+            $collectedDates = DB::select("select  collectDet.collectDate as date,collection.contractID as contractID
+                from tblPayment_Collection as payment 
+                left JOIN tblCollection_Details as collectDet on collectDet.collectionDetID = payment.collectionDetID 
+                left JOIN tblcollection as collection on collection.collectionID = collectDet.collectionID
+                where payment.transactionID = '$transactionID->transactionID'
+                order by collectDet.collectDate");
+
+            if(count($collectedDates) > 0){
+                foreach($collectedDates as $date){
+                    $date = get_object_vars($date);
+                    $dates[] = $date['date'];
+                    $contractID = $date['contractID'];
+                }
+                if(count($dates)>0){
+                    $stallRateID = Contract::where('contractID',$contractID)->pluck('stallRateID')->first();
+                    
+                    $amt = PaymentController::getRate($dates,$stallRateID);
+                    foreach($amt as $amt){
+                       
+                        $data[$recordCtr]['description'] = "Rental Fee for " .Carbon::parse($amt['date'])->format("l")."( ". Carbon::parse($amt['date'])->format('F d,Y')." )";
+                        $data[$recordCtr]['amount'] = number_format($amt['amount'],2);
+                        $recordCtr++;
+                    }
+                }
+            }
+
+            $chargeAmount = Charge_Details::where('transactionID',$transactionID->transactionID)->get();
+            if(count($chargeAmount)>0){
+                foreach ($chargeAmount as $amt) {
+                    $data[$recordCtr]['description'] = $amt->Charges->chargeName;
+                    $data[$recordCtr]['amount'] = number_format($amt->Charges->chargeAmount,2);
+                    $recordCtr++;
+                }
+            }
+
+            $utilitiesAmt = Billing_Details::where('transactionID',$transactionID->transactionID)->get();
+            if(count($utilitiesAmt)>0){
+                foreach ($utilitiesAmt as $amt) {
+                    $data[$recordCtr]['description'] = "Utility Fee";
+                    $data[$recordCtr]['amount'] = number_format($amt->StallMeter->utilityAmt,2);
+                    $recordCtr++;
+                }
+            }
+
+            $initAmt = InitFeeDetail::where('transactionID',$transactionID->transactionID)->get();
+            if(count($initAmt)>0){
+                foreach ($initAmt as $amt) {
+                    $data[$recordCtr]['description'] = $amt->InitialFee->initDesc;
+                    $data[$recordCtr]['amount'] = number_format($amt->InitialFee->initAmt,2);
+                    $recordCtr++;
+                }
             }
         }
-    }
-        $chargeAmount = Charge_Details::where('transactionID',$transactionID->transactionID)->get();
-       if(count($chargeAmount)>0){
-        foreach ($chargeAmount as $amt) {
-            $data[$recordCtr]['description'] = $amt->Charges->chargeName;
-            $data[$recordCtr]['amount'] = number_format($amt->Charges->chargeAmount,2);
-            $recordCtr++;
-        }
-       }
-
-       $utilitiesAmt = Billing_Details::where('transactionID',$transactionID->transactionID)->get();
-       if(count($utilitiesAmt)>0){
-        foreach ($utilitiesAmt as $amt) {
-            $data[$recordCtr]['description'] = "Utility Fee";
-            $data[$recordCtr]['amount'] = number_format($amt->StallMeter->utilityAmt,2);
-            $recordCtr++;
-        }
-       }
-
-       $initAmt = InitFeeDetail::where('transactionID',$transactionID->transactionID)->get();
-       if(count($initAmt)>0){
-        foreach ($initAmt as $amt) {
-            $data[$recordCtr]['description'] = $amt->InitialFee->initDesc;
-            $data[$recordCtr]['amount'] = number_format($amt->InitialFee->initAmt,2);
-            $recordCtr++;
-        }
-
-       }
-   }
        return $data;
 
     }
