@@ -76,6 +76,9 @@
                             </div>
                             <div class="box box-primary">
                                 <div class="box box-body">
+                                    <div id="newEC" class="alert alert-danger print-error-msg" style="display:none">
+                                        <ul></ul>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="pull-right" style="margin-right:5%">
@@ -102,29 +105,30 @@
                                                     <li>
                                                         <div class="checkbox" style="display:inline !important">
                                                             <label>
-                                                                <input name="unpaid[]" style="width: 15px;height: 15px" type="checkbox" value=""> {{$u['date']}} - {{date("l",strtotime($u['date']))}} </label>
+                                                                <input name="unpaid[]" style="width: 15px;height: 15px" type="checkbox" value="{{$u['detID']}}"> {{$u['date']}} - {{date("l",strtotime($u['date']))}} </label>
                                                         </div>
                                                         <div class="pull-right" style="margin-right:5%;display:inline !important">₱ {{number_format($u['amount'],2,'.',',')}} </div>
                                                     </li>
                                                     <?php $total += $u['amount']; ?> @endforeach </ul>
                                             </div>
                                             <div class="col-md-12">
-                                                <div class="pull-right" style="margin-right:4%">
+                                                <div class="pull-right col-md-4" style="margin-right:4%">
                                                     <hr style="border-color:black">
-                                                    <label style="margin-right:10%">Total Amount:</label>&nbsp;₱ {{number_format($total,2,'.',',')}} </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="pull-right" style="margin-right:4%">
-                                                    <label style="margin-right:10%">Amount Received:</label>
-                                                    <input type="text" class="form-control" name="amtReceived" id="amtReceived"/>
+                                                    <div class="form-group">
+                                                    <label>Total Amount:</label>&nbsp;₱ {{number_format($total,2,'.',',')}}
+                                                    </div>
+                                                    <div class="form-group">
+                                                    <h5>Amount Received:
+                                                    <input type="text" class="form-control" name="amtReceived" id="amtReceived" style="width:50%;display:inline"/></h5>
+                                                    </div>
                                                 </div>
-                                            </div> @endif </div>
+                                            </div>@endif </div>
                                 </div>
                             </div>
                             <div class="pull-right">
                                 <div class="defaultBtnSet col-md-12">
                                     <button type="button" class="btn btn-danger btn-flat" id="voidbtn"> Void Items</button>
-                                    <buttom type="button" class="btn btn-primary btn-flat" id="paymentbtn"> <i class="fa fa-save"></i> Save</buttom>
+                                    <buttom type="submit" class="btn btn-primary btn-flat" id="paymentbtn"> <i class="fa fa-save"></i> Save</buttom>
                                 </div>
                                 <div class="voidBtnSet col-md-12" style="display:none">
                                     <button type="button" class="btn btn-danger btn-flat" id="cancelVoid">Cancel</button>
@@ -259,7 +263,7 @@
                                     </table>
                                 </div>
                                 <div class="defaultNewButton" id="backButton">
-                                    <button class="btn btn-primary btn-flat" id="backPH"><span class='fa fa-arrow-left'></span>&nbspBack to Payment History</button>
+                                    <button class="btn btn-primary btn-flat" id="backPH"><span class='fa fa-arrow-left'></span>&nbsp;Back to Payment History</button>
                                 </div>
                                 <div class="table-responsive" id="table2">
                                     <table id="tblviewDetails" class="table table-striped table-hover dt-responsive display nowrap" cellspacing="0" role="grid">
@@ -274,10 +278,6 @@
                                             </tr>
                                             <tr>
                                                 <th colspan="1" style="text-align: right; ">Total Amount Paid:</th>
-                                                <th></th>
-                                            </tr>
-                                            <tr>
-                                                <th colspan="1" style="text-align: right; ">Balance:</th>
                                                 <th></th>
                                             </tr>
                                         </tfoot>
@@ -299,14 +299,46 @@
     var sum = 0;
     var array = [];
     $(document).on('ready', function () {
+        $.validator.addMethod('hasToPay',function(){
+            $val = [];
+            $("input[name=unpaid\\[\\]]:checked").each(function(){
+                $val.push($(this).val());
+            });
+            if($val.length == 0)
+                return false;
+            else
+                return true;
+        });
+        $("#paymentForm").validate({
+            rules: {
+                amtReceived: {
+                    "hasToPay":true
+                    ,min:1
+                    ,number:true
+                }
+            }
+            , messages: {
+                amtReceived:{
+                    "hasToPay":"Nothing to pay"
+                }
+            }
+            , errorClass: "error-class"
+            , validClass: "valid-class"
+            , errorElement: "li"
+            , errorPlacement: function (error) {
+                error.appendTo('.print-error-msg ul');
+            }
+            , errorContainer: "#newEC"
+        });
         $("#paymentbtn").on("click", function () {
-            if (parseInt($("#amtReceived").val()) == 0 || $("#amtReceived").val() == '') {
+            /*if (parseInt($("#amtReceived").val()) == 0 || $("#amtReceived").val() == '') {
                 toastr.warning("Amount received can't be 0.00");
             }
-            else {
+            else {*/
                 $("#paymentForm").submit();
-            }
+            //}
         });
+        
         $("#voidbtn").on("click", function () {
             $('.defaultBtnSet').fadeOut(function () {
                 $('#initList li .cblable').addClass('checkbox');

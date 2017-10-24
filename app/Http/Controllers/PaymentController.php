@@ -26,6 +26,53 @@ use Carbon\Carbon;
 use DatePeriod;
 use DateInterval;
 class PaymentController extends Controller{
+    public function getHistRate($dates,$rateID){
+        $rates = StallRate::find($rateID);
+        $regularRate = $rates->dblRate;
+
+        if($rates->peakRateType == 1){
+            $peakDaysRate = $rates->dblPeakAdditional + $rates->dblRate;
+        }
+        else{
+            $peakDaysRate = ($regularRate)*(($rates->dblPeakAdditional / 100)) + $regularRate;
+        }
+
+        $getPeakDays = DB::table('tblUtilities as a')
+            ->where('utilitiesID','util_peak_days') 
+            ->select('utilitiesDesc')
+            ->get();
+
+        $getMarketDays = DB::table('tblUtilities as a')
+        ->where('utilitiesID','util_market_days') 
+        ->select('utilitiesDesc')
+        ->get();
+
+        $marketDays = explode(",",$getMarketDays[0]->utilitiesDesc);
+        $peakDays = explode(",",$getPeakDays[0]->utilitiesDesc);
+        //$holidays = Holiday::all();
+
+        for($ctr = 0; $ctr < count($peakDays); $ctr++){ 
+              $peakDays[$ctr] = PaymentController::dateStrToInt($peakDays[$ctr]);
+        }
+
+        for($ctr = 0; $ctr < count($marketDays); $ctr++){
+              $marketDays[$ctr] = PaymentController::dateStrToInt($marketDays[$ctr]);
+        }
+
+        $collection = array();
+
+        foreach ($dates as $date) {
+            if(in_array(Carbon::parse($date)->dayOfWeek, $peakDays) && in_array(Carbon::parse($date)->dayOfWeek, $marketDays)){
+                $collection[] = array('date' => $date, 'amount' => number_format($peakDaysRate));
+            }
+            else if(in_array(Carbon::parse($date)->dayOfWeek, $marketDays)){
+                $collection[] = array('date' => $date, 'amount' => number_format($regularRate));
+            }
+        }
+
+        return $collection;
+    }
+
     public function newPaymentTransaction(){
         $transaction = new Transaction;
         $transaction->transactionDate = date('Y-m-d');
@@ -41,6 +88,15 @@ class PaymentController extends Controller{
                 $contract->contractStart = date('Y-m-d');
                 $contract->contractEnd = date('Y-m-d',strtotime(date('Y-m-d') . "+1 year"));
                 $contract->save();
+            }
+
+            if(isset($_POST['unpaid'])){
+                foreach ($_POST['unpaid'] as $i) {
+                    $pc = new Payment_Collection;
+                    $pc->transactionID = $transaction->transactionID;
+                    $pc->collectionDetID = $i;
+                    $pc->save();
+                }
             }
             $payment = new Payment;
             $payment->transactionID = $transaction->transactionID;
@@ -171,11 +227,11 @@ class PaymentController extends Controller{
         $collection = array();
 
         foreach ($dates as $date) {
-            if(in_array(Carbon::parse($date)->dayOfWeek, $peakDays) && in_array(Carbon::parse($date)->dayOfWeek, $marketDays)){
-                $collection[] = array('date' => $date, 'amount' => number_format($peakDaysRate));
+            if(in_array(Carbon::parse($date->collectDate)->dayOfWeek, $peakDays) && in_array(Carbon::parse($date->collectDate)->dayOfWeek, $marketDays)){
+                $collection[] = array('date' => $date->collectDate, 'amount' => number_format($peakDaysRate),'detID' => $date->detID);
             }
-            else if(in_array(Carbon::parse($date)->dayOfWeek, $marketDays)){
-                $collection[] = array('date' => $date, 'amount' => number_format($regularRate));
+            else if(in_array(Carbon::parse($date->collectDate)->dayOfWeek, $marketDays)){
+                $collection[] = array('date' => $date->collectDate, 'amount' => number_format($regularRate),'detID' => $date->detID);
             }
         }
 
@@ -300,16 +356,11 @@ class PaymentController extends Controller{
 
         if($contract->contractStart != null && $contract->contractEnd != null){
             $lastCollect = $this::checkPrevCollection($id);
-            $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$id' ORDER BY collect.contractID");
+            $unpaidCollections = DB::select("Select det.collectDate as collectDate, det.collectionDetID as detID, det.collectionID as collectionID,collect.contractID as contractID  FROM tblcollection_details as det LEFT JOIN tblcollection as collect on collect.collectionID = det.collectionID WHERE NOT EXISTS( SELECT * FROM tblpayment_collection as payment WHERE payment.collectionDetID = det.collectionDetID) AND det.collectDate <= NOW() and collect.contractID = '$id' ORDER BY det.collectDate ASC");
             $dates =  array();
 
-            foreach ($unpaidCollections as $i) {
-                $dates[] = $i->collectDate;
-            }
-
-            if(count($unpaidCollections) > 0)
-            {
-                $unpaidCollections = PaymentController::getRate($dates , $contract->StallRate->stallRateID);
+            if(count($unpaidCollections) > 0){
+                $unpaidCollections = PaymentController::getRate($unpaidCollections , $contract->StallRate->stallRateID);
             }
 
             $checkadvance = DB::table('tblcollection_details as details')
@@ -500,12 +551,12 @@ class PaymentController extends Controller{
 
         foreach($transactionID as $transactionID){
             // $transactionID = get_object_vars($transactionID);
-            $collectedDates = DB::select("select  collectDet.collectDate as date,collection.contractID as contractID
+            $collectedDates = DB::select("select collectDet.collectDate as date,collection.contractID as contractID
                 from tblPayment_Collection as payment 
                 left JOIN tblCollection_Details as collectDet on collectDet.collectionDetID = payment.collectionDetID 
                 left JOIN tblcollection as collection on collection.collectionID = collectDet.collectionID
                 where payment.transactionID = '$transactionID->transactionID'
-                order by collectDet.collectDate");
+                ORDER BY collectDet.collectDate ASC");
 
             if(count($collectedDates) > 0){
                 foreach($collectedDates as $date){
@@ -516,7 +567,7 @@ class PaymentController extends Controller{
                 if(count($dates)>0){
                     $stallRateID = Contract::where('contractID',$contractID)->pluck('stallRateID')->first();
                     
-                    $amt = PaymentController::getRate($dates,$stallRateID);
+                    $amt = PaymentController::getHistRate($dates,$stallRateID);
                     foreach($amt as $amt){
                        
                         $data[$recordCtr]['description'] = "Rental Fee for " .Carbon::parse($amt['date'])->format("l")."( ". Carbon::parse($amt['date'])->format('F d,Y')." )";
@@ -578,7 +629,7 @@ class PaymentController extends Controller{
             $collectionDetID = Payment_Collection::where('transactionID',$id)->pluck('collectionDetID')->first();
             $stallRateID = CollectionDetails::find($collectionDetID);
 
-            $returnedAmt = PaymentController::getRate($dates,$stallRateID->Collection->Contract->stallRateID);
+            $returnedAmt = PaymentController::getHistRate($dates,$stallRateID->Collection->Contract->stallRateID);
             if(count($returnedAmt) > 0){
                 foreach($returnedAmt as $amt){
                     $total += $amt['amount'];
