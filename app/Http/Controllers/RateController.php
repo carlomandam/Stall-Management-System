@@ -41,7 +41,7 @@ class RateController extends Controller
     }
     
     function getStallRates(){
-        $rates = StallRate::with('typeSize.StallType','typeSize.StallTypeSize')->where('stallRateEffectivity','>=',date('Y-m-d'))->orderBy('created_at','ASC')->get();
+        $rates = StallRate::with('typeSize.StallType','typeSize.StallTypeSize')->orderBy('created_at','ASC')->get();
     	$data = array();
     	foreach ($rates as $rate) {
             $rate['actions'] = "<button class='btn btn-success' onclick='getInfo(this.value)' value = '".$rate['stallRateID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>

@@ -67,43 +67,43 @@
                                 @if(in_array('sun',$data['mdays']))
                                 <tr>
                                     <td>Sunday</td>
-                                    <td>Php {{(in_array('sun',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                    <td>Php {{(in_array('sun',$data['pdays'])) ? number_format($prate + $rate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
                                 </tr>
                                 @endif
 								@if(in_array('mon',$data['mdays']))
                                 <tr>
                                     <td>Monday</td>
-                                    <td>Php {{(in_array('mon',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                    <td>Php {{(in_array('mon',$data['pdays'])) ? number_format($prate + $rate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
                                 </tr>
                                 @endif
                                 @if(in_array('tue',$data['mdays']))
                                 <tr>
                                     <td>Tuesday</td>
-                                    <td>Php {{(in_array('tue',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                    <td>Php {{(in_array('tue',$data['pdays'])) ? number_format($prate + $rate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
                                 </tr>
                                 @endif
                                 @if(in_array('wed',$data['mdays']))
                                 <tr>
                                     <td>Wednesday</td>
-                                    <td>Php {{(in_array('wed',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                    <td>Php {{(in_array('wed',$data['pdays'])) ? number_format($prate + $rate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
                                 </tr>
                                 @endif
                                 @if(in_array('thu',$data['mdays']))
                                 <tr>
                                     <td>Thursday</td>
-                                    <td>Php {{(in_array('thu',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                    <td>Php {{(in_array('thu',$data['pdays'])) ? number_format($prate + $rate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
                                 </tr>
                                 @endif
                                 @if(in_array('fri',$data['mdays']))
                                 <tr>
                                     <td>Friday</td>
-                                    <td>Php {{(in_array('fri',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                    <td>Php {{(in_array('fri',$data['pdays'])) ? number_format($prate + $rate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
                                 </tr>
                                 @endif
                                 @if(in_array('sat',$data['mdays']))
                                 <tr>
                                     <td>Saturday</td>
-                                    <td>Php {{(in_array('sat',$data['pdays'])) ? number_format($prate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
+                                    <td>Php {{(in_array('sat',$data['pdays'])) ? number_format($prate + $rate,2,'.',',') : number_format($rate,2,'.',',')}}</td>
                                 </tr>
                                 @endif
                                 <p></p>

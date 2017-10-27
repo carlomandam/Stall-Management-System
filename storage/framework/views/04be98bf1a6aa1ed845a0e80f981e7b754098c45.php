@@ -1,9 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+ <?php $__env->startSection('title'); ?> <?php echo e('Payment'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('style'); ?>
+<link rel="stylesheet" type="text/css" href="<?php echo e(URL::asset('assets/bootstrap/css/panel-tab.css')); ?>">
+<style type="text/css">
+    .col-md-12,
+    .row {
+        margin-top: 10px;
+    }
+    
+    table.dataTable.select tbody tr,
+    table.dataTable thead th:first-child {
+        cursor: pointer;
+    }
+    
+    #table2,
+    #backButton {
+        display: none;
+    }
+</style> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
@@ -14,17 +26,17 @@
             </div>
             <div class="box-body">
                 <div class="col-md-9">
-                    <label>Transaction ID:</label> <?php echo e(date("Ymd",strtotime($data['tran']->created_at)).$data['tran']->transactionID); ?> </div>
+                    <label>Transaction ID:</label> #00001 </div>
                 <div class="col-md-3">
                     <label>Date:</label> <?php echo e(date("F d, Y")); ?> </div>
                 <div class="col-md-9">
-                    <label>Customer Name:</label> <?php echo e($data['cont']->StallHolder->stallHFName." ".strtoupper($data['cont']->StallHolder->stallHMName[0]).". ".$data['cont']->StallHolder->stallHLName); ?></div>
+                    <label>Customer Name:</label> <?php echo e($contract->StallHolder->stallHFName." ".strtoupper($contract->StallHolder->stallHMName[0]).". ".$contract->StallHolder->stallHLName); ?></div>
                 <div class="col-md-3">
-                    <label>Stall No.:</label> <?php echo e($data['cont']->stallID); ?> </div>
+                    <label>Stall No.:</label> <?php echo e($contract->stallID); ?> </div>
                 <div class="col-md-12">
-                    <label>Customer Address:</label> <?php echo e($data['cont']->StallHolder->stallHAddress); ?> </div>
+                    <label>Customer Address:</label> <?php echo e($contract->StallHolder->stallHAddress); ?> </div>
                 <div class="col-md-12">
-                    <label>Contact No:</label> <?php for($i = 0;$i < count($data['cont']->StallHolder->ContactNo);$i++){ echo $data['cont']->StallHolder->ContactNo[$i]->contactNumber; if($i < count($data['cont']->StallHolder->ContactNo) - 1) echo ", ";}?> </div>
+                    <label>Contact No:</label> <?php for($i = 0;$i < count($contract->StallHolder->ContactNo);$i++){ echo $contract->StallHolder->ContactNo[$i]->contactNumber; if($i < count($contract->StallHolder->ContactNo) - 1) echo ", ";}?> </div>
                 <div class="col-md-12">
                     <label>Email: </label> <?php echo e($contract->StallHolder->stallHEmail); ?>
 
@@ -39,8 +51,8 @@
                         </thead>
                         <tbody>
                             <?php $total = 0?>
-                            <?php if(isset($data['init'])): ?>
-                            <?php $__currentLoopData = $data['init']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if(isset($init)): ?>
+                            <?php $__currentLoopData = $init; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                             <td>
                                 <?php echo e($i->InitialFee->initDesc); ?>
@@ -54,12 +66,12 @@
                             </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <?php endif; ?>
-                            <?php if(isset($data['pc'])): ?>
+                            <?php if(isset($pc)): ?>
                             <tr>
                                 <td><label>Collections</label> </td>
                                 <td></td>
                             </tr>
-                            <?php $__currentLoopData = $data['pc']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $__currentLoopData = $pc; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td> <?php echo e($p['date']); ?> - <?php echo e(date("l",strtotime($p['date']))); ?> </td>
                                 <td> ₱ <?php echo e(number_format($p['amount'],2,'.',',')); ?> </td>
@@ -67,12 +79,12 @@
                             </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <?php endif; ?>
-                            <?php if(isset($data['bill'])): ?>
+                            <?php if(isset($bill)): ?>
                             <tr>
                                 <td><label>Bills</label> </td>
                                 <td></td>
                             </tr>
-                            <?php $__currentLoopData = $data['bill']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $__currentLoopData = $bill; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td>
                                     <?php echo e(date("Ymd000",strtotime($b->created_at)).$b->billDetID); ?> 
@@ -111,18 +123,17 @@
                     </table>
                 </div>
                 <div class="col-md-3 pull-right">
-                <lable>Total:</lable>  ₱ <?php echo e(number_format($total,2,'.',',')); ?>
-
-                <br>
+                <lable>Total:</lable>  ₱ <?php echo e(number_format($total,2,'.',',')); ?></div>
             </div>
         </div>
         <div class="defaultNewButton pull-right">
-            <a href="<?php echo e(url('/Payment')); ?>">
-                <button class="btn btn-primary btn-flat"><span class='glyphicon glyphicon-print'></span>&nbsp;Print PDF</button>
-            </a>
+            <button class="btn btn-primary btn-flat" onclick="$(this).hide();window.print();setTimeout(function () {$(this).show()}, 1000);"><span class='glyphicon glyphicon-print'></span>&nbsp;Print PDF</button>
         </div>
     </div>
-</div>
-</body>
-</html>>
-
+</div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+<script type="text/javascript">
+    $(document).on('ready', function () {
+       
+    });
+</script> <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

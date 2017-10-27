@@ -36,7 +36,7 @@
                     <label>Stall Code:</label>
                 </div>
                 <div class="col-md-3">
-                    <input type="text" name="" class="form-control" disabled value="<?php echo e($contract->contractID); ?>"> </div>
+                    <input type="text" name="" class="form-control" disabled value="<?php echo e($contract->stallID); ?>"> </div>
                 <div class="col-md-2">
                     <label>Business Name:</label>
                 </div>
@@ -279,7 +279,6 @@
             , changeMonth: true
             , changeYear: true
             , autoclose: true
-            , startDate: "01/01/2017"
             , todayHighlight: true
             , orientation: 'bottom'
             , format: 'mm/dd/yyyy'
@@ -294,7 +293,6 @@
             , changeMonth: true
             , changeYear: true
             , autoclose: true
-            , startDate: "dateToday"
             , todayHighlight: true
             , orientation: 'bottom'
             , format: 'mm/dd/yyyy'

@@ -129,9 +129,17 @@
             </div>
         
             <div class="modal-body">
-                <p>Are you sure you want to terminate this contract?</p>
-                <p>Note: <span class="required">THIS PROCEDURE IS IRREVERSIBLE</span></p>
-                <p class="debug-url"></p>
+                <div class="row">
+                    <p>Are you sure you want to terminate this contract?</p>
+                    <p>Note: <span class="required">THIS PROCEDURE IS IRREVERSIBLE</span></p>
+                    <p class="debug-url"></p>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="re">Reason</label>
+                            <textarea class="form-control" id="re" name="re"></textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="modal-footer">
@@ -241,6 +249,10 @@
             })).append(jQuery('<input>',{
                 "name":"id"
                 , "value": "<?php echo e($contract->contractID); ?>"
+                , "type": "hidden"   
+            })).append(jQuery('<input>',{
+                "name":"re"
+                , "value": $("#re").val()
                 , "type": "hidden"   
             }));
         form.appendTo("body");

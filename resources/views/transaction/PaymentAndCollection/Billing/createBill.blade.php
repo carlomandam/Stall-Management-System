@@ -35,7 +35,7 @@
                     <label>Stall Code:</label>
                 </div>
                 <div class="col-md-3">
-                    <input type="text" name="" class="form-control" disabled value="{{$contract->contractID}}"> </div>
+                    <input type="text" name="" class="form-control" disabled value="{{$contract->stallID}}"> </div>
                 <div class="col-md-2">
                     <label>Business Name:</label>
                 </div>

@@ -272,6 +272,10 @@ class ApplicationController extends Controller
 
     function rejectRental(){
         $contract = Contract::where('contractID',$_POST['id'])->first();
+        if(isset($_POST['re'])){
+             $contract->contractReason = (trim($_POST['re']) == '') ? 'Terminated' : trim($_POST['re']);
+             $contract->save();
+        }
         $contract->delete();
         return redirect('/StallHolderList');
     }

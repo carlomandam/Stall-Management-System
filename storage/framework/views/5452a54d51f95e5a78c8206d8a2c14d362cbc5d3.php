@@ -123,17 +123,11 @@
                     </table>
                 </div>
                 <div class="col-md-3 pull-right">
-                <lable>Total:</lable>  ₱ <?php echo e(number_format($total,2,'.',',')); ?>
-
-                <br>
-                <lable>Amount Paid:</lable>
-                <br> </div>
+                <lable>Total:</lable>  ₱ <?php echo e(number_format($total,2,'.',',')); ?></div>
             </div>
         </div>
         <div class="defaultNewButton pull-right">
-            <a href="<?php echo e(url('/Payment')); ?>">
-                <button class="btn btn-primary btn-flat"><span class='glyphicon glyphicon-print'></span>&nbsp;Print PDF</button>
-            </a>
+            <button class="btn btn-primary btn-flat" onclick="$(this).hide();window.print();setTimeout(function () {$(this).show()}, 1000);"><span class='glyphicon glyphicon-print'></span>&nbsp;Print PDF</button>
         </div>
     </div>
 </div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>

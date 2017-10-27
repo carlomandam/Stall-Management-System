@@ -201,7 +201,7 @@
                                 </div> @if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0)
                                 <div class="pull-right">
                                     <div class="defaultBtnSet col-md-12">
-                                        <button type="button" class="btn btn-danger btn-flat" id="voidbtn"> Void Items</button>
+                                        <!--<button type="button" class="btn btn-danger btn-flat" id="voidbtn"> Void Items</button>-->
                                         <button type="submit" class="btn btn-primary btn-flat" id="paymentbtn"> <i class="fa fa-save"></i> Save</button>
                                     </div>
                                     <div class="voidBtnSet col-md-12" style="display:none">

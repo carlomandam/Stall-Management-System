@@ -40,7 +40,7 @@
                     <div class="col-md-12">
                         <h3><span style="font-size:21px;font-weight: light">Stall Holder:</span> {{$contract->StallHolder->stallHFName.' '.(($contract->StallHolder->stallHMName != null) ? $contract->StallHolder->stallHMName[0].'. ': '').$contract->StallHolder->stallHLName}} <a href="/getTennant/{{$contract->StallHolder->stallHID}}" style="font-size: 12px">View Details</a></h3> </div>
                     <div class="col-md-12">
-                        <label for="bussiname" style="font-size:18px;font-weight: normal">Business Name: <span style="font-size:20px;font-weight: normal">{{$contract->businessName}}</span> <a href="#" style="font-size: 12px"><span class='glyphicon glyphicon-pencil'></span>Rename</a></label>
+                        <label for="bussiname" style="font-size:18px;font-weight: normal">Business Name: <span style="font-size:20px;font-weight: normal">{{$contract->businessName}}</span> <!--<a href="#" style="font-size: 12px"><span class='glyphicon glyphicon-pencil'></span>Rename</a>--></label>
                     </div>
                 </div>
                 <div class="row">
@@ -129,9 +129,17 @@
             </div>
         
             <div class="modal-body">
-                <p>Are you sure you want to terminate this contract?</p>
-                <p>Note: <span class="required">THIS PROCEDURE IS IRREVERSIBLE</span></p>
-                <p class="debug-url"></p>
+                <div class="row">
+                    <p>Are you sure you want to terminate this contract?</p>
+                    <p>Note: <span class="required">THIS PROCEDURE IS IRREVERSIBLE</span></p>
+                    <p class="debug-url"></p>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="re">Reason</label>
+                            <textarea class="form-control" id="re" name="re"></textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="modal-footer">
@@ -241,6 +249,10 @@
             })).append(jQuery('<input>',{
                 "name":"id"
                 , "value": "{{$contract->contractID}}"
+                , "type": "hidden"   
+            })).append(jQuery('<input>',{
+                "name":"re"
+                , "value": $("#re").val()
                 , "type": "hidden"   
             }));
         form.appendTo("body");

@@ -143,7 +143,7 @@
                         data.stallID,
                         data.tenantName,
                         data.contractStart,
-                        data.contractEnd + " &nbsp &nbsp &nbsp <label> <span class = 'label label-warning'>will expire in "+ data.days +" days</span></label>"
+                        data.contractEnd + " &nbsp &nbsp &nbsp <label> <span class = 'label label-warning'>will expire in "+ data.days +" days</span></label>" + " <a id = 'btnGenerate' data-id = '"+data.stallID+"' class='btn btn-success' onclick = 'clickButton();'><span class='fa fa-print'></span>Print Notice</a>"    
                         
                         
                         ]).draw();
@@ -222,6 +222,15 @@
             });
 
     }
+function clickButton()
+{
+    var  id = $("#btnGenerate").attr('data-id');
+    window.location.href="/printNotice/"+id;
+
+}
+    
+ 
+
     
 </script> <?php $__env->stopSection(); ?> 
 <?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -79,7 +79,7 @@
 
                                                      <a href="/ViewPayment/<?php echo e($stall->contractID); ?>"><button class="btn btn-primary">Proceed to Payment</button></a>
 
-                                                     <a href="/ViewClearance/'.$stall->contractID.'"><button class="btn btn-primary">Print Clearance</button></a>
+                                                     <button id="clearance"  data-id ="<?php echo e($stall->stallCode); ?>" class="btn btn-primary">Print Clearance</button>
                                                      <?php else: ?>
                                                      <a href="/ViewPayment/<?php echo e($stall->contractID); ?>"><button class="btn btn-primary">Proceed to Payment</button></a>
                                                      </td>
@@ -106,7 +106,11 @@
 <?php $__env->startSection('script'); ?>
 <script type="text/javascript" src ="<?php echo e(URL::asset('js/billing.js')); ?>"></script>
 <script type="text/javascript">
- 
+ $(document).on('click','#clearance', function(){
+  id = $(this).attr("data-id");
+  console.log(id);
+  window.location.href="/ClearancePDF/"+id;
+ })
 </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

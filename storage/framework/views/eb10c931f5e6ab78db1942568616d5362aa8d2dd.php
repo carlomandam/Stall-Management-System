@@ -107,6 +107,20 @@
                                                                 <div class="pull-right" style="margin-right:5%">₱ <?php echo e(number_format($i->InitialFee->initAmt,2,'.',',')); ?></div>
                                                             </li>
                                                             <?php $total += $i->InitialFee->initAmt;?> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
+                                                    </div> <?php endif; ?> <?php if($contract->NextContract != null): ?>
+                                                    <div class="col-md-12">
+                                                        <label>Renewal Fee</label>
+                                                        <ul id="initList" style="list-style:none"> <?php $__currentLoopData = $contract->NextContract->UnpaidInitial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <li>
+                                                                <div class="cblable" style="width:50% !important;display:inline !important">
+                                                                    <label style="font-weight: normal">
+                                                                        <input name="initCB[]" style="width: 15px;height: 15px;display:none" type="checkbox" value="<?php echo e($i->initDetID); ?>" disabled><?php echo e($i->InitialFee->initDesc); ?>
+
+                                                                        <input type="hidden" name="renew" value="<?php echo e($i->initDetID); ?>"> </label>
+                                                                </div>
+                                                                <div class="pull-right" style="margin-right:5%">₱ <?php echo e(number_format($i->InitialFee->initAmt,2,'.',',')); ?></div>
+                                                            </li>
+                                                            <?php $total += $i->InitialFee->initAmt;?> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
                                                     </div> <?php endif; ?> <?php if(isset($unpaidCollections) && count($unpaidCollections) > 0): ?>
                                                     <div class="col-md-12">
                                                         <label>Unpaid Collection</label>
@@ -114,9 +128,9 @@
                                                             <li>
                                                                 <div class="checkbox" style="display:inline !important">
                                                                     <label>
-                                                                        <input name="unpaid[]" style="width: 15px;height: 15px" type="checkbox" value="<?php echo e($u['detID']); ?>" checked> <?php echo e($u['date']); ?> - <?php echo e(date("l",strtotime($u['date']))); ?> </label>
+                                                                        <input name="unpaid[]" class="unpaidCol" style="width: 15px;height: 15px" type="checkbox" value="<?php echo e($u['detID']); ?>" checked> <?php echo e($u['date']); ?> - <?php echo e(date("l",strtotime($u['date']))); ?> </label>
                                                                 </div>
-                                                                <div class="pull-right" style="margin-right:5%;display:inline !important">₱ <?php echo e(number_format($u['amount'],2,'.',',')); ?> </div>
+                                                                <div class="pull-right" style="margin-right:5%;display:inline !important">₱ <?php echo e(number_format($u['amount'],2,'.',',')); ?> <input type="hidden" name="colValue[]" value="<?php echo e($u['amount']); ?>"></div>
                                                             </li>
                                                             <?php $total += $u['amount']; ?> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
                                                     </div> <?php endif; ?> <?php if(isset($bills) && count($bills) > 0): ?>
@@ -126,7 +140,22 @@
                                                             <li>
                                                                 <div class="checkbox" style="display:inline !important">
                                                                     <label>
-                                                                        <input name="bills[]" style="width: 15px;height: 15px" type="checkbox" value="<?php echo e($u->billDetID); ?>" checked> <?php echo e(date("Ymd000",strtotime($u->created_at)).$u->billDetID); ?> </label>
+                                                                        <input name="bills[]" style="width: 15px;height: 15px" type="checkbox" value="<?php echo e($u->billDetID); ?>" class="bill" checked> 
+                                                                        <input type="hidden" name="billVal[]" value="<?php 
+                                                                            $thisbill = 0;
+                                                                            foreach($u->Billing_Utilities as $util)
+                                                                                $thisbill += $util->utilityAmt;
+                                                                            
+                                                                            foreach($u->Charges as $charge){
+                                                                            if($charge->chargeID == null)
+                                                                                $thisbill += $charge->chargeAmt;
+                                                                            else
+                                                                                $thisbill += $charge->Charges->chargeAmount;
+                                                                            }
+                                                                            echo($thisbill);
+                                                                        ?>">
+                                                                        <?php echo e(date("Ymd000",strtotime($u->created_at)).$u->billDetID); ?> 
+                                                                    </label>
                                                                 </div>
                                                                 <ul> <?php $__currentLoopData = $u->Billing_Utilities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $util): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <li> <?php echo e(($util->MonthlyReading->utilType == 1) ? "Electric Bill" : (($util->MonthlyReading->utilType == 2) ? "Water":"Unknown Utility Type")); ?>
@@ -137,7 +166,12 @@
                                                                     <li> <?php echo e(($charge->chargeID == null) ? $charge->chargeDesc : $charge->Charges->chargeName); ?>
 
                                                                         <div class="pull-right" style="margin-right:5%;display:inline !important">₱ <?php echo e(number_format(($charge->chargeID == null) ? $charge->chargeAmt : $charge->Charges->chargeAmount,2,'.',',')); ?> </div>
-                                                                        <?php $total += number_format(($charge->chargeID == null) ? $charge->chargeAmt : $charge->Charges->chargeAmount,2,'.',',');?>
+                                                                        <?php
+                                                                            if($charge->chargeID == null)
+                                                                                $total += $charge->chargeAmt;
+                                                                            else
+                                                                                $total += $charge->Charges->chargeAmount;
+                                                                         ?>
                                                                     </li> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
                                                             </li> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </ul>
                                                     </div> <?php endif; ?> <?php if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0): ?>
@@ -145,13 +179,20 @@
                                                         <hr style="border-color:black"> </div>
                                                     <div class="col-md-12" style="text-align:right">
                                                         <label class="" style="margin-right :0%;display:inline !important">Total Amount:</label>
-                                                        <div class="" style="margin-right:5%;width:25%;display:inline-block !important">&nbsp; ₱ <?php echo e(number_format($total,2,'.',',')); ?></div>
+                                                        <div class="" style="margin-right:5%;width:25%;display:inline-block !important" id="totalDiv">&nbsp; ₱ <?php echo e(number_format($total,2,'.',',')); ?></div>
                                                     </div>
                                                     <div class="col-md-12" style="text-align:right">
                                                         <div class="form-group form-inline" style="display:inline">
                                                             <label class="" style="margin-right :0%;display:inline">Amount Received:</label>
                                                             <div class="input-group" style="width:25%;"> <span class="input-group-addon">₱</span>
                                                                 <input class="form-control money" type="text" name="amtReceived" id="amtReceived" style="text-align: right" /> </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12" style="text-align:right">
+                                                        <div class="form-group form-inline" style="display:inline">
+                                                            <label class="" style="margin-right :0%;display:inline">Change:</label>
+                                                            <div class="input-group" style="width:25%;"> <span class="input-group-addon">₱</span>
+                                                                <input class="form-control money" type="text" id="change" style="text-align: right" readonly="" /> </div>
                                                         </div>
                                                     </div>
                                             <?php else: ?>
@@ -165,7 +206,7 @@
                                 </div> <?php if(count($bills) > 0 || count($unpaidCollections) > 0 || count($contract->UnpaidInitial) > 0): ?>
                                 <div class="pull-right">
                                     <div class="defaultBtnSet col-md-12">
-                                        <button type="button" class="btn btn-danger btn-flat" id="voidbtn"> Void Items</button>
+                                        <!--<button type="button" class="btn btn-danger btn-flat" id="voidbtn"> Void Items</button>-->
                                         <button type="submit" class="btn btn-primary btn-flat" id="paymentbtn"> <i class="fa fa-save"></i> Save</button>
                                     </div>
                                     <div class="voidBtnSet col-md-12" style="display:none">
@@ -331,21 +372,58 @@
     var totalAmt = 0;
     var sum = 0;
     var array = [];
+    var total = <?php echo e($total); ?>;
+
     $(document).on('ready', function () {
+        $(".unpaidCol").on('change',function(){
+            if($(this).is(":checked")){
+                total += parseFloat($(this).parent().parent().parent().find("input[type=hidden]").val());
+            }else{
+                total -= parseFloat($(this).parent().parent().parent().find("input[type=hidden]").val());
+           }
+           $("#totalDiv").html("₱ "+total.formatMoney(2, '.', ','));
+        });
+
+        $(".bill").on('change',function(){
+            if($(this).is(":checked")){
+                total += parseFloat($(this).next("input[type=hidden]").val());
+            }else{
+                total -= parseFloat($(this).next("input[type=hidden]").val());
+           }
+           $("#totalDiv").html("₱ "+total.formatMoney(2, '.', ','));
+        });
+
+        $("#amtReceived").on("input",function(){
+            var rec = parseFloat( $(this).val().replace(/,/g,''));
+            console.log(rec);
+            if(rec > total)
+                $("#change").val( rec - total);
+            else
+                $("#change").val(0);
+        });
+
+        Number.prototype.formatMoney = function(c, d, t){
+        var n = this, 
+            c = isNaN(c = Math.abs(c)) ? 2 : c, 
+            d = d == undefined ? "." : d, 
+            t = t == undefined ? "," : t, 
+            s = n < 0 ? "-" : "", 
+            i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+            j = (j = i.length) > 3 ? j % 3 : 0;
+           return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
         $.validator.addMethod('hasToPay', function () {
-            $val = [];
-            $("input[name=unpaid\\[\\]]:checked").each(function () {
-                $val.push($(this).val());
-            });
-            if ($val.length == 0 && $("input[name=unpaid\\[\\]]").length != 0) return false;
+            if (total == 0) return false;
             else return true;
         });
+
         $.validator.addMethod('pay', function (valu, elem, param) {
             var amt = parseFloat(elem.value.replace(",", ''));
-            alert(amt);
-            if (amt < <?php echo e($total); ?>) return false
+            if (amt < total) return false
             else return true;
         });
+
         $("#paymentForm").validate({
             rules: {
                 amtReceived: {
@@ -357,6 +435,7 @@
             , messages: {
                 amtReceived: {
                     "hasToPay": "Nothing to pay"
+                    , "pay": "Insufficient Amount"
                 }
             }
             , errorClass: "error-class"

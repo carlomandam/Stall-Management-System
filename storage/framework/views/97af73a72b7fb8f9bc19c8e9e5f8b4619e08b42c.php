@@ -31,14 +31,14 @@
         <div class = "col-md-12">
           <div class="box box-primary ">
             <div class="box-header with-border">
-              <h3 class="box-title"><b>Utilities - Colletion Status</b></h3>
+              <h3 class="box-title"><b>Utilities - Collection Status</b></h3>
             </div>
           
           <div class = "box-body">
 
             <div class = "col-md-12">
               <div class="callout callout-info">
-                  <h4>Info</h4>
+                  <h4>Set Collection Status</h4>
                    
               </div>
             </div>

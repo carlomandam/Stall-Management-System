@@ -38,7 +38,7 @@ class ChargeController extends Controller
         $charge = Charges::withTrashed()
                             ->whereNotNull('deleted_at')
                              ->get();
-                  return(json_encode($charge))           
+                  return(json_encode($charge));           
     }
     function restoreCharges($id){
        $charge = Charges::withTrashed()

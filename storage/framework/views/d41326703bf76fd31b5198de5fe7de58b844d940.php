@@ -23,6 +23,9 @@
                              
                         </div>
                         <div>
+                             
+                              
+                            
                                 <div class="box-body">
                                   <?php $__currentLoopData = $reading; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $read): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                   <div class="row" style="margin-top: 10px;">
@@ -32,9 +35,9 @@
 
                                       <div class="col-md-2">
                                         <?php if($read->utilType==1): ?>
-                                          <input type="text" class="form-control" value="Electricity" readonly>
+                                          <input type="text" class="form-control" data-id="<?php echo e($read->utilType); ?>" value="Electricity" name="utilityType" readonly>
                                          <?php elseif($read->utilType==2): ?>
-                                          <input type="text" class="form-control" value="Water" readonly>
+                                          <input type="text" class="form-control" data-id="<?php echo e($read->utilType); ?>" value="Water" name="utilityType"readonly >
                                           <?php endif; ?> 
                                       </div>
 
@@ -46,7 +49,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control" name="dateFrom" id="date_from" value="<?php echo e(\Carbon\Carbon::parse($read->readingFrom)->format('m/d/Y')); ?>" readonly>
+                                         <input type="text" class="form-control" name="dateFrom" id="date_from" value="<?php echo e(\Carbon\Carbon::parse($read->readingFrom)->format('Y-m-d')); ?>" readonly>
                                       </div>
 
                                       <div class="col-md-1">
@@ -54,7 +57,7 @@
                                       </div>
 
                                       <div class="col-md-2">
-                                         <input type="text" class="form-control" name="dateTo" id="date_to" value="<?php echo e(\Carbon\Carbon::parse($read->readingTo)->format('m/d/Y')); ?>" readonly>
+                                         <input type="text" class="form-control" name="dateTo" id="date_to" value="<?php echo e(\Carbon\Carbon::parse($read->readingTo)->format('Y-m-d')); ?>" readonly>
                                       </div>
                                   </div> 
 
@@ -76,7 +79,7 @@
                                           <label>Present Reading</label>
                                       </div>
                                       <div class="col-md-2">
-                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" value="<?php echo e($read->presReading); ?>" disabled >
+                                        <input type="text" class="form-control reading" name="presRead" id="pres_read" value="<?php echo e($read->presReading); ?>" >
                                       </div>
                                   </div>
 
@@ -85,7 +88,7 @@
                                           <label>Total Bill Amount:</label>
                                       </div>
                                       <div class="col-md-2">
-                                          <input type="text" class="form-control money" name="totalBill" id="total_bill" value="<?php echo e($read->totalBillAmount); ?>" disabled >
+                                          <input type="text" class="form-control money" name="totalBill" id="total_bill" value="<?php echo e($read->totalBillAmount); ?>"  >
                                       </div>
 
                                        <div class="col-md-2">
@@ -108,14 +111,7 @@
                                               </tr>
                                           </thead>
                                           <tbody class="stallList">
-                                              <?php $__currentLoopData = $subMeter; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <tr class ="stall" data-id ="">
-                                                    <td><?php echo e($sub->stall); ?></td>
-                                                    <td><input type="text" data-id="" class="form-control reading" id="sub_prev" name="subPrev" value="<?php echo e($sub->prev); ?>" readonly></td>
-                                                    <td><input type="text" class="form-control reading" id="sub_pres" name="subPres" value="<?php echo e($sub->pres); ?>"  readonly></td>
-                                                    <td><input type="text" class="form-control money" id="total_amt" name="totalAmt" value="<?php echo e($sub->amount); ?>" disabled></td>
-                                                </tr>
-                                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                           
                                           </tbody>
                                       </table>
                                   </div>
@@ -123,8 +119,9 @@
 
                                   <div class="row" style="margin-top: 20px;">
                                       <div class="col-md-4">
-                                         <!--  <button class="btn btn-primary" id="save" name="save" >Save</button> -->
-                                          <a href="<?php echo e(url('/Utilities')); ?>"><button class="btn btn-info">Back</button></a>
+                                          <button class="btn btn-success" id="isFinalize" data-id="<?php echo e($read->readingID); ?>" >Finalize</button>
+                                          <button class="btn btn-primary" id="update" data-id="<?php echo e($read->readingID); ?>" >Update</button>
+                                          <a href="<?php echo e(url('/Utilities')); ?>"><button class="btn btn-danger">Cancel</button></a>
                                       </div>
                                   </div>
 
@@ -159,6 +156,57 @@
     rightAlign: true,
     prefix: 'Php ',
   });
+
+
+<?php foreach ($subMeter as $sub): ?>
+
+        $('.stallList').append('<tr><td><?php echo e($sub->stall); ?></td><td><input type="text" value="<?php echo e($sub->prev); ?>" class="form-control reading2" id="sub_prev" name="subPrev" disabled></td><td><input type="text" class="form-control reading2" id="sub_press" name="subPres" value = "<?php echo e($sub->pres); ?>"  ></td><td><input type="text" class="form-control money2" id="total_amt" name="totalAmt" value = "<?php echo e($sub->amount); ?>" disabled></td><td><input type="hidden" name="subMeterID" value="<?php echo e($sub->subID); ?>"></td><td><input type="hidden" name="meterID" value="<?php echo e($sub->metID); ?>"></td></tr>');  
+
+<?php endforeach ?>  
+ $(".reading2").inputmask("9999999", { numericInput: true, placeholder: "0",clearMaskOnLostFocus: false});
+$(".money2").inputmask('currency', {rightAlign: true, prefix: 'Php '});
+
+    $(document).on("input", "#sub_press", function () {
+            ind = $(this).closest('tr').index();
+            console.log(ind);
+            document.getElementById('total_bill').disabled = true;
+            document.getElementById('pres_read').disabled = true;
+            temp1 = $('input[name*=subPrev]').eq(ind).val();
+            prev = Number(temp1);
+            console.log(prev);
+            multi = $('input[name=multiplierAmt]').val().replace("Php ", "", ).replace(",", "", );
+            amountBill = $('input[name=totalBill]').val().replace("Php ", "", ).replace(",", "", );
+            temp2 = $(this).val();
+            pres = Number(temp2);
+            console.log(pres);
+            if (pres > prev) {
+                console.log(multi);
+                temp = (pres - prev) * multi;
+                var total = 0;
+                console.log(temp);
+                $(' .stallList tr ').each(function () {
+                    ind2 = $(this).index();
+                    var amount = $('input[name=totalAmt]').eq(ind2).val().replace("Php ", "", ).replace(",", "", );
+                    amount = Number(amount);
+                    console.log(amount);
+                    total = total + amount;
+                    // console.log(amountBill);
+                })
+                console.log(amountBill);
+                console.log(total);
+                if (total > amountBill) {
+                    alert('Invalid INPUT');
+                    $('input[name*=subPres]').eq(ind).val(" ");
+                    $('input[name*=totalAmt]').eq(ind).val("0");
+                }
+                else {
+                    $('input[name*=totalAmt]').eq(ind).val(temp);
+                }
+            }
+            else {
+                $('input[name*=totalAmt]').eq(ind).val("0");
+            }
+        })
 </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
