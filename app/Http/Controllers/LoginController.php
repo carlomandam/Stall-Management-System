@@ -11,14 +11,7 @@ use Closure;
 class LoginController extends Controller
 {
     //
-   
-
-  
-
-
     public function login(){
-
-       
     	return view('login/login');
     }
     
@@ -35,29 +28,16 @@ class LoginController extends Controller
         } 
         else 
         {
-        
             // return redirect()->back()->with('message','email and password did not exist');
         }
-
     }
-	
-	public function goTo(){
-	    if(Auth::user()->position == 'Admin'){
-        return redirect('/Dashboard');
-        }
-        if(Auth::user()->position == 'Employee'){
-            return redirect('/Dashboard');
-        }
-     
-	}
 
     public function logout(){
-         Auth::logout();
+        Auth::logout();
         return redirect('/login');
-    } 
+    }
+    
     public function addUsers(){
         return view('login.register');
     }
-
-   
 }

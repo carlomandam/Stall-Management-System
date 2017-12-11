@@ -12,11 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	if(Auth::check()){
+        return redirect('Dashboard');
+    }
+    else
+    	return view('welcome');
 });
 
-
-Route::get('/log', 'Auth\AdminController@preLogin');
 Route::get('/login', 'Auth\AdminController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\AdminController@login')->name('login.submit');
 Route::post('/logout', 'Auth\AdminController@logout');
@@ -211,16 +213,20 @@ Route::get('/TerminatedContracts','QueriesController@getTerminatedContracts');
 Route::get('/ElectricConsumption','QueriesController@getElectricConsumption');
 Route::get('/WaterConsumption','QueriesController@getWaterConsumption');
 Route::get('/printNotice/{id}','QueriesController@printNotice');
-// /////////////////////Utilities/////////////////
-Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
-Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
-Route::get('/PeakDays', 'UtilitiesController@peakDaysIndex');
-Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');
-Route::get('/InitialFee', 'UtilitiesController@initialFeeIndex');
-Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
-Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
-Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
-Route::post('/updateApplication','ApplicationController@updateApplication');
+
+Route::group(['middleware' => 'admin'], function(){
+	// /////////////////////Utilities/////////////////
+	Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
+	Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
+	Route::get('/PeakDays', 'UtilitiesController@peakDaysIndex');
+	Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');
+	Route::get('/InitialFee', 'UtilitiesController@initialFeeIndex');
+	Route::post('/InitialFee', 'UtilitiesController@initialFeeUpdate');
+	Route::get('/CollectionStatus', 'UtilitiesController@collectionStatusIndex');
+	Route::put('/CollectionStatus/{id}', 'UtilitiesController@collectionStatusUpdate');
+	Route::post('/updateApplication','ApplicationController@updateApplication');
+});
+
 //Reports
 Route::get('/StatusListReport','ReportController@stallStatusIndex');
 Route::get('/BalanceSummary','ReportController@balanceSummaryIndex');

@@ -1,31 +1,20 @@
 <?php
 namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
 use Auth;
 class AdminController extends Controller
 {
-    //
-
-    
-    public function preLogin(){
-          if(Auth::check()){
-            return redirect()->back();
-        }
-        else{
-             return redirect()->route('login');
-        }
-          
-
-    }
 
     public function showLoginForm(){
-       
-             return view('login.login');
-        
-           
-        
+        if(Auth::check()){
+            return redirect()->back();
+        }
+        else
+            return view('login.login');    
     }
+
     public function login(Request $request){	
 
     	$this->validate($request,[
@@ -34,14 +23,16 @@ class AdminController extends Controller
     	]);
 
     	if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password])){
-    		return redirect('/Dashboard');
+    		return redirect()->intended('/Dashboard');
     	}
 
-    	return redirect()->back();
+    	return redirect('login');
 
     }
+
     public function logout(){
         Auth::logout();
-        return redirect('/log');
+        Session::flush();
+        return redirect('/login');
     } 
 }

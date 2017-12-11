@@ -19,10 +19,10 @@
 	<div class="col-lg-3 col-xs-6">
 		<div class="small-box bg-aqua">
 			<div class="inner">
-					<h3>241 <small>Stalls</small></h3>		
-					<b>Available:<small>10</small></b><br>
-					<b style="margin-left: 5px;">Occuppied:<small>231</small></b><br>
-					<b style="margin-left: 10px;">Under Maintenance:<small>231</small></b><br>		
+					<h3>{{$stalls}} <small>Stalls</small></h3>		
+					<b>Available:<small>{{$availableStalls}}</small></b><br>
+					<b style="margin-left: 5px;">Occuppied:<small>{{$occuppied}}</small></b><br>
+					<b style="margin-left: 10px;"></b><br>		
 			</div>
 			<div class="icon">
 				<i class="fa fa-home"></i>
@@ -33,10 +33,10 @@
 	<div class="col-lg-3 col-xs-6">
 		<div class="small-box bg-green">
 			<div class="inner">
-					<h3>200 <small>Tenants</small></h3>		
-					<b>Active:<small>10</small></b><br>
-					<b style="margin-left: 5px;">Pending:<small>231</small></b><br>
-					<b style="margin-left: 10px;">Inactive:<small>5</small></b><br>		
+					<h3>{{$tenants}} <small>Tenants</small></h3>		
+					<b>Active:<small> {{$activeTenants}}</small></b><br>
+					<b style="margin-left: 5px;">Inactive: <small>{{$inactiveTenants}}</small></b><br>
+					<b style="margin-left: 10px;">Pending Application: {{$pendingApplication}}<small></small></b><br>		
 			</div>
 			<div class="icon">
 				<i class="fa fa-user"></i>

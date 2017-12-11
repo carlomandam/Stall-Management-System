@@ -20,10 +20,10 @@
 	<div class="col-lg-3 col-xs-6">
 		<div class="small-box bg-aqua">
 			<div class="inner">
-					<h3>241 <small>Stalls</small></h3>		
-					<b>Available:<small>10</small></b><br>
-					<b style="margin-left: 5px;">Occuppied:<small>231</small></b><br>
-					<b style="margin-left: 10px;">Under Maintenance:<small>231</small></b><br>		
+					<h3><?php echo e($stalls); ?> <small>Stalls</small></h3>		
+					<b>Available:<small><?php echo e($availableStalls); ?></small></b><br>
+					<b style="margin-left: 5px;">Occuppied:<small><?php echo e($occuppied); ?></small></b><br>
+					<b style="margin-left: 10px;"></b><br>		
 			</div>
 			<div class="icon">
 				<i class="fa fa-home"></i>
@@ -34,10 +34,10 @@
 	<div class="col-lg-3 col-xs-6">
 		<div class="small-box bg-green">
 			<div class="inner">
-					<h3>200 <small>Tenants</small></h3>		
-					<b>Active:<small>10</small></b><br>
-					<b style="margin-left: 5px;">Pending:<small>231</small></b><br>
-					<b style="margin-left: 10px;">Inactive:<small>5</small></b><br>		
+					<h3><?php echo e($tenants); ?> <small>Tenants</small></h3>		
+					<b>Active:<small> <?php echo e($activeTenants); ?></small></b><br>
+					<b style="margin-left: 5px;">Inactive: <small><?php echo e($inactiveTenants); ?></small></b><br>
+					<b style="margin-left: 10px;">Pending Application: <?php echo e($pendingApplication); ?><small></small></b><br>		
 			</div>
 			<div class="icon">
 				<i class="fa fa-user"></i>

@@ -22,8 +22,6 @@ class RedirectIfAuthenticated
         }
         else{
              return redirect()->route('login');
-        }
-
-       
+        }   
     }
 }

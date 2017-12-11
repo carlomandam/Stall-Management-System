@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Stall;
+use App\StallHolder;
 use PDF;
 use DB;
 class DashboardController extends Controller
@@ -19,7 +21,14 @@ class DashboardController extends Controller
 
     public function index(){
         //
-        return view('dashboard.index');
+        $stalls = Stall::count();
+        $availableStalls = Stall::has('StallType.StallRate')->doesntHave('CurrentTennant')->count();
+        $occuppied = Stall::has('CurrentTennant')->count();
+        $tenants = StallHolder::count();
+        $activeTenants = StallHolder::has('ActiveContracts')->count();
+        $inactiveTenants = StallHolder::doesntHave('ActiveContracts')->count();
+        $pendingApplication = StallHolder::doesntHave('ActiveContracts')->has('PendingApplication')->count();
+        return view('dashboard.index',compact('availableStalls','stalls','occuppied','tenants','activeTenants','inactiveTenants','pendingApplication'));
     }
 
     /**

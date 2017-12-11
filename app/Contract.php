@@ -59,6 +59,7 @@ class Contract extends Model
     public function Initial_Details(){
         return $this->hasMany('App\InitFeeDetail','contractID');
     }
+    
     public function StallMeter(){
         return $this->hasMany('App\StallMeter','contractID');
     }

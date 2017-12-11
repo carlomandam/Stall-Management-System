@@ -21,6 +21,11 @@ class StallHolder extends Model
     {
         return $this->hasMany('App\Contract','stallHID')->whereNotNull('contractStart')->whereNotNull('contractEnd')->where('contractEnd','>=',date("Y-m-d"))->where('contractStart','<=',date("Y-m-d"));
     }
+
+    public function PendingApplication()
+    {
+        return $this->hasMany('App\Contract','stallHID')->whereNull('prevContractID')->whereNull('contractStart')->whereNull('contractEnd');
+    }
     
     public function ContactNo()
     {
