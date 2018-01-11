@@ -78,10 +78,10 @@ class BuildingController extends Controller
     	$data = array();
     	foreach ($building as $building) {
             $building['floor'] = count(Floor::where('bldgID',$building->bldgID)->get());
-            $building['actions'] = "<button class='btn btn-primary btn-flat' onclick='getInfo(this.value)' value = '".$building['bldgID']."' ><span class='glyphicon glyphicon-pencil'></span> Update</button>
+            $building['actions'] = "<button class='btn btn-primary btn-flat' style='padding: 2px 10px 4px 3px; border-radius:50px;' onclick='getInfo(this.value)' value = '".$building['bldgID']."'><span class='glyphicon btn-glyphicon fa fa-pencil img-circle text-primary' style='padding:7px; background:#ffffff; margin-right:4px;'></span> Update</button>
             
             <div class='btn-group'>
-                <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button>
+                <button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown' style='padding: 2px 10px 4px 3px; border-radius:50px;'><span class='glyphicon btn-glyphicon fa fa-trash img-circle text-danger' style='padding:7px; background:#ffffff; margin-right:4px;'></span> Deactivate</button></button>
                 <ul class='dropdown-menu pull-right opensleft' role='menu'>
                     <center>
                         <h4>Are You Sure?</h4>

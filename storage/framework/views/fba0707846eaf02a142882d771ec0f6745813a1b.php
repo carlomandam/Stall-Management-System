@@ -16,13 +16,16 @@
 
     }
 </style>
+<div class="defaultNewButton">
+    <button style="padding: 1px 10px 4px 3px; border-radius:50px;" class="btn icon-btn btn-primary" data-toggle="modal" data-target="#new">
+        <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-primary" style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbsp;New Building
+    </button>
+
+    <div class=" pull-right" id="archive"> <a style="padding: 2px 10px 3px 3px; border-radius:50px;" href="<?php echo e(url('/BuildingArchive')); ?>" class="btn btn-primary btn-flat"><span style="padding:7px; background:#ffffff; margin-right:4px;" class='fa fa-archive img-circle text-primary'></span>&nbsp;Archive</a> </div>
+</div>
 <div class="box box-primary">
     <div class="box-body">
         <div class="table-responsive">
-            <div class="defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp;New Building</button>
-                <div class=" pull-right" id="archive"> <a href="<?php echo e(url('/BuildingArchive')); ?>" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbsp;Archive</a> </div>
-            </div>
             <table id="prodtbl" class="table table-responsive table-bordered table-striped" role="grid">
                 <thead>
                     <tr>
@@ -106,7 +109,7 @@
                     <p class="small text-danger">Fields with asterisks(*) are required</p>
                     <div class="modal-footer">
                         <div class="pull-right">
-                            <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbsp;Save</button>
+                            <button class="btn btn-primary btn-flat" type="submit" style="padding: 2px 10px 4px 3px; border-radius:50px;"><span class='glyphicon btn-glyphicon fa fa-pencil img-circle text-primary' style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbspSave</button>
                         </div>
                     </div>
                 </div>
@@ -201,7 +204,7 @@
             </div>
             <div class="modal-footer">
                 <div class="pull-right">
-                    <button class="btn btn-primary btn-flat" onclick="$($('#tabcontroll li.active').find('a').attr('href')).find('form').submit();"><span class='fa fa-save'></span>&nbsp; Save</button>
+                    <button class="btn btn-primary btn-flat" onclick="$($('#tabcontroll li.active').find('a').attr('href')).find('form').submit();" style="padding: 2px 10px 4px 3px; border-radius:50px;"><span class='glyphicon btn-glyphicon fa fa-pencil img-circle text-primary' style="padding:7px; background:#ffffff; margin-right:4px;"></span> &nbsp; Save</button>
                 </div>
             </div>
         </div>
@@ -386,7 +389,7 @@
                     , context: this
                     , success: function (data) {
                         $body.removeClass("loading");
-                        if (data) {
+                        if (data.trim()) {
                             toastr.success('Updated Building Information');
                             $('#prodtbl').DataTable().ajax.reload();
                             $('#update').modal('hide');
@@ -500,7 +503,7 @@
                 "id": id
             }
             , success: function (data) {
-                if(data == "rental"){
+                if(data.trim() == "rental"){
                     toastr.warning('Unable to delete building. A stall is currently rented');
                 }else{
                 $('#prodtbl').DataTable().ajax.reload();

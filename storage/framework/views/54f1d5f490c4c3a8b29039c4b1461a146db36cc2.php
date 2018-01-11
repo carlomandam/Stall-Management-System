@@ -1,8 +1,8 @@
-@extends('layout.app') @section('title') {{ 'Holiday'}} @stop @section('content-header')
+ <?php $__env->startSection('title'); ?> <?php echo e('Holiday'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?>
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i> Maintenance</li>
     <li class="active">Holidays</li>
-</ol> @stop @section('content')
+</ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
 <style>
     #floortbl td {
         padding-bottom: 5px;
@@ -19,7 +19,7 @@
 <div class="defaultNewButton">
     <button style="padding: 1px 10px 4px 3px; border-radius:50px;" class="btn icon-btn btn-primary" data-toggle="modal" data-target="#new"><span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-primary" style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbsp;New Holiday</button>
 
-    <div class=" pull-right" id="archive"> <a style="padding: 2px 10px 3px 3px; border-radius:50px;" href="{{ url('/HolidayArchive') }}" class="btn btn-primary btn-flat"><span span style="padding:7px; background:#ffffff; margin-right:4px;" class='fa fa-archive img-circle text-primary'></span>&nbsp;Archive</a> </div>
+    <div class=" pull-right" id="archive"> <a style="padding: 2px 10px 3px 3px; border-radius:50px;" href="<?php echo e(url('/HolidayArchive')); ?>" class="btn btn-primary btn-flat"><span span style="padding:7px; background:#ffffff; margin-right:4px;" class='fa fa-archive img-circle text-primary'></span>&nbsp;Archive</a> </div>
 </div>
 <div class="box box-primary">
     <div class="box-body">
@@ -37,7 +37,8 @@
     </div>
     <div class="modal fade" id="new" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md" role="document">
-            <form method="post" id="newform"> {{csrf_field()}}
+            <form method="post" id="newform"> <?php echo e(csrf_field()); ?>
+
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -146,8 +147,8 @@
             </div>
         </div>
     </div>
-</div> @stop @section('script')
-<script type="text/javascript" src="{{ URL::asset('js/floor_js.js') }}"></script>
+</div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/floor_js.js')); ?>"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         var today = new Date(Date.now()).toLocaleString()
@@ -425,4 +426,5 @@
             }
         });
     }
-</script> @stop
+</script> <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

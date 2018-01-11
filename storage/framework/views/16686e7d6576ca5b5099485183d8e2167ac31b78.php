@@ -1,8 +1,8 @@
-@extends('layout.app') @section('title') {{ 'Requirements'}} @stop @section('content-header')
+ <?php $__env->startSection('title'); ?> <?php echo e('Requirements'); ?> <?php $__env->stopSection(); ?> <?php $__env->startSection('content-header'); ?>
 <ol class="breadcrumb">
     <li><i class="fa fa-dashboard"></i> Maintenance</li>
     <li class="active">Requirements</li>
-</ol> @stop @section('content')
+</ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
 <style>
     #floortbl td {
         padding-bottom: 5px;
@@ -16,7 +16,7 @@
 <div class="defaultNewButton">
     <button style="padding: 1px 10px 4px 3px; border-radius:50px;" class="btn icon-btn btn-primary" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-primary" style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbspNew Requiements</button>
 
-    <div class=" pull-right" id="archive"> <a <a style="padding: 2px 10px 3px 3px; border-radius:50px;" href="{{ url('/requirementsArchive') }}" class="btn btn-primary btn-flat"><span style="padding:7px; background:#ffffff; margin-right:4px;" class='fa fa-archive img-circle text-primary'></span>&nbspArchive</a> </div>
+    <div class=" pull-right" id="archive"> <a <a style="padding: 2px 10px 3px 3px; border-radius:50px;" href="<?php echo e(url('/requirementsArchive')); ?>" class="btn btn-primary btn-flat"><span style="padding:7px; background:#ffffff; margin-right:4px;" class='fa fa-archive img-circle text-primary'></span>&nbspArchive</a> </div>
 </div>
 <div class="box box-primary">
     <div class="box-body">
@@ -29,12 +29,12 @@
                         <th style="width: 280px;">Actions</th>
                     </tr>
                 </thead>
-                <tbody> @foreach($requirements as $req)
+                <tbody> <?php $__currentLoopData = $requirements; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $req): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
-                        <td>{{$req->reqName}}</td>
-                        <td>{{$req->reqDesc}}</td>
+                        <td><?php echo e($req->reqName); ?></td>
+                        <td><?php echo e($req->reqDesc); ?></td>
                         <td>
-                            <button style="padding: 1px 10px 4px 3px; border-radius:50px;" class='btn btn-primary btn-flat' id="updateModal" data-id="{{$req->reqID}}"><span class="glyphicon btn-glyphicon glyphicon-pencil img-circle text-primary" style="padding:7px; background:#ffffff; margin-right:4px;"></span> Update</button>
+                            <button style="padding: 1px 10px 4px 3px; border-radius:50px;" class='btn btn-primary btn-flat' id="updateModal" data-id="<?php echo e($req->reqID); ?>"><span class="glyphicon btn-glyphicon glyphicon-pencil img-circle text-primary" style="padding:7px; background:#ffffff; margin-right:4px;"></span> Update</button>
                             <div class='btn-group'>
                                 <button style="padding: 2px 10px 4px 3px; border-radius:50px;" type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class="glyphicon btn-glyphicon glyphicon-trash img-circle text-danger" style="padding:7px; background:#ffffff; margin-right:4px;"></span> Deactivate</button>
                             </button>
@@ -42,13 +42,13 @@
                                 <center>
                                     <h4>Are You Sure?</h4>
                                     <li class='divider'></li>
-                                    <li><a href='#' data-id="{{$req->reqID}}" id="del">YES</a></li>
+                                    <li><a href='#' data-id="<?php echo e($req->reqID); ?>" id="del">YES</a></li>
                                     <li><a href='#'>NO</a></li>
                                 </center>
                             </ul>
                         </div>
                     </td>
-                    </tr> @endforeach </tbody>
+                    </tr> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </tbody>
             </table>
         </div>
     </div>
@@ -127,6 +127,7 @@
                 </div>
             </form>
         </div>
-    </div> @stop @section('script')
-    <script type="text/javascript" src="{{ URL::asset('js/floor_js.js') }}"></script>
-    <script type="text/javascript" src="{{ URL::asset('js/requirements.js') }}"></script> @stop
+    </div> <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/floor_js.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/requirements.js')); ?>"></script> <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -3,14 +3,18 @@
     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
     <li class="active">Stall</li>
 </ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
+<div class="defaultNewButton">
+    <button style="padding: 1px 10px 4px 3px; border-radius:50px;" class="btn icon-btn btn-primary" data-toggle="modal" data-target="#new"><span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-primary" style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbsp;New Stall</button>
+    
+
+    <button style="padding: 1px 10px 4px 3px; border-radius:50px;" class="btn icon-btn btn-primary" data-toggle="modal" data-target="#updatemultiple"><span class='glyphicon btn-glyphicon fa fa-pencil img-circle text-primary' style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbsp;Update Multiple Stall</button>
+
+
+    <div class=" pull-right" id="archive"> <a style="padding: 2px 10px 3px 3px; border-radius:50px;" href="<?php echo e(url('/StallArchive')); ?>" class="btn btn-primary btn-flat"><span style="padding:7px; background:#ffffff; margin-right:4px;" class='fa fa-archive img-circle text-primary'></span>&nbsp; Archive</a> </div>
+</div>
 <div class="box box-primary">
     <div class="box-body">
         <div class="table-responsive">
-            <div class="defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp;New Stall</button>
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#updatemultiple"><span class='fa fa-pencil'></span>&nbsp;Update Multiple Stall</button>
-                <div class=" pull-right" id="archive"> <a href="<?php echo e(url('/StallArchive')); ?>" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbsp; Archive</a> </div>
-            </div>
             <table id="table" class="table table-bordered table-striped" role="grid">
                 <thead>
                     <tr>
@@ -70,7 +74,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                    <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+                    <button style="padding: 2px 10px 4px 3px; border-radius:50px;" class="btn btn-primary btn-flat"><span class='glyphicon btn-glyphicon fa fa-save img-circle text-primary' style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbspSave</button>
                 </div>
             </div>
         </form>
@@ -126,7 +130,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                    <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+                    <button style="padding: 2px 10px 4px 3px; border-radius:50px;" class="btn btn-primary btn-flat"><span class='glyphicon btn-glyphicon fa fa-save img-circle text-primary' style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbspSave</button>
                 </div>
             </div>
         </form>
@@ -174,7 +178,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- <label style="float:left">All labels with "*" are required</label> -->
-                    <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+                    <button style="padding: 2px 10px 4px 3px; border-radius:50px;" class="btn btn-primary btn-flat"><span class='glyphicon btn-glyphicon fa fa-save img-circle text-primary' style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbspSave</button>
                 </div>
             </div>
         </form>
@@ -308,7 +312,7 @@
                     }
                     , {
                     "data": function(data, type, dataToSet){
-                            return "<button class='btn btn-primary btn-flat' onclick='getInfo(this.value)' value = '"+data.stallID+"' ><span class='glyphicon glyphicon-pencil'></span> Update</button><div class='btn-group'><button type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-trash'></span> Deactivate</button></button><ul class='dropdown-menu pull-right opensleft' role='menu' data-container='body'><center><h4>Are You Sure?</h4><li class='divider'></li><li><a href='#' onclick='deleteStall(\""+data.stallID+"\");return false;'>YES</a></li><li><a href='#' onclick='return false'>NO</a></li></center></ul></div>";
+                            return "<button style='padding: 2px 10px 4px 3px; border-radius:50px;' class='btn btn-primary btn-flat' onclick='getInfo(this.value)' value = '"+data.stallID+"' ><span class='glyphicon btn-glyphicon fa fa-pencil img-circle text-primary' style='padding:7px; background:#ffffff; margin-right:4px;'></span> Update</button>&nbsp<div class='btn-group'><button style='padding: 2px 10px 4px 3px; border-radius:50px;' type='button' class='btn btn-danger btn-flat dropdown-toggle' data-toggle='dropdown'><span class='glyphicon btn-glyphicon fa fa-trash img-circle text-danger' style='padding:7px; background:#ffffff; margin-right:4px;'></span> Deactivate</button></button><ul class='dropdown-menu pull-right opensleft' role='menu' data-container='body'><center><h4>Are You Sure?</h4><li class='divider'></li><li><a href='#' onclick='deleteStall(\""+data.stallID+"\");return false;'>YES</a></li><li><a href='#' onclick='return false'>NO</a></li></center></ul></div>";
                         }
                     }
 			]

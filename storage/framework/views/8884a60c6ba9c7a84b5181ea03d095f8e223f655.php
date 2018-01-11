@@ -8,14 +8,14 @@
     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
     <li class="active">Stall Type</li>
 </ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
-
+<div class="defaultNewButton">
+    <button style="padding: 1px 10px 4px 3px; border-radius:50px;" class="btn icon-btn btn-primary"  data-toggle="modal" data-target="#new"><span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-primary" style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbspNew Stall Type </button>
+    
+    <div class=" pull-right" id="archive"> <a style="padding: 2px 10px 3px 3px; border-radius:50px;" href="<?php echo e(url('/StallTypeArchive')); ?>" class="btn btn-primary btn-flat"><span style="padding:7px; background:#ffffff; margin-right:4px;" class='fa fa-archive img-circle text-primary'></span>&nbspArchive</a> </div>
+</div>
 <div class="box box-primary">
     <div class="box-body">
         <div class="table-responsive">
-            <div class="defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbspNew Stall Type </button>
-                <div class=" pull-right" id="archive"> <a href="<?php echo e(url('/StallTypeArchive')); ?>" class="btn btn-primary btn-flat"><span class='fa fa-archive'></span>&nbspArchive</a> </div>
-            </div>
             <table id="table" class="table table-bordered table-striped" role="grid">
                 <thead>
                     <tr>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="modal-footer">
                                 <!-- <label style="float:left">All labels with "*" are required</label> -->
-                                <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+                                <button class="btn btn-primary btn-flat" type="submit" style="padding: 2px 10px 4px 3px; border-radius:50px;"><span class='glyphicon btn-glyphicon fa fa-pencil img-circle text-primary' style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbspSave</button>
                             </div>
                         </div>
                     </form>
@@ -114,7 +114,7 @@
                             </div>
                             <div class="modal-footer">
                                 <!-- <label style="float:left">All labels with "*" are required</label> -->
-                                <button class="btn btn-primary btn-flat" type="submit"><span class='fa fa-save'></span>&nbspSave</button>
+                                <button class="btn btn-primary btn-flat" type="submit" style="padding: 2px 10px 4px 3px; border-radius:50px;"><span class='glyphicon btn-glyphicon fa fa-pencil img-circle text-primary' style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbspSave</button>
                             </div>
                         </div>
                     </form>

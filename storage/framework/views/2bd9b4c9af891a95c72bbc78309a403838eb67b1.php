@@ -3,12 +3,12 @@
     <li><a href="#"><i class="fa fa-dashboard"></i> Maintenance</a></li>
     <li class="active">Stall Rate</li>
 </ol> <?php $__env->stopSection(); ?> <?php $__env->startSection('content'); ?>
+<div class="defaultNewButton">
+    <button style="padding: 1px 10px 4px 3px; border-radius:50px;" class="btn icon-btn btn-primary" data-toggle="modal" data-target="#new"><span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-primary" style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbsp New Stall Rate </button>
+</div>
 <div class="box box-primary">
     <div class="box-body">
         <div class="table-responsive">
-            <div class="defaultNewButton">
-                <button class="btn btn-primary btn-flat" data-toggle="modal" data-target="#new"><span class='fa fa-plus'></span>&nbsp New Stall Rate </button>
-            </div>
             <table id="table" class="table table-bordered table-striped" role="grid" style="font-size:15px;">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@
                     <p class="small text-danger">Fields with asterisks(*) are required</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-flat"><span class='fa fa-save'></span>&nbspSave</button>
+                    <button style="padding: 2px 10px 4px 3px; border-radius:50px;" class="btn btn-primary btn-flat"><span class='glyphicon btn-glyphicon fa fa-save img-circle text-primary' style="padding:7px; background:#ffffff; margin-right:4px;"></span>&nbspSave</button>
                 </div>
             </div>
         </form>

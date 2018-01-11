@@ -186,13 +186,13 @@
         $('#electric').fadeIn();
 
           $.get('/ElectricConsumption', function(data){
-                var table = $('#tblelectric').DataTable().clear();
+                var table = $('#tblelectric').DataTable().clear().draw();
                 console.log(data);
                 $.each(data, function(i,data){
                     table.row.add([
                         data.reading,
                         data.stallCode,
-                        data.cons +" of Total Electric Consumption( "+ data.totalRead +" )"
+                         "Total Electric Consumption( "+ data.totalRead +" )"
                         
                         
                         ]).draw();
@@ -203,18 +203,19 @@
     function loadWater(){
         $('#queryName').text("Highest Water Consumption");
         $('#contracts').hide();
-       $('#terminated').hide();
+        $('#terminated').hide();
         
         $('#electric').fadeIn();
 
           $.get('/WaterConsumption', function(data){
-                var table = $('#tblelectric').DataTable().clear();
+                var table = $('#tblelectric').DataTable().clear().draw();
+
                 console.log(data);
                 $.each(data, function(i,data){
                     table.row.add([
                         data.reading,
                         data.stallCode,
-                        data.cons +" of Total Water Consumption( "+ data.totalRead +" )"
+                        " Total Water Consumption( "+ data.totalRead +" )"
                         
                         
                         ]).draw();
