@@ -33,7 +33,7 @@
         <div class="panel with-nav-tabs panel-primary">
             <div class="panel-heading">
                 <ul id="myTab" class="nav nav-tabs">
-                    <li class="active"><a href="#tab1primary" data-toggle="tab">Payments</a></li>
+                    <li><a href="#tab1primary" data-toggle="tab">Payments</a></li>
                     <li><a href="#tab2primary" data-toggle="tab">Advance Collection</a></li>
                     <li><a href="#tab3" data-toggle="tab">Payment History</a></li>
                 </ul>
@@ -375,6 +375,25 @@
     var total = <?php echo e($total); ?>;
 
     $(document).on('ready', function () {
+
+        $('#myTab a').click(function(e) {
+          e.preventDefault();
+          $(this).tab('show');
+        });
+
+        // store the currently selected tab in the hash value
+        $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
+          var id = $(e.target).attr("href").substr(1);
+          window.location.hash = id;
+        });
+
+        // on load of the page: switch to the currently selected tab
+        var hash = window.location.hash;
+        if(hash != '')
+            $('#myTab a[href="' + hash + '"]').parent().addClass('active');
+        else
+            $('#myTab a[href="#tab1primary"]').tab('show');
+
         $(".unpaidCol").on('change',function(){
             if($(this).is(":checked")){
                 total += parseFloat($(this).parent().parent().parent().find("input[type=hidden]").val());

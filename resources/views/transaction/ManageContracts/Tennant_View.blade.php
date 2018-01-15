@@ -54,7 +54,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/icheck.js')}}">
 </script> @stop @section('content')
 <div class="row">
-    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{URL::previous()}}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</a> </div>
+    <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{URL::previous()}}#tab4primary" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbspBack</a> </div>
     <div class="col-md-12">
         <div class="box box-primary ">
             <div class="box-header with-border">

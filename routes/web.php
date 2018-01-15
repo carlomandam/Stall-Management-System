@@ -217,6 +217,8 @@ Route::get('/printNotice/{id}','QueriesController@printNotice');
 Route::group(['middleware' => 'admin'], function(){
 	// /////////////////////Utilities/////////////////
 	Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
+	Route::get('/NewUser', 'NewUserController@index');
+	Route::post('/Register', 'NewUserController@register');
 	Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
 	Route::get('/PeakDays', 'UtilitiesController@peakDaysIndex');
 	Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');

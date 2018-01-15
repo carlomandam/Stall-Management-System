@@ -21,8 +21,8 @@
     <div class="col-md-12">
         <div class="panel with-nav-tabs panel-primary">
             <div class="panel-heading">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab3primary" data-toggle="tab">Contracts</a></li>
+                <ul id="myTab" class="nav nav-tabs">
+                    <li><a href="#tab3primary" data-toggle="tab">Contracts</a></li>
                     <li><a href="#tab1primary" data-toggle="tab">Available Stalls</a></li>
                     <li><a href="#tab2primary" data-toggle="tab">Pending Applications</a></li>
                     <li><a href="#tab4primary" data-toggle="tab">Tenants</a></li>         
@@ -108,6 +108,23 @@
 <?php $__env->stopSection(); ?> <?php $__env->startSection('script'); ?>
 <script>
     $(document).ready(function () {
+        $('#myTab a').click(function(e) {
+          e.preventDefault();
+          $(this).tab('show');
+        });
+
+        // store the currently selected tab in the hash value
+        $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
+          var id = $(e.target).attr("href").substr(1);
+          window.location.hash = id;
+        });
+
+        // on load of the page: switch to the currently selected tab
+        var hash = window.location.hash;
+        if(hash != '')
+            $('#myTab a[href="' + hash + '"]').tab('show');
+        else
+            $('#myTab a[href="#tab3primary"]').tab('show');
 
         $('#tblStallHolder').DataTable({
             ajax: '/getStallHolders'

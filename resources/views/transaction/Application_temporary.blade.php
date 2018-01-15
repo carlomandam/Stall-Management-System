@@ -62,7 +62,7 @@
                 <ul id="error-new"></ul>
             </div>
         </div>
-        <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp; Back to StallHolder List</a> </div>
+        <div style="margin-left: 20px; margin-bottom: 10px;"> <a href="{{ url('/StallHolderList') }}#tab1primary" class="btn btn-primary btn-flat"><span class='fa fa-arrow-left'></span>&nbsp; Back to StallHolder List</a> </div>
         <div class="col-md-6">
             <div class="box box-primary ">
                 <div class="box-header with-border">

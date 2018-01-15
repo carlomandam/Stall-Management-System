@@ -28,7 +28,7 @@ label{
  
    <div class="row">
         <div style="margin-left: 20px; margin-bottom: 10px;">
-               <a href="{{ url('/StallHolderList') }}" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack to Stall Holder List</a>
+               <a href="{{ url('/StallHolderList') }}#tab1primary" class="btn btn-primary btn-flat" ><span class='fa fa-arrow-left'></span>&nbspBack to Stall Holder List</a>
         </div>
 
     <!--left table-->

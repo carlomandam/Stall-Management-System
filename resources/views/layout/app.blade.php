@@ -264,7 +264,11 @@
                           <li class="treeview">
                             <a href="/BackupandRecovery"> <i class="fa fa-undo"></i> <span>Backup and Recovery</span> </a>
                         </li>
-                        
+                        @if(Auth::user()->position == "Admin")
+                        <li class="treeview">
+                            <a href="/NewUser"> <i class="glyphicon glyphicon-user"></i> <span>New User</span> </a>
+                        </li>
+                        @endif
                 </ul>
             </section>
         </aside>
