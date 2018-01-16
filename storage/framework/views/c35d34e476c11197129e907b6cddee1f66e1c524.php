@@ -140,13 +140,10 @@
             <a href="/" class="logo"> <span class="logo-mini"><b>M</b>SA</span> <span class="logo-lg"><b>MySeoul </b></span> </a>
             <nav class="navbar navbar-fixed-top">
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a> <span class="system-name"><b>Stalls Management System</b></span>
-             
-                <ul class="nav navbar-nav navbar-right">
-
-                    
+                <ul class="nav navbar-nav navbar-right">                    
                     <li class="dropdown" style="margin-right: 10px;"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         
-                        <span><?php echo e(Auth::user()->name); ?></span><span class="caret"></span> </a>
+                        <span><?php echo e(Auth::user()->fname.' '.Auth::user()->lname); ?></span><span class="caret"></span> </a>
                         <ul class="dropdown-menu" role="menu">
                             <li> <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                             <form id="logout-form" action="/logout" method="POST" style="display: none;">
@@ -154,14 +151,12 @@
                             </form>
                             </li>
                             <li>
-                                <a href="/addUsers">Add Account</a> 
+                                <a href="/addUsers">Update Account Info</a> 
                             </li>
                         </ul>
                     </li>
                 </ul>
-                  
-                         <p id = "time"><small class = "system-time pull-right" ></small></p>
-                 
+                <p id = "time"><small class = "system-time pull-right" ></small></p>
             </nav>
         </header>
         <aside class="main-sidebar">
@@ -169,7 +164,7 @@
                 <div class="user-panel">
                     <div class="pull-left image"> <img src="<?php echo e(URL::asset('image/userimage2.png')); ?>" class="img-circle" alt="User Image"> </div>
                     <div class="pull-left info">
-                        <p id="userName"><?php echo e(Auth::user()->name); ?></p>
+                        <p id="userName"><?php echo e(Auth::user()->fname.Auth::user()->lname); ?></p>
                         <p id="position" style="font-size: 11px;font-weight: normal;"><?php echo e(Auth::user()->position); ?></p>
                     </div>
                 </div>
@@ -261,12 +256,12 @@
                                 <li><a href = "/PaymentsCollectedReport"><i class="fa fa-circle-o"></i>Payments Collected Report</a></li>
                             </ul>
                         </li>
-                          <li class="treeview">
-                            <a href="/BackupandRecovery"> <i class="fa fa-undo"></i> <span>Backup and Recovery</span> </a>
-                        </li>
                         <?php if(Auth::user()->position == "Admin"): ?>
                         <li class="treeview">
-                            <a href="/NewUser"> <i class="glyphicon glyphicon-user"></i> <span>New User</span> </a>
+                            <a href="/NewUser"> <i class="glyphicon glyphicon-user"></i> <span>System Users</span> </a>
+                        </li>
+                        <li class="treeview">
+                            <a href="/BackupandRecovery"> <i class="fa fa-undo"></i> <span>Backup and Recovery</span> </a>
                         </li>
                         <?php endif; ?>
                 </ul>

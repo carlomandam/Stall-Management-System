@@ -17,15 +17,15 @@
             <img src="{{ URL::asset('image/LOGO.png') }}" width="150px" height="150px">
             <h3 style="font-family: impact;margin-top: -10%; text-align: center;">Stalls Management System</h3>
           </div>
-          <input type="email" name="email" placeholder="Email" required class="form-control input-lg" />
+          <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required class="form-control input-lg" />
           @if ($errors->has('email'))
           <span class="help-block">
             <strong>{{ $errors->first('email') }}</strong>
           </span>
           @endif
           
-          <input type="password" class="form-control input-lg" name="password" id="password" placeholder="Password"/>
-          @if ($errors->has('password'))
+          <input type="password" class="form-control input-lg {{ $errors->any() ? ' has-error' : '' }}" name="password" id="password" placeholder="Password"/>
+          @if ($errors->any())
           <span class="help-block">
             <strong>{{ $errors->first('password') }}</strong>
           </span>

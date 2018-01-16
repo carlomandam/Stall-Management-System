@@ -124,6 +124,7 @@ $('.lockFrom').val('{{$util->warning}}+.01');
 
 $('#id_lock').val('{{$util->lock}}');
 $('.terminateFrom').val('{{$util->lock}}+.01')
+$('.terminateTo').val('{{$util->terminate}}')
 
 // $('#id_terminate').val('{{$util->terminate}}');
 
@@ -134,7 +135,7 @@ $(document).on('click', '#edit', function(){
   document.getElementById('id_reminder').disabled =false;
   document.getElementById('id_warning').disabled =false;
   document.getElementById('id_lock').disabled =false;
-  // document.getElementById('id_terminate').disabled =false;
+  document.getElementById('id_terminate').disabled =false;
   document.getElementById('save').disabled =false;
 })
 

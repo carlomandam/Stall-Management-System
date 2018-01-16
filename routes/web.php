@@ -219,6 +219,9 @@ Route::group(['middleware' => 'admin'], function(){
 	Route::get('/MarketDays', 'UtilitiesController@marketDaysIndex');
 	Route::get('/NewUser', 'NewUserController@index');
 	Route::post('/Register', 'NewUserController@register');
+	Route::post('/getUserInfo', 'NewUserController@info');
+	Route::post('/RemoveUser', 'NewUserController@remove');
+	Route::post('/UpdateUser', 'NewUserController@update');
 	Route::put('/MarketDays/{id}', 'UtilitiesController@marketDaysUpdate');
 	Route::get('/PeakDays', 'UtilitiesController@peakDaysIndex');
 	Route::put('/PeakDays/{id}', 'UtilitiesController@peakDaysUpdate');

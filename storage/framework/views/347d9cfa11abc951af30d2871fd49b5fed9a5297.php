@@ -18,15 +18,15 @@
             <img src="<?php echo e(URL::asset('image/LOGO.png')); ?>" width="150px" height="150px">
             <h3 style="font-family: impact;margin-top: -10%; text-align: center;">Stalls Management System</h3>
           </div>
-          <input type="email" name="email" placeholder="Email" required class="form-control input-lg" />
+          <input type="email" name="email" placeholder="Email" value="<?php echo e(old('email')); ?>" required class="form-control input-lg" />
           <?php if($errors->has('email')): ?>
           <span class="help-block">
             <strong><?php echo e($errors->first('email')); ?></strong>
           </span>
           <?php endif; ?>
           
-          <input type="password" class="form-control input-lg" name="password" id="password" placeholder="Password"/>
-          <?php if($errors->has('password')): ?>
+          <input type="password" class="form-control input-lg <?php echo e($errors->any() ? ' has-error' : ''); ?>" name="password" id="password" placeholder="Password"/>
+          <?php if($errors->any()): ?>
           <span class="help-block">
             <strong><?php echo e($errors->first('password')); ?></strong>
           </span>
